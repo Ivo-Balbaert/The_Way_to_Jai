@@ -30,7 +30,6 @@ If we need to mention something which has not been explained yet, we'll add a fo
 Also for those of you who are beginning their programming journey, do speak out code internally when reading a program, explain to yourself all that happens in the code. 
 Later on this becomes more automatic, but in beginning stages it is very helpful to not be overwhelmed by code which seems more complex at first.
  
-
 I would like to express my sincere admiration to **Jonathan Blow** for creating this superb language. Welcome to the wonderful world of developing in Jai!
 
 
