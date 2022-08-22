@@ -127,7 +127,7 @@ But there is a problem, we get the following output:
 ```
 In Workspace 2 ("Target Program"):
 d:/Jai/The Way to Jai/3-Compiling_and_running_your_first_program/code/hello_sailor.jai:2,4:  
-**Error: Undeclared identifier 'print'.**
+Error: Undeclared identifier 'print'.
 
     main :: () {
        print("Hello, Sailor from Jai!");
@@ -214,7 +214,7 @@ Remove the ; at the end of the print statement and compile again. The compiler g
 
 ```
 d:/Jai/The Way to Jai/3-Compiling_and_running_your_first_program/code/hello_sailor.jai:4,37:  
-**Error: Semicolon expected after expression.**
+Error: Semicolon expected after expression.
 
     main :: () {
        print("Hello, Sailor from Jai!\n")
@@ -223,12 +223,12 @@ This is very clear: it gives you the line (4) on which the error occurred, and e
 You'll find that Jai has strong compiler checks and helpful error messages following the motto: _better resolve errors at compile-time than having to deal with bugs at run-time_.  
 Also the Jai compiler stops at the first error it encounters and only reports that.
 
-**Exercises:**
+**Exercises:**  
 Experiment to understand the error messages.
 
-1- Leave out the closing } of main
-2- Leave out the () parameter list in main
-3- Try changing the order of the #import, main procedure and #run statement.  
+1- Leave out the closing } of main  
+2- Leave out the () parameter list in main  
+3- Try changing the order of the #import, main procedure and #run statement.    
 You'll notice that the order in which definitions and procedures appear in a Jai source file doesn’t matter: `#import` can come as last, `main :: () { }` as first or last or somewhere in between, and so on. This is because the compiler does several passes.
 
 *TIP*: In general it is useful to find `main` quickly, so by convention `main` is usually placed at the end (bottom) of the source file.
