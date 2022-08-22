@@ -1,12 +1,25 @@
 # Chapter 3 – Compiling and running your first program
 
+Some preliminary remarks:
+  * Jai source code files have the extension **.jai**. But this is a convention, the compiler doesn't force you to use this extension.
+
+  * In a code file, as is customary in all C type languages, every code line ends with a **;**. You can place several code lines on one line, if you separate them with ;  but this is not so readable.
+  
+   * Sometimes it can be useful to document your code. This can be done in Jai with _comments_:
+   // for a single-line comment, at the start of the line or in the middle of a line
+   /*   …   
+   …
+   */ for a multi-line comment; 
+   These can contain nested comments:  /* block /* nested */ */
+   Comments are not compiled. Use comments sparingly, in general names of variables should show what they contain, and names of procedures should tell us what they do.
+
+   * As you will soon see, programmers use spaces and indentation to make the program text more readable for humans (the compiler doesn't care). The following rule is mostly used: at each indentation level, the code moves 4 spaces to the right.  
+
 ## 3.1 The main entry point
 
 To start, let's create a folder _jai_projects_.
 Open this folder in VSCode by selecting File, Open Folder.
-Now create a new text file, and save it as _hello_sailor.jai_. 
-
-Jai source code files have the extension **.jai**
+Now create a new (empty) text file, and save it as _hello_sailor.jai_. 
 
 Now try to compile this empty file: `jai hello_sailor.jai`
 
@@ -50,7 +63,7 @@ Compiler  time: 0.056352 seconds.
 Link      time: 0.273129 seconds.
 Total     time: 0.329482 seconds.
 
-This only displays some useful compiler info. You will see this whenever you compile Jai code.
+This only displays some useful compiler and linker info. You will see this whenever you compile Jai code.
 
 On Linux, you will see an output like this:
 
@@ -65,11 +78,13 @@ Compiler  time: 0.176359 seconds.
 Link      time: 0.000830 seconds.
 Total     time: 0.177189 seconds.
 
+We won't display this output again, unless it contains something interesting.
+
 ## 3.2 Compiling our first program
 
 ### 3.2.1 Compile-time
-You see the compilation phase only took some 50 ms on Windows. In this fraction of a second, which is called **compile-time**, a lot of things happen. As we will see later (§ 3.2.4 and chapter ??), Jai can do very complex things during compilation, even running entire programs! 
-Anyway, Jai always compiles very fast, as you will see with real programs. 
+You see that the compilation phase only took a fraction of a second, which is called **compile-time**, a lot of things happen. As we will see later (§ 3.2.4 and chapter ??), Jai can do very complex things during compilation, even running entire programs! 
+But as we will soon see with real programs that do something, Jai always compiles very fast.
 
 Let's analyze the compilation output:
 First it displays the full _linker command_ (this could be useful when something goes wrong at this stage). Here (on Windows) we see Microsoft's `link.exe` at work.
@@ -77,6 +92,8 @@ Calling the compiler creates a hidden _.build_ folder, in which _.obj_ files lik
 (on Linux the lld-linux command is used)
 
 The linker then combines all these and helper libraries in one executable named _hello_sailor.exe_. You will also see a file with **.pdb** extension, which is used when debugging.
+
+Compilation/linking produces a single executable hello.exe (on Windows) or hello (on Linux, macOS) as output: Jai follows the _single compilation unit model_.
 
 You can execute this by typing:  _hello_sailor_
 (_./hello_sailor_ on Linux), but as expected, nothing is displayed.
@@ -94,8 +111,6 @@ To produce an output in Jai, we use the **print** procedure, which can take this
 print("Hello, Sailor from Jai!");
 ```
 This is a complete code statement, so it must end with a semicolon **;**
-
-(You can place several code lines on one line, if you separate them with ; but this makes code less readable).
 
 We now have the following code:
 
@@ -116,10 +131,11 @@ d:/Jai/The Way to Jai/3-Compiling_and_running_your_first_program/code/hello_sail
 ..._
 
 The error means the compiler can't find the _print_ procedure. That's because this procedure is defined elsewhere, in a **module** called _Basic_.
-Modules are stored in the _jai\modules_ folder. There we find a subfolder _Basic_, containing a file _Print.jai_, which contains the definition of print.
-In order to make this clear to the compiler, we must **import** that module with the following statement:  `#import "Basic";`
 
-Add this at the start of our code file:
+> Modules are stored in the _jai\modules_ folder. There we find a subfolder _Basic_, containing a file _Print.jai_, which contains the definition of print.
+
+In order to make this clear to the compiler, we must **import** that module with the following statement:  `#import "Basic";`
+Add this at the start, so that our code file now becomes:
 
 ```
 #import "Basic";
@@ -147,15 +163,25 @@ Here is a screenshot where the program is edited, compiled and run from within V
 
 The phase when the Jai program binary file executes is called **run-time**. 
 Compile-time and run-time are very distinct:
- first you compile a program which is compile-time 
- then you run it, which is run-time.
+ 1. first you compile a program which is compile-time 
+ 2. then you run it, which is run-time.
 
 But due to its extensive meta-programming capabilities, Jai can even 
 _run a program during compile-time_!
 
 ### 3.2.4 Running code during compile-time
 
-Make a new source file called _hello_sailor_comptime.jai_ and add the following line after main: `#run main();`
+Make a new source file called _hello_sailor_comptime.jai_ and add the following line after main: `#run main();`, so that we get:
+
+```
+#import "Basic";
+
+main :: () {
+   print("Hello, Sailor from Jai!\n");
+}
+
+#run main();
+```
 
 Now compile the program as before and carefully look at the output:
 
@@ -164,10 +190,9 @@ Now compile the program as before and carefully look at the output:
    _Running linker: ..._
 
 You see the same extensive output starting with _Running linker_ as previously.
-But before the linking starts (so **_in compile-time_**), you already see our printed output.
-This means main() has already been executed during compile-time!
-This is because of the **#run**. This so-called **directive** tells the compiler
-to run the procedure called after `#run` in compile-time.
+But before the linking starts (so  **_during compile-time_** !), you already see our printed output.
+This means main() has already been executed at compile-time!
+This is because of the **#run** command. This so-called **directive** tells the compiler to run the procedure called after `#run` in compile-time.
 
 In case of `#run main()`, you run the whole program during compile-time (see ?? for more info on `#run`).
 
@@ -194,21 +219,14 @@ This is very clear: it gives you the line (4) on which the error occurred, and e
 Also the Jai compiler stops at the first error it encounters and only reports that.
 
 
-**Exercise:**
+**Exercises:**
 
 Experiment understanding the error messages.
 
 1- Leave out the closing } of main
-
 2- Leaving out the () parameter list in main
 
-## 3.2.7 Some more info about the compiler
+Try changing the order of the #import, main procedure and #run statement.
+You'll notice that the order in which definitions and procedures appear in a Jai source file doesn’t matter: #import can come as last, main :: () { } as first or last or somewhere in between, and so on. This is because the compiler does several passes.
 
-- LLVM
-- different backend (comp / run)
-- debug  / release
-   producing an error in debug builds
-   // (and unexpected runtime behavior if this error checking is turned off).
-
-Front-end time: 0.043859 seconds.
-llvm      time: 0.012493 seconds.
+*TIP*: In general it is useful to find `main` quickly, so by convention main is usually placed at the end (bottom) of the source file.

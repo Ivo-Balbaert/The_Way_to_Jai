@@ -48,7 +48,7 @@ But of course you'll want to be able to use Jai from any directory:
 
 ### 2.2.2 Making the jai command system-wide available
 
-To achieve this do the following:
+To achieve this, do the following:
 
     - on Windows: add the path to where jai.exe lives (for example c:\jai\bin) to the PATH system 
     environment variable; here is how to do that:
@@ -86,11 +86,30 @@ Windows is the primary development platform for Jai, because most games are writ
 
 
 ## 2.3 Editor help for coding Jai
-Writing a program's source code goes easier when you have some support such as syntax highlighting in your code editor. Support exists for vim, Sublime Text 3 and VSCode, see: [Tooling Ecosystem](https://github.com/Jai-Community/Jai-Community-Library/wiki/References#tooling-ecosystem). Let's use VSCode here.
+Writing a program's source code goes easier when you have some support such as syntax highlighting in your code editor. Support exists for vim, Sublime Text 3 and VSCode, see: [Tooling Ecosystem](https://github.com/Jai-Community/Jai-Community-Library/wiki/References#tooling-ecosystem). 
 
-### 2.3.1  Using the Visual Studio Code plugin
+### 2.3.1 Overview
 
-Visual Studio Code is one of the most popular programmer’s editors today: [VSCode](https://code.visualstudio.com/), it offers lots of basic functionality (code folding, brace pairing, numbering lines, and so on) and a myriad number of extensions.
+1) **vim**: [Jai.vim](github.com/rluba/jai.vim): Vim syntax highlighting for the Jai programming language.  			
+     
+2) **Emacs**:  [Jai-mode.el](https://github.com/krig/jai-mode/blob/master/jai-mode.el)
+
+3) **Sublime Text 3**: [RobinWragg/JaiTools](https://github.com/RobinWragg/JaiTools)
+ Syntax highlighting, autocompletion, and Goto Symbol/Anything for the Jai language 
+
+4) **Visual Studio Code**: (see § 2.2.2)
+Iain King: [The Language - Visual Studio Marketplace - v0.0.85](https://marketplace.visualstudio.com/items?itemName=onelivesleft.the-language) – 
+
+_Language server_:	[Pyromuffin/jai-lsp](https://github.com/Pyromuffin/jai-lsp)
+
+5) **Visual Studio**: [Jai Revolution](https://inductive.no/jai/jai-revolution/) 
+   plugin for Visual Studio 2013 / 2015 from Inductive AS, published 2015
+	Syntax highlighting (cannot be installed in VS 2017).
+
+At this time I recommend the VSCode plugin, because it probably has the most functionality.
+### 2.3.2  Using the Visual Studio Code plugin
+
+Visual Studio Code (VSCode) is one of the most popular programmer’s editors today and can be installed from: [VSCode](https://code.visualstudio.com/), it offers lots of basic functionality (code folding, brace pairing, numbering lines, and so on) and a myriad number of extensions.
 There is a VS Code plugin for Jai named _The Language_, which provides basic IDE functionality: [The Language](https://marketplace.visualstudio.com/items?itemName=onelivesleft.the-language).
 
 VSCode is very helpful for editing you source code. Compiling is usually done from the command-line (cmd on Windows or a terminal in Linux), but you can do it also from within VSCode by opening up a New Terminal.

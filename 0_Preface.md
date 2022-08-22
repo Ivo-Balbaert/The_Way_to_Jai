@@ -18,9 +18,8 @@ Here are some conventions we'll use in the text:
 Code will be shown in a grey background.
 ```
 
-We'll use _italics_ for folder names, module names, other packages, and so on.
-
-We'll use **bold** for new keywords and directives.
+We'll use _italics_ for folder names, module names, other packages, and also for the output of running programs.  
+We'll use **bold** for important concepts, new keywords and directives.
 
 Sometimes comparisons will be made with other programming languages, to better engage experienced developers, but these will be outside the main text.
 
