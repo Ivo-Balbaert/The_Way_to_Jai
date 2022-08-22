@@ -3,12 +3,12 @@
 Some preliminary remarks:
   * Jai source code files have the extension **.jai**. But this is a convention, the compiler doesn't force you to use this extension.
 
-  * In a code file, as is customary in all C type languages, every code line ends with a **;**. You can place several code lines on one line, if you separate them with ; - but this is not so readable.
+  * In a code file, as is customary in all C type languages, every code line ends with a **;**. You can place several code lines on one line, if you separate them with ; but this is not so readable.
   
    * Sometimes it can be useful to document your code. This can be done in Jai with _comments_:  
    // for a single-line comment, at the start of the line or in the middle of a line  
-   /*   …   
-   …
+   /*    
+   …  
    */ for a multi-line comment   
    These can contain nested comments:  /* block /* nested */ */
    Comments are not compiled. Use comments sparingly, in general names of variables should show what they contain, and names of procedures should tell us what they do.
