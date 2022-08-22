@@ -114,7 +114,7 @@ There is a VS Code plugin for Jai named _The Language_, which provides basic IDE
 
 VSCode is very helpful for editing you source code. Compiling is usually done from the command-line (cmd on Windows or a terminal in Linux), but you can do it also from within VSCode by opening up a New Terminal.
 
-### 2.3.2 How to edit, build and run a Jai program in VS-Code through CodeRunner
+### 2.3.3 How to edit, build and run a Jai program in VS-Code through CodeRunner
 
 Install the [CodeRunner](https://marketplace.visualstudio.com/items?itemName=formulahendry.code-runner)  extension.
 Then in File, Preferences, Settings:
@@ -130,7 +130,7 @@ This is the same as editing in settings.json:
 Now you can RIGHT-click on the code window and select the 1st command: `Run code`, and it will execute this command, which will compile and then run the generated executable.
 We'll show an image of this in chapter 3.
 
-### 2.3.3 The compiler command
+### 2.3.4 The compiler command
 
 Now open up a terminal and type `jai` and ENTER. You get the following message:
 
