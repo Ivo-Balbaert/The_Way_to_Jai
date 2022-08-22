@@ -9,7 +9,8 @@ Some preliminary remarks:
    // for a single-line comment, at the start of the line or in the middle of a line  
    /*    
    …  
-   */ for a multi-line comment   
+   \*/  
+   for a multi-line comment   
    These can contain nested comments:  /* block /* nested */ */
    Comments are not compiled. Use comments sparingly, in general names of variables should show what they contain, and names of procedures should tell us what they do.
 
