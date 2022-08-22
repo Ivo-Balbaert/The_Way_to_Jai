@@ -6,7 +6,8 @@ If you find mistakes, ambiguities, things that are not clear, please create an i
 
 _Table of Contents_
 
-    0. [0_Preface](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/Preface.md)
-    1. [1_What_is_Jai?](https://github.com/Ivo-Balbaert/The_Way_to_Jai/tree/main/1_What_is_Jai)
-    2. [2_Setting_up_a_Jai_Development_Environment](https://github.com/Ivo-Balbaert/The_Way_to_Jai/tree/main/2_Setting_up_a_Jai_Development_Environment)
-    3. [3_Compiling_and_running_your_first_program](https://github.com/Ivo-Balbaert/The_Way_to_Jai/tree/main/3_Compiling_and_running_your_first_program)
+   [0_Preface](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/Preface.md)
+   [1_What_is_Jai?](https://github.com/Ivo-Balbaert/The_Way_to_Jai/tree/main/1_What_is_Jai)
+   [2_Setting_up_a_Jai_Development_Environment](https://github.com/Ivo-Balbaert/The_Way_to_Jai/tree/main/2_Setting_up_a_Jai_Development_Environment)
+   [3_Compiling_and_running_your_first_program](https://github.com/Ivo-Balbaert/The_Way_to_Jai/tree/main/3_Compiling_and_running_your_first_program)
+   [4_More_info_about_the_compiler](https://github.com/Ivo-Balbaert/The_Way_to_Jai/tree/main/4_More_info_about_the_compiler)
