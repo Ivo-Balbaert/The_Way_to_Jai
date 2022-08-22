@@ -51,8 +51,7 @@ Example:     `jai -x64 program.jai -- info for the compile_time execution`
  `-no_cwd`           Turn off the compiler's initial change of working directory. This is a temporary option, provided because the policy around working directories is new and is still being worked out.
 
  `-plug name`        Import module 'name' into the metaprogram and use it as a plugin.  
- `-version`          Print the version of the compiler.
-_Any argument not starting with a -, and before --, is the name of a file to compile._
+ `-version`          Print the version of the compiler.  
 
 There are also a few very _tweaky compiler-front-end options_ that are rarely used. To see these, do:  
            ` jai --- help`
