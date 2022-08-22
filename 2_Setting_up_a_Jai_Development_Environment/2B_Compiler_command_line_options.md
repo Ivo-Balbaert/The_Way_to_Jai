@@ -29,28 +29,28 @@ Example:     `jai -x64 program.jai -- info for the compile_time execution`
 
  `-natvis`           Use natvis compatible type names in debug info (array<T> instead of [] T, etc).
 
- -verbose          Output some extra information about what this metaprogram is doing.
+ `-verbose`          Output some extra information about what this metaprogram is doing.
 
 **Output**:  
- `-exe name`         Set output_executable_name on the target workspace to 'name'.
+ `-exe name`         Set output_executable_name on the target workspace to 'name'.  
  `-no_color`         Disable ANSI terminal coloring in output messages.
 
 **Modules**:  
  `-import_dir arg`   Add this directory to the list of directories searched by #import. Can be used multiple times.
 
 **Performance**:  
- `-release`          Build a release build, i.e., tell the default metaprogram to disable stack traces and enable optimizations. This compiles the program with llvm backend -O2 optimization
+ `-release`          Build a release build, i.e., tell the default metaprogram to disable stack traces and enable optimizations. This compiles the program with LLVM backend -O2 optimization
 
  `-no_dce`     Turn off dead code elimination. This is a temporary option, provided because dead code elimination is a new and potentially unstable feature. This will eventually be removed; the preferred way to turn off dead code elimination is via Build_Options.
 
- `-no_check`         Do not import modules/Check and run it on the code. The result will be that you won't get augmented error checking for stuff like print() calls. Use this if you want to substitute your own error checking plugin, or for higher speeds in builds known to be good.
+ `-no_check`         Do not import modules/Check and run it on the code. The result will be that you won't get augmented error checking for stuff like `print()` calls. Use this if you want to substitute your own error checking plugin, or for higher speeds in builds known to be good.
 
- -no_check_bindings  	Disable checking of module bindings when running modules/Check. If modules/Check is not run due to -no_check, this does nothing.
+ `-no_check_bindings`  	Disable checking of module bindings when running modules/Check. If modules/Check is not run due to -no_check, this does nothing.
 
 **Miscellaneous**:  
  `-no_cwd`           Turn off the compiler's initial change of working directory. This is a temporary option, provided because the policy around working directories is new and is still being worked out.
 
- `-plug name`        Import module 'name' into the metaprogram and use it as a plugin.
+ `-plug name`        Import module 'name' into the metaprogram and use it as a plugin.  
  `-version`          Print the version of the compiler.
 _Any argument not starting with a -, and before --, is the name of a file to compile._
 
