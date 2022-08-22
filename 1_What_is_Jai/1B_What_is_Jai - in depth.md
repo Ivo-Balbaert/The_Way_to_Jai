@@ -66,7 +66,7 @@ C code and Jai code can live side by side; C and Jai interoperate seamlessly. Ja
 
 Jai is like C, also an _imperative, statically and strongly typed_ language, but with a variety of modern language features that C lacks, and with another skin and techniques that are more suitable for game development, where performance, stability and productivity are of the utmost importance.
 
-**1.2 Comparison with other languages**
+**1.2 Comparisons with other languages**
 
 Jai obviously belongs to the C-family of languages, together with C++, Objective C, Java, C#, and so on. For example: it uses semicolons ; to mark the end of a code-line, and encloses a block of code lines within curly braces { }. However, it clearly attempts to provide a simpler and more enjoyable syntax than C/C++.
 
@@ -137,15 +137,15 @@ They have more badly-fitting couplings, take longer to compile, etc.
 Programs are 100x slower, harder to understand, …
 
 
-**1.6 Jai community**
+**1.6 Jai community and communication channels**
 
 Jonathan Blow is CEO of a game-developing company called Thekla ([The Witness](www.thekla.com)](http://www.thekla.com/)).  
 Blow receives and sometimes answers discussions and issues about Jai on [_language@thekla.com_](mailto:language@thekla.com).  
 
 Reddit discussions on the language happen on:[Jai Reddit](https://www.reddit.com/r/Jai/)  
 
-There is a Jai Community wiki at:  
- [Home · Jai-Community/Jai-Community-Library Wiki (github.com)](https://github.com/Jai-Community/Jai-Community-Library/wiki)   and [Jai Community - A place to learn about Jai programming language](https://jai.community/)
+There is a Jai Community wiki at:    
+[Home · Jai-Community/Jai-Community-Library Wiki (github.com)](https://github.com/Jai-Community/Jai-Community-Library/wiki)   and [Jai Community - A place to learn about Jai programming language](https://jai.community/)
 
 A Discord channel called SB (Secret Beta) [https://discord.gg/wB52e2ND](https://discord.gg/wB52e2ND)
 
