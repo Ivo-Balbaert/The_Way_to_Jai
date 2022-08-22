@@ -40,11 +40,11 @@ Now copy the _jai_ subfolder in its entirety to its destination (let's call this
 Now open a terminal in your Jai root folder, and type the command:
     - on Windows: `jai -version`
     - on Linux (or WSL2 in Windows): `./jai -version`
-, it will show the following output (for you your actual version):
+, it will show the following output (for your actual version):
 
 _Version: beta 0.1.036, built on 17 August 2022._
 
-But of course you'll want to be able to use Jai from any directory: 
+But of course you'll want to be able to use Jai from any directory, let's see how this can be done. 
 
 ### 2.2.2 Making the jai command system-wide available
 
@@ -86,7 +86,7 @@ Windows is the primary development platform for Jai, because most games are writ
 
 
 ## 2.3 Editor help for coding Jai
-Writing a program's source code goes easier when you have some support such as syntax highlighting in your code editor. Support exists for vim, Sublime Text 3 and VSCode, see: [Tooling Ecosystem](https://github.com/Jai-Community/Jai-Community-Library/wiki/References#tooling-ecosystem). 
+Writing a program's source code is easier when you have some support such as syntax highlighting in your code editor. Support exists for vim, Sublime Text 3 and VSCode, see: [Tooling Ecosystem](https://github.com/Jai-Community/Jai-Community-Library/wiki/References#tooling-ecosystem). 
 
 ### 2.3.1 Overview
 
@@ -100,11 +100,11 @@ Writing a program's source code goes easier when you have some support such as s
 4) **Visual Studio Code**: (see § 2.2.2)
 Iain King: [The Language - Visual Studio Marketplace - v0.0.85](https://marketplace.visualstudio.com/items?itemName=onelivesleft.the-language) – 
 
-_Language server_:	[Pyromuffin/jai-lsp](https://github.com/Pyromuffin/jai-lsp)
-
 5) **Visual Studio**: [Jai Revolution](https://inductive.no/jai/jai-revolution/) 
    plugin for Visual Studio 2013 / 2015 from Inductive AS, published 2015
 	Syntax highlighting (cannot be installed in VS 2017).
+
+6) **Language server**:	[Pyromuffin/jai-lsp](https://github.com/Pyromuffin/jai-lsp)
 
 At this time I recommend the VSCode plugin, because it probably has the most functionality.
 ### 2.3.2  Using the Visual Studio Code plugin
