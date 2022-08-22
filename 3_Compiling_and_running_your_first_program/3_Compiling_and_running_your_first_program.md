@@ -20,9 +20,10 @@ Some preliminary remarks:
 
 To start, let's create a folder _jai_projects_.
 Open this folder in VSCode by selecting File, Open Folder.
-Now create a new (empty) text file, and save it as _hello_sailor.jai_. 
+Now create a new (empty) text file, and save it as 
+_3.1_hello_sailor.jai_. 
 
-Now try to compile this empty file: `jai hello_sailor.jai`
+Now try to compile this empty file: `jai 3.1_hello_sailor.jai`
 
 The compiler protests with:  
 _In Workspace 2 ("Target Program"):
@@ -88,35 +89,30 @@ We won't display this output again, unless it contains something interesting.
 ## 3.2 Compiling our first program
 
 ### 3.2.1 Compile-time
-You see that the compilation phase only took a fraction of a second, which is called **compile-time**, a lot of things happen. As we will see later (§ 3.2.4 and chapter ??), Jai can do very complex things during compilation, even running entire programs! 
+You see that in the compilation phase, that only took a fraction of a second, which is called **compile-time**, a lot of things happen. As we will see later (§ 3.2.4 and chapter ??), Jai can do very complex things during compilation, even running entire programs! 
 But as we will soon see with real programs that do something, Jai always compiles very fast.
 
 Let's analyze the compilation output:
-First it displays the full _linker command_ (this could be useful when something goes wrong at this stage). Here (on Windows) we see Microsoft's `link.exe` at work.
-Calling the compiler creates a hidden _.build_ folder, in which _.obj_ files like _hello_sailor_1_w2.obj_ are created, as well as a .lib and .exp file.
-(on Linux the lld-linux command is used)
+First it displays the full _linker command_ (this could be useful when something goes wrong at this stage). Here (on Windows) we see Microsoft's `link.exe` at work; on Linux the lld-linux command is used.  
+Calling the compiler creates a hidden _.build_ folder, in which _.obj_ files like _hello_sailor_1_w2.obj_ are created, as well as a .lib and .exp file.  
 
-The linker then combines all these and helper libraries in one executable named _hello_sailor.exe_. You will also see a file with **.pdb** extension, which is used when debugging.
+The linker then combines all these and helper libraries in one executable named _hello_sailor.exe_ on Windows and _hello_sailor_ on Linux and macOS. You will also see a file with **.pdb** extension, which is used when debugging.
 
-Compilation/linking produces a single executable hello.exe (on Windows) or hello (on Linux, macOS) as output: Jai follows the _single compilation unit model_.
-
-You can execute this by typing:  _hello_sailor_
-(_./hello_sailor_ on Linux), but as expected, nothing is displayed.
+Compilation/linking produces a single executable as output: Jai follows the _single compilation unit model_.  
+You can execute this by typing:  `_hello_sailor_`
+(`_./hello_sailor_` on Linux), but as expected, nothing is displayed.
 
 ### 3.2.2 Printing output
 
-No we want to display a greeting to a sailor, let's say: _Hello, Sailor from Jai!_
-
-This is a string and must be enclosed within double quotes "", like:
-_"Hello, Sailor from Jai!"_.
-
+No we want to display a greeting to a sailor, let's say: _Hello, Sailor from Jai!_  
+This is a string and must be enclosed within double quotes "", like:  
+_"Hello, Sailor from Jai!"_.  
 To produce an output in Jai, we use the **print** procedure, which can take this string as argument, like this:
 
 ```
 print("Hello, Sailor from Jai!");
 ```
-This is a complete code statement, so it must end with a semicolon **;**
-
+This is a complete code statement, so it must end with a semicolon **;**  
 We now have the following code:
 
 ```
@@ -128,19 +124,20 @@ main :: () {
 Let's compile it again:  `jai hello_sailor.jai`
 But there is a problem, we get the following output:
 
-_In Workspace 2 ("Target Program"):
+```
+In Workspace 2 ("Target Program"):
 d:/Jai/The Way to Jai/3-Compiling_and_running_your_first_program/code/hello_sailor.jai:2,4: **Error: Undeclared identifier 'print'.**
 
     main :: () {
        print("Hello, Sailor from Jai!");
-..._
-
+...
+```  
 The error means the compiler can't find the _print_ procedure. That's because this procedure is defined elsewhere, in a **module** called _Basic_.
 
-> Modules are stored in the _jai\modules_ folder. There we find a subfolder _Basic_, containing a file _Print.jai_, which contains the definition of print.
+> Modules are stored in the _jai\modules_ folder. There we find a subfolder _Basic_, containing a file _Print.jai_, which contains the definition of `print`.
 
 In order to make this clear to the compiler, we must **import** that module with the following statement:  `#import "Basic";`
-Add this at the start, so that our code file now becomes:
+Add this at the start, so that our code file looks like:
 
 ```
 #import "Basic";
@@ -154,29 +151,27 @@ Now compilation succeeds and an executable is created!
 
 ### 3.2.3 Run-time
 
-When we now run the hello_sailor executable, we see the expected output:
-
+When we now run the hello_sailor executable, we see the expected output:  
 _Hello, Sailor from Jai!_
-
-d:\Jai\The Way to Jai\3-Compiling_and_running_your_first_program\code>
 
 Congratulations! You made your first Jai program.
 
 Here is a screenshot where the program is edited, compiled and run from within VSCode:
 
-![Program in VSCode](..\images\program_vscode.png "Program in VSCode")
+![Program in VSCode](https://github.com/Ivo-Balbaert/The_Way_to_Jai/tree/main/images/program_vscode.png)
+
 
 The phase when the Jai program binary file executes is called **run-time**. 
 Compile-time and run-time are very distinct:
- 1. first you compile a program which is compile-time 
- 2. then you run it, which is run-time.
+ 1. first you compile a program which is **compile-time** 
+ 2. then you execute or run it, which is **run-time**.
 
 But due to its extensive meta-programming capabilities, Jai can even 
 _run a program during compile-time_!
 
 ### 3.2.4 Running code during compile-time
 
-Make a new source file called _hello_sailor_comptime.jai_ and add the following line after main: `#run main();`, so that we get:
+Make a new source file called _3.2_hello_sailor_comptime.jai_ and add the following line after main: `#run main();`, so that we get:
 
 ```
 #import "Basic";
