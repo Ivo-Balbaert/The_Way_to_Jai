@@ -76,7 +76,7 @@ With C3: [Comparisons with other languages - C3 Documentation (c3-lang.org)](htt
 
 **1.3 Some steps in Jai's history**
 
-The video talk that started Jai development was called: _Ideas about a new programming language for games_ and posted on Sep 17 2014 **(**[https://www.youtube.com/watch?v=TH9VCN6UkyQ&index=1&list=PLmV5I2fxaiCKfxMBrNsU1kgKJXD3PkyxO](https://www.youtube.com/watch?v=TH9VCN6UkyQ&index=1&list=PLmV5I2fxaiCKfxMBrNsU1kgKJXD3PkyxO)).  
+The video talk that started Jai development was called: _Ideas about a new programming language for games_ and was posted on Sep 17 2014 **(**[https://www.youtube.com/watch?v=TH9VCN6UkyQ&index=1&list=PLmV5I2fxaiCKfxMBrNsU1kgKJXD3PkyxO](https://www.youtube.com/watch?v=TH9VCN6UkyQ&index=1&list=PLmV5I2fxaiCKfxMBrNsU1kgKJXD3PkyxO)).  
 In Apr 2017, Blow showed a small demo of the language at Reboot Development 2017, ["Making Game Programming Less Terrible"](https://www.youtube.com/watch?v=gWv_vUgbmug)(https://www.youtube.com/watch?v=gWv\_vUgbmug).  
 In Jan 2018 a status update video was published ([https://www.youtube.com/watch?v=rFaBs-CUX5w](https://www.youtube.com/watch?v=rFaBs-CUX5w)).  
 In Mar 2018, Jai was given to a few close associates of Blow.  
@@ -91,7 +91,7 @@ On August 2022, the beta reached v 0.1.036 and extended to around 250 users.
 
 In the 2014-2018 period, Jonathan Blow frequently did educational video overviews of Jai's development ((a series of talks/demos about the language here: [Jonathan Blow - YouTube](https://www.youtube.com/user/jblow888/videos)), and got feedback from people through Q & A sessions and mail. In the closed-beta period, Blow switched to videos of working on the compiler and the game and got user feedback mostly through mail.
 
-Jai's robustness and usability is extensively tested through the Sokoban game which is being developed in Jai (some 250 K LOC), but also through the many projects undertaken by the beta users.
+Jai's robustness and usability is extensively tested through the Sokoban game which is being developed in Jai (some 250 K LOC Lines Of Code), but also through the many projects undertaken by the beta users.
 
 The business-model is based on the commercial release of games written in Jai by the Thekla company, starting with the Sokoban game.  
 
@@ -136,26 +136,24 @@ They have more badly-fitting couplings, take longer to compile, etc.
 5- You should use RAII / ARC, GC etc.  
 Programs are 100x slower, harder to understand, …
 
-##
 
 **1.6 Jai community**
 
 Jonathan Blow is CEO of a game-developing company called Thekla ([The Witness](www.thekla.com)](http://www.thekla.com/)).  
 Blow receives and sometimes answers discussions and issues about Jai on [_language@thekla.com_](mailto:language@thekla.com).  
 
-Reddit discussions on the language happen on:https://www.reddit.com/r/jai\_language/  
+Reddit discussions on the language happen on:[Jai Reddit](https://www.reddit.com/r/jai\_language/)  
 
 There is a Jai Community wiki at:  
  [Home · Jai-Community/Jai-Community-Library Wiki (github.com)](https://github.com/Jai-Community/Jai-Community-Library/wiki)   and [Jai Community - A place to learn about Jai programming language](https://jai.community/)
 
 A Discord channel called SB (Secret Beta) [https://discord.gg/wB52e2ND](https://discord.gg/wB52e2ND)
 
-**1.7 Jai popularity**
+**1.7 Jai's popularity**
 
 Blow's videos about the design and making of Jai are very popular: They get viewing numbers ranging from a few K to 55 K, even 229 K for the very first video.
 
-**Reddit / Discord / Twitter JB / Youtube JB / Jai Community Library Wiki / SB**
-
+**Reddit / Discord / Twitter JB / Youtube JB / Jai Community Library Wiki / SB**  
 (members) ( followers) (abonnees) / (watch - stars)  
 2022 Feb 25: **1.4 K /** / 122.4 K / **62.3 K / 40 - 129**  
 2022 May 21: **1.4 K / 199 /** 122.3 K / **62.3 K / 42 - 151**  
