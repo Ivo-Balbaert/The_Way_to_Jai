@@ -26,6 +26,6 @@ It was designed with these goals in mind:
     
 To realize these goals, Jai for example has no garbage collection (GC) and no exception handling mechanism like Java or C#.
 
-Why is Jai ground-breaking? Jai is so important because it is an effort to build a modern systems programming language from the ground up by a very gifted and experienced developer. With his knowledge of all C/C++ shortcomings, he rethought every one of these problems to give them an easier to use, more elegant or more performant solution. In this way it is really _a better and modern day C_, and also a _C++ done right_.
+Why is Jai ground-breaking? Jai is so important because it is an effort to build a modern systems programming language from the ground up by a very gifted and experienced developer. With his knowledge of all C/C++ shortcomings, he rethought every one of these problems to give them an easier to use, more elegant or more performant solution. In this way Jai really is _a better and modern day C_, and also a _C++ done right_.
 
 Don’t worry if some concepts are not yet clear! We will experience these characteristics first hand as we grow more and more acquainted with Jai in the coming chapters. 

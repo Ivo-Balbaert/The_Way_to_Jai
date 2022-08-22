@@ -78,41 +78,30 @@ With C3: [Comparisons with other languages - C3 Documentation (c3-lang.org)](htt
 
 **1.3 Some steps in Jai's history**
 
-The video talk that started Jai development was called: _Ideas about a new programming language for games_ on Sep 17 2014 **(**[https://www.youtube.com/watch?v=TH9VCN6UkyQ&index=1&list=PLmV5I2fxaiCKfxMBrNsU1kgKJXD3PkyxO](https://www.youtube.com/watch?v=TH9VCN6UkyQ&index=1&list=PLmV5I2fxaiCKfxMBrNsU1kgKJXD3PkyxO)).
+The video talk that started Jai development was called: _Ideas about a new programming language for games_ and posted on Sep 17 2014 **(**[https://www.youtube.com/watch?v=TH9VCN6UkyQ&index=1&list=PLmV5I2fxaiCKfxMBrNsU1kgKJXD3PkyxO](https://www.youtube.com/watch?v=TH9VCN6UkyQ&index=1&list=PLmV5I2fxaiCKfxMBrNsU1kgKJXD3PkyxO)).  
+In Apr 2017, Blow showed a small demo of the language at Reboot Development 2017, ["Making Game Programming Less Terrible"](https://www.youtube.com/watch?v=gWv_vUgbmug)(https://www.youtube.com/watch?v=gWv\_vUgbmug).  
+In Jan 2018 a status update video was published ([https://www.youtube.com/watch?v=rFaBs-CUX5w](https://www.youtube.com/watch?v=rFaBs-CUX5w)).  
+In Mar 2018, Jai was given to a few close associates of Blow.  
+Blow fired the compiler team in early 2019 because they didn't understand Jon's intentions with Jai (they wanted to open it up earlier).
 
-In Apr 2017, Blow showed a small demo of the language at Reboot Development 2017, ["Making Game Programming Less Terrible"](https://www.youtube.com/watch?v=gWv_vUgbmug)(https://www.youtube.com/watch?v=gWv\_vUgbmug).
+A _closed beta program_ (the compiler/docs were send to a limited number of people) started Dec 21 2019: this was the first beta with 10 people. Apr 2020: 20 people.    
+This reached version 0.0.30 on Oct 25 2020. Nov 2020: 40 people. Beta 37 was issued on Jan 1 2021, and had 51 participants.    
+On Dec 24 2021, beta 100 was shipped, with around 100 beta users.  
+A new way of _transitive invites_ to grow the beta user group was introduced.  
+On May 2022, the beta reached v 0.1.025 and extended to around 200 users.  
+On August 2022, the beta reached v 0.1.036 and extended to around 250 users.
 
-In Jan 2018 a status update video was published ([https://www.youtube.com/watch?v=rFaBs-CUX5w](https://www.youtube.com/watch?v=rFaBs-CUX5w)).
-
-In Mar 2018, Jai was given to a few close associates of Blow.
-
-JB fired the compiler team because they didn't understand Jon's intentions with Jai (they wanted to open it up ealier).
-
-A _closed beta program_ (the compiler/docs were send to a limited number of people) started Dec 21 2019: this was the first beta with 10 people. Apr 2020: 20 people.
-
-This reached version 0.0.30 on Oct 25 2020. Nov 2020: 40 people. Beta 37 was issued on Jan 1 2021, and had 51 participants.
-
-On Dec 24 2021, beta 100 was shipped, with around 100 beta users.
-
-A new way of _transitive invites_ to grow the beta user group was introduced.
-
-On May 2022, the beta reached v 0.1.025 and extended to around 200 users.
-
-On AUgust 2022, the beta reached v 0.1.036 and extended to around 250 users.
-
-In the 2014-2018 periode, Jonathan Blow frequently did educational video overviews of Jai's development ((a series of talks/demos about the language here: [Jonathan Blow - YouTube](https://www.youtube.com/user/jblow888/videos)), and got feedback from people through Q & A sessions and mail. In the closed-beta period, Blow switched to videos of working on the compiler and the game and got user feedback mostly through mail.
+In the 2014-2018 period, Jonathan Blow frequently did educational video overviews of Jai's development ((a series of talks/demos about the language here: [Jonathan Blow - YouTube](https://www.youtube.com/user/jblow888/videos)), and got feedback from people through Q & A sessions and mail. In the closed-beta period, Blow switched to videos of working on the compiler and the game and got user feedback mostly through mail.
 
 Jai's robustness and usability is extensively tested through the Sokoban game which is being developed in Jai (some 250 K LOC), but also through the many projects undertaken by the beta users.
 
-The business-model is based on the commercial release of games written in Jai by the Thekla company, starting with the Sokoban game.
+The business-model is based on the commercial release of games written in Jai by the Thekla company, starting with the Sokoban game.  
 
-Jai will be released gradually, as in this order:
-
+Jai will be released gradually, as in this order:  
 - a closed beta release (from Dec 2019 until ??)
 - an open binary distribution release
 - an open-source release on GitHub of the compiler code, a game-engine and (part of) the Sokoban game, but with no open-source contributions by pull requests in the beginning period
-- a full open-source release
-
+- a full open-source release  
 The Sokoban game will be commercially released.
 
 ### As to licensing:
@@ -125,7 +114,7 @@ The name "Jai" means victory in Hindi, Indian languages, or also "Just Another I
 
 **1.4 Specific Jai features**
 
-(Unique, essential, killer features of Jai)
+These are some unique, essential, killer features of Jai:
 
 - Reflection (introspection) and run-time type information
 - Low-level memory management tools for memory allocation and freeing
@@ -137,41 +126,29 @@ The name "Jai" means victory in Hindi, Indian languages, or also "Just Another I
 
 1- Implementation details don't matter, like managing memory, how data structures look like, …
 
-2- Scripting lanuages, interpreted-ness (Perl, Python, Ruby, …), managed-ness (Java, .NET) make a language more powerful, and because computers will be so fast, all will be fine!
+2- Scripting languages, interpreted-ness (Perl, Python, Ruby, …), managed-ness (Java, .NET) make a language more powerful, and because computers will be so fast, all will be fine!  
+All this leads to conflation of slowness (heavy run-times) and lack of control.
 
-    - Conflation of slowness (heavy runtimes)/lack of control and advanced features
-
-3- More layers of software are good:
-
-but: more layers are harder to understand, to debug, to install, to use
-
-They have more badly-fitting couplings, take longer to compile, etc.
+3- More layers of software are good:  
+but: more layers are harder to understand, to debug, to install, to use.   
+They have more badly-fitting couplings, take longer to compile, etc.  
 
 4- You want a complicated, slow IDE to get between you and your programming (Visual Studio, Eclipse, Xcode, …) – the same goes for: a big complicated "ecosystem" of tools, package manager, and so on.
 
-5- You should use RAII / ARC, GC etc.
-
-    - Programs are 100x slower, harder to understand, …
+5- You should use RAII / ARC, GC etc.  
+Programs are 100x slower, harder to understand, …
 
 ##
 
 **1.6 Jai community**
 
-Jonathan Blow is CEO of a game-developing company called Thekla ([The Witness (thekla.com)](http://www.thekla.com/)).
+Jonathan Blow is CEO of a game-developing company called Thekla ([The Witness](www.thekla.com)](http://www.thekla.com/)).  
+Blow receives and sometimes answers discussions and issues about Jai on [_language@thekla.com_](mailto:language@thekla.com).  
 
-Blow receives and sometimes answers discussions and issues about Jai on [_language@thekla.com_](mailto:language@thekla.com).
+Reddit discussions on the language happen on:https://www.reddit.com/r/jai\_language/  
 
-
-
-Reddit discussions on the language happen on:https://www.reddit.com/r/jai\_language/
-
-
-
-There is a Jai Community wiki at:
-
- [Home · Jai-Community/Jai-Community-Library Wiki (github.com)](https://github.com/Jai-Community/Jai-Community-Library/wiki)
-
- and [Jai Community - A place to learn about Jai programming language](https://jai.community/)
+There is a Jai Community wiki at:  
+ [Home · Jai-Community/Jai-Community-Library Wiki (github.com)](https://github.com/Jai-Community/Jai-Community-Library/wiki)   and [Jai Community - A place to learn about Jai programming language](https://jai.community/)
 
 A Discord channel called SB (Secret Beta) [https://discord.gg/wB52e2ND](https://discord.gg/wB52e2ND)
 
@@ -181,12 +158,8 @@ Blow's videos about the design and making of Jai are very popular: They get view
 
 **Reddit / Discord / Twitter JB / Youtube JB / Jai Community Library Wiki / SB**
 
-(members) ( followers) (abonnees) / (watch - stars)
-
-2022 Feb 25: **1.4 K /** / 122.4 K / **62.3 K / 40 - 129**
-
-2022 May 21: **1.4 K / 199 /** 122.3 K / **62.3 K / 42 - 151**
-
-2022 Jul 4: **1.5 K / 236 /** 122.6 K / **63.7 K / 46 – 177 / 45**
-
-2022 Jul 27: **1.6 K / 255 /** 123 K / **64.3 K / 48 – 186 / 49**
+(members) ( followers) (abonnees) / (watch - stars)  
+2022 Feb 25: **1.4 K /** / 122.4 K / **62.3 K / 40 - 129**  
+2022 May 21: **1.4 K / 199 /** 122.3 K / **62.3 K / 42 - 151**  
+2022 Jul 4: **1.5 K / 236 /** 122.6 K / **63.7 K / 46 – 177 / 45**  
+2022 Jul 27: **1.6 K / 255 /** 123 K / **64.3 K / 48 – 186 / 49**  
