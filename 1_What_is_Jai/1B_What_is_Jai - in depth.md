@@ -142,7 +142,7 @@ Programs are 100x slower, harder to understand, …
 Jonathan Blow is CEO of a game-developing company called Thekla ([The Witness](www.thekla.com)](http://www.thekla.com/)).  
 Blow receives and sometimes answers discussions and issues about Jai on [_language@thekla.com_](mailto:language@thekla.com).  
 
-Reddit discussions on the language happen on:[Jai Reddit](https://www.reddit.com/r/jai\_language/)  
+Reddit discussions on the language happen on:[Jai Reddit](https://www.reddit.com/r/Jai/)  
 
 There is a Jai Community wiki at:  
  [Home · Jai-Community/Jai-Community-Library Wiki (github.com)](https://github.com/Jai-Community/Jai-Community-Library/wiki)   and [Jai Community - A place to learn about Jai programming language](https://jai.community/)
