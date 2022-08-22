@@ -174,7 +174,7 @@ _run a program during compile-time_!
 
 Make a new source file called _3.2_hello_sailor_comptime.jai_ and add the following line after main: `#run main();`, so that we get:
 
-```c
+```
 #import "Basic";
 
 main :: () {
