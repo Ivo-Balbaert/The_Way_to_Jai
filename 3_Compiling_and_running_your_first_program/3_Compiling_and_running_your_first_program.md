@@ -11,7 +11,7 @@ Some preliminary remarks:
    …  
    \*/  
    for a multi-line comment   
-   These can contain nested comments:  /* block /* nested */ */
+   These can contain nested comments:  /* block /* nested */ */  
    Comments are not compiled. Use comments sparingly, in general names of variables should show what they contain, and names of procedures should tell us what they do.
 
    * As you will soon see, programmers use spaces and indentation to make the program text more readable for humans (the compiler doesn't care). The following rule is mostly used: at _each indentation level_, the code moves _4 spaces_ to the right.  
@@ -24,14 +24,13 @@ Now create a new (empty) text file, and save it as _hello_sailor.jai_.
 
 Now try to compile this empty file: `jai hello_sailor.jai`
 
-The compiler protests with:
-
+The compiler protests with:  
 _In Workspace 2 ("Target Program"):
 Error: No program entry point was found. (The designated entry point name is 'main'.)_
 
-(Don't worry about the Workspace, we'll explain this later (see ??).)
+(Don't worry about the Workspace, we'll explain this later (see ??).)  
 What does this mean?
-This error tells us the following:
+This error tells us the following:  
 Every Jai program needs a so called _entry point_ called **main**, as in all C-like languages, which is the starting point for code execution. 
 After all, the computer needs to know where to start executing your program!
 
@@ -43,13 +42,14 @@ main :: () {
 ```
 This is simply a _procedure_ with name `main`.
 (Jai calls **procedures** what most other languages call **functions**.)
-Not only is the main procedure a starting point, it also encompasses the complete program execution from start to end.
-:: means that main is in fact a constant, we'll see what that means later (see ??).
-() is the parameter list, which is empty for main. We also don't see anything after ): main has no return value, unlike C. Then follow the curly braces { } which normally contain the code to execute line by line.
+Not only is the main procedure a starting point, it also encompasses the complete program execution from start to end.  
+:: means that main is in fact a constant, we'll see what that means later (see ??).  
+() is the parameter list, which is empty for main. We also don't see anything after ): main has no return value, unlike C.  
+Then follow the curly braces { } which normally contain the code to execute line by line.
 
 > Remark that Jai doesn't need a special keyword like function or func or even fn to indicate a function.
 
-Because there is no code, it doesn't do anything. But this is the first program which can be compiled!
+Because there is no code, it doesn't do anything. But this is the first program which can be compiled!  
 `jai hello_sailor.jai` now produces the output:
 
 Running linker: "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\bin\Hostx64\x64\link.exe" /nologo d:/Jai/jai_projects/.build/hello_sailor_0_w2.obj d:/Jai/jai_projects/.build/hello_sailor_1_w2.obj d:/Jai/jai_projects/.build/hello_sailor_2_w2.obj d:/Jai/jai_projects/.build/hello_sailor_3_w2.obj /OUT:hello_sailor.exe /MACHINE:AMD64 /INCREMENTAL:NO /DEBUG /IMPLIB:d:/Jai/jai_projects/.build/hello_sailor.lib /libpath:"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\lib\x64" /libpath:"C:\Program Files (x86)\Windows Kits\10\Lib\10.0.18362.0\um\x64" /libpath:"C:\Program Files (x86)\Windows Kits\10\Lib\10.0.18362.0\ucrt\x64" -nodefaultlib libcmt.lib vcruntime.lib ucrt.lib kernel32.lib msvcrt.lib kernel32.lib
