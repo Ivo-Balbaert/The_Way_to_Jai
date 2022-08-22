@@ -99,8 +99,8 @@ Calling the compiler creates a hidden _.build_ folder, in which _.obj_ files lik
 The linker then combines all these and helper libraries in one executable named _hello_sailor.exe_ on Windows and _hello_sailor_ on Linux and macOS. You will also see a file with **.pdb** extension, which is used when debugging.
 
 Compilation/linking produces a single executable as output: Jai follows the _single compilation unit model_.  
-You can execute this by typing:  `_hello_sailor_`
-(`_./hello_sailor_` on Linux), but as expected, nothing is displayed.
+You can execute this by typing:  `hello_sailor`
+(`./hello_sailor` on Linux), but as expected, nothing is displayed.
 
 ### 3.2.2 Printing output
 
@@ -121,12 +121,13 @@ main :: () {
 }
 ```
 
-Let's compile it again:  `jai hello_sailor.jai`
+Let's compile it again:  `jai hello_sailor.jai`   
 But there is a problem, we get the following output:
 
 ```
 In Workspace 2 ("Target Program"):
-d:/Jai/The Way to Jai/3-Compiling_and_running_your_first_program/code/hello_sailor.jai:2,4: **Error: Undeclared identifier 'print'.**
+d:/Jai/The Way to Jai/3-Compiling_and_running_your_first_program/code/hello_sailor.jai:2,4:  
+**Error: Undeclared identifier 'print'.**
 
     main :: () {
        print("Hello, Sailor from Jai!");
