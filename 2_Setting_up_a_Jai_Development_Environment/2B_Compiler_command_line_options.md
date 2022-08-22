@@ -17,10 +17,10 @@ Example:     `jai -x64 program.jai -- info for the compile_time execution`
 
 **Command-line args**:  
  `-add arg`          Add the string 'arg' to the target program as code.
-                     Example: -add "MY_VARIABLE :: 42";
+                     Example: `-add "MY_VARIABLE :: 42"`;
                      
  `-run arg`          Start a #run directive that parses and runs 'arg' as code.
-                     Example: -run write_string(\"Hello!\n\")
+                     Example: `-run write_string(\"Hello!\n\")`
                    
 **Debugging**:  
  `-debugger`         If there is a crash in compile-time execution, drop into the interactive debugger.
