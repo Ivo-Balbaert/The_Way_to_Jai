@@ -70,10 +70,8 @@ Jai is like C, also an _imperative, statically and strongly typed_ language, but
 
 Jai obviously belongs to the C-family of languages, together with C++, Objective C, Java, C#, and so on. For example: it uses semicolons ; to mark the end of a code-line, and encloses a block of code lines within curly braces { }. However, it clearly attempts to provide a simpler and more enjoyable syntax than C/C++.
 
-See also: [Overview · Jai-Community/Jai-Community-Library Wiki (github.com)](https://github.com/Jai-Community/Jai-Community-Library/wiki/Overview#comparison-with-other-languages)
-
-for comparisons with C, C++, Java, Go, Rust, Functional Languages (Lisp, Haskell, Scheme,), Scripting Languages (PHP, JavaScript, Ruby, Python, etc.)
-
+See also: [Overview · Jai-Community/Jai-Community-Library Wiki (github.com)](https://github.com/Jai-Community/Jai-Community-Library/wiki/Overview#comparison-with-other-languages)  
+for comparisons with C, C++, Java, Go, Rust, Functional Languages (Lisp, Haskell, Scheme,), Scripting Languages (PHP, JavaScript, Ruby, Python, etc.)  
 With C3: [Comparisons with other languages - C3 Documentation (c3-lang.org)](http://www.c3-lang.org/compare/)
 
 **1.3 Some steps in Jai's history**
