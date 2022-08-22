@@ -52,32 +52,36 @@ Then follow the curly braces { } which normally contain the code to execute line
 Because there is no code, it doesn't do anything. But this is the first program which can be compiled!  
 `jai hello_sailor.jai` now produces the output:
 
+```
 Running linker: "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\bin\Hostx64\x64\link.exe" /nologo d:/Jai/jai_projects/.build/hello_sailor_0_w2.obj d:/Jai/jai_projects/.build/hello_sailor_1_w2.obj d:/Jai/jai_projects/.build/hello_sailor_2_w2.obj d:/Jai/jai_projects/.build/hello_sailor_3_w2.obj /OUT:hello_sailor.exe /MACHINE:AMD64 /INCREMENTAL:NO /DEBUG /IMPLIB:d:/Jai/jai_projects/.build/hello_sailor.lib /libpath:"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\lib\x64" /libpath:"C:\Program Files (x86)\Windows Kits\10\Lib\10.0.18362.0\um\x64" /libpath:"C:\Program Files (x86)\Windows Kits\10\Lib\10.0.18362.0\ucrt\x64" -nodefaultlib libcmt.lib vcruntime.lib ucrt.lib kernel32.lib msvcrt.lib kernel32.lib
    Creating library d:/Jai/jai_projects/.build/hello_sailor.lib and object d:/Jai/jai_projects/.build/hello_sailor.exp
 
 Stats for Workspace 2 ("Target Program"):
 Lexer lines processed: 663 (983 including blank lines, comments.)
-Front-end time: 0.043859 seconds.
-llvm      time: 0.012493 seconds.
+Front-end time: 0.043859 seconds.  
+llvm      time: 0.012493 seconds.  
 
-Compiler  time: 0.056352 seconds.
-Link      time: 0.273129 seconds.
-Total     time: 0.329482 seconds.
+Compiler  time: 0.056352 seconds.  
+Link      time: 0.273129 seconds.  
+Total     time: 0.329482 seconds.  
+```
 
 This only displays some useful compiler and linker info. You will see this whenever you compile Jai code.
 
 On Linux, you will see an output like this:
 
+```
 Running linker: /home/ivo/jai//bin/lld-linux -flavor Gnu --eh-frame-hdr -export-dynamic -o hello_sailor /home/ivo/jai_projects/.build/hello_sailor_0_w2.obj /home/ivo/jai_projects/.build/hello_sailor_1_w2.obj /home/ivo/jai_projects/.build/hello_sailor_2_w2.obj /home/ivo/jai_projects/.build/hello_sailor_3_w2.obj /lib/x86_64-linux-gnu/crt1.o /lib/x86_64-linux-gnu/crti.o /lib/x86_64-linux-gnu/crtn.o -L /home/ivo/jai_projects --dynamic-linker /lib64/ld-linux-x86-64.so.2 -rpath='$ORIGIN' -L /lib -L /lib64 -L /usr/lib -L /usr/lib64 -L /usr/local/lib/x86_64-linux-gnu -L /lib/x86_64-linux-gnu -L /usr/lib/x86_64-linux-gnu -L /usr/local/lib -L /usr/lib/x86_64-linux-gnu/libfakeroot -L /usr/lib/wsl/lib -L /home/ivo/jai/modules/ --start-group /lib/x86_64-linux-gnu/libpthread.so /lib/x86_64-linux-gnu/libm.so /lib/x86_64-linux-gnu/libc.so /lib/x86_64-linux-gnu/libdl.so /lib/x86_64-linux-gnu/librt.so /home/ivo/jai/modules/stb_sprintf/linux/stb_sprintf.a --end-group
 
 Stats for Workspace 2 ("Target Program"):
 Lexer lines processed: 7582 (11448 including blank lines, comments.)
-Front-end time: 0.096169 seconds.
-llvm      time: 0.080191 seconds.
+Front-end time: 0.096169 seconds.  
+llvm      time: 0.080191 seconds.  
 
-Compiler  time: 0.176359 seconds.
-Link      time: 0.000830 seconds.
-Total     time: 0.177189 seconds.
+Compiler  time: 0.176359 seconds.  
+Link      time: 0.000830 seconds.  
+Total     time: 0.177189 seconds.  
+```
 
 We won't display this output again, unless it contains something interesting.
 
