@@ -133,7 +133,7 @@ d:/Jai/The Way to Jai/3-Compiling_and_running_your_first_program/code/hello_sail
        print("Hello, Sailor from Jai!");
 ...
 ```  
-The error means the compiler can't find the _print_ procedure. That's because this procedure is defined elsewhere, in a **module** called _Basic_.
+The error means the compiler can't find the `print` procedure. That's because this procedure is defined elsewhere, in a **module** called _Basic_.
 
 > Modules are stored in the _jai\modules_ folder. There we find a subfolder _Basic_, containing a file _Print.jai_, which contains the definition of `print`.
 
@@ -185,15 +185,16 @@ main :: () {
 ```
 
 Now compile the program as before and carefully look at the output:
-
-   _Hello, Sailor from Jai!_
+```
+   Hello, Sailor from Jai!
    
-   _Running linker: ..._
+   Running linker: ...
+```
 
 You see the same extensive output starting with _Running linker_ as previously.
 But before the linking starts (so  **_during compile-time_** !), you already see our printed output.
-This means main() has already been executed at compile-time!
-This is because of the **#run** command. This so-called **directive** tells the compiler to run the procedure called after `#run` in compile-time.
+This means `main()` has already been executed at compile-time!
+This is because of the **#run** command. This **directive** tells the compiler to run the procedure called after `#run` in compile-time.
 
 In case of `#run main()`, you run the whole program during compile-time (see ?? for more info on `#run`).
 
@@ -202,32 +203,31 @@ In case of `#run main()`, you run the whole program during compile-time (see ?? 
 
   1) Source code file names are usually in lowercase, separated by _ if needed, like _hello_sailor.jai_ or _struct_literals.jai_. In chapters with multiple code files, we'll number them also like _3.1_hello_sailor.jai_.
 
-  2) You might have noticed that the displayed string is immediately followed by the OS-prompt. You can separate them with a blanc line by adding a newline character _\n_ to the string like this:  `print("Hello, Sailor from Jai!\n");`
+  2) You might have noticed that the displayed string is immediately followed by the OS-prompt. You can separate them with a blanc line by adding a newline character _\n_ to the string like this:  `print("Hello, Sailor from Jai!\n");`  
   Compile and check it.
 
 
 ### 3.2.6 Errors
 
-Let's see some other compile-time errors. Remove the ; at the end of the print statement and compile again. The compiler gives you the following error-message:
+Let's see some other compile-time errors.  
+Remove the ; at the end of the print statement and compile again. The compiler gives you the following error-message:
 
+```
 d:/Jai/The Way to Jai/3-Compiling_and_running_your_first_program/code/hello_sailor.jai:4,37: **Error: Semicolon expected after expression.**
 
     main :: () {
        print("Hello, Sailor from Jai!\n")
-
-This is very clear: it gives you the line (4) on which the error occurred, and even the exact column (37)! You'll find that Jai has strong compiler checks and helpful error messages following the motto: _better resolve errors at compile-time than having to deal with bugs at run-time_.
-
+```
+This is very clear: it gives you the line (4) on which the error occurred, and even the exact column (37)!  
+You'll find that Jai has strong compiler checks and helpful error messages following the motto: _better resolve errors at compile-time than having to deal with bugs at run-time_.  
 Also the Jai compiler stops at the first error it encounters and only reports that.
 
-
 **Exercises:**
-
-Experiment understanding the error messages.
+Experiment to understand the error messages.
 
 1- Leave out the closing } of main
-2- Leaving out the () parameter list in main
+2- Leave out the () parameter list in main
+3- Try changing the order of the #import, main procedure and #run statement.  
+You'll notice that the order in which definitions and procedures appear in a Jai source file doesn’t matter: `#import` can come as last, `main :: () { }` as first or last or somewhere in between, and so on. This is because the compiler does several passes.
 
-Try changing the order of the #import, main procedure and #run statement.
-You'll notice that the order in which definitions and procedures appear in a Jai source file doesn’t matter: #import can come as last, main :: () { } as first or last or somewhere in between, and so on. This is because the compiler does several passes.
-
-*TIP*: In general it is useful to find `main` quickly, so by convention main is usually placed at the end (bottom) of the source file.
+*TIP*: In general it is useful to find `main` quickly, so by convention `main` is usually placed at the end (bottom) of the source file.
