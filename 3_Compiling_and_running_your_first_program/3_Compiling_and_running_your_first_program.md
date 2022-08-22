@@ -213,7 +213,8 @@ Let's see some other compile-time errors.
 Remove the ; at the end of the print statement and compile again. The compiler gives you the following error-message:
 
 ```
-d:/Jai/The Way to Jai/3-Compiling_and_running_your_first_program/code/hello_sailor.jai:4,37: **Error: Semicolon expected after expression.**
+d:/Jai/The Way to Jai/3-Compiling_and_running_your_first_program/code/hello_sailor.jai:4,37:  
+**Error: Semicolon expected after expression.**
 
     main :: () {
        print("Hello, Sailor from Jai!\n")
