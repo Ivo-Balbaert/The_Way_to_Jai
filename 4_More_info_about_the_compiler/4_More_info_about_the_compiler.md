@@ -37,7 +37,7 @@ Two compiler backends exist: an _x64_ and an _LLVM_ backend.
 The **x64 backend** was developed from scratch by J. Blow and his compiler team. It converts the internal byte-code to x64 machine code. It does fast but naive code generation, without any code optimization.  
 It is intended to be used during the development phase, but because the difference in total compile-time between x64 and llvm is negligible, this isn’t necessary at this moment.  
 
-During compilation , the time this takes is reported as:    	
+During compilation , the time this takes is reported as:      	
 _x64 time: 0.534119 seconds._
 
 The **LLVM backend** is the default. It can explicitly be specified with: `jai -llvm filename.jai`, but being the default -llvm can be left out.  
@@ -50,7 +50,7 @@ During compilation , the time this takes is reported as:
 _llvm time: 0.062771 seconds._
 
 The sum of front-end time and back-end time is then reported as:    
-_Compiler  time: 0.587162 seconds._  
+_Compiler  time: 0.587162 seconds._    
 	Front-end time + x64 time = Compiler time (for x64 backend)  
 	Front-end time + llvm time = Compiler time (for llvm backend)
 
@@ -91,15 +91,15 @@ Alternatively, you can define this in the Jai build-system itself (see ??).
 
 ## 4.8 Options for giving code at the command-line
 With `-run arg`, you can start a #run directive that parses and runs 'arg' as code.  
-      Example:  `jai -run write_string(\"Hello!\n\")` 
+      Example:  `jai -run write_string(\"Hello!\n\")`   
 The string Hello! is then shown at the start of the compiler output.
 
 With `-add arg`, you can add the string 'arg' to the target program as code.  
-       Example: `jai -add "a := 42"; 1_hello_sailor.jai`
+       Example: `jai -add "a := 42"; 1_hello_sailor.jai`  
 Now the variable a is know in the program, and we can print it out with for example:  `print("%", a);`
 
 The `-verbose` option gives some extra information about what the metaprogram is doing, for example:  
-	`jai -run write_string(\"Hello!\n\") -add "a := 42"; -verbose 1_hello_sailor.jai`
+	`jai -run write_string(\"Hello!\n\") -add "a := 42"; -verbose 1_hello_sailor.jai`  
 shows the following at the start of the compiler output:
             
 ```
@@ -124,4 +124,5 @@ It also contains low-level functions or **intrinsics**, like the following.
 	memset :: (dest: *void, value: u8, count: s64)     #intrinsic;
    
 **memcpy** copies count bytes from source to dest,  
+**memcmp** compares the first count bytes of a and b, its return value is < 0 when a is less than b, > 0 when a is greater than b and 0 when a is equal to b.
 **memset** sets count bytes of dest to value.
