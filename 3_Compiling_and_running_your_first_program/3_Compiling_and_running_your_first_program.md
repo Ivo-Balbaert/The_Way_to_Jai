@@ -227,6 +227,25 @@ This is very clear: it gives you the line (4) on which the error occurred, and e
 You'll find that Jai has strong compiler checks and helpful error messages following the motto: _better resolve errors at compile-time than having to deal with bugs at run-time_.  
 Also the Jai compiler stops at the first error it encounters and only reports that.
 
+### 3.2.7 Exiting a program
+Normally a Jai program will stop after execution of the last statement in `main()`.
+In exceptional circumstances, a program can encounter a run-time error and crash, which means that the operating system has terminated the program. 
+Jai also provides the `exit` procedure to stop the program at any condition it encounters or reaches, see for example the following program (see 3.3_exit.jai):
+
+```
+#import "Basic";
+
+main :: () {
+  print("Before exiting\n"); // => Before exiting
+  exit(0); // exits the program
+  print("After exiting\n"); // <= this will never print!
+}
+```
+`exit` can pass an integer to the OS, so that a script which invoked our Jai program could act upon the returned value.  
+Typical is:
+   0: everything is OK
+   < 0: the program encountered an error-condition.
+
 **Exercises:**  
 Experiment to understand the error messages.
 
