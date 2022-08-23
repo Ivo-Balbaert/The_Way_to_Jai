@@ -166,8 +166,12 @@ The phase when the Jai program binary file executes is called **run-time**.
 Compile-time and run-time are very distinct:
  1. first you compile a program which is **compile-time** 
  2. then you execute or run it, which is **run-time**.
+   
+During compile-time, your code is carefully examined, and if needed a _compiler error_ is shown and the compilation stops without producing an executable. An executable binary is produced only when the compiler can finish without errors.
 
-But due to its extensive meta-programming capabilities, Jai can even 
+At run-time, a program can still be stopped (it crashes) when a certain abnormal condition is encountered producing a _run-time error_ or panic, such as for example during bounds-checking on arrays or strings (when an index is used that is outside the size of the array) or a divide-by-zero condition.
+
+Due to its extensive meta-programming capabilities, Jai can even 
 _run a program during compile-time_!
 
 ### 3.2.4 Running code during compile-time
@@ -232,3 +236,7 @@ Experiment to understand the error messages.
 You'll notice that the order in which definitions and procedures appear in a Jai source file doesn’t matter: `#import` can come as last, `main :: () { }` as first or last or somewhere in between, and so on. This is because the compiler does several passes.
 
 *TIP*: In general it is useful to find `main` quickly, so by convention `main` is usually placed at the end (bottom) of the source file.
+
+4- Write a Jai program that prints "One" and  "Two!" on consecutive lines, and then "Three!" on the same line (see 1_mini.jai).
+
+5- Investigate whether the compiler really needs source files to have the extension .jai (see 1_mini.txt).
