@@ -233,7 +233,7 @@ Experiment to understand the error messages.
 1- Leave out the closing } of main  
 2- Leave out the () parameter list in main  
 3- Try changing the order of the #import, main procedure and #run statement.    
-You'll notice that the order in which definitions and procedures appear in a Jai source file doesn’t matter: `#import` can come as last, `main :: () { }` as first or last or somewhere in between, and so on. This is because the compiler does several passes.
+You'll notice that the order in which definitions and procedures appear in a Jai source file doesn’t matter: `#import` can come as last, `main :: () { }` as first or last or somewhere in between, and so on. This is because the compiler does several passes (see § 4.1).
 
 *TIP*: In general it is useful to find `main` quickly, so by convention `main` is usually placed at the end (bottom) of the source file.
 
