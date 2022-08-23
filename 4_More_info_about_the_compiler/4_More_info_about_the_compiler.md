@@ -124,5 +124,5 @@ It also contains low-level functions or **intrinsics**, like the following.
 	memset :: (dest: *void, value: u8, count: s64)     #intrinsic;
    
 **memcpy** copies count bytes from source to dest,  
-**memcmp** compares the first count bytes of a and b, its return value is < 0 when a is less than b, > 0 when a is greater than b and 0 when a is equal to b.
+**memcmp** compares the first count bytes of a and b, its return value is < 0 when a is less than b, > 0 when a is greater than b and 0 when a is equal to b.  
 **memset** sets count bytes of dest to value.
