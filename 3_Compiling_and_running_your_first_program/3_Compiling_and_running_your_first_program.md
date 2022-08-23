@@ -241,6 +241,7 @@ main :: () {
   print("After exiting\n"); // <= this will never print!
 }
 ```
+Statements coming after `exit` will never be executed.
 `exit` can pass an integer to the OS, so that a script which invoked our Jai program could act upon the returned value.  
 Typical is:
    0: everything is OK
