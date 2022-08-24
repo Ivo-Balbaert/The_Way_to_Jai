@@ -12,8 +12,8 @@ If all data where the same, it would be a lot more difficult to make good use of
 
 Various types exist, like:  
     * _integers_, which are whole numbers (7, 42, 0, -3)  
+    * _floats_, which are decimal numbers (3.14, ) 
     * _strings_ ("Hello", "Tokyo")  
-    * _floats_, which are decimal numbers (3.14, )  
     * _booleans_, which are yes/no, on/off, true/false (the only values are true and false)    
 and so on.   
 These are the **basic** or **primitive** types in Jai, indicated respectively as **int**, **float**, **string** and **bool**. 
@@ -24,16 +24,17 @@ The type determines how a data value looks like and what can be done with it, th
 
 Operations use special _operator_ characters, like + and *.
 
-In our programs, data is stored in **constants** or **variables** which also have some type, which take up memory in the computer. Each type prescribes how much memory it needs, which is a number of bytes (b) (As you probably know, 1 byte contains 8 bits, and a bit is either 0 or 1).  
+In our programs, data is stored in **constants** or **variables** which also have some type, and take up memory in the computer. Each type prescribes how much memory it needs, which is a number of bytes (b) (As you probably know, 1 byte contains 8 bits, and a bit is either 0 or 1).  
 
 Memory is for program performance like water is for life.
-So it is important that we don't use (waste) too much memory. This also means that our program data values better be packed together in memory. This also implies that values of composite data are stored together in successive (contiguous) places in memory, so that _locality is maximized_. This means that reading in data from various caches will be much faster.
+So it is important that we don't use (waste) too much memory. This also means that our program data values better be packed together in memory. This is done by storing values of composite data together in successive (_contiguous_) places in memory, so that reading in data from various caches will be much faster, or as we say: _locality is maximized_.  
 
-Values, constants and variables combined with operators form _expressions_, like `(a + b) * 3`. Expressions result in a value, which can be assigned to other variables, like `x = (a + b) * 3`, forming a _statement_.  
+Values, constants and variables combined with operators form _expressions_, like `(a + b) * 3`. Expressions result in a value, which can be assigned to other variables, like `x = (a + b) * 3;`, forming a _statement_.  
 Each statement in Jai ends with a semi-colon `;` and uses one code line for best readability.
 
-Values of different types don't easily combine in operations, often the values of one type have to be _converted_ or _casted_ to another type. For example: in order to sum its value with another number, the string value `"42"` must first be converted to a number.
-Often these conversions don't work, like how would you convert `"Hello"` to a number?
+Values of different types don't easily combine in operations, often the values of one type have to be _converted_ or _casted_ to another type. For example: in order to sum its value with another number, the string value `"42"` must first be converted to a number.    
+_Question:_ How would you convert `"Hello"` to a number?
+Often these conversions won't work, and you'll get a compiler error.
 
 Jai is a _strongly_ and _statically typed_ language: the compiler must know the types of all the program’s constants and variables at compile time, and a variable cannot change type, like from number to string as in dynamic languages.
 > Except when the variable has type Any (see ??).  
