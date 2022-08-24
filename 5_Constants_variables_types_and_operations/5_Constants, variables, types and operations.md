@@ -11,10 +11,10 @@ If all data where the same, it would be a lot more difficult to make good use of
   
 
 Various types exist, like:  
-    * integers, which are whole numbers (7, 42, 0, -3)  
-    * strings ("Hello", "Tokyo")  
-    * floats, which are decimal numbers (3.14, )  
-    * booleans, which are yes/no, on/off, true/false (the only values are true and false)    
+    * _integers_, which are whole numbers (7, 42, 0, -3)  
+    * _strings_ ("Hello", "Tokyo")  
+    * _floats_, which are decimal numbers (3.14, )  
+    * _booleans_, which are yes/no, on/off, true/false (the only values are true and false)    
 and so on.   
 These are the **basic** or **primitive** types in Jai, indicated respectively as **int**, **float**, **string** and **bool**. 
 
