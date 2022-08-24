@@ -11,3 +11,4 @@ _Table of Contents_
    [2_Setting_up_a_Jai_Development_Environment](https://github.com/Ivo-Balbaert/The_Way_to_Jai/tree/main/2_Setting_up_a_Jai_Development_Environment)  
    [3_Compiling_and_running_your_first_program](https://github.com/Ivo-Balbaert/The_Way_to_Jai/tree/main/3_Compiling_and_running_your_first_program)  
    [4_More_info_about_the_compiler](https://github.com/Ivo-Balbaert/The_Way_to_Jai/tree/main/4_More_info_about_the_compiler)  
+   [5_Constants_variables_types_and_operations](https://github.com/Ivo-Balbaert/The_Way_to_Jai/tree/main/5_Constants_variables_types_and_operations)   
