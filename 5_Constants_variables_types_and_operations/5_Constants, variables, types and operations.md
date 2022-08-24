@@ -49,7 +49,7 @@ Here are some examples for these types:
 **bool** :	`true` and `false` values. They take up 8 bits (1 byte) of memory, and are used to test upon in conditions, so that program flow can be changed.
 
 **int** : for example `42`, `0b10` (a binary 2), `0x10` (a hexadecimal 16). Underscores can be optionally used to separate digit groups as in: `16_777_216` or `0b1010_0010_0101_1111`.  
-8 types exist according to their size (number of bytes) and whether they are positive or signed(can have a negative sign):   
+Eight types exist according to their size (number of bytes) and whether they are positive or signed(can have a negative sign):   
 
 	`s8` or `u8`   - signed and unsigned 1 byte (or 8 bit) integers, range:  -127 to 128 or 0 to 255
 	`s16` or `u16` - signed and unsigned 2 byte integers, range: -32768 to +32767 or 0 to 65,535
@@ -59,7 +59,7 @@ Here are some examples for these types:
 	int defaults to s64
 
 **float** : literals are of the form `3.141592` or `5.98e24`, with a `.` for separating the decimal part, and an `e` for indicating the power of 10 (exponent).  
-2 floating point number types exist according to their size, they are both signed:
+Two floating point number types exist according to their size, they are both signed:
 
 	`float32` - 4 byte (32 bit) 
 	`float64` - 8 byte (64 bit) 
