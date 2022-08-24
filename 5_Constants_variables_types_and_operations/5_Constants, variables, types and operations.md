@@ -10,12 +10,12 @@ Programs and applications are all about data value manipulation. _Data_ can come
 If all data where the same, it would be a lot more difficult to make good use of it. Instead, data values have a _type_. Simple data values are often called _literals_. Literal values are the stuff data is made of; they are constant at compile-time.
   
 
-Various types exist, like:
+Various types exist, like:  
     * integers, which are whole numbers (7, 42, 0, -3)
     * strings ("Hello", "Tokyo")
     * floats, which are decimal numbers (3.14, )
     * booleans, which are yes/no, on/off, true/false (the only values are true and false)  
-and so on. 
+and so on.   
 These are the **basic** or **primitive** types in Jai, indicated respectively as **int**, **float**, **string** and **bool**. 
 
 Jai also has some mechanisms to create **composite** or **custom** types, like arrays (see ??) and structs (see ??).  
