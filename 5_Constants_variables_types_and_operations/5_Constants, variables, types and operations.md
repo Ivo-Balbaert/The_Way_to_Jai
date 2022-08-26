@@ -77,4 +77,74 @@ Jai has no explicit character type. The **#char** directive on a single characte
     `#char "1"; // this is 49`  
 (see for example this [ASCII table](https://www.rapidtables.com/code/text/ascii-table.html))
 
+All things in Jai have a type, which we can find out with the **type_of()** procedure. In program 5_1_literals.jai we see this applied to a number of literals.
+
+```
+#import "Basic";
+
+main :: () {
+    print("Hello, Sailor!\n"); // => Hello, Sailor!
+    // This doesn't work:
+    // print(42);  // =>  Error: Type mismatch. Type wanted: string; type given: s64.
+    // print(false);
+
+    // But these do:
+    print("%\n", 42);    // => 42
+    print("%\n", false); // => false
+
+    print("The type of % is %\n", "Hello, Sailor!", type_of("Hello, Sailor!"));
+    // => The type of Hello Sailor! is string
+    print("The type of % is %\n", 42, type_of(42)); 
+	// => The type of 42 is s64
+    print("The type of % is %\n", false, type_of(false)); 
+	// => The type of false is bool
+}
+```
+
+Try to print out a number; you'll see that this doesn't work. But printing a string is no problem, why is this?  
+The print procedure only accepts a string, or a format string with arguments to be substituted in the % placeholders.
+
+## 5.2 - Constants
+### 5.2.1 _Problem_: Why do we need constants?
+Suppose your program needs to calculate a lot of results using the mass of the earth, which is approximately 5.97219e24 (expressed in kg). Would you rather write this number 10 or more times in your program, perhaps making copy mistakes? What if you later want to change this number to a more accurate one, you would have to change it in 10 or more places!  
+
+### 5.2.2 _Solution_: Demoing constants
+The solution is to give such a constant a meaningful name, like:  
+    `MASS_EARTH :: 5.97219e24;     // in kg`  
+Do this in only one place, and then use that name in all places in code where that value is needed. At compile-time, the compiler will substitute the value for the name everywhere.
+
+Here is our solution program: see **5_1.constant.jai**
+
+```
+#import "Basic";
+
+// global scope:
+MASS_EARTH0 : float : 5.97219e24;  // (1) in kg
+MASS_EARTH :: 5.97219e24;          // (2)
+
+main :: () {
+  MASS_MARS :: MASS_EARTH * 0.15;  // (3)
+  print("The earth mass is %\n", MASS_EARTH);
+  // (4) => The earth mass is 5972189887017193070000000
+
+  print("%\n", type_of(MASS_EARTH));     // (5) => float32
+  print("%\n", is_constant(MASS_EARTH)); // (6) => true
+}
+```
+
+By convention, the name is all uppercase, and as with numbers, multiple parts can be separated by an _.  
+Constants declared out of the main() procedure are defined in a _global scope_, meaning that they are known in the whole program.  
+Line (1) shows that you can declare the type of a constant. But this isn't necessary: in line (2) the constant is declared without type, here the compiler infers the type.   
+Notice that by omitting the type, we get the typical **::**		`MASS_EARTH :: 5.97219e24;`  which indicates a constant value.
+
+Needless to say that you can't define two or more constants with the same name. Test out what error you get! The same goes for variables, procedure names, and so on.  
+In line (3), we use MASS_EARTH to calculate the mass of planet Mars, which is also declared as a constant. Because MASS_MARS is declared inside main(), it is only known in that _local scope_.  
+
+In line (4) we use the **type_of** procedure to show the type of MASS_EARTH, which is float32. type_of() works on nearly everything, because all things have a type.  
+In line (5) we use the **is_constant** procedure to check that MASS_EARTH is a constant.  
+
+
+
+
+
 
