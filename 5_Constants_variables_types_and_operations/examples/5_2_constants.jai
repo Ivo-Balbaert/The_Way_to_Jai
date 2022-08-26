@@ -9,6 +9,8 @@ main :: () {
   print("The earth mass is %\n", MASS_EARTH);
   // => The earth mass is 5972189887017193070000000
 
-  print("%\n", type_of(MASS_EARTH));     // (4) => float32
-  print("%\n", is_constant(MASS_EARTH)); // (5) => true
+  // MASS_EARTH = 5.98e24; // => (4) Error: Attempt to assign to a constant.
+
+  print("%\n", type_of(MASS_EARTH));     // (5) => float32
+  print("%\n", is_constant(MASS_EARTH)); // (6) => true
 }
