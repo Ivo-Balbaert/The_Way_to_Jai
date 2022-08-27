@@ -51,25 +51,25 @@ Here are some examples for these types:
 **int** : for example `42`, `0b10` (a binary 2), `0x10` (a hexadecimal 16). Underscores can be optionally used to separate digit groups as in: `16_777_216` or `0b1010_0010_0101_1111`.  
 Eight types exist according to their size (number of bytes) and whether they are positive or signed(can have a negative sign):   
 
-	****s8** or **u8**   - signed and unsigned 1 byte (or 8 bit) integers,  
-    range:  -127 to 128 or 0 to 255
-	**s16** or **u16** - signed and unsigned 2 byte integers,  
-    range: -32768 to +32767 or 0 to 65,535
-	**s32** or **u32** - signed and unsigned 4 byte bit integers,  
-    range: -2,147,483,648 to +2,147,483,647 or 0 to 4,294,967,295
-	**s64** or **u64** - signed and unsigned 8 byte (or 64 bit) integers,  
-    range: -9,223,372,036,854,775,808 to +9,223,372,036,854,775,807 or 0 to 18,446,744,073,709,551,615
+	`s8` or `u8`   - signed and unsigned 1 byte (or 8 bit) integers,  
+        range:  -127 to 128 or 0 to 255
+	`s16` or `u16` - signed and unsigned 2 byte integers,  
+        range: -32768 to +32767 or 0 to 65,535
+	`s32` or `u32` - signed and unsigned 4 byte bit integers,  
+        range: -2,147,483,648 to +2,147,483,647 or 0 to 4,294,967,295
+	`s64` or `u64` - signed and unsigned 8 byte (or 64 bit) integers,  
+        range: -9,223,372,036,854,775,808 to +9,223,372,036,854,775,807 or 0 to 18,446,744,073,709,551,615
 	
-int defaults to s64
+	int defaults to s64
 
 **float** : literals are of the form `3.141592` or `5.98e24`, with a `.` for separating the decimal part, and an `e` for indicating the power of 10 (exponent).  
 Two floating point number types exist according to their size, they are both signed:
 
-	**float32** - 4 byte (32 bit) 
-	**float64** - 8 byte (64 bit) 
+	`float32` - 4 byte (32 bit) 
+	`float64` - 8 byte (64 bit) 
 
-float defaults to float32  
-Use the `0h` prefix to specify floats in hex, in IEEE-754 format. 
+	float defaults to float32  
+	Use the `0h` prefix to specify floats in hex, in IEEE-754 format. 
 
 **string** : the most common data type, which we have already used, for example: `"Hello from Jai!"`. 
 _Question_: Why are these values strings?  "42", "false" or "0b10".
