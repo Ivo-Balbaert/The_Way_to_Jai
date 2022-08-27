@@ -3,7 +3,7 @@
 ## 5.1 - Data, literals and types
 
 ### 5.1.1 Data and types
-You've probably heard that information (data) is one of the most valuable assets. But what is data really? 
+You've probably heard the saying that information (data) is one of the most valuable assets. But what is data really? 
 
 Programs and applications are all about data value manipulation. _Data_ can come as input from diverse sources (user input, from files, from a database, from the network, and so on). It is temporarily stored in memory and modified, which then results in an output of some sort. This is printed, displayed on a screen, stored in a file or database, sent over the network to a client, and so on.  
 
@@ -12,7 +12,7 @@ If all data where the same, it would be a lot more difficult to make good use of
 
 Various types exist, like:  
     * _integers_, which are whole numbers (7, 42, 0, -3)  
-    * _floats_, which are decimal numbers (3.14, ) 
+    * _floats_, which are decimal numbers (3.14, )   
     * _strings_ ("Hello", "Tokyo")  
     * _booleans_, which are yes/no, on/off, true/false (the only values are true and false)    
 and so on.   
@@ -22,7 +22,7 @@ Jai also has some mechanisms to create **composite** or **custom** types, like a
 
 The type determines how a data value looks like and what can be done with it, that is: what _operations_ can be performed on these values.
 
-Operations use special _operator_ characters, like + and *.
+Operations use special _operator_ characters, like + for addition.
 
 In our programs, data is stored in **constants** or **variables** which also have some type, and take up memory in the computer. Each type prescribes how much memory it needs, which is a number of bytes (b) (As you probably know, 1 byte contains 8 bits, and a bit is either 0 or 1).  
 
@@ -51,21 +51,25 @@ Here are some examples for these types:
 **int** : for example `42`, `0b10` (a binary 2), `0x10` (a hexadecimal 16). Underscores can be optionally used to separate digit groups as in: `16_777_216` or `0b1010_0010_0101_1111`.  
 Eight types exist according to their size (number of bytes) and whether they are positive or signed(can have a negative sign):   
 
-	`s8` or `u8`   - signed and unsigned 1 byte (or 8 bit) integers, range:  -127 to 128 or 0 to 255
-	`s16` or `u16` - signed and unsigned 2 byte integers, range: -32768 to +32767 or 0 to 65,535
-	`s32` or `u32` - signed and unsigned 4 byte bit integers, range: -2,147,483,648 to +2,147,483,647 or 0 to 4,294,967,295
-	`s64` or `u64` - signed and unsigned 8 byte (or 64 bit) integers, range: -9,223,372,036,854,775,808 to +9,223,372,036,854,775,807 or 0 to 18,446,744,073,709,551,615
+	****s8** or **u8**   - signed and unsigned 1 byte (or 8 bit) integers,  
+    range:  -127 to 128 or 0 to 255
+	**s16** or **u16** - signed and unsigned 2 byte integers,  
+    range: -32768 to +32767 or 0 to 65,535
+	**s32** or **u32** - signed and unsigned 4 byte bit integers,  
+    range: -2,147,483,648 to +2,147,483,647 or 0 to 4,294,967,295
+	**s64** or **u64** - signed and unsigned 8 byte (or 64 bit) integers,  
+    range: -9,223,372,036,854,775,808 to +9,223,372,036,854,775,807 or 0 to 18,446,744,073,709,551,615
 	
-	int defaults to s64
+int defaults to s64
 
 **float** : literals are of the form `3.141592` or `5.98e24`, with a `.` for separating the decimal part, and an `e` for indicating the power of 10 (exponent).  
 Two floating point number types exist according to their size, they are both signed:
 
-	`float32` - 4 byte (32 bit) 
-	`float64` - 8 byte (64 bit) 
+	**float32** - 4 byte (32 bit) 
+	**float64** - 8 byte (64 bit) 
 
-	float defaults to float32  
-	Use the `0h` prefix to specify floats in hex, in IEEE-754 format. 
+float defaults to float32  
+Use the `0h` prefix to specify floats in hex, in IEEE-754 format. 
 
 **string** : the most common data type, which we have already used, for example: `"Hello from Jai!"`. 
 _Question_: Why are these values strings?  "42", "false" or "0b10".
@@ -138,10 +142,12 @@ Line (1) shows that you can declare the type of a constant. But this isn't neces
 Notice that by omitting the type, we get the typical **::**		`MASS_EARTH :: 5.97219e24;`  which indicates a constant value.
 
 Needless to say that you can't define two or more constants with the same name. Test out what error you get! The same goes for variables, procedure names, and so on.  
-In line (3), we use MASS_EARTH to calculate the mass of planet Mars, which is also declared as a constant. Because MASS_MARS is declared inside main(), it is only known in that _local scope_.  
+In line (3), we use MASS_EARTH to calculate the mass of planet Mars, which is also declared as a constant. Because MASS_MARS is declared inside main(), it is only known in that _local scope_.
 
-In line (4) we use the **type_of** procedure to show the type of MASS_EARTH, which is float32. type_of() works on nearly everything, because all things have a type.  
-In line (5) we use the **is_constant** procedure to check that MASS_EARTH is a constant.  
+A constant cannot be changed, see what happens by uncommenting line (4).  
+
+In line (5) we use the **type_of** procedure to show the type of MASS_EARTH, which is float32. type_of() works on nearly everything, because all things have a type.  
+In line (6) we use the **is_constant** procedure to check that MASS_EARTH is a constant.  
 
 
 
