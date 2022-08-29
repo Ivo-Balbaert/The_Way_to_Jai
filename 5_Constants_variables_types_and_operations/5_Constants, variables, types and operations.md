@@ -164,8 +164,8 @@ Constants declared out of the main() procedure are defined in a _global scope_, 
 Line (1) shows that you can declare the type of a constant. But this isn't necessary: in line (2) the constant is declared without type, here the compiler infers the type.   
 Notice that by omitting the type, we get the typical **::**		`MASS_EARTH :: 5.97219e24;`  which indicates a constant value.
 
-Needless to say that you can't define two or more constants with the same name. Test out what error you get! The same goes for variables, procedure names, and so on.
-In line (2B) we use `#run` to calculate an expression at compile-time, so that `COMP_CALC` is really a constant. 
+Needless to say that you can't define two or more constants with the same name. Test out what error you get! The same goes for variables, procedure names, and so on.  
+In line (2B) we use `#run` to calculate an expression at compile-time, so that `COMP_CALC` is really a constant.   
 In line (3), we use MASS_EARTH to calculate the mass of planet Mars, which is also declared as a constant. Because MASS_MARS is declared inside main(), it is only known in that _local scope_.
 
 A constant cannot be changed, see what happens by uncommenting line (4).  
@@ -176,8 +176,10 @@ In line (6) we use the **is_constant** procedure to check that MASS_EARTH is a c
 
 main (and any other procedure) also has the `::` indicator. This is because main is a procedure, and all procedures are constant values: they will not rebind (get a different value) at run-time.
 
-## 5.2 - Constants
+## 5.3 - Variables
 
+For most values in programs, you want to be able to change their value, that's why you need **variables**. A variable is a name that you give to a memory location that contains a value which can change. 
+### 5.3.1 - How to declare variables
 
 
 
