@@ -1,5 +1,9 @@
 
+This memory has to be freed. There is no garbage collector in Jai:  except for stack variables, which are freed automatically when their scope (lifetime) ends, the developer must manually free the memory.
 
+
+
+Date type ?
 
 LATER:
 - Structuring code with import and load

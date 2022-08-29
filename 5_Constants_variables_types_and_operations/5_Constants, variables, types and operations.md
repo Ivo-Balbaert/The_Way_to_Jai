@@ -60,7 +60,7 @@ Eight types exist according to their size (number of bytes) and whether they are
 	`s64` or `u64` - signed and unsigned 8 byte (or 64 bit) integers,  
         range: -9,223,372,036,854,775,808 to +9,223,372,036,854,775,807 or 0 to 18,446,744,073,709,551,615
 	
-	int defaults to s64
+int defaults to s64
 
 **float** : literals are of the form `3.141592` or `5.98e24`, with a `.` for separating the decimal part, and an `e` for indicating the power of 10 (exponent).  
 Two floating point number types exist according to their size, they are both signed:
@@ -68,8 +68,8 @@ Two floating point number types exist according to their size, they are both sig
 	`float32` - 4 byte (32 bit) 
 	`float64` - 8 byte (64 bit) 
 
-	float defaults to float32  
-	Use the `0h` prefix to specify floats in hex, in IEEE-754 format. 
+float defaults to float32  
+Use the `0h` prefix to specify floats in hex, in IEEE-754 format. 
 
 **string** : the most common data type, which we have already used, for example: `"Hello from Jai!"`. 
 _Question_: Why are these values strings?  "42", "false" or "0b10".
@@ -81,7 +81,27 @@ Jai has no explicit character type. The **#char** directive on a single characte
     `#char "1"; // this is 49`  
 (see for example this [ASCII table](https://www.rapidtables.com/code/text/ascii-table.html))
 
-All things in Jai have a type, which we can find out with the **type_of()** procedure. In program 5_1_literals.jai we see this applied to a number of literals.
+### 5.1.3 Using print to display a value
+(See program 5_1_literals.jai)
+
+Try to print out a number; you'll see that this doesn't work. But printing a string is no problem, why is this?    
+The print procedure only accepts a string, or a format string with arguments to be substituted in the % placeholders.  
+If you use the print procedure with only 1 parameter, then this parameter must be of type string. If not, you get the **Error: Type mismatch. Type wanted: string; type given: s64.**
+
+    print(GREETING);         // => Hello, Sailor!
+    print(1);
+
+    c:/jai/modules/Basic/Print.jai:386,10: Info: ... in checking argument 1 of call to print.
+    print :: (format_string: string, args: .. Any, to_standard_error := false) -> bytes_printed: s64 { 
+
+The error text shows that the 1st argument needs to be a string, but that in fact it is meant to be a format string, so that you can specify what you want to print.
+
+```
+ 	print ("I greet you: %\n", GREETING);  // => I greet you: Hello, Sailor!
+```
+
+The print procedure uses **%** to indicate insertion points for values: the value is substituted for % in the format string. Unlike many other languages, you don't need to specify what kind of thing is being printed, and it handles complex types too. There is no need for any indication of the type as is done in C (e.g. %d for an integer, or %s for a string) because the Jai compiler knows the types of all print arguments. However, if you want any special formatting of the thing to be printed, you must handle that separately.   
+To make the print-out more readable, place a new-line \n at the end of the format string.
 
 ```
 #import "Basic";
@@ -104,15 +124,14 @@ main :: () {
 	// => The type of false is bool
 }
 ```
-
-Try to print out a number; you'll see that this doesn't work. But printing a string is no problem, why is this?  
-The print procedure only accepts a string, or a format string with arguments to be substituted in the % placeholders.
+### 5.1.4 type_of()
+All things in Jai have a type, which we can find out with the **type_of()** procedure. In program 5_1_literals.jai we applied this to a number of literals.
 
 ## 5.2 - Constants
-### 5.2.1 _Problem_: Why do we need constants?
+### 5.2.1 _Problem_: What if we need the same literal many times?
 Suppose your program needs to calculate a lot of results using the mass of the earth, which is approximately 5.97219e24 (expressed in kg). Would you rather write this number 10 or more times in your program, perhaps making copy mistakes? What if you later want to change this number to a more accurate one, you would have to change it in 10 or more places!  
 
-### 5.2.2 _Solution_: Demoing constants
+### 5.2.2 _Solution_: Constants
 The solution is to give such a constant a meaningful name, like:  
     `MASS_EARTH :: 5.97219e24;     // in kg`  
 Do this in only one place, and then use that name in all places in code where that value is needed. At compile-time, the compiler will substitute the value for the name everywhere.
@@ -125,11 +144,15 @@ Here is our solution program: see **5_1.constant.jai**
 // global scope:
 MASS_EARTH0 : float : 5.97219e24;  // (1) in kg
 MASS_EARTH :: 5.97219e24;          // (2)
+COMP_CALC :: #run (234 * 15);      // (2B)
 
 main :: () {
   MASS_MARS :: MASS_EARTH * 0.15;  // (3)
   print("The earth mass is %\n", MASS_EARTH);
   // (4) => The earth mass is 5972189887017193070000000
+
+  print("I was computed at compile time: %\n", COMP_CALC); 
+  // => I was computed at compile time: 3510
 
   print("%\n", type_of(MASS_EARTH));     // (5) => float32
   print("%\n", is_constant(MASS_EARTH)); // (6) => true
@@ -141,13 +164,20 @@ Constants declared out of the main() procedure are defined in a _global scope_, 
 Line (1) shows that you can declare the type of a constant. But this isn't necessary: in line (2) the constant is declared without type, here the compiler infers the type.   
 Notice that by omitting the type, we get the typical **::**		`MASS_EARTH :: 5.97219e24;`  which indicates a constant value.
 
-Needless to say that you can't define two or more constants with the same name. Test out what error you get! The same goes for variables, procedure names, and so on.  
+Needless to say that you can't define two or more constants with the same name. Test out what error you get! The same goes for variables, procedure names, and so on.
+In line (2B) we use `#run` to calculate an expression at compile-time, so that `COMP_CALC` is really a constant. 
 In line (3), we use MASS_EARTH to calculate the mass of planet Mars, which is also declared as a constant. Because MASS_MARS is declared inside main(), it is only known in that _local scope_.
 
 A constant cannot be changed, see what happens by uncommenting line (4).  
 
 In line (5) we use the **type_of** procedure to show the type of MASS_EARTH, which is float32. type_of() works on nearly everything, because all things have a type.  
-In line (6) we use the **is_constant** procedure to check that MASS_EARTH is a constant.  
+In line (6) we use the **is_constant** procedure to check that MASS_EARTH is a constant.
+> Why do you want to know if something is constant? Jai is very good at meta-programming, which happens at compile-time. During meta-programming you often want to be sure if an expression is a compile-time constant or not.
+
+main (and any other procedure) also has the `::` indicator. This is because main is a procedure, and all procedures are constant values: they will not rebind (get a different value) at run-time.
+
+## 5.2 - Constants
+
 
 
 

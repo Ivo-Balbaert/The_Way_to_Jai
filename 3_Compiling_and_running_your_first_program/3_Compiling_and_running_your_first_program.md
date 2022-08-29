@@ -44,7 +44,7 @@ main :: () {
 This is simply a _procedure_ with name `main`.
 (Jai calls **procedures** what most other languages call **functions**.)
 Not only is the main procedure a starting point, it also encompasses the complete program execution from start to end.  
-:: means that main is in fact a constant, we'll see what that means later (see ??).  
+:: means that main is in fact a constant, we'll see what that means later (see § 5.2.2).  
 () is the parameter list, which is empty for main. We also don't see anything after ): main has no return value, unlike C.  
 Then follow the curly braces { } which normally contain the code to execute line by line.
 

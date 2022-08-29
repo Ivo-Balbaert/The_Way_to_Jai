@@ -3,8 +3,8 @@
 main :: () {
     print("Hello, Sailor!\n"); // => Hello, Sailor!
     // This doesn't work:
-    // print(42);  // =>  Error: Type mismatch. Type wanted: string; type given: s64.
-    // print(false);
+    // print(42);    // =>  Error: Type mismatch. Type wanted: string; type given: s64.
+    // print(false); // =>  Error: Type mismatch. Type wanted: string; type given: bool.
 
     // But these do:
     print("%\n", 42);    // => 42
