@@ -213,7 +213,7 @@ In practice this will be the format mostly used.
 Changing a value from a previously declared variable is done with the assignment operator **=**  
 		    `counter = 100;`
 
-**Case 4:** explicit un-initialization with **---**   
+**Case 4:** no default value is given - explicit un-initialization with **---**   
 Giving variables a default zero value (Case 3) is sometimes unnecessary, because you will supply (or calculate) the values yourself later in the program. In such a case you can skip the default zero initialization (and so gain some performance!) by leaving the variable uninitialized with the **---** symbol as in: 
 		    `varname : type = ---;`
 
