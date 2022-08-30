@@ -40,9 +40,10 @@ main :: () {
   // Case 4: uninitialized declaration (no default value is given):
   counter4 : int = ---;
   average : float = ---;
-  print("counter contains the value %\n", counter4); // => 0
+  print("counter4 contains the value %\n", counter4); // => 31525674139189348
   print("average contains the value %\n", average);  // => 0
 
+  // XYZ
   print("the global var is %\n", global_var); // => the global var is 108
 
   // more than one statement in one code-line:
