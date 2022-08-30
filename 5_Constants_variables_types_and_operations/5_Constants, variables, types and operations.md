@@ -186,15 +186,15 @@ The names start with a lowercase letter, and multiple parts of a name are connec
 ### 5.3.1 - How to declare variables
 (See 5_3_variable_declarations.jai)  
 
-**Case 1:** type and value
+**Case 1:** type and value  
 The full format for declaring a variable is: 
     name : type = value,  like in:
   	
 `first_name : string = "Jon";`
-				 |       |
-        type declaration  initialization  
 
-**Case 2:** only type
+The : type is called the _type declaration_, and the = value the  _initialization_.  
+
+**Case 2:** only type  
 However you don't need to provide both type and value: 
 if you do only a type declaration and skip the value, you'll get a _default zero value_: 					
 
@@ -205,24 +205,24 @@ This default value is 0 for numbers, false for bool, the empty string "" for str
 >Remark: 
 >In C such variables have a random value, because they get assigned a random free location in memory. This can cause errors later on, so C programmers are advised to initialize their variables immediately. This problem cannot occur in Jai: here variables are by default initialized to a "zero" value, which reduces the mental load for the developer (have I already initialized these variables or not?). 
 
-**Case 3:** only value
-We've already seen that the compiler often can infer the type from the given value. If you skip the type (notice that you then get the **:=** ), then the type will be inferred from the value:
+**Case 3:** only value  
+We've already seen that the compiler often can infer the type from the given value. If you skip the type -- notice that you then get the := , then the type will be inferred from the value:
 		    `first_name := "Jon";`  
 In practice this will be the format mostly used.
 
-Changing a value from a previously declared variable is done with the assignment operator **=**
+Changing a value from a previously declared variable is done with the assignment operator **=**  
 		    `counter = 100;`
 
 **Case 4:** explicit un-initialization with **---**   
-Giving variables a default zero value (Case 3) is sometimes unnecessary, because you will supply (or calculate) the values yourself later in the program. In such a case you can skip the default zero initialization (and so gain some performance!) by leaving the variable uninitialized with the --- symbol as in: 
+Giving variables a default zero value (Case 3) is sometimes unnecessary, because you will supply (or calculate) the values yourself later in the program. In such a case you can skip the default zero initialization (and so gain some performance!) by leaving the variable uninitialized with the **---** symbol as in: 
 		    `varname : type = ---;`
 
 Example:    `average : float = ---;`
 
 This way you get the same behavior as in C. This could cause undefined behavior: the variables can contain any value that was left over from previous use at the assigned memory location, but it will contain mostly zeros. Don’t forget to initialize the variable afterwards with a normal assignment!
 
->Schematically:
->  ::	defines a constant
+>Schematically:  
+>  ::	defines a constant  
 >  :=	defines a variable
 
 
