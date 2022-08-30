@@ -10,6 +10,9 @@ main :: () {
     print("%\n", 42);    // => 42
     print("%\n", false); // => false
 
+    // char literal
+    print("char literal: %\n", #char "1"); // => char literal: 49
+
     print("The type of % is %\n", "Hello, Sailor!", type_of("Hello, Sailor!"));
     // => The type of Hello Sailor! is string
     print("The type of % is %\n", 42, type_of(42)); // => The type of 42 is s64

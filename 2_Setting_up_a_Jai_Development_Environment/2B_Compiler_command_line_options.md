@@ -34,6 +34,7 @@ Example:     `jai -x64 program.jai -- info for the compile_time execution`
 **Output**:  
  `-exe name`         Set output_executable_name on the target workspace to 'name'.  
  `-no_color`         Disable ANSI terminal coloring in output messages.
+ `-quiet`            Reduces the (statistics) output from the compiler 
 
 **Modules**:  
  `-import_dir arg`   Add this directory to the list of directories searched by #import. Can be used multiple times.
