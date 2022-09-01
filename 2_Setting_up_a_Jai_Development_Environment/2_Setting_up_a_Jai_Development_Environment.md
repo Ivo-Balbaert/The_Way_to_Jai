@@ -2,7 +2,7 @@
 
 ## 2.1 Opening up the Jai compiler toolkit
 
-Until this moment (Aug 17 2022, version 1.0.036), Jai is still closed beta .
+Until this moment Jai is still closed beta .
 The group members can download the compiler as a zip file (size +- 220 Mb).
 Unzipping this file shows the following contents:
 

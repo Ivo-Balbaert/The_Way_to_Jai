@@ -33,6 +33,8 @@ The goal is to compile 1M lines of code in \< 1s (from scratch, without delta bu
 
 3. Explicit control over optimization and performance characteristics: things like inlining (see ??) and LLVM optimizations (see ??). Jai also effectively uses pointers and it has an implicit context system to switch memory allocation schemes.
 
+4. Bounds checking (see ??), and initialization (see ??).
+
 In order to increase performance, Jai has NO:
 
 - garbage collection (GC)
@@ -40,15 +42,13 @@ In order to increase performance, Jai has NO:
 - exceptions (too complex, weighs too heavy on performance)
 - RAII (Resource Acquisition Is Initialization), like: a struct has to have a copy constructor, move constructor, iterator, and so on, which leads to high friction
 
-4. Bounds checking (see ??), and initialization (see ??).
-
 All this _results_ in:
 
 1. An increase in developer's productivity (20 – 50 %) and joy and fun in programming, making the developer cycle more enjoyable: editing code, compiling, testing is very streamlined, fluid and low-friction, easy to refactor.
 
 2. No problems with different build tools on different OS's.
 
-3. Happy users of Jai programs.
+3. Happy developers/users of Jai programs.
 
 4. Reducing the need for debugging.
 
@@ -142,12 +142,12 @@ Programs are 100x slower, harder to understand, …
 Jonathan Blow is CEO of a game-developing company called Thekla ([The Witness](www.thekla.com)](http://www.thekla.com/)).  
 Blow receives and sometimes answers discussions and issues about Jai on [_language@thekla.com_](mailto:language@thekla.com).  
 
-Reddit discussions on the language happen on:[Jai Reddit](https://www.reddit.com/r/Jai/)  
+Reddit discussions on the language happen on:  [Jai Reddit](https://www.reddit.com/r/Jai/)  
 
 There is a Jai Community wiki at:    
 [Home · Jai-Community/Jai-Community-Library Wiki (github.com)](https://github.com/Jai-Community/Jai-Community-Library/wiki)   and [Jai Community - A place to learn about Jai programming language](https://jai.community/)
 
-A Discord channel called SB (Secret Beta) [https://discord.gg/wB52e2ND](https://discord.gg/wB52e2ND)
+A Discord channel called SB (Secret Beta): [https://discord.gg/wB52e2ND](https://discord.gg/wB52e2ND)
 
 **1.7 Jai's popularity**
 
