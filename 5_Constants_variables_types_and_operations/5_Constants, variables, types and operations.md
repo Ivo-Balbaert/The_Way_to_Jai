@@ -221,12 +221,39 @@ Example:    `average : float = ---;`
 
 This way you get the same behavior as in C. This could cause undefined behavior: the variables can contain any value that was left over from previous use at the assigned memory location, but it will contain mostly zeros. Don’t forget to initialize the variable afterwards with a normal assignment!
 
+global_var in line (1) is defined in _global scope_, known and mutable (!) throughout the entire program.  
+In line (2) we see a #char literal in a variable f, which has type s64.  
+
+
+
 >Schematically:  
 >  ::	defines a constant  
 >  :=	defines a variable
 
-
 ## 5.4 - Errors when defining variables:
+Starting in line (3), we see some of the errors that can occur when defining a variable incorrectly:  
 
+1] When a variable hasn't been given a type:
+   `counter5 = 101;` // => **Error: Undeclared identifier 'counter5'.**
+    _Reason_:
+    = doesn't do type inference, only := does
+    _Solution_: 
+    Write `counter5 := 101;` or  
+          counter5 : u8; counter5 = 101;
 
+2] When a variable with the same name has already been used:
+  `counter := 42;` // => **Error: Redeclaration of variable 'counter'.**
+  _Reason_:
+    duplicate variable (or function, structs, ...) names are not allowed
+  _Solution_: 
+    Change the name like `counter1 := 42;`
+
+3] When a variable has previously been declared with type int:
+  `counter = "France";` // => **Error: Type mismatch. Type wanted: int; type given: string.**
+  _Reason_:
+    A variable can't contain a value with a type different than its declared type.
+  _Solution_: 
+    Change the value like `counter1 := 43;`
+
+## 5.5 - Errors when defining variables:
 

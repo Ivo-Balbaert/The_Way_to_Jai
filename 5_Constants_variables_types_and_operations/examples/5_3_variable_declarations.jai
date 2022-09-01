@@ -1,6 +1,6 @@
 #import "Basic";
 
-global_var := 108;
+global_var := 108;  // (1)
 
 main :: () {
   // Case 1: full type declaration and initialization: 
@@ -43,38 +43,20 @@ main :: () {
   print("counter4 contains the value %\n", counter4); // => 31525674139189348
   print("average contains the value %\n", average);  // => 0
 
-  // XYZ
   print("the global var is %\n", global_var); // => the global var is 108
 
-  // more than one statement in one code-line:
-  n9: u8; m9: u8; n9 = 12; m9 = 13;
-  print("% %\n", n9, m9); // => 12 13
-
   // char literal
-  f := #char "1";     // Inferred as s64. f has the value of the ASCII character '1'
-  print("f: %\n", f); // => 49
+  f := #char "1";     // (2) Inferred as s64. f has the value of the ASCII character '1'
+  print("f is % and has type %\n", f, type_of(f)); 
+  // => f is 49 and has type s64
 
-  // printing:
-  print("Counter is % and valid is %\n", counter, valid); // => Counter is 100 and valid is false
-  n := 7;
-  m := 42;
-  // print("m is", m); // =>  Warning: Incorrect number of arguments supplied to 'print': The format string requires 0 arguments, but 1 argument is given.
-  print("n is %1 and m is %2\n", n, m); // => n is 7 and m is 42
-  print("m is %2 and n is %1\n", n, m); // => m is 42 and n is 7
-  print("%2 %1 %2\n", n, m); // => 42 7 42
-  // print("% %", n, m, counter); // =>  Warning: Incorrect number of arguments supplied to 'print': The format string requires 2 arguments, but 3 arguments are given.
-
-  // printing % with %%:
-  value := 50;
-  print("Everything is on sale for %1%% off!\n", value); // => Everything is on sale for 50% off!
-  
-  // Possible errors:
-  // (1) Error: Undeclared identifier 'counter5'.
+  // Possible errors:  // (3)
+  // 1] Error: Undeclared identifier 'counter5'.
   // counter5 = 101; // => Error
 
-  // (2) Error: Redeclaration of variable 'counter'.
+  // 2] Error: Redeclaration of variable 'counter'.
   // counter := 42;
 
-  // (3) Error: Type mismatch. Type wanted: int; type given: string.
+  // 3] Error: Type mismatch. Type wanted: int; type given: string.
   // counter = "France";
 }
