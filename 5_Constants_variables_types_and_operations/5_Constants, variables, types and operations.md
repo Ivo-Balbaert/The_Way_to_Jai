@@ -158,7 +158,6 @@ main :: () {
   print("%\n", is_constant(MASS_EARTH)); // (6) => true
 }
 ```
-
 By convention, the name is all uppercase, and as with numbers, multiple parts can be separated by an _.  
 Constants declared out of the main() procedure are defined in a _global scope_, meaning that they are known in the whole program.  
 Line (1) shows that you can declare the type of a constant. But this isn't necessary: in line (2) the constant is declared without type, here the compiler infers the type.   

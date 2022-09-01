@@ -6,7 +6,9 @@ That's why it is called **"The Way to Jai"**. While this will not be so useful a
 The [Jai Community Library Wiki](https://github.com/Jai-Community/Jai-Community-Library/wiki) does an excellent job in providing many details about the Jai language, and a lot of useful code snippets.
 However the wiki intentionally addresses more experienced developers.
 
-This tutorial on the other hand is intended for beginning programmers who want to learn this fascinating and promising language. We will try to explain from the ground up how Jai is elegantly constructed to attain its goals, and how it works internally, with an emphasis on insight and best practices. At the same time, parallel guides with more in-depth information will also be provided, but they are not needed to learn basic Jai programming.  
+This tutorial on the other hand is intended for beginning programmers who want to learn this fascinating and promising language. We will try to explain from the ground up how Jai is elegantly constructed to attain its goals, and how it works internally, with an emphasis on insight and best practices.  
+In that sense it resembles the _how_to_ tutorials from Jonathan Blow which are distributed with the compiler. But here we'll generally use simpler code examples, and not get so much in edge-case details.  
+At the same time, parallel guides with more in-depth information will also be provided, but they are not needed to learn basic Jai programming.  
 
 The material is divided into numbered chapters **1_**, **2_**, and so on; **2B_** , **2C_** is the numbering for the more detailed info belonging to chapter 2. The chapters are small, so you can easily work through each of them in 15-60 min. Each chapter has a subfolder _examples_  with working code examples, and in some cases also a subfolder _exercises_, containing solutions to questions / exercises in the text. Code examples are also numbered like **2.1_**, **2.2_**, and so on, and each contains a complete working program, showing only one discussed item each. This results in a great number of small examples, but enhances the learning experience.
 
