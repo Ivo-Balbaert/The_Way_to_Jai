@@ -33,7 +33,7 @@ Example:     `jai -x64 program.jai -- info for the compile_time execution`
 
 **Output**:  
  `-exe name`         Set output_executable_name on the target workspace to 'name'.  
- `-no_color`         Disable ANSI terminal coloring in output messages.
+ `-no_color`         Disable ANSI terminal coloring in output messages.    
  `-quiet`            Reduces the (statistics) output from the compiler 
 
 **Modules**:  
