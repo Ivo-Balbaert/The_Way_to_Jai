@@ -117,7 +117,7 @@ The **Preload** module is implicitly loaded whenever the Jai compiler is started
 It contains definitions the compiler needs in order to compile user source code.
 
 It contains enums for the Operating_System, the _Type_Info_ definitions, the definitions for _Allocator, Logger, Stack trace, Context, Temporary Storage, Source Code location, Array_View and Resizable_Array_. 
-It also contains low-level functions or **intrinsics**, like the following.
+It also contains low-level functions or **intrinsics** which closely mimic corresponding C functions, like the following.
 
    	memcpy :: (dest: *void, source: *void, count: s64) #intrinsic;
 	memcmp :: (a: *void, b: *void, count: s64) -> s16  #intrinsic;

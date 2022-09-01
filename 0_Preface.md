@@ -1,16 +1,16 @@
 # Preface - Goals of this Jai tutorial.
 
 This tutorial is meant to help people hit the ground running when the language is released.  
-That's why it is called **"The Way to Jai"**. While this will not be so useful at this moment (Aug 2022), at some point in time it will be.
+That's why it is called **"The Way to Jai"**. While this will not be so useful at this moment when the compiler is still in a closed beta regimen (Sep 2022), at some point in time it will be. We'll make sure this text and accompanying code stays up to date.
 
 The [Jai Community Library Wiki](https://github.com/Jai-Community/Jai-Community-Library/wiki) does an excellent job in providing many details about the Jai language, and a lot of useful code snippets.
 However the wiki intentionally addresses more experienced developers.
 
-This tutorial on the other hand is intended for beginning programmers who want to learn this fascinating and promising language. We will try to explain from the ground up how Jai is constructed and how it works, with an emphasis on insight and best practices. At the same time, parallel guides with more in-depth information will also be provided, but they are not needed to learn basic Jai programming.
+This tutorial on the other hand is intended for beginning programmers who want to learn this fascinating and promising language. We will try to explain from the ground up how Jai is elegantly constructed to attain its goals, and how it works internally, with an emphasis on insight and best practices. At the same time, parallel guides with more in-depth information will also be provided, but they are not needed to learn basic Jai programming.  
 
-The material is divided into numbered chapters **1_**, **2_**, and so on; **2B_** , **2C_** is the numbering for the more detailed info belonging to chapter 2. The chapters are small, so you can easily work through each of them in 15-30 min. Each chapter has a subfolder _code_  with working code examples, and in most cases also a subfolder _exercises_, containing solutions to questions / exercises in the text. Code examples are also numbered like **2.1_**, **2.2_**, and so on, and each contains a complete working program, showing only one discussed item each. This results in a great number of small examples, but enhances the learning experience.
+The material is divided into numbered chapters **1_**, **2_**, and so on; **2B_** , **2C_** is the numbering for the more detailed info belonging to chapter 2. The chapters are small, so you can easily work through each of them in 15-60 min. Each chapter has a subfolder _examples_  with working code examples, and in some cases also a subfolder _exercises_, containing solutions to questions / exercises in the text. Code examples are also numbered like **2.1_**, **2.2_**, and so on, and each contains a complete working program, showing only one discussed item each. This results in a great number of small examples, but enhances the learning experience.
 
-Within code listings, important code lines will be indicates with **// 1**, **// 2** and so on, after the code. These numbers are referred to in the text discussion. Any output of a program will be shown in the text as well as in the snippet itself, after a **// =>** in the code line itself or on the following line if needed. If the output is too big, it will be shown within /*  */ after the last code line.
+Within code listings, important code lines will be indicates with **// (1)**, **// (2)** and so on, after the code. These numbers are referred to in the text discussion. Any output of a program will be shown in the text as well as in the snippet itself, after a **// =>** in the code line itself or on the following line if needed. If the output is too big, it will be shown within /*  */ after the last code line.
 
 Here are some conventions we'll use in the text:
 

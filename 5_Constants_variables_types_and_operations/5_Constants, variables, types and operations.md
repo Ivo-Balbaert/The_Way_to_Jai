@@ -254,5 +254,12 @@ Starting in line (3), we see some of the errors that can occur when defining a v
   _Solution_: 
     Change the value like `counter1 := 43;`
 
-## 5.5 - Errors when defining variables:
+## 5.5 - Multiple assignment:
+
+
+## 5.6 - More about printing:
+
+## 5.7 - Memory allocation of variables:
+
+size_of
 
