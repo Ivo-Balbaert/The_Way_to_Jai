@@ -51,7 +51,7 @@ Then follow the curly braces { } which normally contain the code to execute line
 > Remark that Jai doesn't need a special keyword like function or func or even fn to indicate a function.
 
 Because there is no code, it doesn't do anything. But this is the first program which can be compiled!  
-`jai hello_sailor.jai` now produces the output:
+`jai 3.1_hello_sailor.jai` now produces the output:
 
 ```
 Running linker: "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\bin\Hostx64\x64\link.exe" /nologo d:/Jai/jai_projects/.build/hello_sailor_0_w2.obj d:/Jai/jai_projects/.build/hello_sailor_1_w2.obj d:/Jai/jai_projects/.build/hello_sailor_2_w2.obj d:/Jai/jai_projects/.build/hello_sailor_3_w2.obj /OUT:hello_sailor.exe /MACHINE:AMD64 /INCREMENTAL:NO /DEBUG /IMPLIB:d:/Jai/jai_projects/.build/hello_sailor.lib /libpath:"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\lib\x64" /libpath:"C:\Program Files (x86)\Windows Kits\10\Lib\10.0.18362.0\um\x64" /libpath:"C:\Program Files (x86)\Windows Kits\10\Lib\10.0.18362.0\ucrt\x64" -nodefaultlib libcmt.lib vcruntime.lib ucrt.lib kernel32.lib msvcrt.lib kernel32.lib
@@ -105,8 +105,7 @@ You can execute this by typing:  `hello_sailor`
 ### 3.2.2 Printing output
 
 No we want to display a greeting to a sailor, let's say: _Hello, Sailor from Jai!_  
-This is a string and must be enclosed within double quotes "", like:  
-_"Hello, Sailor from Jai!"_.  
+This is a string and must be enclosed within double quotes "", like: _"Hello, Sailor from Jai!"_.  
 To produce an output in Jai, we use the **print** procedure, which can take this string as argument, like this:
 
 ```
@@ -152,7 +151,7 @@ Now compilation succeeds and an executable is created!
 
 ### 3.2.3 Run-time
 
-When we now run the hello_sailor executable, we see the expected output:  
+When we now run the _hello_sailor_ executable, we see the expected output:  
 _Hello, Sailor from Jai!_
 
 Congratulations! You made your first Jai program.
@@ -169,7 +168,7 @@ Compile-time and run-time are very distinct:
    
 During compile-time, your code is carefully examined, and if needed a _compiler error_ is shown and the compilation stops without producing an executable. An executable binary is produced only when the compiler can finish without errors.
 
-At run-time, a program can still be stopped (it crashes) when a certain abnormal condition is encountered producing a _run-time error_ or panic, such as for example during bounds-checking on arrays or strings (when an index is used that is outside the size of the array) or a divide-by-zero condition.
+At run-time, a program can still be stopped (it crashes or panics) when a certain abnormal condition is encountered producing a _run-time error_, such as for example during bounds-checking on arrays or strings (when an index is used that is outside the size of the array) or a divide-by-zero condition.
 
 Due to its extensive meta-programming capabilities, Jai can even 
 _run a program during compile-time_!
@@ -196,7 +195,7 @@ Now compile the program as before and carefully look at the output:
 ```
 
 You see the same extensive output starting with _Running linker_ as previously.
-But before the linking starts (so  **_during compile-time_** !), you already see our printed output.
+But before the linking starts (**_during compile-time_** !), you already see our printed output.
 This means `main()` has already been executed at compile-time!
 This is because of the **#run** command. This **directive** tells the compiler to run the procedure called after `#run` in compile-time.
 
@@ -257,6 +256,6 @@ You'll notice that the order in which definitions and procedures appear in a Jai
 
 *TIP*: In general it is useful to find `main` quickly, so by convention `main` is usually placed at the end (bottom) of the source file.
 
-4- Write a Jai program that prints "One" and  "Two!" on consecutive lines, and then "Three!" on the same line (see 1_mini.jai).
+4- Write a Jai program that prints "One" and  "Two!" on consecutive lines, and then "Three!" on the same line (see _mini.jai_).
 
-5- Investigate whether the compiler really needs source files to have the extension .jai (see 1_mini.txt).
+5- Investigate whether the compiler really needs source files to have the extension .jai (see _mini.txt_).
