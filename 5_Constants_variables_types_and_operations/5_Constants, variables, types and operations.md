@@ -266,13 +266,49 @@ The right hand sides in such a _multiple assignment_ can also contain expression
 If needed, declaration and assignment can be on separate lines.
 
 ## 5.6 - Swapping values
+(See 5.5_swapping.jai)
 A swap like n, m = m, n; is allowed, but doesn't work in Jai like you would expect: both variables get the same value. When n and m are of different types an error results, because then they would have to change type, which is not allowed.  
 
-However, module _Basic_ contains swap procedures (Look them up! - both polymorphic, see ??):
-	- Swap: uses pointers and << to a temp value
-	- swap: inline, returns two values with #must
+However, module _Basic_ contains swap procedures (Look them up! - both polymorphic, see ??):  
+	* Swap: uses pointers and << to a temp value
+	* swap: inline, returns two values with #must
 
 ## 5.7 - More about printing
+(See 5.6_printing.jai)
+
+### 5.7.1 - Printing more than one value
+`print` can take two or more arguments: the first is a format string containing text and % substitution symbols. `print` displays the text where each of the % symbols is replaced by an argument, in the order the arguments appear. 
+`print` can also be used to display two or more values as is shown in line (1):  
+`print("n is % and m is %\n", n, m);   // (1) => n is 7 and m is 42`
+
+The substitution % symbols can also take a number to indicate the position. In this way, you can change the order in which values are displayed in the format string, or use the same value more than once (see lines (2) and (3)).
+	
+The number of % and supplied values must be the same. If not you get a warning:
+```
+ print("% %", n, m, counter); // =>  Warning: Incorrect number of arguments supplied to 'print': The format string requires 2 arguments, but 3 arguments are given.
+```
+In this case only the first two values are displayed.
+If you want to print a literal %, replace the second % with %% as in line (4).
+
+### 5.7.2 - A println procedure:
+(See 5.7_println.jai)
+
+To avoid having to type \n for a new line, you can have your own customized procedure `println`.    
+In the code we see the keyword **inline**, to avoid a procedure call to `println`, increasing performance.
+The argument can be of type Any, any type is allowed.  
+This also shows overloading, there are 2 versions of print:  
+- the 1st just takes 1 argument of any type, and calls the standard print procedure from _Basic_, adding a new-line character, so `println` can also print out variables of any type!  
+- the 2nd takes a format string msg, and takes a variable (..) number of any type;
+
+### 5.7.3 - The write procedures
+(See 5.8_write.jai)
+Jai has some lower-level write procedures which are declared as #runtime_support(??). They are defined in modules _Preload_ and _Runtime_Support.jai_, so they don’t need the Basic module. You can use these when you don't want to import the _Basic_ module.
+
+### 5.7.4 - Printing Unicode
+(See 5.9_printing_unicode.jai)
+
+As we see from line (4) onward, we can print any Unicode string.
+In general, print out any Unicode character like this: `print("\u03C0");`
 
 ## 5.8 - Memory allocation of variables
 

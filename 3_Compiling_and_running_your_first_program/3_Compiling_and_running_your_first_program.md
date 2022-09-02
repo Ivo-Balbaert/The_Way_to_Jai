@@ -224,7 +224,9 @@ Error: Semicolon expected after expression.
 ```
 This is very clear: it gives you the line (4) on which the error occurred, and even the exact column (37)!  
 You'll find that Jai has strong compiler checks and helpful error messages following the motto: _better resolve errors at compile-time than having to deal with bugs at run-time_.  
-Also the Jai compiler stops at the first error it encounters and only reports that.
+Also the Jai compiler stops at the first error it encounters and only reports that, and no executable is generated.
+
+Sometimes the compiler signals a _Warning_ instead of an _Error_; a warning means that something strange is detected in the code, but the executable is generated.
 
 ### 3.2.7 Exiting a program
 Normally a Jai program will stop after execution of the last statement in `main()`.
