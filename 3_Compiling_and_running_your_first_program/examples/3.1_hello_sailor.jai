@@ -1,5 +1,5 @@
 #import "Basic";
 
 main :: () {
-   print("Hello, Sailor from Jai!\n");
+    print("Hello, Sailor from Jai!\n");
 }

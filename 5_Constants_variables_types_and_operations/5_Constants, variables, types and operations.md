@@ -82,7 +82,7 @@ Jai has no explicit character type. The **#char** directive on a single characte
 (see for example this [ASCII table](https://www.rapidtables.com/code/text/ascii-table.html))
 
 ### 5.1.3 Using print to display a value
-(See program 5_1_literals.jai)
+(See program 5.1_literals.jai)
 
 Try to print out a number; you'll see that this doesn't work. But printing a string is no problem, why is this?    
 The print procedure only accepts a string, or a format string with arguments to be substituted in the % placeholders.  
@@ -136,7 +136,7 @@ The solution is to give such a constant a meaningful name, like:
     `MASS_EARTH :: 5.97219e24;     // in kg`  
 Do this in only one place, and then use that name in all places in code where that value is needed. At compile-time, the compiler will substitute the value for the name everywhere.
 
-Here is our solution program: see **5_1.constant.jai**
+Here is our solution program: see **5.1_constant.jai**
 
 ```
 #import "Basic";
@@ -183,7 +183,7 @@ Examples: `counter`, `valid_date`, `first_name`, and so on.
 The names start with a lowercase letter, and multiple parts of a name are connected with _ .  
 
 ### 5.3.1 - How to declare variables
-(See 5_3_variable_declarations.jai)  
+(See 5.3_variable_declarations.jai)  
 
 **Case 1:** type and value  
 The full format for declaring a variable is: 
@@ -229,7 +229,7 @@ In line (2) we see a #char literal in a variable f, which has type s64.
 >  ::	defines a constant  
 >  :=	defines a variable
 
-## 5.4 - Errors when defining variables:
+## 5.4 - Errors when defining variables
 Starting in line (3), we see some of the errors that can occur when defining a variable incorrectly:  
 
 1] When a variable hasn't been given a type:  
@@ -254,12 +254,27 @@ Starting in line (3), we see some of the errors that can occur when defining a v
     Change the value like `counter1 := 43;`  
 This shows that Jai is a **strongly typed** language.
 
-## 5.5 - Multiple assignment:
+## 5.5 - Multiple assignment
+(See 5.4_variable_declarations2.jai) 
 
+In line (1) we see how several variables are declared and initialized on one line:   `n1: u8; m1: u8; n1 = 12; m1 = 13;`
+This can of course be shortened.   
+A compound assignment like in line (2)
+is not allowed, but you can write: `n3, m3 := 12, 13;`  
+The right hand sides in such a _multiple assignment_ can also contain expressions, even calculated at compile-time.
 
-## 5.6 - More about printing:
+If needed, declaration and assignment can be on separate lines.
 
-## 5.7 - Memory allocation of variables:
+## 5.6 - Swapping values
+A swap like n, m = m, n; is allowed, but doesn't work in Jai like you would expect: both variables get the same value. When n and m are of different types an error results, because then they would have to change type, which is not allowed.  
+
+However, module _Basic_ contains swap procedures (Look them up! - both polymorphic, see ??):
+	- Swap: uses pointers and << to a temp value
+	- swap: inline, returns two values with #must
+
+## 5.7 - More about printing
+
+## 5.8 - Memory allocation of variables
 
 size_of
 
