@@ -269,14 +269,35 @@ If needed, declaration and assignment can be on separate lines.
 (See 5.5_swapping.jai)
 A swap like n, m = m, n; is allowed, but doesn't work in Jai like you would expect: both variables get the same value. When n and m are of different types an error results, because then they would have to change type, which is not allowed.  
 
-However, module _Basic_ contains swap procedures (Look them up! - both polymorphic, see ??):  
-	* Swap: uses pointers and << to a temp value
-	* swap: inline, returns two values with #must
+However, module _Basic_ contains 2 swap procedures (Look them up! - both polymorphic, see ??):  
+  - Swap: uses pointers and << to a temp value
+  - swap: inline, returns two values with **#must**
 
 ## 5.7 - More about printing
-(See 5.6_printing.jai)
 
 ### 5.7.1 - Printing more than one value
+(See 5.6_printing.jai)
+
+```
+#import "Basic";
+
+main :: () {
+    n := 7;
+    m := 42;
+    // print("m is", m); // =>  Warning: Incorrect number of arguments supplied to 'print': The format string requires 0 arguments, but 1 argument is given.
+    print("n is % and m is %\n", n, m);   // (1) => n is 7 and m is 42
+    print("n is %1 and m is %2\n", n, m); // (2) => n is 7 and m is 42
+    print("m is %2 and n is %1\n", n, m); // (3) => m is 42 and n is 7
+    print("%2 %1 %2\n", n, m); // => 42 7 42
+    // print("% %", n, m, counter); // =>  Warning: Incorrect number of arguments supplied to 'print': The format string requires 2 arguments, but 3 arguments are given.
+
+    // printing % with %%:
+    value := 50;
+    print("Everything is on sale for %1%% off!\n", value); // (4)
+    // => Everything is on sale for 50% off!
+}
+```
+
 `print` can take two or more arguments: the first is a format string containing text and % substitution symbols. `print` displays the text where each of the % symbols is replaced by an argument, in the order the arguments appear. 
 `print` can also be used to display two or more values as is shown in line (1):  
 `print("n is % and m is %\n", n, m);   // (1) => n is 7 and m is 42`
@@ -285,13 +306,42 @@ The substitution % symbols can also take a number to indicate the position. In t
 	
 The number of % and supplied values must be the same. If not you get a warning:
 ```
- print("% %", n, m, counter); // =>  Warning: Incorrect number of arguments supplied to 'print': The format string requires 2 arguments, but 3 arguments are given.
+ print("% %", n, m, counter); // =>  Warning: Incorrect number of arguments supplied to 'print':  
+The format string requires 2 arguments, but 3 arguments are given.
 ```
 In this case only the first two values are displayed.
 If you want to print a literal %, replace the second % with %% as in line (4).
 
 ### 5.7.2 - A println procedure:
 (See 5.7_println.jai)
+
+```
+#import "Basic";
+
+main :: () {
+    n := 7;
+    m := 42;
+    println("Hello, world!"); // => Hello, world!
+    println(1);               // => 1
+    println("% %", n, m);     // => 7 42
+    println("The end.");      // => The end
+}
+
+println :: inline (arg: Any) {
+    print("%\n", arg); // print knows the type of arg
+}
+
+println :: inline (msg: string, args: ..Any) {
+    print(msg, ..args);
+    print("\n");
+}
+
+// =>
+// Hello, world!
+// 1
+// 7 42
+// The end.
+```
 
 To avoid having to type \n for a new line, you can have your own customized procedure `println`.    
 In the code we see the keyword **inline**, to avoid a procedure call to `println`, increasing performance.
@@ -302,15 +352,56 @@ This also shows overloading, there are 2 versions of print:
 
 ### 5.7.3 - The write procedures
 (See 5.8_write.jai)
+
+```
+main :: () {
+  write_string("Hello, World!\n");               // => Hello, World!
+  write_strings("Hello", ",", " World!", "\n");  // => Hello, World!
+  write_number(-42);            // => -42
+  write_nonnegative_number(42); // => 42
+}
+
+/*
+Hello, World!
+Hello, World!
+-4242
+*/
+```
+
 Jai has some lower-level write procedures which are declared as #runtime_support(??). They are defined in modules _Preload_ and _Runtime_Support.jai_, so they don’t need the Basic module. You can use these when you don't want to import the _Basic_ module.
 
 ### 5.7.4 - Printing Unicode
 (See 5.9_printing_unicode.jai)
 
+```
+#import "Basic";
+
+main :: () {
+  print("Hello world!\n");
+  print("Bonjour tout le monde!\n");
+  print("Hallo Wereld!\n");
+  print("¡Hola, mundo!\n"); // (4)
+  print("Καλημέρα κόσμε!\n");
+  print("こんにちは 世界!\n"); 
+  print("!ہیلو ، دنیا\n");
+  print("ສະ​ບາຍ​ດີ​ຊາວ​ໂລກ\n");
+  print("👋🌍❗\n");
+
+  print("\u03C0");  // => π
+}
+
+/*
+Hello world!
+Bonjour tout le monde!
+Hallo Wereld!
+¡Hola, mundo!
+Καλημέρα κόσμε!
+こんにちは 世界!
+!ہیلو ، دنیا
+ສະ​ບາຍ​ດີ​ຊາວ​ໂລກ
+👋🌍❗
+π
+*/
+```
 As we see from line (4) onward, we can print any Unicode string.
 In general, print out any Unicode character like this: `print("\u03C0");`
-
-## 5.8 - Memory allocation of variables
-
-size_of
-
