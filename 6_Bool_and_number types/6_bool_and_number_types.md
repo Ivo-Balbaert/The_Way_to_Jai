@@ -6,7 +6,7 @@ bool values `true` and `false` were discussed in § 5.1
 
 ### 6.1.1 Equal values and boolean expressions
 Two values a and b can be compared with the equality operator **==**:  `a == b`.
-This is a _boolean expression_ or _condition_, resulting in a bool value:
+This is a _boolean expression_ or _condition_, resulting in a bool value:  
     * it is true when a and b have the same value
     * it is false in all other cases.
 
@@ -22,7 +22,7 @@ In Jai you cannot compare values of a different type, for example:
 `0 == false: // => Error: Type mismatch. Type wanted: s64; type given: bool.`
 Number types are an exception to this rule:   `1 == 2.0`  is allowed and returns false.
 
-_Question_ What is the value of `"3" == 3`, why?
+_Question_ What is the value of `"3" == 3`, why?  
 _Answer_ This gives an error! Error: Type mismatch. Type wanted: string; type given: s64.
 
 ### 6.1.2 The assert statement
