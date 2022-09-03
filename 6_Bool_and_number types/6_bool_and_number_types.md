@@ -7,8 +7,8 @@ bool values `true` and `false` were discussed in § 5.1
 ### 6.1.1 Equal values and boolean expressions
 Two values a and b can be compared with the equality operator **==**:  `a == b`.
 This is a _boolean expression_ or _condition_, resulting in a bool value:  
-    * it is true when a and b have the same value
-    * it is false in all other cases.
+  it is true when a and b have the same value  
+  it is false in all other cases.
 
 For example:  true == true and 1 == 1.0 are both true
 The inequality operator **!=** reverses this, it gives true when the values are different:    `"Jai" != "Java"` gives true
