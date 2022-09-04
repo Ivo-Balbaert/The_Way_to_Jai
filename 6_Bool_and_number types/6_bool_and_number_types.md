@@ -132,14 +132,16 @@ total_score *= 3.14;
 ```
 
 Any number literal or variable can be assigned to a variable if the variable has a ‘bigger’ type than the literal (widening), that is: if it can accommodate the literal; this is _implicit conversion_.
-For example, s8, s16, u32 will automatically cast to s64
+For example, s8, s16, u32 will automatically cast to s64.
 But in many cases, Jai blocks the conversion, when the receiving type is too small, or when you want to put a signed integer into an unsigned type:
 
 ```
-i: s16 = 80000;  // => Error: Loss of information (trying to fit 64 bits into 16 bits). Can't do this without an explicit cast. Type wanted: s16; type given: s64.
+i: s16 = 80000;  // => Error: Loss of information (trying to fit 64 bits into 16 bits).  
+// Can't do this without an explicit cast. Type wanted: s16; type given: s64.
 b: u8  = 10;
 c: u16 = 50;
-b = c; // => Error: Loss of information (trying to fit 16 bits into 8 bits). Can't do this without an explicit cast. Type wanted: u8; type given: u16.
+b = c; // => Error: Loss of information (trying to fit 16 bits into 8 bits).  
+// Can't do this without an explicit cast. Type wanted: u8; type given: u16.
 j: u32 = -1; // => Error: Number signedness mismatch. Type wanted: u32; type given: s64.    
 ```
 
