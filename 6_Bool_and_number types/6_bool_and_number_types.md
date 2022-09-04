@@ -191,11 +191,11 @@ If there is information loss, you can _truncate_ the bits you don't care about, 
 
 ### 6.2.5 - Autocasting with xx
 Automatic casting can be used when the compiler can infer what casting has to take place at a certain moment, this is indicated with **xx**:  
-xx variable;   	// autocast variable to whatever type is needed 
-
+xx variable;   	// autocast variable to whatever type is needed  
+Example:   
 `b = xx c;`
 
-But with xx the run-time casting checks are still in place.
+But with xx the run-time casting checks are still in place.  
 `b = xx a;`    
 fails with the same previous error as when doing a cast(u8) a;
 
