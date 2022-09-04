@@ -189,7 +189,7 @@ This gives an added performance bonus.
 If there is information loss, you can _truncate_ the bits you don't care about, when you are very sure nothing wrong will happen with:
 **cast, trunc(type)** 
 
-#### 6.2.5 - Autocasting with xx
+### 6.2.5 - Autocasting with xx
 To do a quick automatic cast, replace the cast() with **xx**:   
 `b = xx c;`
 
