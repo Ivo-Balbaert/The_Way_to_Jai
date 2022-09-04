@@ -1,6 +1,16 @@
 
-This memory has to be freed. There is no garbage collector in Jai:  except for stack variables, which are freed automatically when their scope (lifetime) ends, the developer must manually free the memory.
+- after 6
+- Scope of variables
+- Memory management
+	This memory has to be freed. There is no garbage collector in Jai:  except for stack variables, which are freed automatically when their scope (lifetime) ends, the developer must manually free the memory.
+- Types - Any
 
+
+
+
+
+bool in conditions:
+If var is a non-zero value, it tests as true in conditions, and !var is equal to false.
 
 
 Date type ?
@@ -8,3 +18,4 @@ Date type ?
 LATER:
 - Structuring code with import and load
 - Debugging
+

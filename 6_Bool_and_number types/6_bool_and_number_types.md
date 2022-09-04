@@ -190,7 +190,9 @@ If there is information loss, you can _truncate_ the bits you don't care about, 
 **cast, trunc(type)** 
 
 ### 6.2.5 - Autocasting with xx
-To do a quick automatic cast, replace the cast() with **xx**:   
+Automatic casting can be used when the compiler can infer what casting has to take place at a certain moment, this is indicated with **xx**:  
+xx variable;   	// autocast variable to whatever type is needed 
+
 `b = xx c;`
 
 But with xx the run-time casting checks are still in place.
