@@ -12,4 +12,4 @@ _Table of Contents_
    [3_Compiling_and_running_your_first_program](https://github.com/Ivo-Balbaert/The_Way_to_Jai/tree/main/3_Compiling_and_running_your_first_program)  
    [4_More_info_about_the_compiler](https://github.com/Ivo-Balbaert/The_Way_to_Jai/tree/main/4_More_info_about_the_compiler)  
    [5_Constants_variables_types_and_operations](https://github.com/Ivo-Balbaert/The_Way_to_Jai/tree/main/5_Constants_variables_types_and_operations)   
-   [6_Bool_and_number_types](https://github.com/Ivo-Balbaert/The_Way_to_Jai/tree/main/6_Bool_and_number_types) 
+   [6_Bool_and_number_types](https://github.com/Ivo-Balbaert/The_Way_to_Jai/tree/main/6_Bool_and_number%20types) 
