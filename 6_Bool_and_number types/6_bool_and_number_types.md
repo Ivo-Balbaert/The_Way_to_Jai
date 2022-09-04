@@ -117,7 +117,7 @@ handle_exception                  c:\jai\modules\Runtime_Support_Crash_Handler.j
 main                              d:\Jai\The_Way_to_Jai\6_Bool_and_number types\examples\6.2_numbers.jai:19
 ```
 ### 6.2.3 - Mixing of different types
-+ is only defined for numbers, not for strings:
+Addition (+) is only defined for numbers, not for strings:
 
 ```
 message := "YOU WON!";
