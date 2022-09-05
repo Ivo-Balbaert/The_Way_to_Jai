@@ -59,7 +59,13 @@ main :: () {
     e = xx pi;
     print("e is %\n", e); // (7) => e is 3
 
-    // (8) Precedence
+    // Cast of bool to int:
+    e = xx true;
+    print("e is %\n", e); // (8A) => e is 1
+    e = xx false;
+    print("e is %\n", e); // (8B) => e is 0
+
+    // (9) Precedence
     count := 10;
     print("%\n", count/2 - 1);   // => 4
     print("%\n", (count/2) - 1); // => 4

@@ -134,7 +134,7 @@ main :: () {
     // j: u32 = -1; // => Error: Number signed-ness mismatch. Type wanted: u32; type given: s64.    
     // b = c; // Error: Loss of information (trying to fit 16 bits   into 8 bits). Can't do this without an explicit cast. Type   wanted: u8; type given: u16.
 
-    // Casting:
+    // (5) Casting:
     b = cast(u8) c;
     b = xx c;
     // cast u8 to float works:
@@ -144,7 +144,7 @@ main :: () {
     print("%\n", f); // => 74
     // cast error at runtime:
     // b = cast(u8) a;
-    // => Cast bounds check failed.  Number must be in [0, 255]; it was -5069105.  Site is D:/Jai/The Book of Jai/3_Constants_Variables_Types_Operations/code/5_numbers.jai:19. Panic.
+    // (6) => Cast bounds check failed.  Number must be in [0, 255]; it was -5069105.  Site is D:/Jai/The Book of Jai/3_Constants_Variables_Types_Operations/code/5_numbers.jai:19. Panic.
     // b = xx a; // => Error
     b = cast, no_check(u8) a;
     print("a is % and b is %\n", a, b); // => a is -5069105 and b is 207
@@ -156,9 +156,16 @@ main :: () {
     e: u8;
     e = cast(u8) pi;
     e = xx pi;
-    print("e is %\n", e); // => e is 3
+    print("e is %\n", e); // (7) => e is 3
 
-    // Precedence
+    // Cast of bool to int:
+    e = xx true;
+    print("e is %\n", e); // (8A) => e is 1
+    e = xx false;
+    print("e is %\n", e); // (8B) => e is 0
+
+
+    // (9) Precedence
     count := 10;
     print("%\n", count/2 - 1);   // => 4
     print("%\n", (count/2) - 1); // => 4
@@ -205,6 +212,12 @@ This gives an added performance bonus.
 If there is information loss, you can _truncate_ the bits you don't care about, when you are very sure nothing wrong will happen with:
 **cast, trunc(type)** 
 
+#### 6.2.4.1 - Cast of bool to int
+bool values can be autocast to ints with xx (see line (7)):
+```    
+xx true  returns 1  
+xx false returns 0
+```
 ### 6.2.5 - Autocasting with xx
 Automatic casting can be used when the compiler can infer what casting has to take place at a certain moment, this is indicated with **xx**:  
 xx variable;   	// autocast variable to whatever type is needed  
