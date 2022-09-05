@@ -82,7 +82,7 @@ Jai has no explicit character type. The **#char** directive on a single characte
 (see for example this [ASCII table](https://www.rapidtables.com/code/text/ascii-table.html))
 
 ### 5.1.3 Using print to display a value
-See program _5.1_literals.jai_:
+See _5.1_literals.jai_:
 
 ```
 #import "Basic";
@@ -184,7 +184,7 @@ Examples: `counter`, `valid_date`, `first_name`, and so on.
 The names start with a lowercase letter, and multiple parts of a name are connected with _ .  
 
 ### 5.3.1 - How to declare variables
-(See 5.3_variable_declarations.jai)
+See _5.3_variable_declarations.jai_:
 
 ```
 #import "Basic";
