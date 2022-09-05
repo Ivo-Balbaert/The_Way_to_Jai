@@ -128,10 +128,11 @@ main :: () {
 
     // Size of integers:
     // This number won't fit into 16 bits
-    // i: s16 = 80000;  // => Error: Loss of information (trying to fit 64 bits into 16 bits). Can't do this without an explicit cast. Type wanted: s16; type given: s64.
+    // i: s16 = 80000;  // => Error: Loss of information   
+    // (trying to fit 64 bits into 16 bits). Can't do this without   an explicit cast. Type wanted: s16; type given: s64.  
     // -1 is signed, so it is out of range of what a u32 can store. 
     // j: u32 = -1; // => Error: Number signed-ness mismatch. Type wanted: u32; type given: s64.    
-    // b = c; // Error: Loss of information (trying to fit 16 bits into 8 bits). Can't do this without an explicit cast. Type wanted: u8; type given: u16.
+    // b = c; // Error: Loss of information (trying to fit 16 bits   into 8 bits). Can't do this without an explicit cast. Type   wanted: u8; type given: u16.
 
     // Casting:
     b = cast(u8) c;
@@ -222,8 +223,123 @@ Arbitrarily complex expressions can be formed with boolean and other operators, 
 The same [precedence rules as in C](https://www.tutorialspoint.com/cprogramming/c_operators_precedence.htm) are followed, but you can override these by using parentheses to make the expression more readable, as the code in line (7) shows.
 
 ### 6.2.7 Bitwise operators
+See _6.4_bitwise.jai_:
 
+```
+#import "Basic";
 
-### 6.2.8 Formatting
+main :: () {
+    // Bitwise operators:
+    ab := 0b00_01;
+    al := ab << 1;
+    print("al is: %\n", al); // => al is: 2
+    ar := al >> 1;
+    print("ar is the same as ab: %\n", ar == ab); // => ar is the same as ab: true
+    alr := ab <<< 1;
+    print("alr is: %\n", alr); // => alr is: 2
+
+    print("11001100 & 10001000 is %\n", 0b11001100 & 0b10001000); // => 136
+    print("11001100 # 10000011 is %\n", 0b11001100 | 0b10000011); // => 207
+    n := 8;
+    print("%\n", n % 2 == 0); // => true
+    print("%\n", n & 1 == 0); // => true}
+
+/*
+al is: 2
+ar is the same as ab: true
+alr is: 2
+11001100 & 10001000 is 136
+11001100 # 10000011 is 207
+true
+*/
+```
+
+These are Jai's bitwise operators:
+
+```
+     | - bitwise OR
+	 & - bitwise AND
+	 ^ - bitwise XOR
+	 << - shift left
+	 <<< - rotate left
+	 >> - shift right
+	 >>> - rotate right
+ 	 ~ - bitwise NOT (one's complement) (unary)
+```
+
+The code shows some examples of their use. The bitwise operators perform an arithmetic shift, following C's rules regarding bitwise operators.
+
+#### 6.2.7.1 Test if a number is even
+Using the % or & operator, we can the following expressions return true when n is even:	
+
+```
+n % 2 == 0   
+n & 1 == 0 
+```
+
+### 6.2.8 Formatting procs
+See _6.5_formatting.jai_:
+
+```
+#import "Basic";
+
+main :: () {
+    // Formatting:
+    i := 108;
+    print("% ", formatInt(i, minimum_digits=2)); // => 108
+    print("% ", formatInt(i, base=16, minimum_digits=2)); // => 6c
+    j := 7;
+    print("% ", formatInt(j, minimum_digits=2)); // => 07
+    
+    f1 := 2.25193;
+    f2 := 3.1400;
+    LEADING_WIDTH :: 4;
+    print("% \n", formatFloat(f1, width=LEADING_WIDTH, trailing_width=3, zero_removal=.NO)); // => 2.252
+    print("% \n", formatFloat(f2, width=1, trailing_width=3, zero_removal=.NO)); // => 3.140
+    print("% \n", formatFloat(f2, width=1, trailing_width=3, zero_removal=.YES)); // => 3.14
+}
+
+/*
+108 6c 07 2.252
+3.140
+3.14
+*/
+```
+
+These format* procs give additional functionality for formatting integers and floating numbers. They are defined in Print.jai in the _Basic_ module and return Formatter data structures. The print functions know how to use Formatters as control structures.
+
+**formatInt** :: (value : Any, base := 10, minimum_digits := 1, digits_per_comma : u16 = 0, comma_string := "") -> FormatInt 
+
+**formatFloat** :: (value : Any, width := -1, trailing_width := -1, mode := FormatFloat.Mode.DECIMAL, zero_removal := FormatFloat.Zero_Removal.YES) -> FormatFloat
+
+Additionally, you can use print_style.default_format_int and print_style.default_format_float from the context, which contains default Formatters (see howto 018).
 
 ### 6.2.9 Random numbers
+See _6.6_random.jai_:
+
+```
+#import "Basic";
+#import "Random";
+
+main :: () {
+    // Random numbers: 
+    print("A random integer: %\n", random_get()); // => 1137526400306752306
+    print("A random float between 0 and 1: %\n", random_get_zero_to_one()); // => 0.709799
+    print("A random float between 0 and 100: %\n", random_get_within_range(0, 100)); // => 75.796494
+}
+
+/*
+A random integer: 1137526400306752306
+A random float between 0 and 1: 0.709799
+A random float between 0 and 100: 75.796494
+*/
+```
+
+The following procedures are defined in the _Random_ module, which is just a file _Random.jai_ in the _modules_ folder.  
+```
+random_get :: () -> u64
+random_get_zero_to_one :: () -> float
+random_get_within_range :: (min: float, max: float) -> float
+```
+
+If you want more sophistication, use the _PCG_ module which contains the same procs.
