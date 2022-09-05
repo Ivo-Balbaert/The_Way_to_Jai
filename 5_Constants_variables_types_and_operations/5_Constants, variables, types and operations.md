@@ -137,7 +137,7 @@ The solution is to give such a constant a meaningful name, like:
     `MASS_EARTH :: 5.97219e24;     // in kg`  
 Do this in only one place, and then use that name in all places in code where that value is needed. At compile-time, the compiler will substitute the value for the name everywhere.
 
-Here is our solution program: see **5.1_constant.jai**
+Here is our solution program: see _5.2_constants.jai_
 
 ```
 #import "Basic";
@@ -171,7 +171,7 @@ In line (3), we use MASS_EARTH to calculate the mass of planet Mars, which is al
 
 A constant cannot be changed, see what happens by uncommenting line (4).  
 
-In line (5) we use the **type_of** procedure to show the type of MASS_EARTH, which is float32. type_of() works on nearly everything, because all things have a type.  
+In line (5) we use type_of() procedure to show the type of MASS_EARTH, which is float32.   
 In line (6) we use the **is_constant** procedure to check that MASS_EARTH is a constant.
 > Why do you want to know if something is constant? Jai is very good at meta-programming, which happens at compile-time. During meta-programming you often want to be sure if an expression is a compile-time constant or not.
 
@@ -184,7 +184,62 @@ Examples: `counter`, `valid_date`, `first_name`, and so on.
 The names start with a lowercase letter, and multiple parts of a name are connected with _ .  
 
 ### 5.3.1 - How to declare variables
-(See 5.3_variable_declarations.jai)  
+(See 5.3_variable_declarations.jai)
+
+```
+#import "Basic";
+
+global_var := 108;  // (1)
+
+main :: () {
+    // Case 1: full type declaration and initialization: 
+    counter : int = 100;
+    pi : float = 3.14159;
+    valid : bool = false;
+    first_name : string = "Jon";
+    print("counter: %\n", counter);   // => 100
+
+    // Case 2: only type declaration, no explicit initialization 
+    // (the variables have a default value of zero):
+    counter2 : int;   
+    print("counter2: %\n", counter2);       // => 0
+    pi2 : float;     
+    print("pi2: %\n", pi2);                 // => 0
+    valid2 : bool; 
+    print("valid2: %\n", valid2);           // => false
+    first_name2 : string;   
+    print("first_name2: %\n", first_name2); // => ""
+    ptr : *u32;                             // defaults to a null pointer to a u32.
+    print("ptr: %\n", ptr);                 // => null
+
+    // change default value afterwards:
+    counter2 = 100;
+    first_name2 = "Jon";
+    print("counter2: %\n", counter2);       // => 100
+    print("first_name2: %\n", first_name2); // => "Jon"
+  
+    // Case 3: only initialization (type is inferred):
+    counter3 := 100;         // an int
+    pi3 := 3.14159;          // a float
+    valid3 := false;         // a bool
+    first_name3 := "Jon";    // a string
+    print("pi3 is of type %, value %.\n", type_of(pi3), pi3); // => pi3 is of type float32, value 3.14159.
+    print("counter3: %\n", counter3); // => 100
+  
+    // Case 4: uninitialized declaration (no default value is given):
+    counter4 : int = ---;
+    average : float = ---;
+    print("counter4 contains the value %\n", counter4); // => 31525674139189348
+    print("average contains the value %\n", average);  // => 0
+
+    print("the global var is %\n", global_var); // => the global var is 108
+
+    // char literal
+    f := #char "1";     // (2) Inferred as s64. f has the value of the ASCII character '1'
+    print("f is % and has type %\n", f, type_of(f)); 
+    // => f is 49 and has type s64
+}
+```
 
 **Case 1:** type and value  
 The full format for declaring a variable is: 
@@ -224,14 +279,12 @@ This way you get the same behavior as in C. This could cause undefined behavior:
 global_var in line (1) is defined in _global scope_, known and mutable (!) throughout the entire program.  
 In line (2) we see a #char literal in a variable f, which has type s64.  
 
-
-
 >Schematically:  
 >  ::	defines a constant  
 >  :=	defines a variable
 
 ## 5.4 - Errors when defining variables
-Starting in line (3), we see some of the errors that can occur when defining a variable incorrectly:  
+Here are the errors that can occur when defining a variable incorrectly:  
 
 1] When a variable hasn't been given a type:  
    `counter5 = 101;` // => **Error: Undeclared identifier 'counter5'.**  
@@ -256,28 +309,108 @@ Starting in line (3), we see some of the errors that can occur when defining a v
 This shows that Jai is a **strongly typed** language.
 
 ## 5.5 - Multiple assignment
-(See 5.4_variable_declarations2.jai) 
+See _5.4_variable_declarations2.jai_:
+
+```
+#import "Basic";
+
+main :: () {
+// declaring and assigning in one code-line:
+    n1: u8; m1: u8; n1 = 12; m1 = 13; // (1)
+    print("% %\n", n1, m1); // => 12 13
+
+// compound assignment is NOT allowed:
+  // n1: u8;    m1: u8;     n1 = m1 = 13; // (2) => Error: Operator '=' can only be used at statement level.
+  // but write it as:
+    n2, m2 : u8 = 12, 13;   // (3) Full declaration and initialization: 	
+    print("% %\n", n2, m2); // => 12 13
+// or shorter with type inference:
+    n3, m3 := 12, 13;
+// works also for one value:
+    p, q := 13;  
+    print("% %\n", p, q); // => 12 13
+
+// values of different types or expressions:
+    x, y := 1, "hello";      // an int and a string
+    print("x is % and y is %\n", x, y);         // => x is 1 and y is hello
+    s, t := 2 + 3, 2 * 3;
+    print("s is % and t is %\n", s, t);
+    s1, t1 := #run(2 + 3), #run(2 * 3);
+    print("s1 is % and t1 is %\n", s1, t1);     // => s is 5 and t is 6
+
+  // i, j : int;
+  // i, j = n1 + 1, m1 + 1;
+  // or shorter:
+    i, j := n1 + 1, m1 + 1;
+
+  // multiple declaration, default values, and subsequent assignment:
+    n4, m4 : int;
+    print("n4 is % and m4 is %\n", n4, m4);     // => n1 is 0 and m1 is 0
+    n4, m4 = 1, 2; 
+    print("n4 is % and m4 is %\n", n4, m4);     // => n1 is 0 and m1 is 0
+}
+
+/* Output:
+12 13
+12 13
+13 13
+x is 1 and y is hello
+s is 5 and t is 6
+s1 is 5 and t1 is 6
+n4 is 0 and m4 is 0
+n4 is 1 and m4 is 2
+*/
+```
 
 In line (1) we see how several variables are declared and initialized on one line:   `n1: u8; m1: u8; n1 = 12; m1 = 13;`
 This can of course be shortened.   
 A compound assignment like in line (2)
 is not allowed, but you can write: `n3, m3 := 12, 13;`  
-The right hand sides in such a _multiple assignment_ can also contain expressions, even calculated at compile-time.
-
+The right hand sides in such a _multiple assignment_ can also contain expressions, even calculated at compile-time with #run.  
 If needed, declaration and assignment can be on separate lines.
 
 ## 5.6 - Swapping values
-(See 5.5_swapping.jai)
-A swap like n, m = m, n; is allowed, but doesn't work in Jai like you would expect: both variables get the same value. When n and m are of different types an error results, because then they would have to change type, which is not allowed.  
+See _5.5_swapping.jai_:
+
+```
+#import "Basic";
+
+main :: () {
+    n := 2;
+    m := 3;
+  // swap doesn't work like you would expect:
+  // n, m = m, n;                        
+  // print("n is % and m is %\n", n, m); // (1) => n is 3 and m is 3
+
+  // this gives an error:
+    s, p := "abc", 13;
+  // s, p = p, s; // => Error: Type mismatch. Type wanted: string; type given: s64.  
+
+  // But there our swapping procedures in Basic:
+    Swap(*n, *m);
+    print("n is % and m is %\n", n, m); // => n is 3 and m is 2
+
+    n2 := 2; m2 := 3;
+    n2, m2 = swap(n2, m2);
+    print("n2 is % and m2 is %\n", n2, m2); // => n2 is 3 and m2 is 2       
+}
+
+/*
+n is 3 and m is 2
+n2 is 3 and m2 is 2
+*/
+```
+
+A swap like n, m = m, n; is allowed, but doesn't work in Jai like you would expect (see line (1)): both variables get the same value. When n and m are of different types an error results, because then they would have to change type, which is not allowed.  
 
 However, module _Basic_ contains 2 swap procedures (Look them up! - both polymorphic, see ??):  
   - Swap: uses pointers and << to a temp value
-  - swap: inline, returns two values with **#must**
+  - swap: inline, returns two values with **#must**, which means that they must be handled.
 
 ## 5.7 - More about printing
 
 ### 5.7.1 - Printing more than one value
-(See 5.6_printing.jai)
+See _5.6_printing.jai_:
 
 ```
 #import "Basic";
@@ -314,7 +447,7 @@ In this case only the first two values are displayed.
 If you want to print a literal %, replace the second % with %% as in line (4).
 
 ### 5.7.2 - A println procedure:
-(See 5.7_println.jai)
+See _5.7_println.jai_:
 
 ```
 #import "Basic";
@@ -352,7 +485,7 @@ This also shows overloading, there are 2 versions of print:
 - the 2nd takes a format string msg, and takes a variable (..) number of any type;
 
 ### 5.7.3 - The write procedures
-(See 5.8_write.jai)
+See _5.8_write.jai_:
 
 ```
 main :: () {
@@ -372,7 +505,7 @@ Hello, World!
 Jai has some lower-level write procedures which are declared as #runtime_support(??). They are defined in modules _Preload_ and _Runtime_Support.jai_, so they don’t need the Basic module. You can use these when you don't want to import the _Basic_ module.
 
 ### 5.7.4 - Printing Unicode
-(See 5.9_printing_unicode.jai)
+See _5.9_printing_unicode.jai_:
 
 ```
 #import "Basic";

@@ -1,17 +1,17 @@
 #import "Basic";
 
 main :: () {
-  print("Hello world!\n");
-  print("Bonjour tout le monde!\n");
-  print("Hallo Wereld!\n");
-  print("¡Hola, mundo!\n"); // (4)
-  print("Καλημέρα κόσμε!\n");
-  print("こんにちは 世界!\n"); 
-  print("!ہیلو ، دنیا\n");
-  print("ສະ​ບາຍ​ດີ​ຊາວ​ໂລກ\n");
-  print("👋🌍❗\n");
+    print("Hello world!\n");
+    print("Bonjour tout le monde!\n");
+    print("Hallo Wereld!\n");
+    print("¡Hola, mundo!\n"); // (4)
+    print("Καλημέρα κόσμε!\n");
+    print("こんにちは 世界!\n"); 
+    print("!ہیلو ، دنیا\n");
+    print("ສະ​ບາຍ​ດີ​ຊາວ​ໂລກ\n");
+    print("👋🌍❗\n");
 
-  print("\u03C0");  // => π
+    print("\u03C0");  // => π
 }
 
 /*
