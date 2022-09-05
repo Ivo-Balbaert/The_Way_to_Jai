@@ -1,12 +1,12 @@
 #import "Basic";
 
 main :: () {
-  assert(5 == 5.0);
-  assert(4 == 5, "4 does not equal 5");
-  // print("This is not printed when assert (false)");
+    assert(5 == 5.0);
+    assert(4 == 5, "4 does not equal 5");
+    // (1) print("This is not printed when assert (false)");
 
-  n := 42;
-  assert(type_of(n) == int);
+    n := 42;
+    assert(type_of(n) == int);
 }
 
 // => With line 5 uncommented:
