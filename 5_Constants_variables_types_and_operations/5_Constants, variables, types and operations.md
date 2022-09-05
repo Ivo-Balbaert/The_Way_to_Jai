@@ -82,9 +82,31 @@ Jai has no explicit character type. The **#char** directive on a single characte
 (see for example this [ASCII table](https://www.rapidtables.com/code/text/ascii-table.html))
 
 ### 5.1.3 Using print to display a value
-(See program 5.1_literals.jai)
+See program _5.1_literals.jai_:
 
-Try to print out a number; you'll see that this doesn't work. But printing a string is no problem, why is this?    
+```
+#import "Basic";
+
+main :: () {
+    print("Hello, Sailor!\n"); // => Hello, Sailor!
+    // This doesn't work:
+    // print(42);  // (1) =>  Error: Type mismatch. Type wanted: string; type given: s64.
+    // print(false);
+
+    // But these do work:
+    print("%\n", 42);    // => 42
+    print("%\n", false); // => false
+
+    print("The type of % is %\n", "Hello, Sailor!", type_of("Hello, Sailor!"));
+    // (2) => The type of Hello Sailor! is string
+    print("The type of % is %\n", 42, type_of(42)); 
+	// => The type of 42 is s64
+    print("The type of % is %\n", false, type_of(false)); 
+	// => The type of false is bool
+}
+```
+
+Try to print out a number (line (1)); you'll see that this doesn't work. But printing a string is no problem, why is this?    
 The print procedure only accepts a string, or a format string with arguments to be substituted in the % placeholders.  
 If you use the print procedure with only 1 parameter, then this parameter must be of type string. If not, you get the **Error: Type mismatch. Type wanted: string; type given: s64.**
 
@@ -103,29 +125,8 @@ The error text shows that the 1st argument needs to be a string, but that in fac
 The print procedure uses **%** to indicate insertion points for values: the value is substituted for % in the format string. Unlike many other languages, you don't need to specify what kind of thing is being printed, and it handles complex types too. There is no need for any indication of the type as is done in C (e.g. %d for an integer, or %s for a string) because the Jai compiler knows the types of all print arguments. However, if you want any special formatting of the thing to be printed, you must handle that separately.   
 To make the print-out more readable, place a new-line \n at the end of the format string.
 
-```
-#import "Basic";
-
-main :: () {
-    print("Hello, Sailor!\n"); // => Hello, Sailor!
-    // This doesn't work:
-    // print(42);  // =>  Error: Type mismatch. Type wanted: string; type given: s64.
-    // print(false);
-
-    // But these do:
-    print("%\n", 42);    // => 42
-    print("%\n", false); // => false
-
-    print("The type of % is %\n", "Hello, Sailor!", type_of("Hello, Sailor!"));
-    // => The type of Hello Sailor! is string
-    print("The type of % is %\n", 42, type_of(42)); 
-	// => The type of 42 is s64
-    print("The type of % is %\n", false, type_of(false)); 
-	// => The type of false is bool
-}
-```
 ### 5.1.4 type_of()
-All things in Jai have a type, which we can find out with the **type_of()** procedure. In program 5_1_literals.jai we applied this to a number of literals.
+All things in Jai have a type, which we can find out with the **type_of()** procedure. In program 5_1_literals.jai we applied this to a number of literals, starting from line (2).
 
 ## 5.2 - Constants
 ### 5.2.1 _Problem_: What if we need the same literal many times?

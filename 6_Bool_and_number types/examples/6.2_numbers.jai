@@ -53,7 +53,7 @@ main :: () {
     a, b += 1;
     print("a is % and b is %\n", a, b); // =>  is -5069104 and b is 208
  
-    // cast float to integer type truncates:
+    // Casting float to integer type truncates:
     pi := 3.14; 
     e: u8;
     e = cast(u8) pi;

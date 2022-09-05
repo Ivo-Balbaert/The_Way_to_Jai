@@ -215,6 +215,7 @@ print("%\n", count/(2 - 1)); // => 10 - to force against normal precedence
 
 ### 6.2.7 Bitwise operators
 
+
 ### 6.2.8 Formatting
 
 ### 6.2.9 Random numbers

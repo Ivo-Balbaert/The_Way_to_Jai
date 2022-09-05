@@ -15,6 +15,8 @@ The material is divided into numbered chapters **1_**, **2_**, and so on; **2B_*
 This results in a great number of small examples, but enhances the learning experience.
 
 Within code listings, important code lines will be indicates with **// (1)**, **// (2)** and so on, after the code. These numbers are referred to in the text discussion. Any output of a program will be shown in the text as well as in the snippet itself, after a **// =>** in the code line itself or on the following line if needed. If the output is too big, it will be shown within /*  */ after the last code line.
+Code examples are not always completely shown.
+Keep the code examples close when you are going through the text, to see the entire context and for quick compiling and testing.
 
 Here are some conventions we'll use in the text:
 
