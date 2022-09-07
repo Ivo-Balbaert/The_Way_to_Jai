@@ -104,7 +104,7 @@ main :: () {
     print("The type of % is %\n", false, type_of(false)); 
 	// => The type of false is bool
 }
-```c++
+```
 
 Try to print out a number (line (1)); you'll see that this doesn't work. But printing a string is no problem, why is this?    
 The print procedure only accepts a string, or a format string with arguments to be substituted in the % placeholders.  
@@ -120,7 +120,7 @@ The error text shows that the 1st argument needs to be a string, but that in fac
 
 ```c++
  	print ("I greet you: %\n", GREETING);  // => I greet you: Hello, Sailor!
-```c++
+```
 
 The print procedure uses **%** to indicate insertion points for values: the value is substituted for % in the format string. Unlike many other languages, you don't need to specify what kind of thing is being printed, and it handles complex types too. There is no need for any indication of the type as is done in C (e.g. %d for an integer, or %s for a string) because the Jai compiler knows the types of all print arguments. However, if you want any special formatting of the thing to be printed, you must handle that separately.   
 To make the print-out more readable, place a new-line \n at the end of the format string.
@@ -158,7 +158,7 @@ main :: () {
   print("%\n", type_of(MASS_EARTH));     // (5) => float32
   print("%\n", is_constant(MASS_EARTH)); // (6) => true
 }
-```c++
+```
 By convention, the name is all uppercase, and as with numbers, multiple parts can be separated by an _.  
 Constants declared out of the main() procedure are defined in a _global scope_, meaning that they are known in the whole program.  
 Line (1) shows that you can declare the type of a constant. But this isn't necessary: in line (2) the constant is declared without type, here the compiler infers the type.   
@@ -239,7 +239,7 @@ main :: () {
     print("f is % and has type %\n", f, type_of(f)); 
     // => f is 49 and has type s64
 }
-```c++
+```
 
 **Case 1:** type and value  
 The full format for declaring a variable is: 
@@ -360,7 +360,7 @@ s1 is 5 and t1 is 6
 n4 is 0 and m4 is 0
 n4 is 1 and m4 is 2
 */
-```c++
+```
 
 In line (1) we see how several variables are declared and initialized on one line:   `n1: u8; m1: u8; n1 = 12; m1 = 13;`
 This can of course be shortened.   
@@ -399,7 +399,7 @@ main :: () {
 n is 3 and m is 2
 n2 is 3 and m2 is 2
 */
-```c++
+```
 
 A swap like n, m = m, n; is allowed, but doesn't work in Jai like you would expect (see line (1)): both variables get the same value. When n and m are of different types an error results, because then they would have to change type, which is not allowed.  
 
@@ -430,7 +430,7 @@ main :: () {
     print("Everything is on sale for %1%% off!\n", value); // (4)
     // => Everything is on sale for 50% off!
 }
-```c++
+```
 
 `print` can take two or more arguments: the first is a format string containing text and % substitution symbols. `print` displays the text where each of the % symbols is replaced by an argument, in the order the arguments appear. 
 `print` can also be used to display two or more values as is shown in line (1):  
@@ -475,7 +475,7 @@ println :: inline (msg: string, args: ..Any) {
 // 1
 // 7 42
 // The end.
-```c++
+```
 
 To avoid having to type \n for a new line, you can have your own customized procedure `println`.    
 In the code we see the keyword **inline**, to avoid a procedure call to `println`, increasing performance.
@@ -500,7 +500,7 @@ Hello, World!
 Hello, World!
 -4242
 */
-```c++
+```
 
 Jai has some lower-level write procedures which are declared as #runtime_support(??). They are defined in modules _Preload_ and _Runtime_Support.jai_, so they don’t need the Basic module. You can use these when you don't want to import the _Basic_ module.
 
@@ -536,6 +536,6 @@ Hallo Wereld!
 👋🌍❗
 π
 */
-```c++
+```
 As we see from line (4) onward, we can print any Unicode string.
 In general, print out any Unicode character like this: `print("\u03C0");`

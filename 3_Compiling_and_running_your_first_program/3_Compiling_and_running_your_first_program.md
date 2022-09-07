@@ -40,7 +40,7 @@ In Jai syntax, this looks like:
 ```c++
 main :: () {
 }
-```c++
+```
 This is simply a _procedure_ with name `main`.
 (Jai calls **procedures** what most other languages call **functions**.)
 Not only is the main procedure a starting point, it also encompasses the complete program execution from start to end.  
@@ -53,7 +53,7 @@ Then follow the curly braces { } which normally contain the code to execute line
 Because there is no code, it doesn't do anything. But this is the first program which can be compiled!  
 `jai 3.1_hello_sailor.jai` now produces the output:
 
-```c++
+```
 Running linker: "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\bin\Hostx64\x64\link.exe" /nologo d:/Jai/jai_projects/.build/hello_sailor_0_w2.obj d:/Jai/jai_projects/.build/hello_sailor_1_w2.obj d:/Jai/jai_projects/.build/hello_sailor_2_w2.obj d:/Jai/jai_projects/.build/hello_sailor_3_w2.obj /OUT:hello_sailor.exe /MACHINE:AMD64 /INCREMENTAL:NO /DEBUG /IMPLIB:d:/Jai/jai_projects/.build/hello_sailor.lib /libpath:"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\lib\x64" /libpath:"C:\Program Files (x86)\Windows Kits\10\Lib\10.0.18362.0\um\x64" /libpath:"C:\Program Files (x86)\Windows Kits\10\Lib\10.0.18362.0\ucrt\x64" -nodefaultlib libcmt.lib vcruntime.lib ucrt.lib kernel32.lib msvcrt.lib kernel32.lib
    Creating library d:/Jai/jai_projects/.build/hello_sailor.lib and object d:/Jai/jai_projects/.build/hello_sailor.exp
 
@@ -65,13 +65,13 @@ llvm      time: 0.012493 seconds.
 Compiler  time: 0.056352 seconds.  
 Link      time: 0.273129 seconds.  
 Total     time: 0.329482 seconds.  
-```c++
+```
 
 This only displays some useful compiler and linker info. You will see this whenever you compile Jai code.
 
 On Linux, you will see an output like this:
 
-```c++
+```
 Running linker: /home/ivo/jai//bin/lld-linux -flavor Gnu --eh-frame-hdr -export-dynamic -o hello_sailor /home/ivo/jai_projects/.build/hello_sailor_0_w2.obj /home/ivo/jai_projects/.build/hello_sailor_1_w2.obj /home/ivo/jai_projects/.build/hello_sailor_2_w2.obj /home/ivo/jai_projects/.build/hello_sailor_3_w2.obj /lib/x86_64-linux-gnu/crt1.o /lib/x86_64-linux-gnu/crti.o /lib/x86_64-linux-gnu/crtn.o -L /home/ivo/jai_projects --dynamic-linker /lib64/ld-linux-x86-64.so.2 -rpath='$ORIGIN' -L /lib -L /lib64 -L /usr/lib -L /usr/lib64 -L /usr/local/lib/x86_64-linux-gnu -L /lib/x86_64-linux-gnu -L /usr/lib/x86_64-linux-gnu -L /usr/local/lib -L /usr/lib/x86_64-linux-gnu/libfakeroot -L /usr/lib/wsl/lib -L /home/ivo/jai/modules/ --start-group /lib/x86_64-linux-gnu/libpthread.so /lib/x86_64-linux-gnu/libm.so /lib/x86_64-linux-gnu/libc.so /lib/x86_64-linux-gnu/libdl.so /lib/x86_64-linux-gnu/librt.so /home/ivo/jai/modules/stb_sprintf/linux/stb_sprintf.a --end-group
 
 Stats for Workspace 2 ("Target Program"):
@@ -82,7 +82,7 @@ llvm      time: 0.080191 seconds.
 Compiler  time: 0.176359 seconds.  
 Link      time: 0.000830 seconds.  
 Total     time: 0.177189 seconds.  
-```c++
+```
 
 We won't display this output again, unless it contains something interesting.
 
@@ -110,7 +110,7 @@ To produce an output in Jai, we use the **print** procedure, which can take this
 
 ```c++
 print("Hello, Sailor from Jai!");
-```c++
+```
 This is a complete code statement, so it must end with a semicolon **;**  
 We now have the following code:
 
@@ -118,7 +118,7 @@ We now have the following code:
 main :: () {
    print("Hello, Sailor from Jai!");
 }
-```c++
+```
 
 Let's compile it again:  `jai hello_sailor.jai`   
 But there is a problem, we get the following output:
@@ -131,7 +131,7 @@ Error: Undeclared identifier 'print'.
     main :: () {
        print("Hello, Sailor from Jai!");
 ...
-```c++  
+``` 
 The error means the compiler can't find the `print` procedure. That's because this procedure is defined elsewhere, in a **module** called _Basic_.
 
 > Modules are stored in the _jai\modules_ folder. There we find a subfolder _Basic_, containing a file _Print.jai_, which contains the definition of `print`.
@@ -145,7 +145,7 @@ Add this at the start, so that our code file looks like:
 main :: () {
    print("Hello, Sailor from Jai!");
 }
-```c++
+```
 
 Now compilation succeeds and an executable is created!
 
@@ -185,14 +185,14 @@ main :: () {
 }
 
 #run main();
-```c++
+```
 
 Now compile the program as before and carefully look at the output:
 ```c++
    Hello, Sailor from Jai!
    
    Running linker: ...
-```c++
+```
 
 You see the same extensive output starting with _Running linker_ as previously.
 But before the linking starts (**_during compile-time_** !), you already see our printed output.
@@ -215,13 +215,13 @@ In case of `#run main()`, you run the whole program during compile-time (see ?? 
 Let's see some other compile-time errors.  
 Remove the ; at the end of the print statement and compile again. The compiler gives you the following error-message:
 
-```c++
+```
 d:/Jai/The Way to Jai/3-Compiling_and_running_your_first_program/code/hello_sailor.jai:4,37:  
 Error: Semicolon expected after expression.
 
     main :: () {
        print("Hello, Sailor from Jai!\n")
-```c++
+```
 This is very clear: it gives you the line (4) on which the error occurred, and even the exact column (37)!  
 You'll find that Jai has strong compiler checks and helpful error messages following the motto: _better resolve errors at compile-time than having to deal with bugs at run-time_.  
 Also the Jai compiler stops at the first error it encounters and only reports that, and no executable is generated.
@@ -241,7 +241,7 @@ main :: () {
   exit(0); // exits the program
   print("After exiting\n"); // <= this will never print!
 }
-```c++
+```
 Statements coming after `exit` will never be executed.
 `exit` can pass an integer to the OS, so that a script which invoked our Jai program could act upon the returned value.  
 Typical is:
