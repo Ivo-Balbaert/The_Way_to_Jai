@@ -66,7 +66,7 @@ Finally, the sum of compilation and link time is reported as _Total time:    0.4
 
 Here is a complete example output again:
 
-```
+```c++
 Stats for Workspace 2 ("Target Program"):
 Lexer lines processed: 6481 (11075 including blank lines, comments.)
 Front-end time: 0.054479 seconds.
@@ -75,7 +75,7 @@ llvm      time: 0.042108 seconds.
 Compiler  time: 0.096587 seconds.
 Link      time: 0.328986 seconds.
 Total     time: 0.425573 seconds.
-```
+```c++
 
 ## 4.6 Architectures  
 One of the big advantages of LLVM is that it is _platform independent_: it can produce executable binary code for a wide variety of platforms, amongst them game consoles.  
@@ -103,7 +103,7 @@ The `-verbose` option gives some extra information about what the metaprogram is
 	`jai -run write_string(\"Hello!\n\") -add "a := 42"; -verbose 1_hello_sailor.jai`  
 shows the following at the start of the compiler output:
             
-```
+```c++
 Basename: 1_hello_sailor
 Path:
 Input files: ["1_hello_sailor.jai"]
@@ -112,7 +112,7 @@ Run strings: ["write_string("Hello!\n")"]
 Plugins:     [2f2_50b8]
 Hello!
 Running linker: … (abbreviated)_
-```
+```c++
 ## 4.9 The Preload module
 The **Preload** module is implicitly loaded whenever the Jai compiler is started, so it doesn’t need to be imported.
 It contains definitions the compiler needs in order to compile user source code.

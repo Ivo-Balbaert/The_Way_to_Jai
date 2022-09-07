@@ -20,9 +20,9 @@ Keep the code examples close when you are going through the text, to see the ent
 
 Here are some conventions we'll use in the text:
 
-```
+```c++
 Code will be shown in a grey background.
-```
+```c++
 
 We'll use _italics_ for folder names, module names, other packages, and also for the output of running programs.  
 We'll use **bold** for important concepts, new keywords and directives.

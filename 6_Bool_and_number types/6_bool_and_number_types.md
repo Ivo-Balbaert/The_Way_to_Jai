@@ -1,7 +1,7 @@
 # Chapter 6 – Bool and number types
 See _6.1_bools.jai_:
 
-```
+```c++
 #import "Basic";
 
 main :: () {
@@ -23,7 +23,7 @@ main :: () {
     print("b1 and b2 is %\n", b1 && b2); // => b1 and b2 is false
     print("b1 or b2 is %\n", b1 || b2);  // => b1 or b2 is true
 }
-```
+```c++
 
 ## 6.1 - Boolean values
 bool values `true` and `false` were discussed in § 5.1
@@ -57,7 +57,7 @@ You can find complete truth tables [here](https://en.wikipedia.org/wiki/Truth_ta
 ### 6.1.3 The assert statement
 See _6.2_assert.jai_:
 
-```
+```c++
 #import "Basic";
 
 main :: () {
@@ -78,7 +78,7 @@ c:/jai/modules/Preload.jai:334: default_assertion_failed
 c:/jai/modules/Basic/module.jai:74: assert
 d:/Jai/The_Way_to_Jai/6_Bool_and_number types/examples/6.3_assert.jai:5: main
 */
-```
+```c++
 
 Instead of always printing out if a bool expression is true of false, there is a handy shortcut with the **assert** procedure, defined in module _Basic_.
 
@@ -95,7 +95,7 @@ Also you can leave important assert statements in production code and disable th
 ## 6.2 - Number types
 See _6.3_numbers.jai_:
 
-```
+```c++
 #import "Basic";
 
 main :: () {
@@ -171,7 +171,7 @@ main :: () {
     print("%\n", (count/2) - 1); // => 4
     print("%\n", count/(2 - 1)); // => 10
 }
-```
+```c++
 
 We talked about the different number types in § 5.1.2
 
@@ -214,10 +214,10 @@ If there is information loss, you can _truncate_ the bits you don't care about, 
 
 #### 6.2.4.1 - Cast of bool to int
 bool values can be autocast to ints with xx (see line (7)):
-```    
+```c++    
 xx true  returns 1  
 xx false returns 0
-```
+```c++
 ### 6.2.5 - Autocasting with xx
 Automatic casting can be used when the compiler can infer what casting has to take place at a certain moment, this is indicated with **xx**:  
 xx variable;   	// autocast variable to whatever type is needed  
@@ -238,7 +238,7 @@ The same [precedence rules as in C](https://www.tutorialspoint.com/cprogramming/
 ### 6.2.7 Bitwise operators
 See _6.4_bitwise.jai_:
 
-```
+```c++
 #import "Basic";
 
 main :: () {
@@ -265,11 +265,11 @@ alr is: 2
 11001100 # 10000011 is 207
 true
 */
-```
+```c++
 
 These are Jai's bitwise operators:
 
-```
+```c++
      | - bitwise OR
 	 & - bitwise AND
 	 ^ - bitwise XOR
@@ -278,22 +278,22 @@ These are Jai's bitwise operators:
 	 >> - shift right
 	 >>> - rotate right
  	 ~ - bitwise NOT (one's complement) (unary)
-```
+```c++
 
 The code shows some examples of their use. The bitwise operators perform an arithmetic shift, following C's rules regarding bitwise operators.
 
 #### 6.2.7.1 Test if a number is even
 Using the % or & operator, we can the following expressions return true when n is even:	
 
-```
+```c++
 n % 2 == 0   
 n & 1 == 0 
-```
+```c++
 
 ### 6.2.8 Formatting procs
 See _6.5_formatting.jai_:
 
-```
+```c++
 #import "Basic";
 
 main :: () {
@@ -317,7 +317,7 @@ main :: () {
 3.140
 3.14
 */
-```
+```c++
 
 These format* procs give additional functionality for formatting integers and floating numbers. They are defined in Print.jai in the _Basic_ module and return Formatter data structures. The print functions know how to use Formatters as control structures.
 
@@ -330,7 +330,7 @@ Additionally, you can use print_style.default_format_int and print_style.default
 ### 6.2.9 Random numbers
 See _6.6_random.jai_:
 
-```
+```c++
 #import "Basic";
 #import "Random";
 
@@ -346,13 +346,13 @@ A random integer: 1137526400306752306
 A random float between 0 and 1: 0.709799
 A random float between 0 and 100: 75.796494
 */
-```
+```c++
 
 The following procedures are defined in the _Random_ module, which is just a file _Random.jai_ in the _modules_ folder.  
-```
+```c++
 random_get :: () -> u64
 random_get_zero_to_one :: () -> float
 random_get_within_range :: (min: float, max: float) -> float
-```
+```c++
 
 If you want more sophistication, use the _PCG_ module which contains the same procs.
