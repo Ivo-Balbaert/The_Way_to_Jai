@@ -75,7 +75,7 @@ llvm      time: 0.042108 seconds.
 Compiler  time: 0.096587 seconds.
 Link      time: 0.328986 seconds.
 Total     time: 0.425573 seconds.
-```c++
+```
 
 ## 4.6 Architectures  
 One of the big advantages of LLVM is that it is _platform independent_: it can produce executable binary code for a wide variety of platforms, amongst them game consoles.  
@@ -112,7 +112,7 @@ Run strings: ["write_string("Hello!\n")"]
 Plugins:     [2f2_50b8]
 Hello!
 Running linker: … (abbreviated)_
-```c++
+```
 ## 4.9 The Preload module
 The **Preload** module is implicitly loaded whenever the Jai compiler is started, so it doesn’t need to be imported.
 It contains definitions the compiler needs in order to compile user source code.
