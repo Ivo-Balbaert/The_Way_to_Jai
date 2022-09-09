@@ -134,8 +134,6 @@ Error: Undeclared identifier 'print'.
 ``` 
 The error means the compiler can't find the `print` procedure. That's because this procedure is defined elsewhere, in a **module** called _Basic_.
 
-> Modules are stored in the _jai\modules_ folder. There we find a subfolder _Basic_, containing a file _Print.jai_, which contains the definition of `print`.
-
 In order to make this clear to the compiler, we must **import** that module with the following statement:  `#import "Basic";`
 Add this at the start, so that our code file looks like:
 
