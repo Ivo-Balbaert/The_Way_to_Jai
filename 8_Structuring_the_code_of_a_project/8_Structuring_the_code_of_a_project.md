@@ -1,6 +1,6 @@
 # Chapter 8 – Structuring code
 
-In § 3.2.2 we saw how we can import a module in our project by using #import.  
+In § 3.2.2 we saw how we can import a module in our project by using `#import`.  
 When an identifier for a type, variable or procedure is encountered while compiling, the compiler first looks in the current source file. Then it searches the imported modules (if any, see § 8.1), and it also searches the loaded files (see § 8.2)
 
 ## 8.1 Structuring modules
@@ -27,7 +27,7 @@ When you look at the start of this file, you can see that it loads the other .ja
 
 This is a common way to structure a module.
 
-## 8.2 Structuring a project
+## 8.2 Loading files with #load
 Besides the #import to take in a module, you also would want to be able to take in a (or more) Jai source code file(s) and add it to your project. Like modules, we use the `#load` directive to do this.  
 
 The `#load` directive effectively copies in the contents from the loaded source file into the current file. Think of loading a file as pasting the code directly into the calling file. While building this current file, all code from the loaded files will be automatically build with it.  
@@ -54,7 +54,7 @@ This way code like procedure definitions or struct declarations and so on can be
 `#load` provides us with a way to structure the code in a project: code that belongs together can be put in one file. In this way, the main file of a project can be structured as a collection of all these component source files.  
 In a more complex project, this principle could be applied to lower levels as well: `part1.jai` could also contain #load (s), and so on: it is a hierarchical process.
 
-To illustrate this, `part1.jai` contains the declaration of the variable `a_part1`: a_part1 := 42;` which is printed out in `main()`. From `part2.jai` you see that you can load a file from an arbitrary path; the path is relative to the calling file.
+To illustrate this, `part1.jai` contains the declaration of the variable a_part1`: `a_part1 := 42;` which is printed out in `main()`. From `part2.jai` you see that you can load a file from an arbitrary path; the path is relative to the calling file.
 
 ## 8.3 Named imports
 Sometimes you want to qualify a function name with the module name it came from (perhaps because that name has already been used, it is duplicate) you can do a named import as follows:	 `Math :: #import "Math";`
@@ -67,7 +67,7 @@ Then you have to qualify any function from that module with its module name, lik
 
 This improves readability: it makes it clear where a function comes from. The name can also be completely different, so it can be shorter, or be used to differentiate between two modules with the same name.
 
-## 8.4 Conventions
+## 8.4 Structuring a project
 A project can consist of many source files and modules that are called. But there can only be one main source file. This file contains the `main()` procedure and structures the project with #imports and #loads. It is often called `main.jai` or `first.jai`.
 
 The order of statements in a Jai source file is not mandatory. However, for readability  it can be good to adhere to some conventions, particularly in a big codebase.
