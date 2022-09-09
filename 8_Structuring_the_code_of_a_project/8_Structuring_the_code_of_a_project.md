@@ -54,7 +54,7 @@ This way code like procedure definitions or struct declarations and so on can be
 `#load` provides us with a way to structure the code in a project: code that belongs together can be put in one file. In this way, the main file of a project can be structured as a collection of all these component source files.  
 In a more complex project, this principle could be applied to lower levels as well: `part1.jai` could also contain #load (s), and so on: it is a hierarchical process.
 
-To illustrate this, `part1.jai` contains the declaration of the variable a_part1`: `a_part1 := 42;` which is printed out in `main()`. From `part2.jai` you see that you can load a file from an arbitrary path; the path is relative to the calling file.
+To illustrate this, `part1.jai` contains the declaration of the variable a_part1: `a_part1 := 42;` which is printed out in `main()`. From `part2.jai` you see that you can load a file from an arbitrary path; the path is relative to the calling file.
 
 ## 8.3 Named imports
 Sometimes you want to qualify a function name with the module name it came from (perhaps because that name has already been used, it is duplicate) you can do a named import as follows:	 `Math :: #import "Math";`
