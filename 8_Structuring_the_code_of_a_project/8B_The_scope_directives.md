@@ -1,4 +1,4 @@
-8B – The #scope directives
+# 8B – The #scope directives
 
 § 7 talked about scope of definitions, and in § 8 we saw how files and modules are loaded and imported. Jai cleans up the mess of header-files and namespaces in C/C++  
 
@@ -7,7 +7,6 @@ Declarations of a source file are exported into application scope. If you want s
 
 ```
 #scope_file;
-
 tango :: "File Scope (in file1)";
 ```
 
