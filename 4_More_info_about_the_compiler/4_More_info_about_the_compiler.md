@@ -132,10 +132,6 @@ It also contains low-level functions or **intrinsics** which closely mimic corre
 In Jai, developers have complete control over where and when memory is allocated. Jai does a much better job of packing values in memory so they are close together, which increases runtime performance.   
 
 The compiler knows how much memory each type uses. It also know the type of each variable. A variable's memory is allocated at type declaration, for example: variable `counter` of type int will allocate 8 bytes. It will occupy one word on a 64 bit machine. 
-You could visualize this as follows:  
-                  _____
-    counter ---> |_____| 
-                  MEMORY
 
 Variables of a basic type are stored by default in _stack_ memory. This memory is freed automatically when the variable is no longer needed (goes out of scope), see § 7.  
 However most of your program's memory will be allocated in the _heap_. Jai has no automatic memory management, so the developer is responsable for releasing (freeing) that memory.
