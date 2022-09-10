@@ -1,5 +1,3 @@
-
-- 7 Scope of variables
 - Memory management
 	This memory has to be freed. There is no garbage collector in Jai:  except for stack variables, which are freed automatically when their scope (lifetime) ends, the developer must manually free the memory.
 - Types - Any
@@ -17,8 +15,4 @@ if (n & 1) == 0 // this is true for n with even value
 Date type ?
 
 LATER:
-- Structuring code with import and load
 - Debugging
-
-
-zahnriemen phlegestift
