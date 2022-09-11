@@ -15,3 +15,6 @@ _Table of Contents_
    [6_Bool and number types](https://github.com/Ivo-Balbaert/The_Way_to_Jai/tree/main/6_Bool_and_number%20types)  
    [7_Scope of variables](https://github.com/Ivo-Balbaert/The_Way_to_Jai/tree/main/7_Scope_of_variables)  
    [8_Structuring the code of a project](https://github.com/Ivo-Balbaert/The_Way_to_Jai/tree/main/8_Structuring_the_code_of_a_project)
+   [9_More about types](https://github.com/Ivo-Balbaert/The_Way_to_Jai/tree/main/9_More_about_types)
+
+   
