@@ -1,9 +1,6 @@
-- Memory management
-	This memory has to be freed. There is no garbage collector in Jai:  except for stack variables, which are freed automatically when their scope (lifetime) ends, the developer must manually free the memory.
-- Types - Any
-
-- highlighting code?
-
+- Strings
+- Pointers
+- After pointers: 10_memory.jai
 
 
 bool in conditions:
@@ -15,4 +12,6 @@ if (n & 1) == 0 // this is true for n with even value
 Date type ?
 
 LATER:
-- Debugging
+- Debugging: after control structures
+- 9.3 before 9.1 ?
+- Type_Info: after struct, enum , see types.jai in 11_Advanced examples
