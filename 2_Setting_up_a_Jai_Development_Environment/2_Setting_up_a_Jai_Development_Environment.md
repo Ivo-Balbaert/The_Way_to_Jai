@@ -84,6 +84,49 @@ Then just drop the most recent _jai_ folder as the new Jai root folder, and you'
 
 Windows is the primary development platform for Jai, because most games are written to run on Windows first. Jonathan Blow also uses Visual Studio as IDE for the compiler.
 
+### 2.2.6 Solution for install problem on Linux distros
+On many 64 bit Linux platforms (Mint, Ubuntu, ...) starting the Jai compiler gives the following error message:
+Remark: WSL on Windows with Ubuntu doesn't have this problem on a 64 bit machine.
+
+```
+In Workspace 1 ("First Workspace"):
+/etc/jai/modules/POSIX/libc_bindings.jai:243,20: Error: /lib/i386-linux-gnu/libdl.so.2: Dynamic library load failed. Error code 2, message: No such file or directory
+
+    // @header dlfcn.h
+    dynamic_linker :: #foreign_system_library "libdl";
+
+/etc/jai/modules/Basic/posix.jai:1,2: Info: This occurred inside a module that was imported here.
+
+    #import "POSIX";
+
+/etc/jai/modules/Default_Metaprogram.jai:435,2: Info: ... which was imported here.
+
+    }
+    #import "Basic";
+
+/home/sl3dge/.build/.added_strings_w1.jai:2,2: Info: ... which was imported here.
+
+    #import "Default_Metaprogram";
+
+    dlerror says: /lib/i386-linux-gnu/libdl.so.2: wrong ELF class: ELFCLASS32
+```
+
+The main issue here is: **libdl.so.2: wrong ELF class: ELFCLASS32**
+Other similar errors can occur, like:  
+**librt.so.1: wrong ELF class: ELFCLASS32**
+**libpthread.so.0: wrong ELF class: ELFCLASS32**
+
+For some reason when you ask for "libdl" or "librt" or "libpthread", the OS points you to the 32bit version instead of the 64 bit version.
+
+As suggested on the Discord channel, all that is needed to solve these problems is to install **libc6-dev-amd64**.  
+This is done by executing the following 2 commands in a terminal:  
+```
+1) sudo apt-get update -y
+2) sudo apt-get install -y libc6-dev-amd64
+```
+
+Check with `jai -version`:
+Version: beta 0.1.039, built on 17 September 2022.
 
 ## 2.3 Editor help for coding Jai
 Writing a program's source code is easier when you have some support such as syntax highlighting in your code editor. Support exists for vim, Sublime Text 3 and VSCode, see: [Tooling Ecosystem](https://github.com/Jai-Community/Jai-Community-Library/wiki/References#tooling-ecosystem). 
