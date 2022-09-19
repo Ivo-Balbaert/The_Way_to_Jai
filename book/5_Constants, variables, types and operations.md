@@ -12,8 +12,8 @@ If all data where the same, it would be a lot more difficult to make good use of
 
 Various types exist, like:  
     * _integers_, which are whole numbers (7, 42, 0, -3)  
-    * _floats_, which are decimal numbers (3.14, )   
-    * _strings_ ("Hello", "Tokyo")  
+    * _floats_, which are decimal numbers (3.14, 5.98e24)   
+    * _strings_ ("Hello", "Tokyo", "世界!")  
     * _booleans_, which are yes/no, on/off, true/false (the only values are true and false)    
 and so on.   
 These are the **basic** or **primitive** types in Jai, called respectively **int**, **float**, **string** and **bool**. 
@@ -27,7 +27,7 @@ Operations use special _operator_ characters, like + for addition.
 In our programs, data is stored in **constants** or **variables** which also have some type, and take up memory in the computer. Each type prescribes how much memory it needs, which is a number of bytes (b) (As you probably know, 1 byte contains 8 bits, and a bit is either 0 or 1).  
 
 Memory is for program performance like water is for life.
-So it is important that we don't use (waste) too much memory. This also means that our program data values better be packed together in memory. This is done by storing values of composite data together in successive (_contiguous_) places in memory, so that reading in data from various caches will be much faster, or as we say: _locality is maximized_.  
+So it is important that we don't use (waste) too much memory. This also means that our program data values better be packed together in memory. This is done by storing values of composite data together in successive (_contiguous_) places in memory, so that reading in data from various caches will be much faster, or as it is phrased: _locality is maximized_.  
 
 Values, constants and variables combined with operators form _expressions_, like `(a + b) * 3`. Expressions result in a value, which can be assigned to other variables, like `x = (a + b) * 3;`, forming a _statement_.  
 Each statement in Jai ends with a semi-colon `;` and uses one code line for best readability.
@@ -41,7 +41,7 @@ Jai is a _strongly_ and _statically typed_ language: the compiler must know the 
  
 Conversion of the type of a variable is strictly controlled, and operations can only work on certain types. This all adds up to better error-checking by the compiler, and thus more robust, safer and much faster programs. 
 
-You can and often must indicate the type explicitly, but the compiler can also _infer_ many types (see ??) to ease the task of the programmer here.
+You can and often must indicate the type explicitly, but the compiler can also _infer_ many types (see § 5.3.1 case 3) to ease the task of the programmer here.
 
 ### 5.1.2 The primitive types
 Here are some examples for these types:
@@ -60,7 +60,7 @@ Eight types exist according to their size (number of bytes) and whether they are
 	`s64` or `u64` - signed and unsigned 8 byte (or 64 bit) integers,  
         range: -9,223,372,036,854,775,808 to +9,223,372,036,854,775,807 or 0 to 18,446,744,073,709,551,615
 	
-int defaults to s64
+`int` defaults to `s64`
 
 **float** : literals are of the form `3.141592` or `5.98e24`, with a `.` for separating the decimal part, and an `e` for indicating the power of 10 (exponent).  
 Two floating point number types exist according to their size, they are both signed:
@@ -68,16 +68,16 @@ Two floating point number types exist according to their size, they are both sig
 	`float32` - 4 byte (32 bit) 
 	`float64` - 8 byte (64 bit) 
 
-float defaults to float32  
+`float` defaults to `float32`  
 Use the `0h` prefix to specify floats in hex, in IEEE-754 format. 
 
-**string** : the most common data type, which we have already used, for example: `"Hello from Jai!"`. 
+**string** : the most common data type, which we have already used, for example: `"Hello from Jai!"`.   
 _Question_: Why are these values strings?  "42", "false" or "0b10".
-Indeed all types can be disguised as string.
+Indeed all types can disguise as string when surrounded by "".
 
 **void** : this is a special type of size 0, with no values. It is used when a variable has no value.
 
-Jai has no explicit character type. The **#char** directive on a single character string gives the numeric value of the ASCII character, inferred as of type s64; for example:		
+Jai has no explicit character type. The **#char** directive on a single character string gives the numeric value of the ASCII character, inferred as type s64; for example:		
     `#char "1"; // this is 49`  
 (see for example this [ASCII table](https://www.rapidtables.com/code/text/ascii-table.html))
 
@@ -91,7 +91,7 @@ main :: () {
     print("Hello, Sailor!\n"); // => Hello, Sailor!
     // This doesn't work:
     // print(42);  // (1) =>  Error: Type mismatch. Type wanted: string; type given: s64.
-    // print(false);
+    // print(false); // =>  Error: Type mismatch. Type wanted: string; type given: bool.
 
     // But these do work:
     print("%\n", 42);    // => 42
@@ -110,7 +110,6 @@ Try to print out a number (line (1)); you'll see that this doesn't work. But pri
 The print procedure only accepts a string, or a format string with arguments to be substituted in the % placeholders.  
 If you use the print procedure with only 1 parameter, then this parameter must be of type string. If not, you get the **Error: Type mismatch. Type wanted: string; type given: s64.**
 
-    print(GREETING);         // => Hello, Sailor!
     print(1);
 
     c:/jai/modules/Basic/Print.jai:386,10: Info: ... in checking argument 1 of call to print.
@@ -119,25 +118,25 @@ If you use the print procedure with only 1 parameter, then this parameter must b
 The error text shows that the 1st argument needs to be a string, but that in fact it is meant to be a format string, so that you can specify what you want to print.
 
 ```c++
- 	print ("I greet you: %\n", GREETING);  // => I greet you: Hello, Sailor!
+ 	print ("I greet you: %\n", "Hello, Sailor!");  // => I greet you: Hello, Sailor!
 ```
 
-The print procedure uses **%** to indicate insertion points for values: the value is substituted for % in the format string. Unlike many other languages, you don't need to specify what kind of thing is being printed, and it handles complex types too. There is no need for any indication of the type as is done in C (e.g. %d for an integer, or %s for a string) because the Jai compiler knows the types of all print arguments. However, if you want any special formatting of the thing to be printed, you must handle that separately.   
-To make the print-out more readable, place a new-line \n at the end of the format string.
+The print procedure uses **%** to indicate insertion points for values: the value is substituted for % in the format string.   Unlike many other languages, you don't need to specify what kind of thing is being printed, and it handles complex types too. There is no need for any indication of the type as is done in C (e.g. %d for an integer, or %s for a string) because the Jai compiler knows the types of all print arguments. However, if you want any special formatting of the thing to be printed, you must handle that separately.   
+To make the print-out more readable, place a new-line (\n) at the end of the format string.
 
 ### 5.1.4 type_of()
 All things in Jai have a type, which we can find out with the **type_of()** procedure. In program 5_1_literals.jai we applied this to a number of literals, starting from line (2).
 
 ## 5.2 - Constants
-### 5.2.1 _Problem_: What if we need the same literal many times?
-Suppose your program needs to calculate a lot of results using the mass of the earth, which is approximately 5.97219e24 (expressed in kg). Would you rather write this number 10 or more times in your program, perhaps making copy mistakes? What if you later want to change this number to a more accurate one, you would have to change it in 10 or more places!  
+### 5.2.1 _Problem_: What if we need the same literal many times in code?
+Suppose your program needs to calculate a lot of results using the mass of the earth, which is approximately 5.97219e24 (expressed in kg), a value that doesn't change. Would you rather write this number many times in your program, perhaps making copy mistakes? What if you later want to change this number to a more accurate one, you would have to change it in perhaps 10 or more places!  
 
 ### 5.2.2 _Solution_: Constants
-The solution is to give such a constant a meaningful name, like:  
+The solution is to give such a **constant** a meaningful name, like:  
     `MASS_EARTH :: 5.97219e24;     // in kg`  
-Do this in only one place, and then use that name in all places in code where that value is needed. At compile-time, the compiler will substitute the value for the name everywhere.
+Do this in only one place, and then use that name in all places in code where that value is needed. At compile-time, the compiler will substitute the value for the constant's name everywhere.
 
-Here is our solution program: see _5.2_constants.jai_
+Here is an example program: see _5.2_constants.jai_
 
 ```c++
 #import "Basic";
@@ -150,20 +149,24 @@ COMP_CALC :: #run (234 * 15);      // (2B)
 main :: () {
   MASS_MARS :: MASS_EARTH * 0.15;  // (3)
   print("The earth mass is %\n", MASS_EARTH);
-  // (4) => The earth mass is 5972189887017193070000000
+  // => The earth mass is 5972189887017193070000000
 
   print("I was computed at compile time: %\n", COMP_CALC); 
   // => I was computed at compile time: 3510
+
+  // MASS_EARTH = 5.98e24; // => (4) Error: Attempt to assign to a constant.
 
   print("%\n", type_of(MASS_EARTH));     // (5) => float32
   print("%\n", is_constant(MASS_EARTH)); // (6) => true
 }
 ```
-By convention, the name is all uppercase, and as with numbers, multiple parts can be separated by an _.  
-Constants declared out of the main() procedure are defined in a _global scope_, meaning that they are known in the whole program.  
-Line (1) shows that you can declare the type of a constant. But this isn't necessary: in line (2) the constant is declared without type, here the compiler infers the type.   
-Notice that by omitting the type, we get the typical **::**		`MASS_EARTH :: 5.97219e24;`  which indicates a constant value.
-No let or imm is necessary before the constant's name.
+By convention, the name of a constant is all uppercase, and as with numbers, multiple parts can be separated by an _.  
+Constants declared out of the main() procedure are defined in a _global scope_, meaning that they are known in the whole program (see § 7).  
+Line (1) shows that you can declare the type of a constant. But this isn't necessary: in line (2) the constant is declared without type, and the compiler infers the type.   
+Notice that by omitting the type, we get the typical **::**  
+`MASS_EARTH :: 5.97219e24;`  
+which indicates a constant value.
+No let, imm or const (as used in other languages) is necessary before the constant's name.
 
 Needless to say that you can't define two or more constants with the same name. Test out what error you get! The same goes for variables, procedure names, and so on.  
 In line (2B) we use `#run` to calculate an expression at compile-time, so that `COMP_CALC` is really a constant.   
@@ -179,8 +182,9 @@ main (and any other procedure) also has the `::` indicator. This is because main
 
 ## 5.3 - Variables
 
-For most values in programs, you want to be able to change their value, that's why you need **variables**. A variable is a name (identifier) given to a memory location that contains a data value which can change (is _mutable_); no var or mut is necessary before the variable name. This value has a type, which cannot be changed.  
-Examples: `counter`, `valid_date`, `first_name`, and so on.
+For most values in programs, you want to be able to change their value, that's why you need **variables**. A variable is a name (identifier) given to a memory location that contains a data value which can change (is _mutable_). Again no var or mut is necessary before the variable name to indicate this. The value of a variable has a type, which cannot be changed.  
+Examples of variable names are:   
+`counter`, `valid_date`, `first_name`  
 The names start with a lowercase letter, and multiple parts of a name are connected with _ .  
 
 ### 5.3.1 - How to declare variables
@@ -209,8 +213,6 @@ main :: () {
     print("valid2: %\n", valid2);           // => false
     first_name2 : string;   
     print("first_name2: %\n", first_name2); // => ""
-    ptr : *u32;                             // defaults to a null pointer to a u32.
-    print("ptr: %\n", ptr);                 // => null
 
     // change default value afterwards:
     counter2 = 100;
@@ -255,15 +257,15 @@ if you do only a type declaration and skip the value, you'll get a _default zero
 
 `counter : int;  	// default value of 0`
 
-This default value is 0 for numbers, false for bool, the empty string "" for strings, null for pointer types.
+This default value is 0 for numbers, false for bool, the empty string "" for strings.
 
 >Remark: 
->In C such variables have a random value, because they get assigned a random free location in memory. This can cause errors later on, so C programmers are advised to initialize their variables immediately. This problem cannot occur in Jai: here variables are by default initialized to a "zero" value, which reduces the mental load for the developer (have I already initialized these variables or not?). 
+>In C such variables have a random value, because they get assigned a random free location in memory. This can cause errors later on, so C programmers are advised to initialize their variables immediately. This problem cannot occur in Jai: here variables are by default initialized to a "zero" value, which reduces the mental load for the developer ("have I already initialized these variables or not?"). 
 
 **Case 3:** only value  
-We've already seen that the compiler often can infer the type from the given value. If you skip the type -- notice that you then get the := , then the type will be inferred from the value:
+We've already seen that the compiler often can infer the type from the given value. If you skip the type - notice that you then get the := , then the type will be inferred from the value:
 		    `first_name := "Jon";`  
-In practice this will be the format mostly used.
+In practice, this will be the format mostly used.
 
 Changing a value from a previously declared variable is done with the assignment operator **=**  
 		    `counter = 100;`
@@ -276,7 +278,7 @@ Example:    `average : float = ---;`
 
 This way you get the same behavior as in C. This could cause undefined behavior: the variables can contain any value that was left over from previous use at the assigned memory location, but it will contain mostly zeros. Don’t forget to initialize the variable afterwards with a normal assignment!
 
-global_var in line (1) is defined in _global scope_, known and mutable (!) throughout the entire program.  
+`global_var` in line (1) is defined in _global scope_, known and mutable throughout the entire program, so handle it carefully!.  
 In line (2) we see a #char literal in a variable f, which has type s64.  
 
 >Schematically:  
@@ -291,7 +293,7 @@ Here are the errors that can occur when defining a variable incorrectly:
     _Reason_:
     = doesn't do type inference, only := does  
     _Solution_: 
-    Write `counter5 := 101;` or counter5 : u8; counter5 = 101;
+    Write `counter5 := 101;` or `counter5 : u8; counter5 = 101`;
 
 2] When a variable with the same name has already been used:  
   `counter := 42;` // => **Error: Redeclaration of variable 'counter'.**  
@@ -300,7 +302,7 @@ Here are the errors that can occur when defining a variable incorrectly:
   _Solution_: 
     Change the name like `counter1 := 42;`
 
-3] When a variable has previously been declared with type int:  
+3] When a variable `counter` has previously been declared with type int:  
   `counter = "France";` // => **Error: Type mismatch. Type wanted: int; type given: string.**  
   _Reason_:
     A variable can't contain a value with a type different than its declared type.  
@@ -328,7 +330,7 @@ main :: () {
     n3, m3 := 12, 13;
 // works also for one value:
     p, q := 13;  
-    print("% %\n", p, q); // => 12 13
+    print("% %\n", p, q); // => 13 13
 
 // values of different types or expressions:
     x, y := 1, "hello";      // an int and a string
@@ -345,28 +347,17 @@ main :: () {
 
   // multiple declaration, default values, and subsequent assignment:
     n4, m4 : int;
-    print("n4 is % and m4 is %\n", n4, m4);     // => n1 is 0 and m1 is 0
+    print("n4 is % and m4 is %\n", n4, m4);     // => n4 is 0 and m4 is 0
     n4, m4 = 1, 2; 
-    print("n4 is % and m4 is %\n", n4, m4);     // => n1 is 0 and m1 is 0
+    print("n4 is % and m4 is %\n", n4, m4);     // => n4 is 1 and m4 is 2
 }
-
-/* Output:
-12 13
-12 13
-13 13
-x is 1 and y is hello
-s is 5 and t is 6
-s1 is 5 and t1 is 6
-n4 is 0 and m4 is 0
-n4 is 1 and m4 is 2
-*/
 ```
 
 In line (1) we see how several variables are declared and initialized on one line:   `n1: u8; m1: u8; n1 = 12; m1 = 13;`
 This can of course be shortened.   
 A compound assignment like in line (2)
 is not allowed, but you can write: `n3, m3 := 12, 13;`  
-The right hand sides in such a _multiple assignment_ can also contain expressions, even calculated at compile-time with #run.  
+The right-hand sides in such a _multiple assignment_ can also contain expressions, even calculated at compile-time with #run.  
 If needed, declaration and assignment can be on separate lines.
 
 ## 5.6 - Swapping values
@@ -382,8 +373,8 @@ main :: () {
   // n, m = m, n;                        
   // print("n is % and m is %\n", n, m); // (1) => n is 3 and m is 3
 
-  // this gives an error:
     s, p := "abc", 13;
+  // this gives an error:
   // s, p = p, s; // => Error: Type mismatch. Type wanted: string; type given: s64.  
 
   // But there our swapping procedures in Basic:
@@ -394,16 +385,12 @@ main :: () {
     n2, m2 = swap(n2, m2);
     print("n2 is % and m2 is %\n", n2, m2); // => n2 is 3 and m2 is 2       
 }
-
-/*
-n is 3 and m is 2
-n2 is 3 and m2 is 2
-*/
 ```
 
 A swap like n, m = m, n; is allowed, but doesn't work in Jai like you would expect (see line (1)): both variables get the same value. When n and m are of different types an error results, because then they would have to change type, which is not allowed.  
 
-However, module _Basic_ contains 2 swap procedures (Look them up! - both polymorphic, see ??):  
+> Advanced:
+    However, module _Basic_ contains 2 swap procedures (Look them up! - both polymorphic, see ??):  
   - Swap: uses pointers and << to a temp value
   - swap: inline, returns two values with **#must**, which means that they must be handled.
 
@@ -439,14 +426,18 @@ main :: () {
 The substitution % symbols can also take a number to indicate the position. In this way, you can change the order in which values are displayed in the format string, or use the same value more than once (see lines (2) and (3)).
 	
 The number of % and supplied values must be the same. If not you get a warning:
+
 ```c++
  print("% %", n, m, counter); // =>  Warning: Incorrect number of arguments supplied to 'print':  
 The format string requires 2 arguments, but 3 arguments are given.
-```c++
+```
+
 In this case only the first two values are displayed.
 If you want to print a literal %, replace the second % with %% as in line (4).
 
+
 ### 5.7.2 - A println procedure:
+> Warning: advanced 
 See _5.7_println.jai_:
 
 ```c++
@@ -502,7 +493,7 @@ Hello, World!
 */
 ```
 
-Jai has some lower-level write procedures which are declared as #runtime_support(??). They are defined in modules _Preload_ and _Runtime_Support.jai_, so they don’t need the Basic module. You can use these when you don't want to import the _Basic_ module.
+Jai has some lower-level write procedures which are declared as #runtime_support(see ??). They are defined in modules _Preload_ and _Runtime_Support.jai_, so they don’t need the Basic module. You can use these when you don't want to import the _Basic_ module.
 
 ### 5.7.4 - Printing Unicode
 See _5.9_printing_unicode.jai_:

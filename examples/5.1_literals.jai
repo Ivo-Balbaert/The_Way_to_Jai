@@ -7,6 +7,7 @@ main :: () {
     // print(false); // =>  Error: Type mismatch. Type wanted: string; type given: bool.
 
     // But these do:
+    print ("I greet you: %\n", "Hello, Sailor!"); // => I greet you: Hello, Sailor!
     print("%\n", 42);    // => 42
     print("%\n", false); // => false
 

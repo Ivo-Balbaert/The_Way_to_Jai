@@ -20,9 +20,7 @@ main :: () {
     print("valid2: %\n", valid2);           // => false
     first_name2 : string;   
     print("first_name2: %\n", first_name2); // => ""
-    ptr : *u32;                             // defaults to a null pointer to a u32.
-    print("ptr: %\n", ptr);                 // => null
-
+    
     // change default value afterwards:
     counter2 = 100;
     first_name2 = "Jon";

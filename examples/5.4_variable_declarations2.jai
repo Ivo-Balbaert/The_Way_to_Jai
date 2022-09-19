@@ -14,7 +14,7 @@ main :: () {
     n3, m3 := 12, 13;
 // works also for one value:
     p, q := 13;  
-    print("% %\n", p, q); // => 12 13
+    print("% %\n", p, q); // => 13 13
 
 // values of different types or expressions:
     x, y := 1, "hello";      // an int and a string
@@ -31,9 +31,9 @@ main :: () {
 
   // multiple declaration, default values, and subsequent assignment:
     n4, m4 : int;
-    print("n4 is % and m4 is %\n", n4, m4);     // => n1 is 0 and m1 is 0
+    print("n4 is % and m4 is %\n", n4, m4);     // => n4 is 0 and m4 is 0
     n4, m4 = 1, 2; 
-    print("n4 is % and m4 is %\n", n4, m4);     // => n1 is 0 and m1 is 0
+    print("n4 is % and m4 is %\n", n4, m4);     // => n4 is 1 and m4 is 2
 }
 
 /* Output:

@@ -7,8 +7,8 @@ main :: () {
   // n, m = m, n;                        
   // print("n is % and m is %\n", n, m); // => n is 3 and m is 3
 
-  // this gives an error:
     s, p := "abc", 13;
+  // this gives an error:
   // s, p = p, s; // => Error: Type mismatch. Type wanted: string; type given: s64.  
 
   // But there our swapping procedure in Basic:
