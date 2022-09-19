@@ -2,7 +2,7 @@
 
 ## 2.1 Opening up the Jai compiler toolkit
 
-Until this moment Jai is still closed beta .
+Until this moment Jai is still closed beta (??).
 The group members can download the compiler as a zip file (size +- 220 Mb).
 Unzipping this file shows the following contents:
 
@@ -10,7 +10,7 @@ Unzipping this file shows the following contents:
 
 Here is what these folders contain:
 
-- _bin_: this contains the Jai compiler executables (jai.exe for Windows, jai-linux for Linux) and the LLVM linker lld (see section # ??).
+- _bin_: this contains the Jai compiler executables (jai.exe for Windows, jai-linux for Linux, see $ 4.1-4.4) and the LLVM linker lld (see section § 4.5).
 - *how_to*: this contains some examples with explanatory comments.
 - _examples_: this contains some more advanced example programs.
 - _modules_: this contains Jai’s standard library, we'll discuss this in more detail here: ??
@@ -134,23 +134,26 @@ Remark:
 ## 2.3 Editor help for coding Jai
 Writing a program's source code is easier when you have some support such as syntax highlighting in your code editor. Support exists for vim, Sublime Text 3 and VSCode, see: [Tooling Ecosystem](https://github.com/Jai-Community/Jai-Community-Library/wiki/References#tooling-ecosystem). 
 
-### 2.3.1 Overview
+### 2.3.1 Overview of different editors
 
 1) **vim**: [Jai.vim](github.com/rluba/jai.vim): Vim syntax highlighting for the Jai programming language.  			
      
 2) **Emacs**:  [Jai-mode.el](https://github.com/krig/jai-mode/blob/master/jai-mode.el)
 
-3) **Sublime Text 3**: [RobinWragg/JaiTools](https://github.com/RobinWragg/JaiTools)
+3) **Notepad++**: [jai_npp](https://github.com/cookednick/jai_npp)
+ Syntax highlighting  
+
+4) **Sublime Text 3**: [RobinWragg/JaiTools](https://github.com/RobinWragg/JaiTools)
  Syntax highlighting, autocompletion, and Goto Symbol/Anything for the Jai language 
 
-4) **Visual Studio Code**: (see § 2.2.2)
+5) **Visual Studio Code**: (see § 2.2.2)
 Iain King: [The Language - Visual Studio Marketplace - v0.0.85](https://marketplace.visualstudio.com/items?itemName=onelivesleft.the-language) – 
 
-5) **Visual Studio**: [Jai Revolution](https://inductive.no/jai/jai-revolution/) 
+6) **Visual Studio**: [Jai Revolution](https://inductive.no/jai/jai-revolution/) 
    plugin for Visual Studio 2013 / 2015 from Inductive AS, published 2015
 	Syntax highlighting (cannot be installed in VS 2017).
 
-6) **Language server**:	[Pyromuffin/jai-lsp](https://github.com/Pyromuffin/jai-lsp)
+7) **Language server**:	[Pyromuffin/jai-lsp](https://github.com/Pyromuffin/jai-lsp)
 
 At this time I recommend the VSCode plugin, because it probably has the most functionality.
 ### 2.3.2  Using the Visual Studio Code plugin
@@ -176,7 +179,7 @@ This is the same as editing in settings.json:
 Now you can RIGHT-click on the code window and select the 1st command: `Run code`, and it will execute this command, which will compile and then run the generated executable.
 We'll show an image of this in chapter 3.
 
-### 2.3.4 The compiler command
+### 2.4 The compiler command
 
 Now open up a terminal and type `jai` and ENTER. You get the following message:
 

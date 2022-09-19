@@ -1,5 +1,5 @@
 # Chapter 4 – More info about the compiler
-## 4.1 Some info about the compiler
+## 4.1 General info
 
 Originally, Jai compiled to C, and this C code was compiled with gcc or the LLVM clang C compiler.    
 Now the compiler (written in C++) generates first an IR (intermediate representation) _byte-code_, which is then turned into machine-code through the LLVM tool-chain.  
@@ -8,9 +8,9 @@ Its growing size:
 	- this expanded to around 50,000 LOC after adding the LLVM backend, macros, operator overloading, multiple 	return values, unions, etc.; 
 	- it jumped to around 75,000 LOC of code after adding inline assembly support, 
 	- it is now some 87,000 LOC.  
-The compiler source is proprietary at this time (Aug 2022), and will not be self-hosting (meaning: written in Jai) in the near future. The compiler is _very fast_: all typical debug-builds even up to 250,000 LOC in under 1 s.
+The compiler source is proprietary at this time (Aug 2022), and will not be self-hosting (meaning: written in Jai) in the near future. The compiler is _very fast_: all typical debug-builds even up to 250,000 LOC are processed fully in under 1 s.
 
-The compiler does not process code in a single-pass, lexically ordered way like C++ does. Instead the compiler does multiple passes to find all definitions if it needs to. This means forward declarations are not needed, and the ordering of definitions and declarations is irrelevant.
+The compiler does not process code in a single-pass, lexically ordered way like C++ does. Instead the compiler does multiple passes to find all definitions if it needs to. This means _forward declarations are not needed_, and the _ordering of definitions and declarations is irrelevant_.
 
 The compiler uses a hand-written _recursive descent top-down parser_. It runs _multi-threaded_ as a kind of job system.  
 
@@ -21,13 +21,13 @@ As we see in the diagram, Jai source code is first converted to an _abstract syn
 ## 4.2 Internal byte-code interpreter
 Jai can run programs in its byte-code during compilation, so only at compile-time, for example with the `#run` command. This is possible because the compiler contains a _byte-code interpreter_.    
 
-When a function or program is run at compile-time, its byte-code is executed by this interpreter. The results (for example: calculation of values, construction of procedures) are funneled back into the source code, and then the compiler continues as normal.  
+When a function or program is run at compile-time, its byte-code is executed by this interpreter. The results (for example: calculation of values, construction of procedures through metaprogramming, see ??) are funneled back into the source code, and then the compiler continues as normal.  
 
 At runtime, a Jai executable (binary) is running machine code directly. 
 
 ## 4.3 Front-end
 The AST and byte-code boxes in the schema above form the front-end, which is primarily written by J. Blow.  
-During compilation, the time this phase takes is reported as:  
+During compilation, the time this phase takes is for example reported as:  
 _Front-end time: 0.078980 seconds_
 
 ## 4.4 Back-ends
@@ -38,16 +38,16 @@ Two compiler backends exist: an _x64_ and an _LLVM_ backend.
 The **x64 backend** was developed from scratch by J. Blow and his compiler team. It converts the internal byte-code to x64 machine code. It does fast but naive code generation, without any code optimization.  
 It is intended to be used during the development phase, but because the difference in total compile-time between x64 and llvm is negligible, this isn’t necessary at this moment.  
 
-During compilation , the time this takes is reported as:      	
+During compilation , the time this takes is for example reported as:      	
 _x64 time: 0.534119 seconds._
 
-The **LLVM backend** is the default. It can explicitly be specified with: `jai -llvm filename.jai`, but being the default -llvm can be left out.  
+The **LLVM backend** is the default. It can explicitly be specified with: `jai -llvm filename.jai`, but being the default, -llvm can be left out.  
 In this LLVM compiler chain, the Jai internal byte-code is further converted to LLVM IR-code.  
 
-LLVM is an external compiler [tool-chain](https://en.wikipedia.org/wiki/LLVM) that does much better code optimization, but at the expense of slower compilation speed. You get all the LLVM optimizations for free, and the whole range of architectures and platforms LLVM targets. It's slower, but compiling a release build using LLVM is only needed for a definitive release or for specific platforms and targets.
+LLVM is an external compiler [tool-chain](https://en.wikipedia.org/wiki/LLVM) that does much more elaborate code optimization, but at the expense of slower compilation speed. You get all the LLVM optimizations for free, and the whole range of architectures and platforms LLVM targets. It's slower, but compiling a release build using LLVM is only needed for a definitive release or for specific platforms and targets.
 It is intended to be used in production, when deploying an app.   
 
-During compilation , the time this takes is reported as:  
+During compilation , the time this takes is for example reported as:  
 _llvm time: 0.062771 seconds._
 
 The sum of front-end time and back-end time is then reported as:    
@@ -57,7 +57,7 @@ _Compiler  time: 0.587162 seconds._
 
 ## 4.5 Linking
 The backend compiler produces several compiler artefacts in the hidden _.build_ folder (.obj, .exp and .lib files). It is the task of the linker (_link.exe_ from MSVC on Windows, _lld-linux_ on Linux) to combine these object files and OS specific libraries statically into one output executable (.exe on Windows).  
-The time this takes is reported as:   
+The time this takes is for example reported as:   
 _Link      time: 0.328986 seconds._
 
 The link phase with the llvm backend on Windows can take about 3 x longer than the compilation phase.  
@@ -88,7 +88,7 @@ While developing, you’ll work with normal _debug builds_ which is the default,
 
 When, after a thorough test process, you decide that your application is production-ready, you will want to deploy a _release version_, optimized for speed. Here you don’t want any debugging or stack-trace info, and you require all optimizations turned on. At this stage you’ll want to use the llvm backend and the -release option, as in:	`jai -release program.jai`
 
-Alternatively, you can define this in the Jai build-system itself (see ??).
+Alternatively and advisably (because you can fine-tune the process much more), you can define this in the Jai build-system itself (see ??).
 
 ## 4.8 Options for giving code at the command-line
 With `-run arg`, you can start a #run directive that parses and runs 'arg' as code.  
@@ -114,10 +114,10 @@ Hello!
 Running linker: … (abbreviated)_
 ```
 ## 4.9 The Preload module
-The **Preload** module is implicitly loaded whenever the Jai compiler is started, so it doesn’t need to be imported.
+We already talked about the Basic module, which is necessary for printing. But there is also a **Preload** module, which is even more fundamental and is implicitly loaded whenever the Jai compiler is started, so it doesn’t need to be imported.
 It contains definitions the compiler needs in order to compile user source code.
 
-It contains enums for the Operating_System, the _Type_Info_ definitions, the definitions for _Allocator, Logger, Stack trace, Context, Temporary Storage, Source Code location, Array_View and Resizable_Array_. 
+It contains enums for the Operating_System, the _Type_Info_ definitions, the definitions for _Allocator, Logger, Stack trace, Context, Temporary Storage, Source Code location, Array_View and Resizable_Array_.   
 It also contains low-level functions or **intrinsics** which closely mimic corresponding C functions, like the following.
 
    	memcpy :: (dest: *void, source: *void, count: s64) #intrinsic;
@@ -128,13 +128,14 @@ It also contains low-level functions or **intrinsics** which closely mimic corre
 **memcmp** compares the first count bytes of a and b, its return value is < 0 when a is less than b, > 0 when a is greater than b and 0 when a is equal to b.  
 **memset** sets count bytes of dest to value.  
 
+> Notice the #intrinsic directive
 ## 4.10 Memory management
 In Jai, developers have complete control over where and when memory is allocated. Jai does a much better job of packing values in memory so they are close together, which increases runtime performance.   
 
-The compiler knows how much memory each type uses. It also know the type of each variable. A variable's memory is allocated at type declaration, for example: variable `counter` of type int will allocate 8 bytes. It will occupy one word on a 64 bit machine. 
+The compiler knows how much memory each type uses. It also knows the type of each variable. A variable's memory is allocated at type declaration, for example: variable `counter` of type int will allocate 8 bytes. It will occupy one word on a 64 bit machine. 
 
-Variables of a basic type are stored by default in _stack_ memory for performance reasons. This memory is freed automatically when the variable is no longer needed (goes out of scope), see § 7.  
+Variables of a basic type are stored by default in _stack_ memory for performance reasons. This memory is freed automatically when the variable is no longer needed (when it goes out of scope), see § 7.  
 However most of your program's memory will be allocated in the _heap_. Jai has no automatic memory management, so the developer is responsable for releasing (freeing) that memory.
-We'll later (see ??) detail the mechanisms Jai offers to developers to do that.
+We'll later (see ??) detail the mechanisms Jai offers to do that.
 
-For a good discussion, see [Stack vs Heap](https://hackr.io/blog/stack-vs-heap).
+For a good discussion about these two types of memory, see [Stack vs Heap](https://hackr.io/blog/stack-vs-heap).

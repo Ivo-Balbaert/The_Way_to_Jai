@@ -3,9 +3,10 @@
 Some preliminary remarks:
   * Jai source code files have the extension **.jai**. But this is a convention, the compiler doesn't force you to use this extension.
 
-  * In a code file, as is customary in all C type languages, every code line ends with a **;**. You can place several code lines on one line, if you separate them with ; but this is not so readable.
+  * In a code file, as is customary in all C type languages, every code line ends with a **;**  
+  You can place several code lines on one line, if you separate them with ; but this is not so readable.
   
-   * Sometimes it can be useful to document your code. This can be done in Jai with _comments_:  
+   * Often it is useful to document your code. This can be done in Jai with _comments_:  
    // for a single-line comment, at the start of the line or in the middle of a line  
    /*    
    …  
@@ -29,7 +30,7 @@ The compiler protests with:
 _In Workspace 2 ("Target Program"):
 Error: No program entry point was found. (The designated entry point name is 'main'.)_
 
-(Don't worry about the Workspace, we'll explain this later (see ??).)  
+(Don't worry about the Workspace thing, we'll explain this later (see ??).)  
 What does this mean?
 This error tells us the following:  
 Every Jai program needs a so called _entry point_ called **main**, as in all C-like languages, which is the starting point for code execution. 
@@ -93,10 +94,10 @@ You see that in the compilation phase, that only took a fraction of a second, wh
 But as we will soon see with real programs that do something, Jai always compiles very fast.
 
 Let's analyze the compilation output:
-First it displays the full _linker command_ (this could be useful when something goes wrong at this stage). Here (on Windows) we see Microsoft's `link.exe` at work; on Linux the lld-linux command is used.  
-Calling the compiler creates a hidden _.build_ folder, in which _.obj_ files like _hello_sailor_1_w2.obj_ are created, as well as a .lib and .exp file.  
+First it displays the full _linker command_ (this could be useful when something goes wrong at this stage). Here (on Windows) we see Microsoft's `link.exe` at work; on Linux the `lld-linux` command is used.  
+Calling the compiler creates a hidden _.build_ folder, in which _.obj_ files like _hello_sailor_1_w2.obj_ are created, as well as a `.lib` and `.exp` file.  
 
-The linker then combines all these and helper libraries in one executable named _hello_sailor.exe_ on Windows and _hello_sailor_ on Linux and macOS. You will also see a file with **.pdb** extension, which is used when debugging.
+The linker then combines all these files and helper libraries in one executable named _hello_sailor.exe_ on Windows and _hello_sailor_ on Linux and macOS. You will also see a file with `.pdb` extension, which is used when debugging.
 
 Compilation/linking produces a single executable as output: Jai follows the _single compilation unit model_.  
 You can execute this by typing:  `hello_sailor`
@@ -106,7 +107,7 @@ You can execute this by typing:  `hello_sailor`
 
 No we want to display a greeting to a sailor, let's say: _Hello, Sailor from Jai!_  
 This is a string and must be enclosed within double quotes "", like: _"Hello, Sailor from Jai!"_.  
-To produce an output in Jai, we use the **print** procedure, which can take this string as argument, like this:
+To produce an output in Jai, we use the `print` procedure, which can take this string as argument, like this:
 
 ```c++
 print("Hello, Sailor from Jai!");
@@ -120,7 +121,7 @@ main :: () {
 }
 ```
 
-Let's compile it again:  `jai hello_sailor.jai`   
+Let's compile it again:  `jai 3.1_hello_sailor.jai`   
 But there is a problem, we get the following output:
 
 ```c++
@@ -132,7 +133,9 @@ Error: Undeclared identifier 'print'.
        print("Hello, Sailor from Jai!");
 ...
 ``` 
-The error means the compiler can't find the `print` procedure. That's because this procedure is defined elsewhere, in a **module** called _Basic_.
+The error  
+**Error: Undeclared identifier 'print'.**  
+means the compiler can't find the `print` procedure. That's because this procedure is defined elsewhere, in a **module** called _Basic_.
 
 In order to make this clear to the compiler, we must **import** that module with the following statement:  `#import "Basic";`
 Add this at the start, so that our code file looks like:
@@ -149,10 +152,10 @@ Now compilation succeeds and an executable is created!
 
 ### 3.2.3 Run-time
 
-When we now run the _hello_sailor_ executable, we see the expected output:  
+When we now run the _hello_sailor_ executable as shown above, we see the expected output:  
 _Hello, Sailor from Jai!_
 
-Congratulations! You made your first Jai program.
+Congratulations: you made your first working Jai program!.
 
 Here is a screenshot where the program is edited, compiled and run from within VSCode:
 
@@ -161,10 +164,10 @@ Here is a screenshot where the program is edited, compiled and run from within V
 
 The phase when the Jai program binary file executes is called **run-time**. 
 Compile-time and run-time are very distinct:
- 1. first you compile a program which is **compile-time** 
- 2. then you execute or run it, which is **run-time**.
+ 1. first you compile a program in a time period which is **compile-time** 
+ 2. then you execute or run it, which is during **run-time**.
    
-During compile-time, your code is carefully examined, and if needed a _compiler error_ is shown and the compilation stops without producing an executable. An executable binary is produced only when the compiler can finish without errors.
+During compile-time, your code is carefully examined, and if needed a _compiler error_ is shown and the compilation stops without producing an executable. An executable binary is produced only when the compiler and linker can finish without errors.
 
 At run-time, a program can still be stopped (it crashes or panics) when a certain abnormal condition is encountered producing a _run-time error_, such as for example during bounds-checking on arrays or strings (when an index is used that is outside the size of the array) or a divide-by-zero condition.
 
@@ -193,18 +196,20 @@ Now compile the program as before and carefully look at the output:
 ```
 
 You see the same extensive output starting with _Running linker_ as previously.
-But before the linking starts (**_during compile-time_** !), you already see our printed output.
+But before the linking starts (Running linker, which is **_during compile-time_** !), you already see our printed output.
 This means `main()` has already been executed at compile-time!
-This is because of the **#run** command. This **directive** tells the compiler to run the procedure called after `#run` in compile-time.
+This is because of the **#run** command. This so-called **directive** tells the compiler to run the procedure called after `#run` in compile-time.
 
 In case of `#run main()`, you run the whole program during compile-time (see ?? for more info on `#run`).
+
+> Jai uses a lot of directives and we'll discuss them in several coming chapters. You could consider them as special instructions for the compiler. They all start with the **#** token.
 
 
 ### 3.2.5 Some remarks
 
-  1) Source code file names are usually in lowercase, separated by _ if needed, like _hello_sailor.jai_ or _struct_literals.jai_. In chapters with multiple code files, we'll number them also like _3.1_hello_sailor.jai_.
+  1) Source code file names are usually in lowercase, separated by _ if needed, like _hello_sailor.jai_ or _struct_literals.jai_. In chapters with multiple code files, we'll number them like _3.1_hello_sailor.jai_.
 
-  2) You might have noticed that the displayed string is immediately followed by the OS-prompt. You can separate them with a blanc line by adding a newline character _\n_ to the string like this:  `print("Hello, Sailor from Jai!\n");`  
+  2) You might have noticed that the displayed string is immediately followed by the operating system (OS)-prompt. You can separate them with a blanc line by adding a newline character _\n_ to the string like this:  `print("Hello, Sailor from Jai!\n");`  
   Compile and check it.
 
 
@@ -228,7 +233,7 @@ Sometimes the compiler signals a _Warning_ instead of an _Error_; a warning mean
 
 ### 3.2.7 Exiting a program
 Normally a Jai program will stop after execution of the last statement in `main()`.
-In exceptional circumstances, a program can encounter a run-time error and crash, which means that the operating system has terminated the program. 
+In exceptional circumstances, a program can encounter a run-time error and crash, which means that the OS has terminated the program. 
 Jai also provides the `exit` procedure to stop the program at any condition it encounters or reaches, see for example the following program (see 3.3_exit.jai):
 
 ```c++
@@ -246,7 +251,7 @@ Typical is:
    0: everything is OK
    < 0: the program encountered an error-condition.
 
-**Exercises:**  
+*Exercises:* 
 Experiment to understand the error messages.
 
 1- Leave out the closing } of main  
