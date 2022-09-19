@@ -429,9 +429,9 @@ The number of % and supplied values must be the same. If not you get a warning:
 
 ```c++
  print("% %", n, m, counter); // =>  Warning: Incorrect number of arguments supplied to 'print':  
-The format string requires 2 arguments, but 3 arguments are given.
 ```
 
+The format string requires 2 arguments, but 3 arguments are given.
 In this case only the first two values are displayed.
 If you want to print a literal %, replace the second % with %% as in line (4).
 
