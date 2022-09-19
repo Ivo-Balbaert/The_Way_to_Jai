@@ -86,7 +86,6 @@ Windows is the primary development platform for Jai, because most games are writ
 
 ### 2.2.6 Solution for install problem on Linux distros
 On many 64 bit Linux platforms (Mint, Ubuntu, ...) starting the Jai compiler gives the following error message:
-Remark: WSL on Windows with Ubuntu doesn't have this problem on a 64 bit machine.
 
 ```
 In Workspace 1 ("First Workspace"):
@@ -111,22 +110,24 @@ In Workspace 1 ("First Workspace"):
     dlerror says: /lib/i386-linux-gnu/libdl.so.2: wrong ELF class: ELFCLASS32
 ```
 
-The main issue here is: **libdl.so.2: wrong ELF class: ELFCLASS32**
-Other similar errors can occur, like:  
-**librt.so.1: wrong ELF class: ELFCLASS32**
+The main issue here is: **libdl.so.2: wrong ELF class: ELFCLASS32**  
+Other similar errors can occur, like:    
+**librt.so.1: wrong ELF class: ELFCLASS32**  
 **libpthread.so.0: wrong ELF class: ELFCLASS32**
 
-For some reason when you ask for "libdl" or "librt" or "libpthread", the OS points you to the 32bit version instead of the 64 bit version.
+For some reason when you ask for `libdl` or `librt` or `libpthread`, the OS points you to the 32bit version instead of the 64 bit version.
 
 As suggested on the Discord channel, all that is needed to solve these problems is to install **libc6-dev-amd64**.  
-This is done by executing the following 2 commands in a terminal:  
+This is done by executing the following commands in a terminal:  
 ```
 1) sudo apt-get update -y
 2) sudo apt-get install -y libc6-dev-amd64
 ```
 
-Check with `jai -version`:
+Check with `jai -version`:  
 Version: beta 0.1.039, built on 17 September 2022.
+
+Remark: WSL on Windows with Ubuntu doesn't have this problem on a 64 bit machine.
 
 ## 2.3 Editor help for coding Jai
 Writing a program's source code is easier when you have some support such as syntax highlighting in your code editor. Support exists for vim, Sublime Text 3 and VSCode, see: [Tooling Ecosystem](https://github.com/Jai-Community/Jai-Community-Library/wiki/References#tooling-ecosystem). 
