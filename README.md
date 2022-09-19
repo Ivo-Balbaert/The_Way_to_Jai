@@ -6,11 +6,11 @@ If you find mistakes, ambiguities, things that are not clear, please create an i
 
 _Table of Contents_
 
-   [0_Preface](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/0_Preface.md)  
-   [1_What is Jai?](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/1_What_is_Jai.md)   
-   [1B_What is Jai - more in depth?](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/1B_What_is_Jai%20-%20more%20in%20depth.md)   
-   [2_Setting up a Jai Development Environment](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/2_Setting_up_a_Jai_Development_Environment.md)  
-   [2B_Compiler command-line options](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/2B_Compiler_command_line_options.md)  
+   [0 - Preface](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/0_Preface.md)  
+   [1 - What is Jai?](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/1_What_is_Jai.md)   
+   [1B - What is Jai - more in depth?](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/1B_What_is_Jai%20-%20more%20in%20depth.md)   
+   [2 - Setting up a Jai development environment](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/2_Setting_up_a_Jai_Development_Environment.md)  
+   [2B - Compiler command-line options](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/2B_Compiler_command_line_options.md)  
 
    [3_Compiling and running your first program](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/3_Compiling_and_running_your_first_program.md)  
    [4_More info about the compiler](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/4_More_info_about_the_compiler.md)  

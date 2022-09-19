@@ -2,7 +2,7 @@
 
 **1.1 What type of language is Jai?**
 
-**1.1.1 Goals and priorities**
+**1.1.1 Priorities**
 
 Blow described his new language as a _better and modern day C_, and also as _C++ done right_. Its primary focus is high-performance **game programming** , but it is also suited for **general-purpose** and **low-level systems programming,** like C/C++, D or Rust. Jai is lower-level than Java or C#, and it is not an object-oriented language like these with classes and inheritance. Jai also allows programmers to get as low-level as they desire.
 
@@ -16,24 +16,17 @@ Here are the _priorities_ of Jai in this order:
 
 **\> safety**
 
-Jai was designed with these _goals_ in mind:
+To realize these priorities, Jai has the following _properties_:
 
-1. A simple, clean, consistent syntax and a lot of expressive power.
-2. A very high-speed compiler.
-3. Excellent performance, on par with C++, or similar to C, or even faster.
-4. Safety in execution and useful and pleasant compiler error-messages.
+1. The compiler is written in C++. There are no header files, and no forward declarations. Also builds can be controlled from within the language, the process is the same for all platforms (see ??); make-files or any other external build-systems are not needed. Jai has extensive compile time meta programming functionality, even to the point of being able to run programs at compile time (see § 3.2.4). It also has compile time polymorphism (see ??), and a powerful macro system ( see ??).
 
-To realize these goals, Jai has the following _properties_:
+The goal is to compile 1M lines of code in \< 1s (from scratch, without delta builds). The official compilation speed of the compiler is 250,000 lines of code per second using the x64 backend, according to the CHANGELOG of beta 0.0.045 (using the Sokoban game as a benchmark).
 
-1. Putting _data at the center_ of the design (see ??).
+2. Explicit control over optimization and performance characteristics: things like inlining (see ??) and LLVM optimizations (see ??). Jai also effectively uses pointers and it has an implicit context system to switch memory allocation schemes.
 
-2. The compiler is written in C++. There are no header files, and no forward declarations. Also builds can be controlled from within the language, the process is the same for all platforms (see ??); make-files or any other external build-systems are not needed. Jai has extensive compile time meta programming functionality, even to the point of being able to run programs at compile time (see ??). It also has compile time polymorphism (see ??), and a powerful macro system ( see ??).
+3. Bounds checking (see ??), and initialization (see § 5.3.1).
+4. Putting _data at the center_ of the design (see ??).
 
-The goal is to compile 1M lines of code in \< 1s (from scratch, without delta builds). The official compilation speed of the compiler is 250,000 lines of code per second using the x64 backend, according to the CHANGELOG of beta 0.0.045 (using Sokoban as a benchmark).
-
-3. Explicit control over optimization and performance characteristics: things like inlining (see ??) and LLVM optimizations (see ??). Jai also effectively uses pointers and it has an implicit context system to switch memory allocation schemes.
-
-4. Bounds checking (see ??), and initialization (see ??).
 
 In order to increase performance, Jai has NO:
 
@@ -58,7 +51,7 @@ Jai is specifically meant to be a game programming language, where a game is def
 - Renders some sort of 3D scene.
 - Is targeted at modern gaming hardware like PCs and consoles.  
 
-So Jai should be useable and be able to replace C++ for projects on the AAA scale. 
+So Jai should be useable and able to replace C++ for projects on the AAA scale. 
 
 Keep in mind that the language is _designed for good programmers; it_ has no training wheels for beginners. For example: developers have to take care of manual memory management, handling memory is all important.
 
