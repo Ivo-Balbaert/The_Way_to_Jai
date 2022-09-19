@@ -7,7 +7,6 @@ Besides the basic types mentioned in § 5 and § 6, Jai also has  other fundamen
 
 The compiler has complete knowledge of all the types at compile-time, and some of that remains accessible at run-time. We'll later see (ch ??) how to use that.
 
-## 9.1 Variables of type Type
 See _9.1_types.jai_:
 
 ```c++
@@ -48,7 +47,7 @@ main :: () {
     print("s * t = %\n", s * t); // => 63
     print("size_of(TI) is %\n", size_of(TI)); // 4 (bytes)
 
-    // Any:
+    // the Any type:
     x: Any = 3.0;  // (9)
     x = 3;         // (10)
     x = "Hello";
@@ -68,18 +67,18 @@ main :: () {
     print("is b a float? %\n", b == float); // => false
 }
 ```
+## 9.1 Constants of type Type: Type alias
+An existing type can be given a new name (a **type alias**), defined as a constant, see Thread_index and TI in lines (0) and (8). Then you can define variables of the new type, and use these in other operations defined for the basic type.
 
+## 9.2 Variables of type Type
 In lines (1) to (4) we have three variables a to d that all have type Type; d even has value Type!  
 
-## 9.2 size_of
+## 9.3 size_of
 **size_of** is a procedure that gives you the size in bytes a variable occupies in memory.
 To use it, first apply type_of() to the variable:     **size_of(type_of(variable))**
 See the examples starting in line (5):
 t2 is of type string, and in line (6) we see that the size of a string is 16 bytes; this is also the case for Unicode strings (see line (7)).
 We see that Type itself is 8 bytes in size.
-
-## 9.3 Constants of type Type: Type alias
-An existing type can be given a new name (a **type alias**), defined as a constant, see Thread_index and TI in lines (0) and (8). Then you can define variables of the new type, and use these in other operations defined for the basic type.
 
 ## 9.4 The Any type
 (see line (9) and following)

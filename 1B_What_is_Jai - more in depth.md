@@ -57,6 +57,7 @@ Jai is specifically meant to be a game programming language, where a game is def
 - Is interactive.
 - Renders some sort of 3D scene.
 - Is targeted at modern gaming hardware like PCs and consoles.  
+
 So Jai should be useable and be able to replace C++ for projects on the AAA scale. 
 
 Keep in mind that the language is _designed for good programmers; it_ has no training wheels for beginners. For example: developers have to take care of manual memory management, handling memory is all important.

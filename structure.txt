@@ -1,15 +1,10 @@
-a “game” is a program which:
-
-Runs in realtime.
-Is interactive.
-Renders some sort of 3D scene[5].
-Is targeted at modern gaming hardware like PCs and consoles.
-
---> useful to projects on the AAA scale
-
 - Strings
 - Pointers
-- After pointers: 10_memory.jai
+- After pointers: 12_memory.jai
+- Control structures
+- Arrays
+- Procedures
+
 
 
 bool in conditions:
