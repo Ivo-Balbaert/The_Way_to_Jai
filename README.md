@@ -8,7 +8,7 @@ _Table of Contents_
 
    [0 -  Preface](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/0_Preface.md)  
    [1 -  What is Jai?](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/1_What_is_Jai.md)   
-   [1B - What is Jai - more in depth?](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/1B_What_is_Jai%20-%20more%20in%20depth.md)   
+   [1B - What is Jai - more in depth](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/1B_What_is_Jai%20-%20more%20in%20depth.md)   
    [2 -  Setting up a Jai development environment](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/2_Setting_up_a_Jai_Development_Environment.md)  
    [2B - Compiler command-line options](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/2B_Compiler_command_line_options.md)  
 
