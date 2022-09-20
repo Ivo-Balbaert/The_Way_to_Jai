@@ -13,14 +13,6 @@ See _7.1_scope.jai_:
 global_var := 42;
 GLOBAL_CONSTANT :: 999;
 
-Values :: enum {
-        ONE :: 1;
-        TWO :: 2;
-        THREE :: 5;
-        // factorial(5); // Error: Invalid statement inside an enum.  
-        // Only declarations, bare identifiers, and #if are supported.
-}
-
 main :: () {
     // local procedure scope in main block:
     local_main_var := 7;
@@ -48,15 +40,15 @@ There are two different kinds of scope: _data scope_ and _imperative scope_:
   _Imperative_ (or _procedural_) scopes represent the code inside procedures like `main()` that can be run at runtime. We'll talk about procedures shortly in § ??.
   The statements in these scopes are to be executed from top to bottom.
 
-### 7.1.1 - Global variables
+### 7.1.1 - Global constants and variables
 Variables or constants like global_var or 
-GLOBAL_CONSTANT that are declared at the top-level of a source file are known throughout the whole code file. They are called global variables, and are said to have global (or file) or top-level scope.  
+GLOBAL_CONSTANT that are declared at the top-level of a source file are known throughout the whole code file. They are called global constants and global variables, and are said to have global (or file) or top-level scope.  
 
 They will occupy memory throughout the entire time the program is running. That is one disadvantage for global variables. The same goes for variables defined inside `main()`. 
 
 ### 7.1.2 - Local variables
 All other variables or constants are defined and only known within the code block in which they are defined: they are local variables and have local scope: : they automatically get freed when the procedure is exited (just after the closing }).   
-Procedures define local scope,as well as all kinds of coding structures for conditions and repetitions (see Ch. ??).
+Procedures define local scope,as well as all kinds of coding structures for conditions and repetitions (see § ??).
 
 We can also define a new local scope simply by starting a new _anonymous code block_  (surrounded by { } ) as in line (1) at the top-level or inside any other block. 
 
@@ -88,5 +80,5 @@ A variable in a more inner block can shadow a variable with the same name from a
 > Shadowing can be confusing, use it only when it is really necessary.
 
 Procedures can use global variables from a data scope.
-A procedure, that's defined inside another procedure, cannot use the local variables of that outer procedure, because it has to be able to run independently by itself.(later, with example ??). However, it can use all constants, defined in any outer scope, also imperative. Because procedures are constants, they can also be called  
+A procedure, that's defined inside another procedure, cannot use the local variables of that outer procedure, because it has to be able to run independently by itself (see example ??). However, it can use all constants, defined in any outer scope, also imperative. Because procedures are constants, they can also be called  
 

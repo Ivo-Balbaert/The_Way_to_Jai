@@ -4,13 +4,6 @@
 global_var := 42;
 GLOBAL_CONSTANT :: 999;
 
-Values :: enum {
-        ONE :: 1;
-        TWO :: 2;
-        THREE :: 5;
-        // factorial(5); // Error: Invalid statement inside an enum. Only declarations, bare identifiers, and #if are supported.
-}
-
 main :: () {
     // local procedure scope in main block:
     local_main_var := 7;

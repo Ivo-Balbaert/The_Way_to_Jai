@@ -16,13 +16,19 @@ main :: () {
     // print("8.0 / 0 is %\n", 8.0 / 0); // => Error: Division by zero.
     z := 0;
     // print("8 / z is %\n", 8 / z); // => Runtime error, program stops after this line
+    /*
+    The program crashed. Printing the stack trace:
+handle_exception                  c:\jai\modules\Runtime_Support_Crash_Handler.jai:211    
+... (skipping OS-internal procedures)
+main                              d:\Jai\The_Way_to_Jai\examples\6\6.3_numbers.jai:18 
+    */
 
     // Mixing of different types:
     a: s32 = -5_069_105;
     b: u8  = 10;
     c: u16 = 50;
-    d := a + b; // => d is -5068898
-    print("d is %\n", d); // => 
+    d := a + b; 
+    print("d is %\n", d); // => d is -5068898
     // total_score *= 3.14; // (2) => Error: Number mismatch. Type wanted: s64; type given: float32.
     message := "YOU WON!";
     // score3 := total_score + message; 
@@ -64,7 +70,12 @@ main :: () {
     print("e is %\n", e); // (8A) => e is 1
     e = xx false;
     print("e is %\n", e); // (8B) => e is 0
-
+    // Cast of int to bool:
+    b1: bool = cast(bool) 0;
+    print("%\n", b1);       // (8C) => false
+    b1 = cast(bool) -50;  // same for positive integers
+    print("%\n", b1);       // (8D) => true
+    
     // (9) Precedence
     count := 10;
     print("%\n", count/2 - 1);   // => 4

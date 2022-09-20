@@ -114,13 +114,19 @@ main :: () {
     // print("8.0 / 0 is %\n", 8.0 / 0); // => Error: Division by zero.
     z := 0;
     // print("8 / z is %\n", 8 / z); // => Runtime error, program stops after this line
+    /*
+    The program crashed. Printing the stack trace:
+handle_exception                  c:\jai\modules\Runtime_Support_Crash_Handler.jai:211    
+... (skipping OS-internal procedures)
+main                        d:\Jai\The_Way_to_Jai\examples\6\6.3_numbers.jai:18 
+    */
 
     // Mixing of different types:
     a: s32 = -5_069_105;
     b: u8  = 10;
     c: u16 = 50;
-    d := a + b; // => d is -5068898
-    print("d is %\n", d); // => 
+    d := a + b; 
+    print("d is %\n", d); // => d is -5068898 
     // total_score *= 3.14; // Error: Number mismatch. Type wanted: s64; type given: float32.
     message := "YOU WON!";
     // score3 := total_score + message; 
@@ -212,12 +218,6 @@ This gives an added performance bonus.
 If there is information loss, you can _truncate_ the bits you don't care about, when you are very sure nothing wrong will happen with:
 **cast, trunc(type)** 
 
-#### 6.2.4.1 - Cast of bool to int
-bool values can be autocast to ints with xx (see line (7)):
-```c++    
-xx true  returns 1  
-xx false returns 0
-```
 ### 6.2.5 - Autocasting with xx
 Automatic casting can be used when the compiler can infer what casting has to take place at a certain moment, this is indicated with **xx**:  
 xx variable;   	// autocast variable to whatever type is needed  
@@ -230,6 +230,23 @@ fails with the same previous error as when doing a cast(u8) a;
 
 In the float to int example, this works but truncates:  
 `e = xx pi;`
+
+#### 6.2.5.1 - Cast of bool to int
+bool values can be autocast to ints with xx (see line (7)):
+```c++    
+xx true  returns 1  
+xx false returns 0
+```
+#### 6.2.5.2 - Cast of int to bool
+xx doesn't work here, but a cast(bool) of 0 returns false, and a cast(bool) of any other integer gives true (see line (8C and 8D)).
+
+```c++ 
+ // Cast of int to bool:
+    b1: bool = cast(bool) 0;
+    print("%", b1);       // (8C) => false
+    b1 = cast(bool) -50;  // same for positive integers
+    print("%", b1);       // (8D) => true
+```
 
 ### 6.2.6 Complex expressions and precedence
 Arbitrarily complex expressions can be formed with boolean and other operators, which can quickly become unreadable.
@@ -252,7 +269,7 @@ main :: () {
     print("alr is: %\n", alr); // => alr is: 2
 
     print("11001100 & 10001000 is %\n", 0b11001100 & 0b10001000); // => 136
-    print("11001100 # 10000011 is %\n", 0b11001100 | 0b10000011); // => 207
+    print("11001100 | 10000011 is %\n", 0b11001100 | 0b10000011); // => 207
     n := 8;
     print("%\n", n % 2 == 0); // => true
     print("%\n", n & 1 == 0); // => true}
@@ -262,7 +279,7 @@ al is: 2
 ar is the same as ab: true
 alr is: 2
 11001100 & 10001000 is 136
-11001100 # 10000011 is 207
+11001100 | 10000011 is 207
 true
 */
 ```
@@ -271,7 +288,7 @@ These are Jai's bitwise operators:
 
 ```c++
      | - bitwise OR
-	 & - bitwise AND
+ 	 & - bitwise AND
 	 ^ - bitwise XOR
 	 << - shift left
 	 <<< - rotate left
@@ -325,7 +342,7 @@ These format* procs give additional functionality for formatting integers and fl
 
 **formatFloat** :: (value : Any, width := -1, trailing_width := -1, mode := FormatFloat.Mode.DECIMAL, zero_removal := FormatFloat.Zero_Removal.YES) -> FormatFloat
 
-Additionally, you can use print_style.default_format_int and print_style.default_format_float from the context, which contains default Formatters (see howto 018).
+Additionally, you can use print_style.default_format_int and print_style.default_format_float from the context, which contains default Formatters (?? see howto 018).
 
 ### 6.2.9 Random numbers
 See _6.6_random.jai_:
@@ -353,6 +370,6 @@ The following procedures are defined in the _Random_ module, which is just a fil
 random_get :: () -> u64
 random_get_zero_to_one :: () -> float
 random_get_within_range :: (min: float, max: float) -> float
-```c++
+```
 
 If you want more sophistication, use the _PCG_ module which contains the same procs.
