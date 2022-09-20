@@ -8,7 +8,6 @@ You've probably heard the saying that information (data) is one of the most valu
 Programs and applications are all about data value manipulation. _Data_ can come as input from diverse sources (user input, from files, from a database, from the network, and so on). It is temporarily stored in memory and modified, which then results in an output of some sort. This is printed, displayed on a screen, stored in a file or database, sent over the network to a client, and so on.  
 
 If all data where the same, it would be a lot more difficult to make good use of it. Instead, data values have a _type_. Simple data values are often called _literals_. Literal values are the stuff data is made of; they are constant at compile-time.
-  
 
 Various types exist, like:  
     * _integers_, which are whole numbers (7, 42, 0, -3)  
@@ -16,7 +15,7 @@ Various types exist, like:
     * _strings_ ("Hello", "Tokyo", "世界!")  
     * _booleans_, which are yes/no, on/off, true/false (the only values are true and false)    
 and so on.   
-These are the **basic** or **primitive** types in Jai, called respectively **int**, **float**, **string** and **bool**. 
+These are the **basic**, **fundamental** or **primitive** types in Jai, called respectively **int**, **float**, **string** and **bool**. 
 
 Jai also has some mechanisms to create **composite** or **custom** types, like arrays (see ??) and structs (see ??).  
 
