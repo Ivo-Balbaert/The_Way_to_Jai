@@ -1,9 +1,9 @@
-# Chapter 8 – Structuring code
+# Chapter 8 – Structuring a project's code
 
 In § 3.2.2 we saw how we can import a module in our project by using `#import`.  
 When an identifier for a type, variable or procedure is encountered while compiling, the compiler first looks in the current source file. Then it searches the imported modules (if any, see § 8.1), and it also searches the loaded files (see § 8.2)
 
-## 8.1 Structuring modules
+## 8.1 Structuring with modules
 Modules mostly contain code that is commonly used to provide basic functionality, what in most languages is called the _standard library_. For example: to use the `print` function we had to import the _Basic_ module with `#import "Basic";`.  
 
 Modules are stored in the _jai\modules_ folder.
@@ -14,9 +14,9 @@ For example, the _Basic_ module has its own folder _/modules/Basic_. In it you'l
 
 The `module.jai` file often serves as a way to assemble all these source files. It uses `#load` for this.
 
-When you look at the start of this file, you can see that it loads the other .jai files in the folder:
+When you look at the start of the `module.jai` for _Basic_, you can see that it loads the other .jai files in the folder:
 
-```
+```c++
 #load "Array.jai";
 #load "Simple_String.jai";
 #load "String_Builder.jai";
@@ -25,10 +25,10 @@ When you look at the start of this file, you can see that it loads the other .ja
 #load "string_to_float.jai";
 ```
 
-This is a common way to structure a module.
+This is a common way to structure a module, or indeed a main file of any substantial project. The following section details how it works.
 
 ## 8.2 Loading files with #load
-Besides the #import to take in a module, you also would want to be able to take in a (or more) Jai source code file(s) and add it to your project. Like modules, we use the `#load` directive to do this.  
+Besides the #import to take in a module, you also would want to be able to take in one (or more) Jai source code file(s) and add it to your project. Like modules, we use the `#load` directive to do this.  
 
 The `#load` directive effectively copies in the contents from the loaded source file into the current file. Think of loading a file as pasting the code directly into the calling file. While building this current file, all code from the loaded files will be automatically build with it.  
 Have a look at this example:
