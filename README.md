@@ -18,7 +18,7 @@ _Table of Contents_
    [7 - Scope of variables](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/7_Scope_of_Variables.md)  
    [8 - Structuring the code of a project](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/8_Structuring_the_code_of_a_project.md)  
    [8B - The #scope directives](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/8B_The_scope_directives.md)    
-   [9 - More about types](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/9_More_about_types.md)
-   [10 - What are pointers?](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/10_What_are_pointers.md)
+   [9 - More about types](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/9_More_about_types.md)  
+   [10 - What are pointers?](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/10_What_are_pointers.md)  
   
   
