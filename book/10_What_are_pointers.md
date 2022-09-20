@@ -10,7 +10,7 @@ ptr = *var
 ```
 
 You can visualize it as in the following image:  
-![Pointer diagram](https://github.com/Ivo-Balbaert/The_Way_to_Jai/tree/main/images/pointers.png)  
+![Pointer diagram](https://github.com/Ivo-Balbaert/The_Way_to_Jai/tree/main/images/pointers.jpg)  
 Here you see a pointer ptr in the blue box (left) which has a value 0x123. This is the memory address of the variable var in the green box (right). The variable has value 100. Notice that the pointer itself has an address, here 0x155.
 
 > Often the name of a pointer starts with ptr for readability, but this is by no means mandatory.
