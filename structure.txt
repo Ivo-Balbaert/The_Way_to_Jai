@@ -1,22 +1,32 @@
-type_of(): already in 5.1.4
+To move forward?
+==========
+- 5.6 Swap procedures from Basic		     : in Procedures chapter?
+- 5.7.2 - A println procedure: inline, Any, .. : in Procedures chapter?
 
+------------------------------------------------------------------------------------
 - Strings
 - Pointers
 	ptr : *u32;                             // defaults to a null pointer to a u32.
       print("ptr: %\n", ptr);                 // => null
 	This default value is null for pointer types.
 
-- Review: 6 - Mixing ...
-
 - After pointers: 12_memory.jai
 - Control structures
 - Arrays
+
+- Enums in global scope:
+	Values :: enum {
+        ONE :: 1;
+        TWO :: 2;
+        THREE :: 5;
+        // factorial(5); // Error: Invalid statement inside an enum.  
+        // Only declarations, bare identifiers, and #if are supported.
+	}
+
+
+
 - Procedures
 
-To move?
-==========
-- 5.6 Swap procedures from Basic		     : in Procedures chapter?
-- 5.7.2 - A println procedure: inline, Any, .. : in Procedures chapter?
 
 
 
@@ -35,5 +45,3 @@ LATER:
 - Type_Info: after struct, enum , see types.jai in 11_Advanced examples
 
 -----------------------
-
-https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/2B_Compiler_command_line_options.md

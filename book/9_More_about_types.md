@@ -5,7 +5,7 @@ All types in Jai have type **Type**, the type of Type is also Type.
 
 Besides the basic types mentioned in § 5 and § 6, Jai also has  other fundamental types , such as: string, pointer, function, struct, array, and enum.
 
-The compiler has complete knowledge of all the types at compile-time, and some of that remains accessible at run-time. We'll later see (ch ??) how to use that.
+The compiler has complete knowledge of all the types at compile-time, and some of that remains accessible at run-time. We'll later see (§ ??) how to use that.
 
 See _9.1_types.jai_:
 

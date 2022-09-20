@@ -1,9 +1,9 @@
 # 8B – The #scope directives
 
-§ 7 talked about scope of definitions, and in § 8 we saw how files and modules are loaded and imported. Jai cleans up the mess of header-files and namespaces in C/C++  
+§ 7 talked about scope of definitions, and in § 8 we saw how files and modules are loaded and imported: Jai cleans up the mess of header-files and namespaces in C/C++  
 
 ## 8B.1 The #scope_file and #scope_export directives
-Declarations of a source file are exported into application scope. If you want some definitions to only be visible in the file itself (in _file_scope_), place these behind the **#scope_file;** directive, like this inside a `file1.jai`:  
+Declarations of a source file are _exported_ into application scope. If you want some definitions to only be visible in the file itself (in _file_scope_), place these behind the **#scope_file;** directive, like this inside a `file1.jai`:  
 
 ```
 #scope_file;

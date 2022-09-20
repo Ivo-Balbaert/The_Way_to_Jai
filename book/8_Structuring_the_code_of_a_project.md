@@ -1,5 +1,6 @@
 # Chapter 8 – Structuring a project's code
 
+A Jai project consists of a start-up file, usually called ´main.jai´, which contains tne `main :: ()` entry-point procedure.
 In § 3.2.2 we saw how we can import a module in our project by using `#import`.  
 When an identifier for a type, variable or procedure is encountered while compiling, the compiler first looks in the current source file. Then it searches the imported modules (if any, see § 8.1), and it also searches the loaded files (see § 8.2)
 
