@@ -123,8 +123,20 @@ The call to `get_s64_from_void_pointer` tells you enough on what went wrong.
 
 On Linux you get the following output:
 ```
-Segmentation fault
+Segmentation fault. The faulty address is 0x0, from 0x234f01.
+./10(get_s64_from_void_pointer_700001078+0xf1) [0x234f01]
+./10(print_integer_700001391+0x271) [0x225d21]
+./10(print_item_to_builder_70000199d+0x7e4) [0x221d64]
+./10(print_to_builder_700001d9a+0xdc5) [0x22ee65]
+./10(print_700001426+0x13b) [0x227e4b]
+./10(__program_main+0xf7) [0x22c6c7]
+./10(main+0xb2) [0x227232]
+/lib/x86_64-linux-gnu/libc.so.6(+0x29d90) [0x7f2db7d13d90]
+/lib/x86_64-linux-gnu/libc.so.6(__libc_start_main+0x80) [0x7f2db7d13e40]
+./10(_start+0x25) [0x236155]
 ```
+Again, the first two lines tell you enough.
+
 
 A program that crashes at run-time when used by clients is a developer's nightmare. So, apart from extensive testing to find such bugs, what can we do else to avoid or trace them?
 
@@ -154,4 +166,4 @@ get_s64_from_void_pointer (c:/jai/modules/Basic/Print.jai:152,23)
 ....
 ```
 
-In a later chapter on Debugging, we'll see how you can pinpoint the bug even closer.
+In a later chapter on Debugging (see § ), we'll see how you can pinpoint the bug even closer.
