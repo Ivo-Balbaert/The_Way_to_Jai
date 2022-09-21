@@ -1,4 +1,4 @@
-# Chapter 11 – Allocating memory
+# Chapter 11 – Allocating and freeing memory
 
 We talked about memory and Jai before in § 1.1.1, § 1.4 and § 4.10.
 Now that we know the concept of pointers, we can discuss the basic mechanisms in Jai for creating (also called _allocating_) and _freeing_ memory.
