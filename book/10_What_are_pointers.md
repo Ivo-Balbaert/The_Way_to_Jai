@@ -36,6 +36,8 @@ main :: () {
 
     c := *a; // (4)
     print("Value of c is %, but c points also at address of a: %\n", << c, c);
+    << c = 108; // (4B)
+    print("Value of c is now %\n", << c); // => Value of c is now 108
   
     // null pointer:
     d: *u32; // 
@@ -63,7 +65,12 @@ val = << ptr;
 ```
 In some cases dereferencing happens automatically when using the pointer itself, to simplify the syntax.  
 From line (3) we see that the type of b is `*s64`.  
-In line (4) we see how this type can be inferred with the shorter := notation.  
+In line (4) we see how this type can be inferred with the shorter := notation. We also see that in line (4B) that you can change the value by using the dereference operator as left hand side:
+
+```c++
+<< ptr = new_val;   
+```
+The value at the address ptr points to is changed, but the address ptr points to stays the same.
 
 What is the value of an uninitialized pointer (in other words:a pointer that doesn't yet have a memory address assigned to it)? Let's find out.  
 In line (5) we see that the value of the uninitialized pointer d with type *u32 is **null**.  null means: d has no address to point to.  
@@ -167,3 +174,9 @@ get_s64_from_void_pointer (c:/jai/modules/Basic/Print.jai:152,23)
 ```
 
 In a later chapter on Debugging (see § ), we'll see how you can pinpoint the bug even closer.
+
+## 10.4 Casting to pointer types
+Because a pointer type is like any other type, you can cast a variable to that type, like this:
+```
+ptr1 := cast(*int) ptr;
+```

@@ -10,6 +10,8 @@ main :: () {
 
     c := *a; // (4)
     print("Value of c is %, but c points also at address of a: %\n", << c, c);
+    << c = 108;
+    print("Value of c is now %\n", << c); // => Value of c is now 108
  
     // null pointer:
     d: *u32; // (5)

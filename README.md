@@ -20,5 +20,6 @@ _Table of Contents_
    [8B - The #scope directives](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/8B_The_scope_directives.md)    
    [9 - More about types](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/9_More_about_types.md)  
    [10 - What are pointers?](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/10_What_are_pointers.md)  
+   [11 - Memory allocations](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/11_Memory_allocations.md)    
   
   
