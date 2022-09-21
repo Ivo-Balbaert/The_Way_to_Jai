@@ -80,6 +80,10 @@ _The only thing you can assign null to is a pointer type_; you can't assign null
 
 You can even declare a variable ptr as a void pointer, like in line (7). This means ptr doesn't even know at this point what will be the type of variable it points to!
 
+> A pointer to data of unknown type has type *void.  
+
+*void can be casted to any type, and it has the same functionality as in C. 
+
 ## 10.2 Pointers to pointer
 We saw that a pointer has also an address, so nothing prevents you from having a pointer to a pointer. This can even be several levels of _indirection_ deep, as lines (8) and following show. 
 To get to the value of a three-level pointer, you have to dereference three times:  
