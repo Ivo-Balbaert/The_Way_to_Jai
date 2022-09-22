@@ -18,7 +18,7 @@ Vector3un :: struct {
     x: float = 1;
     y: float = ---; // uninitialized
     z: float = 3;
-}  
+}
 
 Entity :: struct {
     serial_number: int;

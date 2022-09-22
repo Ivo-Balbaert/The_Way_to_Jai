@@ -21,5 +21,7 @@ _Table of Contents_
    [9 - More about types](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/9_More_about_types.md)  
    [10 - What are pointers?](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/10_What_are_pointers.md)  
    [11 - Memory allocations](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/11_Memory_allocations.md)  
-   [12 - Basics of structs and enums](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/12_Basics of structs and enums.md)  
+   [12 - Basics of structs and enums](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/12_Basics%20of%20structs%20and%20enums.md)  
+     
+
    
