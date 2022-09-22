@@ -126,6 +126,7 @@ The type of n1 is *s64
 8
  */
 ```
+> Remark: This example is somewhat contrived: normally you wouldn't allocate an int on the heap.
 
 The int variable n0 defined in line (1) is allocated on the stack; it will automatically be freed at the end of the procedure (here main) it is defined in.
 The n1 variable is created on the heap in line (2) with the `alloc` proc, like this:
