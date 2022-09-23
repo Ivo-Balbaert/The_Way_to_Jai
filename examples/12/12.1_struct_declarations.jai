@@ -31,7 +31,8 @@ Person :: struct {
 }
 
 main :: () {
-    v : Vector2;
+    v : Vector2;  // defined in module Math
+    print("%\n", v); // (0) => {0, 0}
     print("% %\n", v.x, v.y); // (1) => 0 0
     v.x, v.y = 42, 108;       // (2)
     print("% %\n", v.x, v.y); // => 42 108
@@ -41,6 +42,7 @@ main :: () {
 
     v4 : Vector2un;
     print("% %\n", v4.x, v4.y); // => 0 0
+    print("%\n", type_of(v4)); // => Vector2un
     // (4) Undefined behavior, could print anything, mostly "0 0"
 
     bob : Person;
@@ -48,7 +50,19 @@ main :: () {
     bob.age = 42;
     bob.location.x = 64.14;        // (6)
     bob.location.y = -21.92;
-    print("% is aged % and is currently at location %\n", bob.name, bob.age, bob.location);
+    print("% is aged % and is currently at location %\n", bob.name, bob.age, bob.location); // (7)
+    print("%\n", bob); // (8) => {"Robert", 42, {64.139999, -21.92}}
+
+    // struct literals:
+    vec2 := Vector2.{2.0, 6.28}; // (9)
+    print("%\n", vec2); // => {2, 6.28}
+    // same as:
+    vec3 : Vector2;
+    vec3 = .{2.0, 6.28};
+    vec4:= Vector2.{y = 6.28, x= 2.0}; 
+    bob2 := Person.{"Robert", 42, Vector2.{64.139999, -21.92}}; // (10)
+    print("%\n", type_of(bob2)); // => Person
+    print("%\n", size_of(Person)); // => 32 // (bytes)
 }
 
 /*

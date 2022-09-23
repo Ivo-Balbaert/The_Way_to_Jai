@@ -89,6 +89,10 @@ x is 234
 */
 ```
 
+> A neat trick that uses defer is to start main() with:
+> ´ defer print("Program ended gracefully");´
+> If this message is printed out, your program ends without crashing
+
 defer is mainly used to free memory or other resources (closing a file or a database connection), as we'll see in the next sections.
 
 ## 11.2 Allocating and freeing primitive variables

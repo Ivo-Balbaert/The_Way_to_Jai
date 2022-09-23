@@ -47,7 +47,7 @@ Here are some examples for these types:
 
 **bool** :	`true` and `false` values. They take up 8 bits (1 byte) of memory, and are used to test upon in conditions, so that program flow can be changed.
 
-**int** : for example `42`, `0b10` (a binary 2), `0x10` (a hexadecimal 16). Underscores can be optionally used to separate digit groups as in: `16_777_216` or `0b1010_0010_0101_1111`.  
+**int** : for example `42`, `0b10` (a binary 2), `0x10` (a hexadecimal with decimal value 16). Underscores can be optionally used to separate digit groups as in: `16_777_216` or `0b1010_0010_0101_1111` (a binary with decimal value 41567).  
 Eight types exist according to their size (number of bytes) and whether they are positive or signed(can have a negative sign):   
 
 	`s8` or `u8`   - signed and unsigned 1 byte (or 8 bit) integers,  
