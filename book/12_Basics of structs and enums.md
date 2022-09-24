@@ -244,11 +244,42 @@ Later on we'll see (§ ??) how to read/print/process such structs out, node by n
 ## 12.7 A struct's namespace
 (see nested_structs)
 
+Wouldn't it be nice if you could use the fields of a struct without having to prefix them with their struct name? That's possible! A struct defines a **namespace**, which you can locally create with the **using** keyword. Then you don't need to use the struct name anymore.
 
+See __12.4_using.jai_:
+```c++
+#import "Basic";
 
+Person :: struct {
+    name: string;
+}
 
+Patient :: struct {
+    using as: Person;      // (1)
+    disease: string;   
+}
 
+main :: () {
+    pat1 : Patient;  
+    pat1.name = "Johnson"; // (2)
+    print("Patient is: %\n", pat1); // => Patient is: {{"Johnson"}, "Bronchitis"}
 
+    using pat1;            // (3)
+    print("Patient has name: %\n", name); // => Patient has name: Johnson
 
+}
+```
+Line (1) tells us Patient can use the namespace of Person. That's why in line (2) we don't need to use Person in order to access the `name` field. Line (3) shows us that we can even use pat1 as a namespace.  
+The keyword using lets you import namespaces, as we did with enums. `as` is not a keyword here, it can be replaced by any other word, for example `using person: Person`.
+**using** allows us to refer to a contained struct's members without referencing that struct. It allows you to bring the member variables of a struct into the scope of another struct (like sub-classing but no methods/overriding) or a proc (like a method but more flexible, see ??).   
+This mimics a kind of _inheritance_. We use _composition_ instead of a subclass and can reference the fields of the ‘parent’ struct directly. Jai doesn't have classes and inheritance, but as we see here: first class composition works like inheritance!
+(see ?? for a more complete example).
 
+> Favor composition over inheritance.
+
+See this [Discussion about OOP](https://en.wikipedia.org/wiki/Entity%E2%80%93component%E2%80%93system)
+
+** Exercise**
+Declare a Point3D struct with 3 float coordinates x, y and z.
+Make a pnt variable of type Point2D, initialize it as a struct literal. Then print out the coordinates without writing pnt.x, and so on (see exercises/12/using.jai).
 
