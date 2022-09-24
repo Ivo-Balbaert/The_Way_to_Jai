@@ -279,7 +279,7 @@ This mimics a kind of _inheritance_. We use _composition_ instead of a subclass 
 
 See this [Discussion about OOP](https://en.wikipedia.org/wiki/Entity%E2%80%93component%E2%80%93system)
 
-** Exercise**
+**Exercise**
 Declare a Point3D struct with 3 float coordinates x, y and z.
 Make a pnt variable of type Point2D, initialize it as a struct literal. Then print out the coordinates without writing pnt.x, and so on (see exercises/12/using.jai).
 
