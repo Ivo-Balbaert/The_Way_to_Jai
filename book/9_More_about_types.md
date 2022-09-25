@@ -82,7 +82,7 @@ We see that Type itself is 8 bytes in size.
 
 ## 9.4 The Any type
 (see line (9) and following)
-The **Any** type (defined in module Preload), is the most wide type. It encompasses and matches with all other types. Values of all types can be converted to Any.
+The **Any** type (defined in module _Preload_), is the most wide type. It encompasses and matches with all other types. Values of all types can be converted to Any.
 This allows you to assign one variable to values of different types (see lines 10-11, even a function type as in line (11)), as you might do in a dynamically-typed programming language. 
 The Any type has size 16 bytes.
 

@@ -1,4 +1,4 @@
-# Chapter 12 - Basics of structs and enums
+# Chapter 12 - Basics of structs
 
 Every programming language needs a kind of data structure that can define some kind of entity, that has several characteristics, called **fields** (also called member variables), that can be of a different type. The solution to this is the **struct** type, that is common in many other languages, and is a kind of lightweight version of a class.
 
@@ -116,6 +116,15 @@ All struct fields are public: they can be read and even changed everywhere! Ther
 
 A struct definition must occur in a data scope (see § 7).
 
+An **anonymous struct** can be defined as for example:
+```c++
+struct {
+     x: int;
+     y: int;
+     z: int;
+}
+```
+( example of use ??)
 > Declaring a struct doesn't allocate memory, it just defines a kind of template or blue-print for a data structure to be defined in imperative scope.
 
 ## 12.2 Making struct variables
@@ -137,7 +146,8 @@ What if you don't want default zero-values?
 3) Or you can make a mix of default and uninitialized values, like in `Vector3un`.
 
 ## 12.3 Nested structs
-The location field in Person is itself a Vector2 struct, that's why it is called a **nested struct**: a struct that contains another struct. Note how you can access and change the fields of a nested struct by 'drilling down' with the . notation, like:   `bob.location.x`
+The location field in Person is itself a Vector2 struct, that's why it is called a **nested struct**: a struct that contains another struct. Note how you can access and change the fields of a nested struct by 'drilling down' with the . notation, like:   `bob.location.x  
+(But also see § 12.7 for how to shorten this notation.)
 
 Here is another example of nested structs:
 
@@ -241,7 +251,7 @@ main :: () {
 
 Later on we'll see (§ ??) how to read/print/process such structs out, node by node. 
 
-## 12.7 A struct's namespace
+## 12.7 A structs namespace
 (see nested_structs)
 
 Wouldn't it be nice if you could use the fields of a struct without having to prefix them with their struct name? That's possible! A struct defines a **namespace**, which you can locally create with the **using** keyword. Then you don't need to use the struct name anymore.
@@ -282,4 +292,26 @@ See this [Discussion about OOP](https://en.wikipedia.org/wiki/Entity%E2%80%93com
 **Exercise**
 Declare a Point3D struct with 3 float coordinates x, y and z.
 Make a pnt variable of type Point2D, initialize it as a struct literal. Then print out the coordinates without writing pnt.x, and so on (see exercises/12/using.jai).
+
+## 12.8 Using a structs namespace for better storage management
+Suppose our application uses a struct Entity, with a number of fields that our used very much, and the rest is used much less. We could then place the frequently needed fields in an Entity_Hot struct, to be placed on the stack. The less needed fields could be placed in an Entity_Cold struct, to be allocated on the heap.  
+Our Entity struct could now be composed with pointers to these two parts as follows:
+
+```c++
+Entity_Hot :: struct {
+    // most-used fields, stored in stack
+}
+
+Entity_Cold :: struct {
+    // less-used fields, stored on heap
+}
+
+Entity :: struct {
+    using hot:  *Entity_Hot;
+    using cold: *Entity_Cold;
+}
+```
+
+Now fields can even be switched from Hot to Cold or vice-versa without having to change the code! This can be decided based on the target platform.
+
 
