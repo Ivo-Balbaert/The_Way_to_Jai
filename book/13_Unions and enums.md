@@ -163,11 +163,11 @@ enum {
 The Jai standard library makes heavy use of enums, for example in module _Preload_:  
 Operating_System_Tag, Log_Level, Type_Info_Tag and so on.
 
-## 13.2 Enum as a namespace
+## 13.3 Enum as a namespace
 Just like with structs, we can do a `using` Enum_Type (see line (6) in the example code), and then we can use the different members of the enum without the `.`  
 
 
-## 13.3 Enum as #specified
+## 13.4 Enum as #specified
 New member values added to an enum get auto-incremented automatically. But what happens when a member name is deleted? Then all subsequent members get new integer values! If our code depends on these values, this could be a source for bugs.  
 To avoid this, we can annotate an enum with the directive **#specified**.  The author of the enum uses #specified in order to declare the intention of maintaining compatibility of enum values over time. This requires declaring each integer explicitly: an enum declared as #specified will no longer accept the auto-increment.
 
@@ -183,7 +183,7 @@ Operating_Systems :: enum u16 #specified {
 
 If a struct has an enum marked as #specified, you know that it's safe just to serialize that enum member as an integer, or even to just serialize the whole struct as binary.
 
-## 13.4 enum_flags and masking flags
+## 13.5 enum_flags and masking flags
 A special version of an enum is a **enum_flags**. Here the integer values backing the member names are subsequent powers of 2, like in this example _13.3_enum_flags.jai_:
 
 ```c++
@@ -231,7 +231,7 @@ d is EAST | NORTH | WEST
 ```
 In line (1) you see how we can mask out a flag by doing `d &= ~SOUTH;` (see the bit explanation in the comments above).
 
-## 13.5 Some useful enum methods
+## 13.6 Some useful enum methods
 _13.4_enum_methods.jai_ shows some useful methods to use with enums:
 
 ```c++
