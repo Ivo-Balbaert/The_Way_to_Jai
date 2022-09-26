@@ -1,4 +1,4 @@
-# Chapter 14 - Branching_with_if_else
+# Chapter 14 - Branching with if else
 
 In order to make our code more flexible, we need to have control structures that allow us to branch code or repeat code on whether or not a condition is true. This condition can be any boolean or boolean expression.  
 The condition after an if, while or other code after for doesn’t need to be surrounded by parentheses (), as is the case in C or many other languages..  
@@ -75,12 +75,12 @@ Your grade is an A+
 In line (1) we see a simple if testing a bool (note that we don't have to write if dead == true). In line (2) we provide two branches, one for the true case, the other for the false case.  
 Line (3) shows all expressions with ==, !=, <= and so on, as well as all bool operators can be used to make conditions.  
 
-### 14.2.1 One-liners
+### 14.1.1 One-liners
 Lines (4) and (5) show one-line if statements; a `then` can be used for clarity, but is optional, unless needed to make parsing unambiguous. When the body of the if contains only one statement, { } can be left out. It is recommended to use ( ) around the condition in one-liners for readability.	  
 
 Lines (6) and (7) show multi-line or nested if-else if-else statements. The else if and else are optional.
 
-### 14.2.2 The classical C error:  
+### 14.1.2 The classical C error 
 A common C error using = instead of == by error like
 `if a = 5 { … }	`
 is caught by the compiler with:  Error: Operator '=' can only be used at statement level (see line 3B).
