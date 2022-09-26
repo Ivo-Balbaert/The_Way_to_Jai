@@ -368,30 +368,17 @@ See _5.5_swapping.jai_:
 main :: () {
     n := 2;
     m := 3;
-  // swap doesn't work like you would expect:
   // n, m = m, n;                        
   // print("n is % and m is %\n", n, m); // (1) => n is 3 and m is 3
 
     s, p := "abc", 13;
   // this gives an error:
   // s, p = p, s; // => Error: Type mismatch. Type wanted: string; type given: s64.  
-
-  // But there our swapping procedures in Basic:
-    Swap(*n, *m);
-    print("n is % and m is %\n", n, m); // => n is 3 and m is 2
-
-    n2 := 2; m2 := 3;
-    n2, m2 = swap(n2, m2);
-    print("n2 is % and m2 is %\n", n2, m2); // => n2 is 3 and m2 is 2       
 }
 ```
 
-A swap like n, m = m, n; is allowed, but doesn't work in Jai like you would expect (see line (1)): both variables get the same value. When n and m are of different types an error results, because then they would have to change type, which is not allowed.  
-
-> Advanced:
-    However, module _Basic_ contains 2 swap procedures (Look them up! - both polymorphic, see ??):  
-  - Swap: uses pointers and << to a temp value
-  - swap: inline, returns two values with **#must**, which means that they must be handled.
+A swap like n, m = m, n; is allowed, but doesn't work in Jai like you would expect (see line (1)): both variables get the same value. When n and m are of different types an error results, because then they would have to change type, which is not allowed.
+But see ?? for built-in swap procedures.  
 
 ## 5.7 - More about printing
 
@@ -434,47 +421,7 @@ The format string requires 2 arguments, but 3 arguments are given.
 In this case only the first two values are displayed.
 If you want to print a literal %, replace the second % with %% as in line (4).
 
-
-### 5.7.2 - A println procedure:
-> Warning: advanced 
-See _5.7_println.jai_:
-
-```c++
-#import "Basic";
-
-main :: () {
-    n := 7;
-    m := 42;
-    println("Hello, world!"); // => Hello, world!
-    println(1);               // => 1
-    println("% %", n, m);     // => 7 42
-    println("The end.");      // => The end
-}
-
-println :: inline (arg: Any) {
-    print("%\n", arg); // print knows the type of arg
-}
-
-println :: inline (msg: string, args: ..Any) {
-    print(msg, ..args);
-    print("\n");
-}
-
-// =>
-// Hello, world!
-// 1
-// 7 42
-// The end.
-```
-
-To avoid having to type \n for a new line, you can have your own customized procedure `println`.    
-In the code we see the keyword **inline**, to avoid a procedure call to `println`, increasing performance.
-The argument can be of type Any, any type is allowed.  
-This also shows overloading, there are 2 versions of print:  
-- the 1st just takes 1 argument of any type, and calls the standard print procedure from _Basic_, adding a new-line character, so `println` can also print out variables of any type!  
-- the 2nd takes a format string msg, and takes a variable (..) number of any type;
-
-### 5.7.3 - The write procedures
+### 5.7.2 - The write procedures
 See _5.8_write.jai_:
 
 ```c++
@@ -494,7 +441,7 @@ Hello, World!
 
 Jai has some lower-level write procedures which are declared as #runtime_support(see ??). They are defined in modules _Preload_ and _Runtime_Support.jai_, so they don’t need the Basic module. You can use these when you don't want to import the _Basic_ module.
 
-### 5.7.4 - Printing Unicode
+### 5.7.3 - Printing Unicode
 See _5.9_printing_unicode.jai_:
 
 ```c++
