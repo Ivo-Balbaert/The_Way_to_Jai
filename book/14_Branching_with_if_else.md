@@ -80,8 +80,9 @@ Lines (4) and (5) show one-line if statements; a `then` can be used for clarity,
 
 Lines (6) and (7) show multi-line or nested if-else if-else statements. The else if and else are optional.
 
-### 14.1.2 The classical C error 
-A common C error using = instead of == by error like
+### 14.1.2 The classical C error
+It is easy to mistake a mathematical = for a computer ==: 
+a common C error using = instead of == by error like
 `if a = 5 { … }	`
 is caught by the compiler with:  Error: Operator '=' can only be used at statement level (see line 3B).
 
@@ -104,6 +105,7 @@ This is the equivalent of cond ? stat1 : stat2 in other languages.
 ifx returns a value, which can be used to make or assign to a variable.
 
 ## 14.3 Case branching
+If you need to compare a variable against a lot of values, you would have to write a long if-else-if sequence. Jai offers you an easier way with if-case.
 See example `14.3_if_case.jai`:
 
 ```c++
@@ -180,6 +182,7 @@ If a possible enum case is missing while specifying #complete, you get the compi
 If you want a multiple lines to be executed in a case, just write them one after the other (see case 1). For readability, you could enclose the block in {}, and also in general indent the if-case statement as in the code example.
 
 ## 14.4 Test on empty variables
+Testing on zero/empty variables can be very useful!
 Because a zero value is false and any non-zero value is true, you can easily test empty-ness of a variable  with an if-statement:
 
 ```
