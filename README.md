@@ -24,5 +24,5 @@ _Table of Contents_
    [12 - Basics of structs](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/12_Basics%20of%20structs.md)    
    [13 - Unions and enums](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/13_Unions%20and%20enums.md)     
    [14 - Branching with if else](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/14_Branching_with_if_else.md)  
-   [15 - Looping with while and for](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/15_Looping_with_while_and_for.md)   
+   [15 - Looping with while and for](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/15_Looping%20with%20while%20and%20for.md)   
    
