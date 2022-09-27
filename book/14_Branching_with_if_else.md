@@ -72,7 +72,7 @@ Your grade is an A+
 */
 ```
 
-In line (1) we see a simple if testing a bool (note that we don't have to write if dead == true). In line (2) we provide two branches, one for the true case, the other for the false case.  
+In line (1) we see a simple if testing a bool (note that we don't have to write if dead == true). In line (2) we provide two branches, one for the true case (then the if branch executes), the other for the false case (then the else branch executes): only one branch executes.  
 Line (3) shows all expressions with ==, !=, <= and so on, as well as all bool operators can be used to make conditions.  
 
 ### 14.1.1 One-liners
@@ -170,6 +170,7 @@ This example illustrates Jai's switch statement equivalent, using if-case (inste
 ```
 Following line (2) the **#through** directive is used in an if-case statement. This directive ensures that a fall_through to the next case occurs, so that this branch is also executed. So this is the exact opposite behavior as in C, where you have to write `break` in order not to fall-through.  
 
+The case branch without a value is the default case, when no other values match. Only one case branch is ever executed.  
 If-case statements work on integers, strings, enums, bools, arrays, and floats (but be very careful when using if-case statements with floats since floating point numbers approximate values). 
 
 ## 14.3.1 Using if-case with enums and #complete
@@ -235,13 +236,13 @@ See _14.5_if_tests.jai_:
 #import "Basic";
 
 main :: () {
-    // Test if n is an even or uneven number:
+    // Test if n is an even or odd number:
     n := 108;
     if n % 2 == 0 print("% is an even number\n", n); // (1)
     // => 108 is an even number
     if (n & 1) == 0 print ("even\n"); // (2) => even, can also be written as if n & 1
     n = 109;
-    if n % 2    print("uneven\n"); // (3) => uneven
+    if n % 2    print("odd\n"); // (3) => odd
 }
 ```
 
