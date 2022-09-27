@@ -102,14 +102,14 @@ Starting in line (6), we see a loop over counter i which is enclosed with a loop
 
 > If a while loop uses a counter, change the counter by prefixing with defer. But  be careful in combination with break and continue (put defer after these).
 
-### 15.1.2 Named while-loop
+### 15.1.2 Named while-loops
 In line (7) you see the same while loop as used for the counting down, but now the condition has been given a name (`counting`). This name can be used to break out of the loop when you have nested while loops (see § 15.3).
 
 ### 15.1.3 Printing out a recursive list
 In § 12.6 we constructed a linked-list with a recursive struct ListNode. To print out its data, now we can do this through a loop mechanism, see _15.2_while_looping_through_a_linked_list.jai_. This has the same definition of ListNode and variable lst as in example 13.3_linked_list.jai, so we omit this code here; the following code is used between c.next = null and the free statements:
 
 ```c++
-print("List printed in a while loop: \n");
+    print("List printed in a while loop: \n");
     print("% -> ", lst.data);
     r := lst.next;              //   (1)
     while r {                   //   (2) 
@@ -177,7 +177,7 @@ In general `for start..end { }`; for an exclusive range write end–1. start and
 If there is no name for the loop variable, Jai has its own implicit iteration variable called `it`, see line (1). In line (2) we give the loop variable a name like `number`. This is the same as naming the condition variable in a while. 
 In that case `it` is no longer defined. 
 
-(1) and (2) are on-line for-loops. (3) shows that we need { } to write a for with a code block; end here is a variable.  
+(1) and (2) are one-line for-loops. (3) shows that we need { } to write a for with a code block; end here is a variable.  
 In line (4) we see a reversed for-loop indicated with **<**. Note that you still have to write the range as end..start, or put it in another way, as : `for < i: max..0 { ... }`.
 
 Like with while we can nest for-loops, as shown in line (5)
@@ -199,7 +199,7 @@ i) break out of a loop at a certain condition (that is: leave the loop and conti
 ii) break out of the current loop iteration at a certain condition, and continue with the next loop iteration: use the **continue** keyword.
 
 Here are examples of these situations:
-See 15.4_break.jai:
+See _15.4_break.jai_:
 
 ```c++
 #import "Basic";
@@ -250,7 +250,7 @@ In line (2), we see the same logic written as a while loop. The nested loop in l
 In line (4) we see how you can break out of a while-loop using the condition variable.
 So normally a `break` terminates the current innermost loop immediately, but a `break var` breaks out of the loop where `var` is the iteration or condition variable. 
 
-See 15.5_continue.jai:
+See _15.5_continue.jai_:
 
 ```c++
 #import "Basic";

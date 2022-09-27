@@ -248,6 +248,9 @@ xx doesn't work here, but a cast(bool) of 0 returns false, and a cast(bool) of a
     print("%", b1);       // (8D) => true
 ```
 
+In general a cast(bool) of a variable will be false if it's value is zero, null or empty. A cast(bool) of a variable will be true if it contains a real value.
+This is called the _truthiness_ of a value. This is very useful in branching and looping conditions, see § 14 and § 15. 
+
 ### 6.2.6 Complex expressions and precedence
 Arbitrarily complex expressions can be formed with boolean and other operators, which can quickly become unreadable.
 The same [precedence rules as in C](https://www.tutorialspoint.com/cprogramming/c_operators_precedence.htm) are followed, but you can override these by using parentheses to make the expression more readable, as the code in line (7) shows.
