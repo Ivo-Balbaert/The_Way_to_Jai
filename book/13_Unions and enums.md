@@ -28,6 +28,17 @@ Ts :: struct {              // (2)
   c: Type; 
 }
 
+// void as a union member // (2B)
+Object :: struct {
+  member: void; 
+  #place member;
+  x: float;
+  #place member;
+  y: float;
+  #place member;
+  z: float;
+}
+
 main :: () {
   t: T;             // (3)
   t.a = 100;        // (4)
@@ -52,7 +63,7 @@ The size of the union T is 8
 ```
 
 A **union* is defined like a struct, but replacing `struct` by `union`, see line (1). The possible fields are then enumerated, but remember: only one can be active at any time.
-(An alternative definition is to write it as a kind of struct with a **#place** directive.)  
+(An alternative definition is to write it as a kind of struct with a **#place** directive.) A union field can be of type void (see line (2B), why ??). 
 
 A variable of the union type is declared in line (3), and one field is given a value in line (4). When another field gets assigned, the value from the previous field is lost and becomes undefined: see line (6).
 

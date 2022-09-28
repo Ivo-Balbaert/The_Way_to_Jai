@@ -52,6 +52,7 @@ main :: () {
     bob.location.y = -21.92;
     print("% is aged % and is currently at location %\n", bob.name, bob.age, bob.location); // (7)
     print("%\n", bob); // (8) => {"Robert", 42, {64.139999, -21.92}}
+    assert(type_of(bob) == Person);
 
     // struct literals:
     vec2 := Vector2.{2.0, 6.28}; // (9)

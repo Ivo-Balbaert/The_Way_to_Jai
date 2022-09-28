@@ -74,7 +74,7 @@ Use the `0h` prefix to specify floats in hex, in IEEE-754 format.
 _Question_: Why are these values strings?  "42", "false" or "0b10".
 Indeed all types can disguise as string when surrounded by "".
 
-**void** : this is a special type of size 0, with no values. It is used when a variable has no value.
+**void** : this is a special type of size 0, with no values. It is used when a variable has no value. Other types cannot cast to it.
 
 Jai has no explicit character type. The **#char** directive on a single character string gives the numeric value of the ASCII character, inferred as type s64; for example:		
     `#char "1"; // this is 49`  
@@ -239,6 +239,9 @@ main :: () {
     f := #char "1";     // (2) Inferred as s64. f has the value of the ASCII character '1'
     print("f is % and has type %\n", f, type_of(f)); 
     // => f is 49 and has type s64
+
+    varv: void;
+    print("varv is %\n", varv); // (2B) => varv is void
 }
 ```
 
@@ -279,6 +282,7 @@ This way you get the same behavior as in C. This could cause undefined behavior:
 
 `global_var` in line (1) is defined in _global scope_, known and mutable throughout the entire program, so handle it carefully!.  
 In line (2) we see a #char literal in a variable f, which has type s64.  
+In line (2B) we see a variable varv of type void, which also prints out void.  
 
 >Schematically:  
 >  ::	defines a constant  

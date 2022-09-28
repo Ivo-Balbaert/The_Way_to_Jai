@@ -62,6 +62,7 @@ main :: () {
     bob.location.y = -21.92;
     print("% is aged % and is currently at location %\n", bob.name, bob.age, bob.location); // (7)
     print("%\n", bob); // (8) => {"Robert", 42, {64.139999, -21.92}}
+    assert(type_of(bob) == Person);
 
     // struct literals:
     vec2 := Vector2.{2.0, 6.28}; // (9)
@@ -112,7 +113,7 @@ Person :: struct {
     location        : Vector2;
 }
 ```
-All struct fields are public: they can be read and even changed everywhere! There is a convention to prefix fields which should be private by `_`, but the compiler does not enforce that.
+All struct fields are public: they can be read and even changed everywhere! There is a convention to prefix fields which should be private by `_`, but the compiler does not enforce that. A struct field can be of type void (why ??).
 
 A struct definition must occur in a data scope (see § 7).
 

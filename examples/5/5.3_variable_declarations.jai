@@ -48,6 +48,9 @@ main :: () {
     print("f is % and has type %\n", f, type_of(f)); 
     // => f is 49 and has type s64
 
+    varv: void;
+    print("varv is %\n", varv); // (2B) => void
+
   // Possible errors:  // (3)
   // 1] Error: Undeclared identifier 'counter5'.
   // counter5 = 101; // => Error

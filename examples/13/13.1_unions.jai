@@ -12,7 +12,18 @@ Ts :: struct {              // (2)
   #place a;
   b: float64;
   #place a;
-  c: Type; 
+  c: Type;
+}
+
+// void as a union member // (2B)
+Object :: struct {
+  member: void; 
+  #place member;
+  x: float;
+  #place member;
+  y: float;
+  #place member;
+  z: float;
 }
 
 main :: () {
