@@ -147,6 +147,15 @@ main :: () {
         case Val.C;
             print("This is Val.C case\n");
     }
+
+    // using enum namespace:
+    using Val;
+    e := A;
+    if e == {       // (4)
+        case A; print("e is A\n"); // => e is A
+        case B; print("e is B\n");
+        case C; print("e is C\n");
+    }
 }
 
 /*
@@ -179,6 +188,8 @@ Starting in line (3), we see an if-case used to select on an enum value. In this
 If a possible enum case is missing while specifying #complete, you get the compiler error:  
 `Error: This 'if' was marked #complete...
 ... but the following enum value was missing:`
+
+Line (4) shows how a using can even shorten an if-case for an enum.
 
 If you want a multiple lines to be executed in a case, just write them one after the other (see case 1). For readability, you could enclose the block in {}, and also in general indent the if-case statement as in the code example.
 

@@ -5,7 +5,7 @@ Person :: struct {
 }
 
 Patient :: struct {
-    using as: Person;
+    using pe: Person;
     disease: string;   
 }
 
@@ -17,6 +17,5 @@ main :: () {
 
     using pat1;            // (2)
     print("Patient has name: %\n", name); // => Patient has name: Johnson
-
 }
 

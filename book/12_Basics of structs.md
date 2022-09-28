@@ -266,7 +266,7 @@ Person :: struct {
 }
 
 Patient :: struct {
-    using as: Person;      // (1)
+    using pe: Person;      // (1)
     disease: string;   
 }
 
@@ -277,24 +277,73 @@ main :: () {
 
     using pat1;            // (3)
     print("Patient has name: %\n", name); // => Patient has name: Johnson
-
 }
 ```
 Line (1) tells us Patient can use the namespace of Person. That's why in line (2) we don't need to use Person in order to access the `name` field. Line (3) shows us that we can even use pat1 as a namespace.  
-The keyword using lets you import namespaces, as we did with enums. `as` is not a keyword here, it can be replaced by any other word, for example `using person: Person`.
+The keyword using lets you import namespaces, as we did with enums. `pe` is not a keyword here, it can be replaced by any other word, for example `using person: Person`.
 **using** allows us to refer to a contained struct's members without referencing that struct. It allows you to bring the member variables of a struct into the scope of another struct (like sub-classing but no methods/overriding) or a proc (like a method but more flexible, see ??).   
-This mimics a kind of _inheritance_. We use _composition_ instead of a subclass and can reference the fields of the ‘parent’ struct directly. Jai doesn't have classes and inheritance, but as we see here: first class composition works like inheritance!
+This mimics a kind of _inheritance_: Patient is like a subtype of the supertype Person.  
+We use _composition_ instead of a subclass and can reference the fields of the ‘parent’ struct directly. Jai doesn't have classes and inheritance, but as we see here: first class composition works like inheritance!
 (see ?? for a more complete example).
 
 > Favor composition over inheritance.
 
 See this [Discussion about OOP](https://en.wikipedia.org/wiki/Entity%E2%80%93component%E2%80%93system)
 
+## 12.8 The #as directive
+What if we want the power of `using` from § 12.7 and the ability to implicitly cast a variable of the struct subtype to a variable of the struct supertype? This is accomplished with the **#as** directive:
+
+See _12.6_#as_using.jai_:
+
+```c++
+#import "Basic";
+
+Person :: struct {
+    name: string;
+}
+
+Patient :: struct {    
+    using as: Person;
+    disease: string;   
+}
+
+Employee :: struct {    // (1)
+    #as using p: Person;
+    profession: string;   
+}
+
+main :: () {
+    pat1 : Patient;  
+    pat1.name = "Johnson"; 
+   
+    emp1: Employee;
+    emp1.name = "Gates";
+    emp1.profession = "software engineer";
+    print("%\n", emp1); // => {{"Gates"}, "software engineer"}
+
+    p1: Person;
+    // p1 = pat1; // (3) Error: Type mismatch: incompatible structs (wanted 'Person', given 'Patient').
+    p1 = emp1;
+    print("%\n", p1); // (4) => {"Gates"}
+}
+```
+
+In this example we have our Patient subtype from before, but in line (1) an Employee subtype is defined with #as: 
+`#as using p: Person;`  
+We see the difference when comparing lines (3) and (4):
+- in (3) we attempt to assign a Patient to a Person variable, this errors out!
+- in (4) we assign an Employee to a Person variable, this works, but of course only retains the name in p1.
+
+So #as means we can implicitly cast from the subtype to the supertype!
+
+#as is also used in the Type_Info_ types, discussed in § 16.2
+
+
 **Exercise**
 Declare a Point3D struct with 3 float coordinates x, y and z.
 Make a pnt variable of type Point2D, initialize it as a struct literal. Then print out the coordinates without writing pnt.x, and so on (see exercises/12/using.jai).
 
-## 12.8 Using a structs namespace for better storage management
+## 12.9 Using a structs namespace for better storage management
 Suppose our application uses a struct Entity, with a number of fields that our used very much, and the rest is used much less. We could then place the frequently needed fields in an Entity_Hot struct, to be placed on the stack. The less needed fields could be placed in an Entity_Cold struct, to be allocated on the heap.  
 Our Entity struct could now be composed with pointers to these two parts as follows:
 
@@ -315,4 +364,28 @@ Entity :: struct {
 
 Now fields can even be switched from Hot to Cold or vice-versa without having to change the code! This can be decided based on the target platform.
 
+## 12.10 Pointer to struct
+See _12.5_pointer_to_struct.jai_:
+
+```c++
+#import "Basic";
+#import "Math";
+
+Person :: struct {
+    name            : string;
+    age             : int;
+    location        : Vector2;
+}
+
+main :: () {
+    bob := Person.{"Robert", 42, Vector2.{64.139999, -21.92}};
+    rob := *bob;        // (1)
+    print("rob is %\n", rob);   // => rob is 8d_425b_fe20
+    print("The type of rob is %\n", type_of(rob)); // => The type of rob is *Person
+    print("The value rob points to is %\n", << rob); 
+    // => The value rob points to is {"Robert", 42, {64.139999, -21.92}}
+}
+```
+
+In line (1) we see how a pointer variable rob is created as a pointer to a struct variable. Its type us *Person.
 

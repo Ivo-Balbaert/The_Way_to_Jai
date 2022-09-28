@@ -36,6 +36,15 @@ main :: () {
         case Val.C;
             print("This is Val.C case\n");
     }
+
+    // using enum namespace:
+    using Val;
+    e := A;
+    if e == {       // (4)
+        case A; print("e is A\n"); // => e is A
+        case B; print("e is B\n");
+        case C; print("e is C\n");
+    }
 }
 
 /*
