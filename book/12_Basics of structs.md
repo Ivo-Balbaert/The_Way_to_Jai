@@ -334,7 +334,10 @@ We see the difference when comparing lines (3) and (4):
 - in (3) we attempt to assign a Patient to a Person variable, this errors out!
 - in (4) we assign an Employee to a Person variable, this works, but of course only retains the name in p1.
 
-So #as means we can implicitly cast from the subtype to the supertype!
+So #as means we can implicitly cast from the subtype to the supertype!  
+#as using p: Person;
+   can also be written as:  
+using #as p: Person;
 
 #as is also used in the Type_Info_ types, discussed in § 16.2
 
