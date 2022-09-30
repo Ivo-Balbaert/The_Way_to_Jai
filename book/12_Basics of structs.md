@@ -387,8 +387,25 @@ main :: () {
     print("The type of rob is %\n", type_of(rob)); // => The type of rob is *Person
     print("The value rob points to is %\n", << rob); 
     // => The value rob points to is {"Robert", 42, {64.139999, -21.92}}
+
+    // 2nd example:
+    Entity :: struct {
+        serial_number: int;
+    }
+
+    e: Entity;              // e is a variable of type Entity
+    e.serial_number = 0349825645;
+//    ptr: *Entity;           // (3) ptr is a pointer to an Entity struct- a declaration
+//    ptr = *e;               // (4) ptr is a pointer to e - initialization
+    // shorter:
+    ptr := *e;                // (5)
+    print("e's value is: %\n", << ptr); // => e's value is: {349825645}
 }
 ```
 
 In line (1) we see how a pointer variable rob is created as a pointer to a struct variable. Its type us *Person.
-
+In the 2nd example we note that a struct can also be declared in a local scope.
+The short definition of a pointer to a struct:  ptr := *e;  
+can be divided into:  
+    ptr: *Entity;  // declaration
+    ptr = *e;      // assignment
