@@ -86,11 +86,11 @@ Line (8) tellus us the type of the sum proc:
 So the header or signature of a proc (its arguments and return-values list) determine its type.
 
 **Exercises**  
-(1) Write a proc with no arguments that prints "Hello, world!" (see display.jai). Make the proc run at compile time.
-(2)	Write a proc that prints a new line (see newline.jai).
-(3) Rewrite ex 15.2_squares.jai from § 15 using a proc square  (see proc_square.jai) and test it.
-(4) Write a proc that tests whether a character is a digit (see is_digit.jai)
-(5) Jai has its own assert built-in, but let us write our own assert proc that takes a condition and does nothing if this is true, else it prints an error message “ASSERTION FAILED” (see assert.jai). 
+(1) Write a proc with no arguments that prints "Hello, world!"   (see display.jai). Make the proc run at compile time.  
+(2)	Write a proc that prints a new line (see newline.jai).  
+(3) Rewrite ex 15.2_squares.jai from § 15 using a proc square  (see proc_square.jai) and test it.  
+(4) Write a proc that tests whether a character is a digit (see is_digit.jai)  
+(5) Jai has its own assert built-in, but let us write our own assert proc that takes a condition and does nothing if this is true, else it prints an error message “ASSERTION FAILED” (see assert.jai).   
 
 ## 17.2 Local procs
 Procedures defined at the same top-level as main are called global procs. They can be called by main and can also call each other. An example is `proc` and `proc2` in the following code:
