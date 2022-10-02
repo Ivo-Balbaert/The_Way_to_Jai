@@ -25,5 +25,8 @@ _Table of Contents_
    [13 - Unions and enums](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/13_Unions%20and%20enums.md)     
    [14 - Branching with if else](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/14_Branching_with_if_else.md)  
    [15 - Looping with while and for](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/15_Looping%20with%20while%20and%20for.md)     
-   [16 - Types in depth](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/16_Types%20in%20depth.md)  
-   
+   [16 - Types in depth](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/16_Types%20in%20depth.md)    
+   [17 - Basics of procedures](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/17_Basics%20of%20procedures.md)  
+   [18 - Arrays](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/18_Arrays.md)    
+
+

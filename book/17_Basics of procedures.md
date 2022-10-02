@@ -79,7 +79,7 @@ _Error: Number mismatch. Type wanted: int; type given: float32._ (see line (4), 
 As we see in line (5), it is always possible to pass the parameter value through its argument name: `square(x = c)`. This enables a more-documented style, but also to call the arguments in a different order than declared.  
 Line (6) shows that a parameter can just be another proc call.
 
-### 17.1.2 Getting the type and address of a proc: 
+### 17.1.2 Getting the type and address of a proc
 Line (7) shows that a proc is a pointer, it points to where the code starts in memory.
 Line (8) tellus us the type of the sum proc:
 `procedure (s64, s64, s64) -> s64`
