@@ -153,7 +153,9 @@ Iain King: [The Language - Visual Studio Marketplace - v0.0.85](https://marketpl
    plugin for Visual Studio 2013 / 2015 from Inductive AS, published 2015
 	Syntax highlighting (cannot be installed in VS 2017).
 
-7) **Language server**:	[Pyromuffin/jai-lsp](https://github.com/Pyromuffin/jai-lsp)
+7) **Language server**:	[Pyromuffin/jai-lsp](https://github.com/Pyromuffin/jai-lsp) or [Sl3dge78/jai-lsp](https://github.com/Sl3dge78/jai_lsp)
+
+Works with Vim, Emacs, VSCode, and should work with other editors that implement an lsp client.
 
 At this time I recommend the VSCode plugin, because it probably has the most functionality.
 ### 2.3.2  Using the Visual Studio Code plugin

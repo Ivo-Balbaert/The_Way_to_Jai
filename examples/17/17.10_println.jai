@@ -9,11 +9,11 @@ main :: () {
     println("The end.");      // => The end
 }
 
-println :: inline (arg: Any) {
+println :: inline (arg: Any) {      
     print("%\n", arg); // print knows the type of arg
 }
 
-println :: inline (msg: string, args: ..Any) {
+println :: inline (msg: string, args: ..Any) {   // (2)
     print(msg, ..args);
     print("\n");
 }

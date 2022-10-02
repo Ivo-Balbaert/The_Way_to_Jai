@@ -382,7 +382,7 @@ main :: () {
 ```
 
 A swap like n, m = m, n; is allowed, but doesn't work in Jai like you would expect (see line (1)): both variables get the same value. When n and m are of different types an error results, because then they would have to change type, which is not allowed.
-But see ?? for built-in swap procedures.  
+But see § 17.10 for a swap procedure and ?? for built-in versions.  
 
 ## 5.7 - More about printing
 
