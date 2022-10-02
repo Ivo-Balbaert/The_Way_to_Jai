@@ -47,7 +47,7 @@ In order to avoid ambiguity, the variable number argument must be the last in th
 
 Because args is an array, the exact number of arguments is given by `args.count` (line(2)) and you can loop over them with `for args` (line(4)).
 
-### 18.1 Passing an array as variable argument
+### 18.1 Passing an array as a variable argument
 In line (6B) we pass the array arr defined in line (6A) to proc var_args like this:  
 `var_args(..arr);` or `var_args(args = ..arr);`
 This is in fact the same as calling `var_args(1,2,3,4,5,6,7);`; we say that the array items are _spread_ over args.
@@ -63,7 +63,7 @@ After the varargs name v is used, all parameters are going into the variable arg
 You can spread parameters with a name as well as in line (7B): 
 `varargs_proc(f = 5, 3.14 = "How", v = ..array);`
 
-### 18.3 The print procedure using ..
+### 18.3 The print procedure uses ..
 See _18.6_print_proc.jai_:
 
 ```c++

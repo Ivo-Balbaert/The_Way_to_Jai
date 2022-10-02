@@ -369,7 +369,7 @@ When you tell the compiler explicitly to **inline** a proc call, it means that t
 The compiler often does this implicitly, without the developer knowing that. But in Jai, the developer can explicitly indicate where to inline (or not line) a proc. This is done with:  
 `:: inline` or `:: no_inline` at the proc declaration
 or:  
-`inline proc_call()` or `no_inline proc_call()`   
+`inline proc_call()` or `no_inline proc_call()` at the call site    
 Inlining is a command to the compiler which must be obeyed, it is not a hint.
 
 In the snippet above you find a concrete example of each of these cases. A proc declared as :: inline by will by default be inlined.  
