@@ -1,0 +1,41 @@
+#import "Basic";
+
+Good_Fruit :: enum {
+    APPLE      :: 1;
+    BANANA     :: 2;
+    BANANANA   :: 3;
+    KIWI       :: 4;
+    GRAPE      :: 5;
+    STRAWBERRY :: 6;
+}
+
+main :: () {
+    numbers := int.[1, 3, 5, 7, 9]; // (1) array literal
+    print("count is %, and data is %.\n", numbers.count, numbers.data); // (2)
+    // => count is 5, and data is f8_01ba_f828.
+    print("%\n", type_of(numbers)); // (3) => [5] s64
+    print("%\n", type_of([4]int) == type_of([5]int)); // (4) => true because both are Type
+    // empty array literal:
+    emp := string.[]; // (5)
+    print("% - %\n", emp.count, emp.data); // => 0 - null
+    // arr1 : [4]float = float.[10.0, 20.0, 1.4, 10.0]; // (6)
+    // shorter:
+    arr1: = float.[10.0, 20.0, 1.4, 10.0];
+    print("arr1 is % \n", arr1); // (7) => arr1 is [10, 20, 1.4, 10]
+    print("The 3rd item is %\n", arr1[3]); // (8) => The 3rd item is 10
+    arr1[3] = 2.71;              // (9)
+    print("arr1 is % \n", arr1); // => arr1 is [10, 20, 1.4, 2.71]
+    words := string.["The", "number", "is", "odd."];
+    print("words is %\n", words); // => words is ["The", "number", "is", "odd."]
+
+    what_i_want :: Good_Fruit.[.APPLE, .GRAPE, .KIWI, .BANANANA, .APPLE]; // (10)
+
+    for numbers print("numbers[%] = %\n", it_index, it); // (11)
+    /* =>
+    numbers[0] = 1
+    numbers[1] = 3
+    numbers[2] = 5
+    numbers[3] = 7
+    numbers[4] = 9
+    */
+}
