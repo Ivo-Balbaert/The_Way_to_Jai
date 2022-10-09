@@ -17,5 +17,7 @@ main :: () {
   // create a view on a part of an array, for example from index 2 to 4: [3, 4, 5]
   v.data += 2;
   v.count = 3;
-  print("v is %\n", v); // (4) => v is [3, 4, 5, 6, 7]
+  print("v is %\n", v);  // (4) => v is [3, 4, 5, 6, 7]
+  // print("%\n", arrv[6]); // (5)
+  // => Array bounds check failed. (The attempted index is 6, but the highest valid index is 5).
 }

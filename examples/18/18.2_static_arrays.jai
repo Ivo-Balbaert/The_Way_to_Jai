@@ -55,6 +55,9 @@ main :: () {
     print("arr2 is %\n", arr2);
     // => arr2 is ["Hello", 42, {1, 2, 3}, (zero-initialized Any)]
 
+    x := *[10] int; // x is a pointer to an array of int of size 10
+    print("x is %\n", x); // => x is *[10] s64
+
     if arr2 {           // (8)
         print("arr2 is NOT empty\n"); // => arr2 is NOT empty
     }

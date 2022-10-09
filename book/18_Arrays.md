@@ -30,6 +30,7 @@ Good_Fruit :: enum {
 
 main :: () {
     numbers := int.[1, 3, 5, 7, 9]; // (1) array literal
+    // numbers2 := .[1, 3, 5, 7, 9]; // (1B) => Error: This declaration is bound to a struct or array literal that did not specify its type, so there is no way to know its type.
     print("count is %, and data is %.\n", numbers.count, numbers.data); // (2)
     // => count is 5, and data is f8_01ba_f828.
     print("%\n", type_of(numbers)); // (3) => [5] s64
@@ -57,15 +58,26 @@ main :: () {
     numbers[4] = 9
     */
     print("\n");
+    for words   print(" %. %\n", it_index, it);
+    /*
+    0. The
+    1. number
+    2. is
+    3. odd.
+    */
 }
 ```
 
 In line (1) we define an int array literal, in general the syntax is: type.[item1, ..., itemn]
+Line (1B) shows that indicating the type as prefix is necessary.
 Every array has a `count` and `data` field (see ??): the count gives the number of items in the array, and data is a pointer to the 1st item.  
 As we see from line (3), it's type is `[5] s64`, [] is the typical array notation, 5 is the count (or size), and s64 is the items type, which is equivalent to int. This type shows that the array literal is in fact a **static array**. Line (4) shows that [4]int and [5]int have the same type Type. Empty array literals will have their count pointer not set to 0; their data pointer is guaranteed to be null.
 In line (6) we see a typed declaration of a static array, which is then initialized to an array literal. The definition can include the complete type, but this can also be inferred. In line (7) we see that an array can simply be printed out as a whole.
 Lines (8) and (9) tell us that we can read out the i-th item as `arr[i]`, and change its value with `arr[i] = new_val`.
 In line (10) an array literal is created with the values of an enum.
+
+**Typing of array literals**
+When passed to or returned from a proc where the array type is indicated, array literals can be untyped like .[1, 2, 3, 4, 5], otherwise they have to be typed.
 
 ## 18.2. For loop over arrays
 Looping over an array while processing each item is made extremely easy with a for-loop, which works for all kinds of arrays. From line (11) we see that we still have the `it` variable, which takes in the value of the item in each iteration. But now we have also the `ìt_index` variable, which gives for each item its index position in the array, starting from 0 like in all C-like languages. See § 18.3, ??  for more examples.
@@ -227,9 +239,10 @@ main :: () {
   array_reset(*arrdyn);  // (9) Reset (empties) arrdyn
   print("arrdyn is: %\n", arrdyn); // => arrdyn is: []
 
-  // Filling an array: // better version in array_for.jai
+  // filling an array:
   N :: 100;
   for 0..N-1  array_add(*arrdyn, it);  // (10)
+  // for i: 0..N-1  array_add(*arrdyn, i); // alternative for (10)
 
   M :: 50;
 // more performant way:
@@ -277,6 +290,29 @@ Resizable_Array :: struct {
 See _18.4_array_views.jai_:
 
 ```c++
+#import "Basic";
+
+main :: () {
+  static_array := int.[0,1,2,3,4,5];
+  arrv : []int = static_array;    // (1)
+  print("%\n", arrv.count); // => 6
+  print("%\n", arrv[3]);    // => 3
+  arrv[3] = 42;
+  print("%\n", static_array); // (1B) => [0, 1, 2, 42, 4, 5]
+  arrv2: []int = int.[1,2,3,4,5]; // (2)
+  print("arrv2 is %\n", arrv2); // => arrv2 is [1, 2, 3, 4, 5]
+  a: [..] int;
+  for 1..7 array_add(*a, it);  
+  v: [] int = a;                  // (3)
+  print("v is %\n", v); // => v is [1, 2, 3, 4, 5, 6, 7]
+
+  // create a view on a part of an array, for example from index 2 to 4: [3, 4, 5]
+  v.data += 2;
+  v.count = 3;
+  print("v is %\n", v);  // (4) => v is [3, 4, 5, 6, 7]
+  // print("%\n", arrv[6]); // (5)
+  // => Array bounds check failed. (The attempted index is 6, but the highest valid index is 5).
+}
 ```
 
 An **array view** is like the name says, a view on an underlying array in memory; so it uses that memory, it allocates no memory of its own. In lines (1)-(3) above, we define array views arrv, arrv2 and v (a view on a dynamic array). They are all of type **[]int**  
@@ -288,24 +324,254 @@ Array_View_64 :: struct {
 } // takes up 16 bytes
 ```
 (There are also smaller array_views that use relative pointers.)
+Array views are also bounds-checked, but at run-time: see line (5). The program crashes and a stack trace is printed.
 
-## 18.5.1 Changing the view
+## 18.5.1 Changing the view and the base array
 In line (1B) we show that you can change the underlying array by manipulating the view with the normal index notation.
 `data` is a pointer to the base data in memory. So by adding an offset to this pointer, and changing the count of the view, the view changes as we want (see line (4)). We can take a slice of the base array.  
 This is the first example of pointer arithmetic we encounter in Jai. Needless to say you must be very careful to stay within the memory limits of the base array.
 
-
-## 18.6. For-loops over an array
-
-## 18.7. Multidimensional
-
-## 18.8. Passing an array to a function
+Why are array views important? Besides getting an alternative look on an array without consuming memory, they also allow us to write procedures in a more general way: both static and dynamic arrays are auto-casted to array views if the array view is a parameter, see § 18.8 
 
 
+## 18.5.1 Misuse of array views with dynamic arrays
+See _18.8_array_view_misuse.jai_:
 
-----------------------------------------------------------
-## 18. Variable number of arguments ..
-See _18.5_var_args.jai_:
+```c++
+```
+Carefully look at the code above: we define and populate a dynamic array a, then take a view v on it, and then add more items to a. Now if we print out a in (4), everything is ok, but if we print out v in (5), we see the result is bad: it only sees 10 items, and the first two are even corrupt data!  
+The reason for this is that any time you call `array_add` on a, it might move its memory. If you do this after assigning the view v, a problem will arise because since 'a' was possibly moved, v points to the wrong memory location!  
+> So only take an array view on a dynamic array when this will no longer be resized.
+
+## 18.6. For-loops over arrays: more examples
+See _18.5_array_for.jai_:
+
+```c++
+#import "Basic";
+
+main :: () {
+    N :: 4;
+    static_array: [N]int = .[0, 1, 2, 3]; 
+    dynamic_array : [..]int;
+    array_view : []int = static_array;
+
+    for static_array   static_array[it_index] = it;
+    // for 0..static_array.count-1  static_array[it_index] = it; // (1) => Error: Undeclared identifier 'it_index'.
+    for static_array print("SA item[%] = % - ",  it_index, it);
+    // => SA item[0] = 0 - SA item[1] = 1 - SA item[2] = 2 - SA item[3] = 3 - 
+    print("\n");
+   
+    array_add(*dynamic_array, 4);
+    array_add(*dynamic_array, 5);
+    array_add(*dynamic_array, 6);
+    array_add(*dynamic_array, 7);
+    for dynamic_array   dynamic_array[it_index] = it;  // (2)
+    for dynamic_array print("DA item[%] = % - ", it_index, it);  
+    // => DA item[0] = 4 - DA item[1] = 5 - DA item[2] = 6 - DA item[3] = 7 -
+    print("\n");
+
+    for array_view   array_view[it_index] = it;   
+    for array_view print("AV item[%] = % - ", it_index, it);
+    // => AV item[0] = 0 - AV item[1] = 1 - AV item[2] = 2 - AV item[3] = 3 -
+    print("\n");
+    
+    for n: static_array     print("% - ", n); // (2) => 0 - 1 - 2 - 3 
+    // for n: static_array     print("% - ", it); // => Error: Undeclared identifier 'it'.
+    print("\n");
+
+    for value, index: dynamic_array {         // (3)
+        print("DynArray[%] = % - ", index, value);
+    }
+    // => DynArray[0] = 4 - DynArray[1] = 5 - DynArray[2] = 6 - DynArray[3] = 7 -
+    print("\n");
+
+    // changing an array:
+    arr := int.[1, 2, 3, 4, 5];
+    // take all the values in an arr and square the items
+    for *elem: arr {            // (4)
+        val := <<elem;
+        <<elem = val * val; 
+    }
+    print("arr is: %\n", arr); // => arr is: [1, 4, 9, 16, 25]
+
+    // reversing the iteration:
+    static_array := int.[1, 2, 3, 4, 5];
+    for < static_array  print(" % ", it);  // (5)
+    // => 5  4  3  2  1
+} 
+```
+
+We saw in § 18.2 how easy it is to write a for loop over an array and that we now have `it_index` for the position and `it` for the item's value at our disposal.
+In the above code we demonstrate that a for loop over the array works for all three array types. However as shown in line (1), `it_index` is NOT known when a for as a range on 0..arr.count-1 is used, contrary to `it` which is known.  
+The for-loop in line (2) for the dynamic array wouldn't print out anything, if it where not for the `array_add` statements before, that create the dynamic array items.
+You can replace the in-built iteration variable `it` with your own as in line (2):  
+`for n: static_array`   
+but then `it` is no longer available.
+
+### 18.6.1 Named index and value:
+You can also replace both `it` and `it_index` with your own variables as in line (3):
+`for value, index: array_view`      // in that order!
+
+## 18.6.2 Changing an array by iterating with a pointer
+The it variable is read-only, it cannot be used to change the items of an array (try it out!). Look at the code starting in line (4):  
+- `for *elem: arr {}` we loop over the array with an iteration variable that is a pointer
+- `<<elem = val * val` inside the loop, we dereference that pointer and assign a new value to it.
+This can even be done more succinct as shown in line (4B). 
+
+So iteration can be done by pointer or by value, and is built-in at a very low level: the compiler understands arrays in depth, and so does the debugger.
+
+**Exercise**
+Double the values of an array in a for loop. Then do the same in a while loop and see what is easiest.  
+(see array_double.jai)
+
+## 18.6.3 Reversing a for loop with <
+In line (5) we see that simply writing a `for <` reverses the iteration order.
+
+
+## 18.7. Multidimensional arrays
+All the arrays we've encountered until now were 1-dimensional, with an index going from 0 to array.count-1
+But for example when writing a game in 2D or 3D, we easily need objects with that number of dimensions. So how do we define these in Jai?
+
+See _18.6_multidim.jai_:
+
+```c++
+#import "Basic";
+
+main :: () {
+    a2 : [4][4] float;    // (1) - 2D static array
+    print("a2 is: %\n", a2); // =>
+//  a2 is: [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
+    b2 : [4][4][4] float; // 3D - static array
+    print("b2 is: %\n", b2); // =>
+// b2 is: [[[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]],
+//         [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]], 
+//         [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]], 
+//         [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]]  
+    array3: [2][2] int = .[int.[1,0], int.[0,3]];
+    print("array3 is: %\n", array3); // => array3 is: [[1, 0], [0, 3]]
+    array4 := [2] int.[int.[1,0], int.[0,3]];
+
+    luminance_color_ramp := ([3] float).[.[0,0,0],  // black
+                                         .[0,0,1],  // blue
+                                         .[0,1,1],  // cyan
+                                         .[0,1,0],  // green
+                                         .[1,1,0],  // yellow
+                                         .[1,0,0],  // red
+                                         .[1,0,1],  // magenta
+                                         .[1,1,1]]; // white
+    print("type_of(luminance_color_ramp) is %\n", type_of(luminance_color_ramp));
+    // => type_of(luminance_color_ramp) is [8] [3] float32
+
+    for luminance_color_ramp    print("% % % / ", it[0], it[1], it[2]); // (2)
+    // => 0 0 0 / 0 0 1 / 0 1 1 / 0 1 0 / 1 1 0 / 1 0 0 / 1 0 1 / 1 1 1 /
+
+// do they need to be freed, probably they are in stack ?
+    array_free(a2);
+    array_free(b2);
+    array_free(array3);
+    array_free(luminance_color_ramp);
+}
+```
+Lines (1) and following show some examples of declaration and initialization. Line (2) prints out a 2D-array within a for loop.
+
+## 18.8. Passing an array to a procedure
+See _18.7_array_proc.jai_:
+
+```c++
+#import "Basic";
+
+print_int_array :: (arr: [] int) {
+    print("Array has size % - ", arr.count);
+    for arr print("arr[%] = % / ", it_index, it);
+    // for i: 0..arr.count-1 {
+    //     print("arr[%] = % / ", i, arr[i]);
+    // }
+    print("\n");
+}
+
+add_numbers :: (numbers: [] int) -> int {   
+    sum := 0;
+    for numbers sum += it;
+    return sum;
+}
+
+main :: () {
+    N :: 4;
+    static_array: [N]int = .[0, 1, 2, 3]; 
+    // Printing an array:
+    print_int_array(static_array); // (1)
+    // => Array has size 4 - arr[0] = 0 / arr[1] = 1 / arr[2] = 2 / arr[3] = 3 / 
+
+    dynamic_array : [..]int;
+    defer free(*dynamic_array);
+    array_add(*dynamic_array, 4);
+    array_add(*dynamic_array, 5);
+    array_add(*dynamic_array, 6);
+    print_int_array(dynamic_array); // (2)
+    // => Array has size 3 - arr[0] = 4 / arr[1] = 5 / arr[2] = 6 /
+
+    sum := add_numbers(.[1, 2, 3, 4, 5]); // (3)
+    print("sum is %\n", sum); // => sum is 15
+    sum = add_numbers(static_array);
+    print("sum is %\n", sum); // => sum is 6
+    sum = add_numbers(dynamic_array);
+    print("sum is %\n", sum); // => sum is 15
+}
+```
+
+A function can take an array (or many) as argument. 
+The argument array is typed like an array view: `arr: []int` 
+A pointer to the array as well as its size are passed to the function.  
+See as first example the proc _print_int_array_ . In line (1) it is called with a static array as parameter, and in line (2) with a dynamic array. _Static and dynamic arrays are automatically converted to an array view when passed to a proc with such an argument_.  
+This is extremely useful: array views let us do stuff like calling the same proc for different-sized arrays, like in the previous example.  
+Another example is the _add_numbers_ proc (called in line (3) and following), which takes an array view as an argument and returns the sum of its items.
+
+## 18.8.1 C's biggest mistake
+C's biggest mistake is: treating arrays as pointers. When passing an array to a function in C, only the pointer is passed, so that the size information is lost. This results in many bugs, see Walter Bright's article: ["C’s biggest mistake" (dec 2009)](www.drdobbs.com/architecture-and-design/cs-biggest-mistake/228701625).  
+In Jai, arrays do not automatically cast to pointers as in C. Rather, they are like fat or wide pointers that contain a pointer to the start of the array, and the size of the array. Internally, they are a struct (pointer + size). 
+This prevents the many possible bugs resulting from the way C handles this. In Jai the procedure can test that it doesn’t change the array out of bounds, because it knows its size through arr.count. 
+
+## 18.9. An array of pointers
+See _18.9_array_pointers.jai_:
+
+```c++
+#import "Basic";
+
+Dragon :: struct {
+    serial_no: int;
+    name: string;
+    strength: u8;
+}
+
+NR_DRAGONS :: 10;
+
+main :: () {
+    e1 := New(Dragon);
+    e1.serial_no = 123;
+    e1.name =  "Dragon1";
+    e1.strength =  42;
+    e2 := New(Dragon);
+    e2.serial_no = 124;
+    e2.name =  "Dragon2";
+    e2.strength =  78;
+    
+    arr_dragons: [NR_DRAGONS] *Dragon; 
+    defer { for arr_dragons  free(it); };
+    arr_dragons[1] = e1;
+    arr_dragons[2] = e2;
+    arr_dragons[3] = New(Dragon);
+    arr_dragons[3].serial_no = 666;
+    print("the dragon array is: %\n", arr_dragons);
+    // => the dragon array is: [null, 22a_1f40_4b20, 22a_1f40_4be0, 
+    // 22a_1f40_4cd0, null, null, null, null, null, null]
+}
+```
+
+Game entities (objects) are most often defined as structs. Each type of entity can have many instances at any time. Because we probably will have thousands of objects, we need to allocate them on the heap with New.  
+A handy way to work with them is to make an array, where each item is a pointer to an entity instance. In our example, arr_dragons is an array of size NR_DRAGONS of pointers to Dragons, the array contains the addresses of the Dragon instances.
+
+## 18.10 Variable number of arguments ..
+See _18.10_var_args.jai_:
 
 ```c++
 #import "Basic";
@@ -348,12 +614,12 @@ In order to avoid ambiguity, the variable number argument must be the last in th
 
 Because args is an array, the exact number of arguments is given by `args.count` (line(2)) and you can loop over them with `for args` (line(4)).
 
-### 18.1 Passing an array as a variable argument
+### 18.10.1 Passing an array as a variable argument
 In line (6B) we pass the array arr defined in line (6A) to proc var_args like this:  
 `var_args(..arr);` or `var_args(args = ..arr);`
 This is in fact the same as calling `var_args(1,2,3,4,5,6,7);`; we say that the array items are _spread_ over args.
 
-### 18.2 Named variable arguments proc
+### 18.10.2 Named variable arguments proc
 A named variable and (some) default arguments proc would be defined like:
 `varargs_proc :: (s:= "Fred", f:= 2.5, v: ..string) { }`
 
@@ -364,8 +630,8 @@ After the varargs name v is used, all parameters are going into the variable arg
 You can spread parameters with a name as well as in line (7B): 
 `varargs_proc(f = 5, 3.14 = "How", v = ..array);`
 
-### 18.3 The print procedure uses ..
-See _18.6_print_proc.jai_:
+### 18.11 The print procedure uses ..
+See _18.11_print_proc.jai_:
 
 ```c++
 #import "Basic";

@@ -11,6 +11,9 @@ Good_Fruit :: enum {
 
 main :: () {
     numbers := int.[1, 3, 5, 7, 9]; // (1) array literal
+    // numbers2 := .[1, 3, 5, 7, 9]; // (1B) => Error: This declaration is bound to a struct 
+    // or array literal that did not specify its type, 
+    // so there is no way to know its type.
     print("count is %, and data is %.\n", numbers.count, numbers.data); // (2)
     // => count is 5, and data is f8_01ba_f828.
     print("%\n", type_of(numbers)); // (3) => [5] s64
@@ -37,5 +40,12 @@ main :: () {
     numbers[2] = 5
     numbers[3] = 7
     numbers[4] = 9
+    */
+    for words   print(" %. %\n", it_index, it);
+    /*
+    0. The
+    1. number
+    2. is
+    3. odd.
     */
 }

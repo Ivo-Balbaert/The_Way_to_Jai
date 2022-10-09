@@ -29,11 +29,13 @@ main :: () {
   array_reset(*arrdyn);  // (9) Reset (empties) arrdyn
   print("arrdyn is: %\n", arrdyn); // => arrdyn is: []
 
-  // Filling an array: // better version in array_for.jai
+  // filling an array:
   N :: 100;
-  for 0..N-1  array_add(*arrdyn, it);  // (10)
+  for 0..N-1  array_add(*arrdyn, it);   // (10)
+  // for i: 0..N-1  array_add(*arrdyn, i); // alternative for (10)
 
-  M :: 50;
+   array_reset(*arrdyn);  // 
+   M :: 50;
 // more performant way:
   array_reserve(*arrdyn, M); // (11) - Reserve 50 items!
   for 1..M array_add(*arrdyn, it);  // 

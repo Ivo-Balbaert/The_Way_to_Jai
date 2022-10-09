@@ -22,7 +22,7 @@ To realize these priorities, Jai has the following _properties_:
 
 The goal is to compile 1M lines of code in \< 1s (from scratch, without delta builds). The official compilation speed of the compiler is 250,000 lines of code per second using the x64 backend, according to the CHANGELOG of beta 0.0.045 (using the Sokoban game as a benchmark).
 
-2. Explicit control over optimization and performance characteristics: things like inlining (see ??) and LLVM optimizations (see ??). Jai also effectively uses pointers and it has an implicit context system to switch memory allocation schemes.
+2. Explicit control over optimization and performance characteristics: things like inlining (see ??) and LLVM optimizations (see ??). Jai also effectively uses pointers and it has an implicit context system to switch memory allocation schemes. Currently (Oct 2022) the generated code is around ~20% slower than C, but this will get better.
 
 3. Bounds checking (see ??), and initialization (see § 5.3.1).
 4. Putting _data at the center_ of the design (see ??).
