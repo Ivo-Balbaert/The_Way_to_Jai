@@ -172,7 +172,7 @@ So you can make a for loop over this range:  `for 0..arr.count-1 { ... }` and in
 The size in bytes of the i-th item is given by `size_of(arr[i])`.
 Line (7) indicates that you can use Any as the array type if you want to make an array that contains items of different types (The syntax `arr2 = Any.["Hello", 42, Vector3.{1, 2, 3}];` doesn't work here).
 
-### 18.3.2 Compile-time and run-time bounds check.
+### 18.3.2 Compile-time and run-time bounds check
 If the size of the array and the index are known at compile time a compile-time bounds check will be performed: see line (6B), the error is:
 ** Error: Subscript is out of array bounds. (The attempted index is 100, but the highest valid index is 99.) **
 This also works for a constant (6C), but not for a variable like in (6D). Then the code compiles, but we get a run-time panic:
