@@ -514,3 +514,94 @@ Define your own version of a 2D vector, and write a function make_vec2D that rec
 The struct literal notation is much shorter than the 'constructor'-like proc, but it has a limitation:   
 Why doesn't this work?      `v := Vec2D.{x, y};`
 (see _make_vector2.jai_) 
+
+
+## 17.13 Structs and procs
+
+## 17.13.1 Using the namespace of a struct in procs
+See _17.11_using_structs_procs.jai_:
+
+```c++
+#import "Basic";
+
+Vector2 :: struct {
+    x: float = 1;
+    y: float = 4;
+}
+
+Entity :: struct {
+  position: Vector2;
+}
+
+print_position_a :: (entity: *Entity) {
+  print("print_position_a: (%, %)\n", entity.position.x, entity.position.y);
+}
+
+print_position_b :: (entity: *Entity) {
+  using entity;
+  print("print_position_b: (%, %)\n", position.x, position.y);
+}
+
+print_position_c :: (using entity: *Entity) {
+  print("print_position_c: (%, %)\n", position.x, position.y);
+}
+
+print_position_d :: (entity: *Entity) {
+  using entity.position;
+  print("print_position_d: (%, %)\n", x, y);
+}
+
+main :: () {
+    e: Entity;
+
+    print_position_a(*e); // => print_position_a: (1, 4)
+    print_position_b(*e); // => print_position_b: (1, 4)
+    print_position_c(*e); // => print_position_c: (1, 4)
+    print_position_d(*e); // => print_position_d: (1, 4)
+}
+```
+
+In the code above we have 4 versions of a `print_position_` proc, which take an argument of type *Entity:  
+- version a: here the complete path to print the positions is used: `entity.position.x`    
+- version b: because of the `using entity`, which is effectively using the namespace of the struct, we can now call the position with `position.x`  
+- version c: same as b, but we can call the using directly on the argument
+- version d: if we do `using entity.position;` x and y can be reached without any qualification.
+
+## 17.13.2 The #as directive in proc arguments
+See _17.13_using_as_structs.jai_:
+
+```c++
+#import "Basic";
+
+A :: struct {
+  data: int = 108;
+}
+
+B :: struct {
+  using #as a: A;  // (1) 
+}
+
+proc1 :: (a: A) {
+  print("Calling proc :: (a: A)\n");
+}
+
+proc2 :: (using a: A) {
+  print("a.data = %\n", data);
+}
+
+main :: () {
+  a: A;
+  b: B;
+ 
+  proc1(b);   // (2) => Calling proc :: (a: A)
+  proc2(a);   // => a.data = 108
+  proc2(b);   // (3) => a.data = 108
+}
+```
+
+In § 12.8 we discussed the usage of the #as directive to implicitly cast a subtype to a supertype. In the above example in line (1) this is declared for B as a subtype of A.  
+Line (2) shows how an instance of B can pass seamlessly for an instance of A. In line (3) we see that the same is true when using the namespace.  
+
+**Exercise**
+Use struct Person from § 17.3. Add fields name and location, which is a Vector2 used from module _Math_. Define a proc `move_person`, which can change a person's location. Test it out!
+(see structs_and_procs.jai)

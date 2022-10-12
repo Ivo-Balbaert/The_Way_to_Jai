@@ -207,7 +207,7 @@ In case of `#run main()`, you run the whole program during compile-time (see ?? 
 
 ### 3.2.5 Some remarks
 
-  1) Source code file names are usually in lowercase, separated by _ if needed, like _hello_sailor.jai_ or _struct_literals.jai_. In chapters with multiple code files, we'll number them like _3.1_hello_sailor.jai_.
+  1) Source code file names are usually in lowercase, separated by _ if needed, like _hello_sailor.jai_ or _struct_literals.jai_. Never use space characters in a Jai filename! In chapters with multiple code files, we'll number them like _3.1_hello_sailor.jai_.
 
   2) You might have noticed that the displayed string is immediately followed by the operating system (OS)-prompt. You can separate them with a blanc line by adding a newline character _\n_ to the string like this:  `print("Hello, Sailor from Jai!\n");`  
   Compile and check it.

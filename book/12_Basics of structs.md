@@ -293,7 +293,7 @@ See this [Discussion about OOP](https://en.wikipedia.org/wiki/Entity%E2%80%93com
 ## 12.8 The #as directive
 What if we want the power of `using` from § 12.7 and the ability to implicitly cast a variable of the struct subtype to a variable of the struct supertype? This is accomplished with the **#as** directive:
 
-See _12.6_#as_using.jai_:
+See _12.6_#using_as.jai_:
 
 ```c++
 #import "Basic";
@@ -308,7 +308,7 @@ Patient :: struct {
 }
 
 Employee :: struct {    // (1)
-    #as using p: Person;
+    using #as p: Person;
     profession: string;   
 }
 

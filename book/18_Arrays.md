@@ -664,4 +664,28 @@ This is because `print` is defined in module _Basic_ file _Print.jai_ as:
 
 We see it has a variable number argument `args`, which makes this possible.
 
+## 18.12 Array of structs
+See 18.11_array_of_structs.jai:
+
+```c++
+#import "Basic";
+
+Vec2 :: struct {
+    x: float = 1;
+    y: float = 4;
+}
+
+main :: () {
+    va: [10] Vec2;                      // (1)
+    print("% %\n", va[7].x, va[7].y); // => 1 4
+    // loop through array:
+    for va print("% % - ", it.x, it.y);  // (2)
+    // => 1 4 - 1 4 - 1 4 - 1 4 - 1 4 - 1 4 - 1 4 - 1 4 - 1 4 - 1 4 -
+    print("\n"); 
+    va2 : [10]Vec2 = ---;                // (3)
+    print("% %\n", va2[7].x, va2[7].y);  // => 0 0 // undefined behavior prints mostly 0 0
+}
+```
+
+In line (1) we declare an array of 10 Vec2 structs, a commonly used data-structure, sometimes abbreviated as _AOS_. In line (2) you can see that the it variable in a for-loop can access the struct's fields. Line (3) shows how to overrule the fields default values, making them uninitialized.
 
