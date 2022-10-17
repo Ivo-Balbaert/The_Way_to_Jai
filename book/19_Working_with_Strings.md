@@ -144,7 +144,7 @@ main :: () {
 The backslash characters (also called escape sequences) use the backslash to indicate a special character:
 
 ```c++
-\e    Escape
+    \e    Escape
     \n     Newline    
     \r     Carriage Return
     \t     Tab
