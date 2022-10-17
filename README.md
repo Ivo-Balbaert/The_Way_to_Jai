@@ -27,6 +27,8 @@ _Table of Contents_
    [15 - Looping with while and for](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/15_Looping%20with%20while%20and%20for.md)     
    [16 - Types in depth](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/16_Types%20in%20depth.md)    
    [17 - Basics of procedures](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/17_Basics%20of%20procedures.md)  
-   [18 - Arrays](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/18_Arrays.md)    
+   [18 - Arrays](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/18_Arrays.md)  
+   [19 - Working with strings](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/19_Working_with_Strings.md)  
+       
 
 

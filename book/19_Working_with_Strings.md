@@ -114,10 +114,6 @@ When we declare a Unicode string such as ch in line (3), we see that the number 
 Also notice that `Newstring` is the exact same definition as `Array_View_64`. 
 A variable of type string is in fact an _array view_, where the data is an array of u8  (written as []u8), which is NOT '0'-terminated.
 
-This is in contrast to a C-string, which is '0' terminated, and has the Jai type *u8. 
-Jai strings are much more safe than C strings, because they store their length (count), so manipulations of the string can be bounds-checked.
-
-To make it easier to communicate with C, constant Jai strings like `greeting :: "Hello"` are constructed by the compiler with a '0'-termination.
 String constants can be implicitly cast to *u8 or *s8, but `y := "Hello"` cannot be cast implicitly to *u8.
 
 ## 19.2 Some basic operations on bytes
@@ -379,10 +375,16 @@ slice :: inline (s: string, index: s64, count: s64) -> string;
 ```
 
 ## 19.7 C strings
-Here are the most important procs:
+Jai strings do NOT end with a zero byte \0.  This is in contrast to a C-string, which is '0' terminated, and has the Jai type *u8. 
+JJai strings are much more safe than C strings, because they store their length (count), so manipulations of the string can be bounds-checked (see § 19.4.1).
+
+On the other hand Jai programs will have to work together with C programs/libraries, so Jai needs to be able to interact well with C strings.
+To make it easier to communicate with C, constant Jai strings like `greeting :: "Hello"` are constructed by the compiler with a '0'-termination.
+
+Here are the most important C string manipulation procs:
 ```c++
-to_string :: takes a *u8 or a []u8 and returns a string
 to_c_string :: (str: string) -> *u8; // NOTE: This function heap allocates memory
+to_string :: takes a *u8 (a C string) or a []u8 and returns a Jai string
 c_style_strlen :: (ptr: *u8) -> int; 
 ```
 
@@ -391,6 +393,28 @@ And here are some examples of usage:
 See _19.5_cstrings.jai_:
 
 ```c++
+#import "Basic";
+#import "String";
+
+main :: ()  {
+    str1 := "London";
+    c_string := to_c_string(str1); // c_string is 0 terminated
+    defer free(c_string); // (1)
+    print("the C string is %\n", c_string); // => the C string is 1ad_d867_56f0
+    print("the C string is %\n", << c_string); // => the C string is 76 // ASCII value of 'L'
+    print("Its length is %\n", c_style_strlen(c_string)); // => Its length is 6
+    // alternative way:
+    len := 0;
+    while << c_string {
+        len += 1;
+        c_string += 1; // (2) pointer arithmetic
+    }
+    print("The length of c_string is %\n", len); // => The length of c_string is 6
+    print("the original string is %\n", to_string(c_string)); 
+    // => the original string is London
+}
 ```
+The memory of C strings had to be freed, as shown in line (1) with `free`.
+The while loop around line (2) shows how to get the length of a C string by dereferencing and incrementing the pointer. When c_string points to the ending 0 value, its value is evaluated as false and the while loop terminates.
 
 
