@@ -3,7 +3,7 @@
 We encountered strings first in § 5.1 and we've used them ever since. Here we'll go deeper into: 
 - what is a string?
 - how to work with a string builder for best performance
-- what are common operations for strings?
+- what are common operations for strings?  
 But you can be assured that strings in Jai are simple and performant, unlike in C++.
 
 
@@ -143,6 +143,7 @@ main :: () {
 ## 19.3 Backslash codes, escape characters and Unicode characters
 The backslash characters (also called escape sequences) use the backslash to indicate a special character:
 
+````c++
 	\e    Escape
     \n     Newline    
     \r     Carriage Return
@@ -161,6 +162,7 @@ The backslash characters (also called escape sequences) use the backslash to ind
 			Example: print("\u03C0");  // => π  (see 5.9_printing_unicode.jai)
 
     \UABCDEF12   The 32-bit Unicode character U+ABCDEF12, in UTF-8.
+```
 
 To write a backslash, use "\\"
 Using backslashes gets unreadable very quickly.
