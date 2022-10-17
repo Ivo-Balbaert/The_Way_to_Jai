@@ -143,7 +143,7 @@ main :: () {
 ## 19.3 Backslash codes, escape characters and Unicode characters
 The backslash characters (also called escape sequences) use the backslash to indicate a special character:
 
-````c++
+```c++
 	\e    Escape
     \n     Newline    
     \r     Carriage Return
