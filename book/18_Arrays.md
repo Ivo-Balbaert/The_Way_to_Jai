@@ -225,7 +225,7 @@ main :: () {
   array_add(*arrdyn, 13); // Add 13 to the end of arrdyn
   print("arrdyn is: %\n", arrdyn); // => arrdyn is: [5, 9, 13]
  
-  print("%\n", array_find(arrdyn, 5));  // (6) => true -  look for 5 in arrdyn
+  print("%\n", array_find(arrdyn, 5));  // (6) => true -  looks for 5 in arrdyn
 
   for arrdyn {
     if it == 5 remove it;       // (7)
@@ -254,15 +254,16 @@ main :: () {
 In the code above lines (1)-(2) declare to dynamic arrays, with the typical syntax:  
 `[..]type`  
 To release memory, you can either use the **array_free** proc (line (3)), or the **free** proc which needs a pointer to the memory (line (4)).
-To add one item at a time, use the **array_add** proc with a pointer to the array, and the item as arguments (see lines (5) and following).
+To add one or several item(s) (see § 18B) at a time, use the **array_add** proc with a pointer to the array, and the item(s) as arguments (see lines (5) and following).
 
 ### 18.4.1 Useful procs for dynamic arrays
 
 We check if an item is present in the array in line (6), use **array_find**, which returns true if the item is found, false otherwise.
-Removal of items within a dynamic array is done with the **remove** proc, as in line (7): we want to remove the item with value 5, so we loop over the array, if-test with it ==, and if true, remove it. This proc is used to safely remove elements while iterating through an array, which is often a problem in other languages. 
+Removal of items within a dynamic array is done with the **remove** proc, as in line (7): we want to remove the item with value 5, so we loop over the array, if-test with it == value, and if true, remove it. This proc is used to safely remove elements while iterating through an array, which is often a problem in other languages. 
 Notes:
 - This proc does not work for fixed-size arrays!  
-- This proc does an unordered remove, the removed item is replaced with the last item.  
+- This proc does an unordered remove, the removed item is replaced with the last item. 
+(For an ordered remove, see § 18B.) 
 
 To copy an array into another array, use **array_copy**, as in line (8).
 To empty a dynamic array completely, use the **array_reset** proc, as in line (9).
@@ -287,31 +288,35 @@ Resizable_Array :: struct {
 
 
 ## 18.5. Array views
-See _18.4_array_views.jai_:
+See _18.4_array_view.jai_:
 
 ```c++
 #import "Basic";
 
 main :: () {
-  static_array := int.[0,1,2,3,4,5];
-  arrv : []int = static_array;    // (1)
-  print("%\n", arrv.count); // => 6
-  print("%\n", arrv[3]);    // => 3
-  arrv[3] = 42;
-  print("%\n", static_array); // (1B) => [0, 1, 2, 42, 4, 5]
-  arrv2: []int = int.[1,2,3,4,5]; // (2)
-  print("arrv2 is %\n", arrv2); // => arrv2 is [1, 2, 3, 4, 5]
-  a: [..] int;
-  for 1..7 array_add(*a, it);  
-  v: [] int = a;                  // (3)
-  print("v is %\n", v); // => v is [1, 2, 3, 4, 5, 6, 7]
+    static_array := int.[0,1,2,3,4,5];
+    arrv : []int = static_array;    // (1)
+    print("%\n", arrv.count); // => 6
+    print("%\n", arrv[3]);    // => 3
+    arrv[3] = 42;
+    print("%\n", static_array); // (1B) => [0, 1, 2, 42, 4, 5]
 
-  // create a view on a part of an array, for example from index 2 to 4: [3, 4, 5]
-  v.data += 2;
-  v.count = 3;
-  print("v is %\n", v);  // (4) => v is [3, 4, 5, 6, 7]
-  // print("%\n", arrv[6]); // (5)
-  // => Array bounds check failed. (The attempted index is 6, but the highest valid index is 5).
+    arrp: *int = arrv.data;
+    arrp += 1; // incrementing pointer arrp by 1 adds 8 to the pointer
+
+
+    arrv2: []int = int.[1,2,3,4,5]; // (2)
+    print("arrv2 is %\n", arrv2); // => arrv2 is [1, 2, 3, 4, 5]
+    a: [..] int;
+    for 1..7 array_add(*a, it);  
+    v: [] int = a;                  // (3)
+    print("v is %\n", v); // => v is [1, 2, 3, 4, 5, 6, 7]
+    // create a view on a part of an array, for example from index 2 to 4: [3, 4, 5]
+    v.data += 2;
+    v.count = 3;
+    print("v is %\n", v);  // (4) => v is [3, 4, 5]
+    // print("%\n", arrv[6]); // (5)
+    // => Array bounds check failed. (The attempted index is 6, but the highest valid index is 5).
 }
 ```
 
@@ -330,9 +335,9 @@ Array views are also bounds-checked, but at run-time: see line (5). The program 
 In line (1B) we show that you can change the underlying array by manipulating the view with the normal index notation.
 `data` is a pointer to the base data in memory. So by adding an offset to this pointer, and changing the count of the view, the view changes as we want (see line (4)). We can take a slice of the base array.  
 This is the first example of pointer arithmetic we encounter in Jai. Needless to say you must be very careful to stay within the memory limits of the base array.
+>  Incrementing a pointer by 1 adds 8 to the pointer, since a 64-bit integer consists of 8 bytes. The increment for a pointer depends on the size of the data the pointer points to. 
 
 Why are array views important? Besides getting an alternative look on an array without consuming memory, they also allow us to write procedures in a more general way: both static and dynamic arrays are auto-casted to array views if the array view is a parameter, see § 18.8 
-
 
 ### 18.5.2 Misuse of array views with dynamic arrays
 See _18.8_array_view_misuse.jai_:

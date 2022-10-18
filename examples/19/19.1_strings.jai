@@ -72,11 +72,18 @@ main :: ()  {
             print("% -", ch[i]);
     } // => 228 -184 -150 -231 -149 -140
     print("\n");
-    
+
     // sprint:
     b := "Resounding ";
     newstr := sprint("% %!\n", b, ch); // (11)
     print("%\n", newstr); // => Resounding 世界!
-
     free(newstr);  // (12)
+
+    // strings are array views:
+    x := "Sailor";  // (13)
+    x.count = 4;
+    print("x is: '%'\n", x);    // => x is: 'Sail'
+    x.count -= 1;
+    x.data += 1; // <-- pointer advances 1 byte, and now points to 'a'
+    print("x is: '%'\n", x);    // => x is: 'ail'
 }

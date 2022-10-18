@@ -186,3 +186,25 @@ Because a pointer type is like any other type, you can cast a variable to that t
 ```
 ptr1 := cast(*int) ptr;
 ```
+
+## 10.5 Relative pointers *~snn
+See _10.3_Relative_pointers.jai_:
+
+```c++
+#import "Basic";
+
+main :: () {
+    Obj :: struct { var := 0; }
+
+    ptr0: *Obj;      // (1)
+    print("ptr0 is %\n", ptr0); // => ptr0 is null
+    ptra: *~s32 Obj; // (2) - 32-bit relative pointer to an Obj
+    ptrb: *~s16 Obj; // (3) - 16-bit relative pointer to an Obj
+    ptrc: *~s8  Obj; // (4) - 8-bit relative pointer to an Obj
+    print("ptrc is %\n", ptrc); // => ptrc is r null
+}
+```
+
+In § 10.1 we saw that a pointer like in line (1) on a 64 bit OS is 8 bytes in size, which is quite large.  
+Jai allows you to use smaller, so called _relative pointers_, respectively of 4, 2 and 1 byte(s) in size, which can be used to point to an object from a place in the memory vicinity.
+

@@ -90,8 +90,15 @@ main :: ()  {
     b := "Resounding ";
     newstr := sprint("% %!\n", b, ch); // (11)
     print("%\n", newstr); // => Resounding 世界!
-
     free(newstr);  // (12)
+
+    // strings are array views:
+    x := "Sailor";  // (13)
+    x.count = 4;
+    print("x is: '%'\n", x);    // => x is: 'Sail'
+    x.count -= 1;
+    x.data += 1; // <-- pointer advances 1 byte, and now points to 'a'
+    print("x is: '%'\n", x);    // => x is: 'ail'
 }
 ```
 
@@ -200,6 +207,10 @@ In § 16.2 we saw that _Code_ is a type on its own. One of Jai's fortes is meta-
 Code can be stored in a string, but because code can contain lots of backslashes and quotes this can become very difficult to read.  
 A better solution is to store code as a constant string (::) or for many code lines as a
 multi-line string (see § 19.4.3).
+
+### 19.4.8 Strings as array views
+Because strings are essentially array views, you can manipulate .count and .data just as with array views, like in line (13) and following.
+
 
 
 ## 19.5 String builder
