@@ -427,7 +427,7 @@ main :: ()  {
     // => the original string is London
 }
 ```
-The memory of C strings had to be freed, as shown in line (1) with `free`.
+The memory of C strings has to be freed, as shown in line (1) with `free`.
 The while loop around line (2) shows how to get the length of a C string by dereferencing and incrementing the pointer. When c_string points to the ending 0 value, its value is evaluated as false and the while loop terminates.
 
 

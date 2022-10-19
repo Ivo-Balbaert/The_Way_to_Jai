@@ -154,7 +154,7 @@ Again, the first two lines tell you enough.
 A program that crashes at run-time when used by clients is a developer's nightmare. So, apart from extensive testing to find such bugs, what can we do else to avoid or trace them?
 
 If you can track the bug to a certain part of the code, you can try to print out the pointer's value to see if it equals null, as in line (1):  `print("%\n", c); // (1) => null`
-Or better, use an assert as in line (2):
+Or better, use an `assert` as in line (2):
 which gives the output:  
 
 ```
@@ -179,7 +179,7 @@ get_s64_from_void_pointer (c:/jai/modules/Basic/Print.jai:152,23)
 ....
 ```
 
-In a later chapter on Debugging (see § ), we'll see how you can pinpoint the bug even closer.
+In a later chapter on Debugging (see § 20), we'll see how you can pinpoint the bug even closer.
 
 ## 10.4 Casting to pointer types
 Because a pointer type is like any other type, you can cast a variable to that type, like this:
@@ -202,6 +202,11 @@ main :: () {
     ptrb: *~s16 Obj; // (3) - 16-bit relative pointer to an Obj
     ptrc: *~s8  Obj; // (4) - 8-bit relative pointer to an Obj
     print("ptrc is %\n", ptrc); // => ptrc is r null
+
+    print("size: %\n", size_of(*~s8 int));  // => size: 1
+	print("size: %\n", size_of(*~s16 int)); // => size: 2
+	print("size: %\n", size_of(*~s32 int)); // => size: 4
+	print("size: %\n", size_of(*~s64 int)); // => size: 8
 }
 ```
 
