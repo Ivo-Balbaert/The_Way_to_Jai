@@ -4,7 +4,8 @@ Sometimes it is not immediately obvious what causes your program to behave diffe
 The quest for the bug's cause is even more urgent when a crash of a program occurs. In Jai's case this can be at run-time, but also in compile-time execution? 
 In all these cases we need a good debugging tool that allows us to find the cause quickly. Let's see what Jai and its ecosystem have to offer on this front.  
 
-First we focus on a very obvious cause,see _20.1_crash.jai_:
+First we focus on a very obvious case,  
+see _20.1_crash.jai_:
 
 ```c++
 // #run main(); // uncomment this for debugging at compile-time
@@ -26,7 +27,7 @@ handle_exception                  c:\jai\modules\Runtime_Support_Crash_Handler.j
 main                              d:\Jai\The_Way_to_Jai\examples\20\20.1_crash.jai:5   
 ```
 
-From it we see that Jai has a crash handler module for runtime support, and that the crash occurred in line (5), which our editor tells us is indeed the line `b := 1/a;`.
+From it we see that Jai has a crash handler module for runtime support, and that the crash occurred in line (5), which our editor tells us is indeed the line `b := 1/a;`
 
 ## 20.1 Some general strategies
 Jai will nearly always show a message when a program crashes. To rule out the possibility of a crash with no output, there is this nice trick: have  
