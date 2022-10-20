@@ -98,3 +98,9 @@ Whiskey: Application Scope (from the main file).
 Tango:   File Scope        (in file beta)
 Foxtrot: Application Scope (from file alpha).
 ```
+
+Summarized:  
+> #scope_file: all code that follows is private to the file
+> #scope_export: restores public scope
+> #scope_module: all code that follows is private to the module
+

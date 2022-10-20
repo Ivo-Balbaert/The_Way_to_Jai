@@ -200,7 +200,7 @@ You can print out or process each byte, but not change them in the string itself
 It can be used to build strings dynamically, as shown in line (11).
 
 ### 19.4.6 Releasing a string's memory
-Strings that have been built dynamically have to be de-allocated. This can be done with `free()`, as shown in line (12). An elegant alternative approach is to use the `tprint` twin proc of `sprint` (see ??).
+Strings that have been built dynamically have to be de-allocated. This can be done with `free()`, as shown in line (12). An elegant alternative approach is to use the `tprint` twin proc of `sprint` (see § 21.3.1).
 
 ### 19.4.7 Storing code in strings
 In § 16.2 we saw that _Code_ is a type on its own. One of Jai's fortes is meta-programming, that is: manipulating code at compile-time.  
@@ -210,7 +210,6 @@ multi-line string (see § 19.4.3).
 
 ### 19.4.8 Strings as array views
 Because strings are essentially array views, you can manipulate .count and .data just as with array views, like in line (13) and following.
-
 
 
 ## 19.5 String builder

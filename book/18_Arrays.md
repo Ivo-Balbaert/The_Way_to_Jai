@@ -276,7 +276,7 @@ This is found in module _Preload_; again it is a struct, which takes up 40 bytes
 
 ```c++
 Resizable_Array :: struct {
-    count      : s64;  // Signed so that if we do for 0..count-1 it works...
+    count      : s64;  // Signed so that for 0..count-1 it works...
     data       : *void;
     allocated  : s64;        // (1)
     allocator  : Allocator;  // (2)
@@ -284,7 +284,7 @@ Resizable_Array :: struct {
 ```
 
 `allocated` in (1) tells how many bytes are reserved at the moment.  
-`allocator` in (2) is a pointer to the memory allocation mechanism we use for this particular array (see ??).
+`allocator` in (2) is a pointer to the memory allocation mechanism we use for this particular array (see § 21).
 
 
 ## 18.5. Array views
