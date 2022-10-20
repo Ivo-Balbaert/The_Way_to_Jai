@@ -29,7 +29,8 @@ _Table of Contents_
    [17 - Basics of procedures](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/17_Basics%20of%20procedures.md)  
    [18 - Arrays](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/18_Arrays.md)  
    [19 - Working with strings](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/19_Working_with_Strings.md)  
-   [20 - Debugging](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/20_Debugging.md)  
-     
+   [20 - Debugging](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/20_Debugging.md)    
+   [21 - Allocators and Temporary Storage](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/21_Allocators_and_Temporary_Storage.md)  
+   
 
 
