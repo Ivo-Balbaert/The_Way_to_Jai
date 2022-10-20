@@ -1,4 +1,4 @@
-# 21 – Allocators and temporary storage
+# 21 – Allocators and Temporary Storage
 
 Previously (see § 11) we saw how to use alloc / New and free for using heap memory:  
 - New and free is used for structs (see § 12.5)
