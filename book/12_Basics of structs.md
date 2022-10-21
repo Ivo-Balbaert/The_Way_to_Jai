@@ -128,6 +128,8 @@ struct {
 ( example of use ??)
 > Declaring a struct doesn't allocate memory, it just defines a kind of template or blue-print for a data structure to be defined in imperative scope.
 
+> A struct cannot be casted to a bool.
+
 ## 12.2 Making struct variables
 When defining a struct no variable is defined, so no memory is allocated yet.  
 You have to define a struct variable, like this:  `v: Vector2;`

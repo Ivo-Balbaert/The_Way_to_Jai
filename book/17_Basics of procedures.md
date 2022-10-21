@@ -298,7 +298,7 @@ if !success {      // (1)
 By returning a bool which signals success of the file-opening action, we can test as in line (1) on success, and leave the current procedure when there was a problem.
 
 ## 17.7 Overloading procedures
-Procedures are said to _overload_ each other when they have the same name, but different argument list. The only thing in which they differ is the types of their arguments. Here is an example with two procedures proc1:
+Procedures are said to _overload_ each other when they have the same name, but different argument list. The only things in which they differ are the types of their arguments. Here is an example with two procedures proc1:
 
 See _17.6_overloading.jai_:
 
@@ -337,6 +337,7 @@ main :: () {
 ```
 
 Overloading will try to find the smallest and closest fit for overloaded procs, so the first call to proc1 will call version (1), and the second one will call version (2), as proven by the printed output.
+For another example, see § 22.1
 
 The following error is given when there are two procs with same name and argument lists in the code on the same scope level:
 **Error: Two overloaded definitions of the same procedure can't have identical argument lists.**
@@ -347,7 +348,7 @@ Suppose we have overloading procs in global and local scope(s). How will the ove
 The way the resolution mechanism works is: it looks through all overload versions regardless their scope, and will pick the overload where the argument(s) type fit best.
 
 **Problem?**
-You've probably spotted the problem: nearly every procedure will have possibly (many) overloads, differing only in the proc header, the code often stays the same. This promotes code bloat, and a change in logic means changing a number of procs. Lots of programming languages have a solution for this, called generics, templates or parametrization. Jai's solution is called **polymorphic procedures**, which we'll discuss in § ??.
+You've probably spotted the problem: nearly every procedure will have possibly (many) overloads, differing only in the proc header, the code often stays the same. This promotes code bloat, and a change in logic means changing a number of procs. Lots of programming languages have a solution for this, called generics, templates or parametrization. Jai's solution is called **polymorphic procedures**, which we'll discuss in § 22.
 
 ## 17.8 Inlining procs
 See _17.7_inlining.jai_:

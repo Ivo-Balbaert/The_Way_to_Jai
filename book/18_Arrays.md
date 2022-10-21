@@ -186,6 +186,11 @@ my_panic                          c:\jai\modules\Runtime_Support.jai:136
 __array_bounds_check_fail         c:\jai\modules\Runtime_Support.jai:185
 main                              d:\Jai\The_Way_to_Jai\examples\18\18.2_static_arrays.jai:46_
 
+**#no_abc**
+An array bounds check makes your code more robust, but costs in performance.
+Use the #no_abc directive to disable the array bounds check in a proc in a production build:
+`proc1 :: () #no_abc { }`   
+
 ### 18.3.3 Using an array as a boolean
 Line (8) shows that we can use an array as a bool (condition): an array that is not empty is true.
 
