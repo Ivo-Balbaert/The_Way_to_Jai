@@ -262,13 +262,13 @@ It uses a multiple return to swap the values, so it is called like `n2, m2 = swa
 See § 22.4.
 
 **Exercises**
-(1) Use the first Swap version from module _Basic_ to reverse a string (see reverse_string.jai).
-(2) Use swap from module _Basic_ to swap two person instances (see swap_persons.jai).
-(3) Write a polymorphic `find` routine that searches for a value in an array and reports its position, and -1 if the value is not found.
-(4) Write a global procedure `mult_and_add_with_constants` that takes two float64 a and b, and returns as result (1.5 * a + 4.6 * b). Then call this proc from a nested procedure `do_math_things` in main (see do_math_things1.jai).
-Now write a polymorphic version that has types $Ta for a and $Tb for b, returning a value of type Ta. Observe that it works like the previous version. Now change the type of a to float32. Explain what happens when you compile (see do_math_things2.jai)
-(5) Write a polymorphic proc display_xy that shows the x and y coordinates of a Vector2, Vector3 and Vector4 instances; take the Vector definitions from module _Math_ (see display_xy.jai).
-(6) Try to understand the error you get when compiling polymorph_err.jai
+(1) Use the first Swap version from module _Basic_ to reverse a string (see reverse_string.jai).  
+(2) Use swap from module _Basic_ to swap two person instances (see swap_persons.jai).  
+(3) Write a polymorphic `find` routine that searches for a value in an array and reports its position, and -1 if the value is not found.  
+(4) Write a global procedure `mult_and_add_with_constants` that takes two float64 a and b, and returns as result (1.5 * a + 4.6 * b). Then call this proc from a nested procedure `do_math_things` in main (see do_math_things1.jai).  
+Now write a polymorphic version that has types $Ta for a and $Tb for b, returning a value of type Ta. Observe that it works like the previous version. Now change the type of a to float32. Explain what happens when you compile (see do_math_things2.jai)  
+(5) Write a polymorphic proc display_xy that shows the x and y coordinates of a Vector2, Vector3 and Vector4 instances; take the Vector definitions from module _Math_ (see display_xy.jai).  
+(6) Try to understand the error you get when compiling polymorph_err.jai  
 
 ## 22.4 The lambda notation =>
 See _22.5_lambdas.jai_:
