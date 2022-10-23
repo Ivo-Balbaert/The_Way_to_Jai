@@ -113,7 +113,10 @@ Person :: struct {
     location        : Vector2;
 }
 ```
-All struct fields are public: they can be read and even changed everywhere! There is a convention to prefix fields which should be private by `_`, but the compiler does not enforce that. A struct field can be of type void (why ??).
+All struct fields are _public_: they can be read and even changed everywhere! There is a convention to prefix fields which should be private by `_`, but the compiler does not enforce that. A struct field can be of type void (why ??).
+
+> Unlike classes in other languages, Jai does NOT have member functions: there is no concept of functions "belonging" to a particular struct or datatype. So it's better to not define a procedure inside a struct.
+
 
 A struct definition must occur in a data scope (see § 7).
 
@@ -137,7 +140,9 @@ This variable v is defined on the stack, in § ?? we'll see how to make a struct
 All data values are contiguous in memory, that is: they are packed together successively in the order in which they are defined.
 
 How can we access the data in a field?  
-Simply by using the dot (.) notation, as in `v.x` shown in line (1). Here we see that fields get default zero-values.
+Simply by using the dot (.) notation, as in `v.x` shown in line (1).  
+> . dereferences by default, unlike in C/C++
+Here we see that fields get default zero-values.
 In lines (2) and (5) we see how field data can be changed, the field is written as left-hand-side of an assignment:   
 `bob.name = Robert;`
 (Note that a := is not needed, because the fields type has already been declared!)

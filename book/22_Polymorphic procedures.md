@@ -267,16 +267,122 @@ See § 22.4.
 (3) Write a polymorphic `find` routine that searches for a value in an array and reports its position, and -1 if the value is not found.
 (4) Write a global procedure `mult_and_add_with_constants` that takes two float64 a and b, and returns as result (1.5 * a + 4.6 * b). Then call this proc from a nested procedure `do_math_things` in main (see do_math_things1.jai).
 Now write a polymorphic version that has types $Ta for a and $Tb for b, returning a value of type Ta. Observe that it works like the previous version. Now change the type of a to float32. Explain what happens when you compile (see do_math_things2.jai)
+(5) Write a polymorphic proc display_xy that shows the x and y coordinates of a Vector2, Vector3 and Vector4 instances; take the Vector definitions from module _Math_ (see display_xy.jai).
+(6) Try to understand the error you get when compiling polymorph_err.jai
 
-## 22.3 Baked arguments
-See _22.5_baked_args.jai_:
+## 22.4 The lambda notation =>
+See _22.5_lambdas.jai_:
 ```c++
+#import "Basic";
+
+add100 :: (a: []int, proc: (int) -> int) -> []int {  // (1)
+    result: [..]int;
+    for a   array_add(*result, proc(a[it_index]));   // (2)
+    return result;
+}
+
+main :: () {
+  array_a := int.[1, 2, 3, 4, 5, 6, 7, 8];
+  array_b := add100(array_a, (x) => x + 100);        // (3)
+  // lam :: (x) => x + 100;                          // (4)
+  // array_b := add100(array_a, lam);                // (5)
+  print("%\n", array_b); // => [101, 102, 103, 104, 105, 106, 107, 108]
+  defer array_free(array_b);
+}
 ```
 
-## 22.4 A map function
-See _22.6_map.jai_:
+All procedures that we have encountered until now had a name, they were named procs. But in certain cases it can be useful to work with unnamed procs, so-called **anonymous functions** or **lambdas**. 
+
+In line (3) we see that the proc add100 is called with the following expression as 2nd parameter:  
+`(x) => x + 100`  
+This is a lambda: for each x it works on, it returns x + 100.  
+The proc `add100` has this signature (see line (1)):
+`add100 :: (a: []int, proc: (int) -> int) -> []int`  
+It defines its 2nd argument as a procedure with this signature:
+`proc: (int) -> int`  
+This is a proc that takes an int as argument and returns an int.
+Our lambda above conforms to that signature.
+In line (2), we loop over a (here array_a), apply our lambda as proc to each of its items, and adding these to the dynamic array result, which is returned after the loop.
+
+To make the code more readable, we could have defined out lambda as a constant:  
+`lam :: (x) => x + 100;`    (see line (4))
+and call add100 like this:
+`add100(array_a, lam)`      (see line (5))
+
+Anonymous functions are useful for passing as arguments to other procedures, or return them from a procedure (example ??). Such procs, like `add100` above, are sometimes called **higher-order functions**.
+
+> Unlike C++ or Rust, closures and capture blocks are not supported.
+
+> Remark: `add100` constructs and returns a dynamic array.
+
+**Exercise**
+(1) Write a polymorphic proc that returns the count field of an input parameter. Then rewrite this proc as a lambda. Check it for static and dynamic arrays, and strings   (see poly_count.jai).
+
+
+## 22.5 Baked arguments
+The directive **#bake_arguments** lets us specify value(s) for argument(s) of a procedure, but leaving some arguments unspecified. The result is a proc with fewer arguments. Lets see an example:
+
+See _22.6_baked_args.jai_:
 ```c++
+#import "Basic";
+
+add :: (a, b) => a + b;                 // (1)
+add10 :: #bake_arguments add(a=10);     // (2)
+
+mult :: (a: float, b: float) -> float {
+    return a * b;
+}
+
+mult1 :: #bake_arguments mult(b = -9);  // (3)
+
+main :: () {
+  b := 20;
+  c := add10(b);                      // (4)
+  print("c is %\n", c);               // => c is 30
+  print("mult1(2) is %\n",mult1(2));  //(5) => mult1(2) is -18
+}
+```
+
+In line (1) we have a lambda `add`, in line (2) we 'bake in' the value 10 for argument a, so that we get a new proc called `add10`, which only needs one parameter for b.
+This function is called in line (4); it effectively adds 10 to a given number, so it has specialized the original proc by baking in some arguments.
+Similarly, in line (3) a new proc `mult1` is constructed by supplying a value for argument b in proc `mult`, and `mult1` is called in line (5).
+#bake_arguments procedures are pre-compiled functions, they are not closures.
+This is different from default values (see § 17.4), because a proc made with #bake_arguments is a different proc than the original one, whereas with default values there is only one procedure.
+
+> So Jai has function currying through #bake_arguments, except function curry only happens at compile time. There is no runtime function currying in Jai. 
+
+## 22.6 A map function
+Using polymorphic arguments, we can construct functional-programming like map functions, that take for example an array and a function as arguments.
+
+See _22.7_map.jai_:
+```c++
+#import "Basic";
+
+map :: (array: [] $T, f: (T) -> $R) -> [] R {   // (1)
+    result: [] R;
+    result.count = array.count;
+    result.data = alloc(result.count * size_of(R)); 
+    for array result[it_index] = f(it);
+    return result;
+}
+
+square :: (n: int) -> int { return n*n; }       // (2)
+
+main :: () {
+    N :: 5;
+    a: [N] int;
+    for 0..N-1 a[it] = it+1;
+    print("a is %\n", a); // => a is [1, 2, 3, 4, 5]
+
+    b := map(a, square);                        // (3)
+    print("b is %\n", b); // => b is [1, 4, 9, 16, 25]
+}
 ```
 
 The code above presents an example of a polymorphic procedure `map` with several polymorphic types (called T and R): `map :: (array: [] $T, f: (T) -> $R) -> [] R`
-It is also an example of a **higher-order function**, because the 2nd argument of map is itself a function: `f: (T) -> $R`
+It is also an example of a **higher-order function**, because the 2nd argument of map is itself a proc: `f: (T) -> $R`.  
+The proc `square` in line (2) fulfills that signature. `map` is called in line (3) with `square` as a 2nd parameter. That proc is applied to each element of the array, returning a new array as result. 
+
+> Remark: `map` constructs and returns a static array.
+> In § 23.?? we'll see another version of map.
+

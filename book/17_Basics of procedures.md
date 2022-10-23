@@ -80,10 +80,10 @@ As we see in line (5), it is always possible to pass the parameter value through
 Line (6) shows that a parameter can just be another proc call.
 
 ### 17.1.2 Getting the type and address of a proc
-Line (7) shows that a proc is a pointer, it points to where the code starts in memory.
-Line (8) tellus us the type of the sum proc:
+Line (7) shows that a proc is an address (often called a **function pointer**), it points to where the code starts in memory. In § 22.4 and 22.6 shows examples where this function pointer is used as a parameter to another procedure.  
+Line (8) tells us the type of the sum proc:
 `procedure (s64, s64, s64) -> s64`
-So the header or signature of a proc (its arguments and return-values list) determine its type.
+So the **header** or **signature** of a proc (its arguments and return-values list) determine its type.
 
 **Exercises**  
 (1) Write a proc with no arguments that prints "Hello, world!"   (see display.jai). Make the proc run at compile time.  
@@ -518,6 +518,7 @@ Why doesn't this work?      `v := Vec2D.{x, y};`
 
 
 ## 17.13 Structs and procs
+Just like with any other types, we can pass struct variables or pointers to them to a procedure.
 
 ## 17.13.1 Using the namespace of a struct in procs
 See _17.11_using_structs_procs.jai_:
