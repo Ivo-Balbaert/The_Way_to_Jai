@@ -261,7 +261,7 @@ It uses a multiple return to swap the values, so it is called like `n2, m2 = swa
 ### 22.2.4 Example with several polymorphic types
 See § 22.4.
 
-**Exercises**
+**Exercises**  
 (1) Use the first Swap version from module _Basic_ to reverse a string (see reverse_string.jai).  
 (2) Use swap from module _Basic_ to swap two person instances (see swap_persons.jai).  
 (3) Write a polymorphic `find` routine that searches for a value in an array and reports its position, and -1 if the value is not found.  
@@ -270,7 +270,7 @@ Now write a polymorphic version that has types $Ta for a and $Tb for b, returnin
 (5) Write a polymorphic proc display_xy that shows the x and y coordinates of a Vector2, Vector3 and Vector4 instances; take the Vector definitions from module _Math_ (see display_xy.jai).  
 (6) Try to understand the error you get when compiling polymorph_err.jai  
 
-## 22.4 The lambda notation =>
+## 22.3 The lambda notation =>
 See _22.5_lambdas.jai_:
 ```c++
 #import "Basic";
@@ -319,7 +319,7 @@ Anonymous functions are useful for passing as arguments to other procedures, or 
 (1) Write a polymorphic proc that returns the count field of an input parameter. Then rewrite this proc as a lambda. Check it for static and dynamic arrays, and strings   (see poly_count.jai).
 
 
-## 22.5 Baked arguments
+## 22.4 Baked arguments
 The directive **#bake_arguments** lets us specify value(s) for argument(s) of a procedure, but leaving some arguments unspecified. The result is a proc with fewer arguments. Lets see an example:
 
 See _22.6_baked_args.jai_:
@@ -351,7 +351,7 @@ This is different from default values (see § 17.4), because a proc made with #b
 
 > So Jai has function currying through #bake_arguments, except function curry only happens at compile time. There is no runtime function currying in Jai. 
 
-## 22.6 A map function
+## 22.5 A map function
 Using polymorphic arguments, we can construct functional-programming like map functions, that take for example an array and a function as arguments.
 
 See _22.7_map.jai_:
