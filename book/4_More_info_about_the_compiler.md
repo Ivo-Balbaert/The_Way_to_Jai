@@ -119,7 +119,7 @@ Running linker: … (abbreviated)_
 ```
 ## 4.9 The Preload module
 We already talked about the Basic module, which is necessary for printing. But there is also a **Preload** module, which is even more fundamental and is implicitly loaded whenever the Jai compiler is started, so it doesn’t need to be imported.
-It contains definitions the compiler needs in order to compile user source code.
+It contains the minimal definitions the compiler needs in order to compile user source code.
 
 It contains enums for the Operating_System, the _Type_Info_ definitions, the definitions for _Allocator, Logger, Stack trace, Context, Temporary Storage, Source Code location, Array_View and Resizable_Array_.   
 It also contains very low-level functions or **intrinsics** which closely mimic corresponding C functions, like the following.

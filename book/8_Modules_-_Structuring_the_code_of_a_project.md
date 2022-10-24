@@ -1,13 +1,19 @@
-# Chapter 8 – Structuring a project's code
+# Chapter 8 – Modules - Structuring a project's code
 
 A Jai project consists of a start-up file, usually called ´main.jai´, which contains tne `main :: ()` entry-point procedure.
-In § 3.2.2 we saw how we can import a module in our project by using `#import`.  
-When an identifier for a type, variable or procedure is encountered while compiling, the compiler first looks in the current source file. Then it searches the imported modules (if any, see § 8.1), and it also searches the loaded files (see § 8.2)
+In § 3.2.2 we saw how we can import a module in our project by using `#import`. We encountered the implicitly loaded _Preload_ module in § 4.9
+
+**Searching for identifier names**
+When an identifier for a type, variable or procedure is encountered while compiling, the compiler first looks in the current source file. Then it searches the imported modules (if any, see § 8.1), and it also searches the loaded files (see § 8.2).
+Modules are more or less equivalent to what is called libraries in C/C++, and packages in Java and other languages.
 
 ## 8.1 Structuring with modules
 Modules mostly contain code that is commonly used to provide basic functionality, what in most languages is called the _standard library_. For example: to use the `print` function we had to import the _Basic_ module with `#import "Basic";`.  
 
 Modules are stored in the _jai\modules_ folder.
+They are installed globally on a machine, so that all Jai applications need to use the same modules collection. 
+> A system will be made so that modules you use get copied locally into your application. The advantage is that you have a stable build that doesn't randomly break unless you decide to update those modules (see also § 8.5).
+
 A module can be one file, for example `Random.jai`, imported if needed with `#import "Random";`.  
 
 When a module contains many files, you need to give the module its own folder with the same name, and in it a file `module.jai` is required.
@@ -79,3 +85,15 @@ After the imports/loads come the global declarations of constants, variables, ty
 
 You always want to be able to find the `main()` procedure quickly, to get an overview of what the program is doing. For that reason:
 > Put the main() procedure at the bottom of the main file.
+
+## 8.5 -import_dir
+An imported module is searched in the _jai\modules_ folder. Additional modules from other directories can be imported via the `-import_dir "Path/To/Module"` flag.
+Examples:
+- To load a `module.jai` in the same folder as program.jai:  
+    `jai program.jai -import_dir "./"`
+- To load a module from a folder /path/to/mod1:  
+    `jai program.jai -import_dir "/path/to/mod1"`  
+  Or if arg1 == "/path/to/mod1"  
+    `jai program.jai -import_dir arg1`
+- You can specify several path arguments to module directories at the same time:
+    `jai program.jai -import_dir arg1, arg2, arg3`
