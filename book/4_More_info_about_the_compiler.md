@@ -122,17 +122,31 @@ We already talked about the Basic module, which is necessary for printing. But t
 It contains definitions the compiler needs in order to compile user source code.
 
 It contains enums for the Operating_System, the _Type_Info_ definitions, the definitions for _Allocator, Logger, Stack trace, Context, Temporary Storage, Source Code location, Array_View and Resizable_Array_.   
-It also contains low-level functions or **intrinsics** which closely mimic corresponding C functions, like the following.
+It also contains very low-level functions or **intrinsics** which closely mimic corresponding C functions, like the following.
 
    	memcpy :: (dest: *void, source: *void, count: s64) #intrinsic;
 	memcmp :: (a: *void, b: *void, count: s64) -> s16  #intrinsic;
 	memset :: (dest: *void, value: u8, count: s64)     #intrinsic;
    
-**memcpy** copies count bytes from source to dest,  
+**memcpy** copies count bytes from source to dest, see line (1). 
 **memcmp** compares the first count bytes of a and b, its return value is < 0 when a is less than b, > 0 when a is greater than b and 0 when a is equal to b.  
 **memset** sets count bytes of dest to value.  
 
-> Notice the #intrinsic directive
+> Notice the #intrinsic directive with which these functions are marked.
+
+For some example code, see _4.1_intrinsics.jai_:
+```c++
+#import "Basic";
+
+main :: () {
+    x: int = 42;
+    y: type_of(x);
+
+    memcpy(*y, *x, size_of(type_of(x)));    // (1)
+    print("y is %\n", y);  // => y is 42; 
+}
+```
+
 ## 4.10 Memory management
 In Jai, developers have complete control over where and when memory is allocated. Jai does a much better job of packing values in memory so they are close together, which increases runtime performance.   
 

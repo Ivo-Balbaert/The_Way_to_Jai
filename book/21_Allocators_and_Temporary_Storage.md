@@ -30,7 +30,7 @@ A struct Node could be allocated like:
 You can also write your own allocators.
 
 ## 21.2 Temporary storage
-Temporary storage is a special kind of Allocator. It is defined in the _Preload_ module, and module _Basic_ contains support routines to make working with temporary storage very easy.
+Temporary storage is a special kind of Allocator. It is defined as a struct in the _Preload_ module, and module _Basic_ contains support routines to make working with temporary storage very easy.
 
 It's a linear allocator, the fastest kind. There is a pointer to the start of free memory. If enough free memory is available to service your request, the pointer is advanced and returns the result. If there's not enough free memory, we ask the OS for more RAM. Because Temporary_Storage is expected to be for small-to-medium-sized allocations, we don't expect this to happen very often (and if we want, we can pre-allocate all the memory and lock it down so that the OS is never consulted.)  
 
@@ -100,3 +100,4 @@ Line (1) shows how to use the temporary allocator for creating a dynamic array. 
 ## 21.3.3 How much memory is allocated in temp?
 This is given by the field: `context.temporary_storage.occupied`.  
 We see in line (5) that it goes back to 0 after the temp memory has been reset in (4).
+

@@ -293,6 +293,8 @@ This mimics a kind of _inheritance_: Patient is like a subtype of the supertype 
 We use _composition_ instead of a subclass and can reference the fields of the ‘parent’ struct directly. Jai doesn't have classes and inheritance, but as we see here: first class composition works like inheritance!
 (see ?? for a more complete example).
 
+> The `using` keyword allows you to bring the member variables of a struct into the scope of a function (like a method but more flexible) or another struct (like subclassing but no methods/overriding).
+
 > Favor composition over inheritance.
 
 See this [Discussion about OOP](https://en.wikipedia.org/wiki/Entity%E2%80%93component%E2%80%93system)

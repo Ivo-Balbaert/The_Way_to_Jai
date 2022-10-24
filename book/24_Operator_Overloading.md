@@ -32,14 +32,16 @@ main :: () {
 In this code we use the + and * overloaded operators for the Vector3 type from module _Math_.
 
 In lines (1)-(2) we use + with two Vector3 arguments.
-`+` for Vector3 is defined with this signature (see Math\module.jai):    
-`operator + :: (a: Vector3, b: Vector3) -> Vector3`
+`+` for Vector3 is defined with this signature:    
+`operator + :: (a: Vector3, b: Vector3) -> Vector3`  
 followed by how the returned Vector3 value is calculated.
+(look it up in Math\module.jai)
 
 In lines (3)-(4) we use * with a Vector3 and a float.
-`*` for Vector3 and float is defined with this signature (see Math\module.jai):    
-`operator * :: (a: Vector3, k: float) -> Vector3  #symmetric`
+`*` for Vector3 and float is defined with this signature:    
+`operator * :: (a: Vector3, k: float) -> Vector3  #symmetric`  
 followed by how the returned Vector3 value is calculated.
+(look it up in Math\module.jai)  
 The **#symmetric** directive tells us that a Vector3 * a float (like in (3)) or a float * a Vector3 (like in (4)) both give the same result.
 
 ## 24.2 Object operators
