@@ -180,7 +180,8 @@ In that case `it` is no longer defined.
 (1) and (2) are one-line for-loops. (3) shows that we need { } to write a for with a code block; end here is a variable.  
 In line (4) we see a reversed for-loop indicated with **<**. Note that you still have to write the range as end..start, or put it in another way, as : `for < i: max..0 { ... }`.
 
-Like with while we can nest for-loops, as shown in line (5)
+Like with while we can nest for-loops, as shown in line (5).
+A for-loop over a string does not work.
 
 **Exercises**
 1) Try out that a for-loop like:
@@ -337,4 +338,47 @@ Direction contains the following values:
 */
 ```
 
-In addition to the enum methods we discovered in § 13.6 that give us the range and the member names, we can also user a for-loop shown in line (1) to get the enum's values with the `enum_values_as_s64` proc. 
+In addition to the enum methods we discovered in § 13.6 that give us the range and the member names, we can also user a for-loop shown in line (1) to get the enum's values with the `enum_values_as_s64` proc.  
+
+## 15.5 Looping over a structs fields
+See _15.7_struct_members.jai_:
+
+```c++
+#import "Basic";
+#import "Math";
+
+Person :: struct {
+    name            : string;
+    age             : int;
+    location        : Vector2;
+}
+
+main :: ()  {
+    pinfo := type_info(Person);
+    for member: pinfo.members {      // (1)
+        print("% - ", member.name);  
+        print("% - ", << member.type);  
+        print("% - ", member.notes);  
+        print("% - ", member.flags);   
+    }
+    print("\n");
+    member, offset := get_field(pinfo, "age");
+    print("info age field: % and has offset %\n", << member, offset);
+    print("\n");
+
+}
+/*
+name - {STRING, 16} - [] - 0 - 
+age - {INTEGER, 8} - [] - 0 - 
+location - {STRUCT, 8} - [] - 0 -
+
+info age field: {name = "age"; type = 7ff6_5021_4000; offset_in_bytes = 16; 
+flags = 0; notes = []; offset_into_constant_storage = 0; } and has offset 16
+
+*/   
+```
+We can use `type_info()` on a struct definition and then loop over its members to get their names, their type, and if present, flags and attached notes.
+Also the `get_field` method gives you detailed information.
+
+## 15.6 Serialization
+The methods discussed in the previous sections provide type info which can be used to _serialize_ structs into strings, and vice-versa _deserialize_ strings into structs. They enable us to write serialization procedures, commonly used e.g. in network replication of entities and save game data.

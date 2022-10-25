@@ -418,3 +418,4 @@ The short definition of a pointer to a struct:  ptr := *e;
 can be divided into:  
     ptr: *Entity;  // declaration
     ptr = *e;      // assignment
+

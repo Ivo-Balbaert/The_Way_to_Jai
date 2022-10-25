@@ -1,7 +1,7 @@
 # Chapter 16 - Types in depth
 
 At compile time Jai deduces all there is to know about the types of all variables and objects.  
-This info is heavily used in meta-programming at compile-time, and it is even (partially ??) known at run-time.
+This info is heavily used in meta-programming at compile-time (see § 26).
 In this chapter we'll see which data-structures from built-in modules are used for this processing. Most of these are defined in module _Preload_.
 
 >To see how type inference works in depth, read the masterfully written 090_how_typechecking_works article in the how_to/ folder of the compiler.)
