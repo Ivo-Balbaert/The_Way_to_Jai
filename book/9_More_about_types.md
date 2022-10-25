@@ -6,7 +6,7 @@ All types in Jai have type **Type**, the type of Type is also Type.
 
 Besides the basic types mentioned in § 5 and § 6, Jai also has  other fundamental types , such as: string, pointer, function, struct, array, and enum.
 
-The compiler has complete knowledge of all the types at compile-time, and some of that remains accessible at run-time. We'll later see (§ ??) how to use that.
+The compiler has complete knowledge of all the types at compile-time, and some of that remains accessible at run-time. We'll later see (§ 26) how to use that.
 
 See _9.1_types.jai_:
 
@@ -96,7 +96,7 @@ print :: (format_string: string, args: .. Any, to_standard_error := false) -> by
 }
 ```
 
-It can print out variables of any type; format can also be a variable (see 018).
+It can print out variables of any type; format_string can also be a variable.
 The print function takes in a variable (..) number of type Any parameters at compile time, and the type information is available at runtime. 
 
 ## 9.6 Type comparisons

@@ -56,6 +56,13 @@ main :: () {
     c2: **int = *b2;
     d2: ***int = *c2;
     print("%\n", << << << d2); // => 3, the value of a2
+
+    // New:
+    n := New(int);      // (9)
+    print("%\n", n);    // => 1f7_2f06_6470
+    print("%\n", type_of(n));    // (10) => *s64
+    print("%\n", << n); // => 0
+    free(n);            // (11)
 }
 ```
 In lines (1A-B) we first declare and then initialize a pointer to an int. b contains the memory address of a, in this example 9e_02cf_f898.
@@ -82,6 +89,9 @@ _The only thing you can assign null to is a pointer type_; you can't assign null
 > Only a pointer can be null.
 
 You can even declare a variable ptr as a void pointer, like in line (7). This means ptr doesn't even know at this point what will be the type of variable it points to!
+
+In line (9), we make a New(int). `New` is a procedure defined in module _Basic_ that can take any type, construct an instance of it, and return a pointer to it (see line (10)).
+New allocates memory on the heap, so you have to free it yourself, as done in line (11).
 
 > A pointer to data of unknown type has type *void.  
 
@@ -182,13 +192,36 @@ get_s64_from_void_pointer (c:/jai/modules/Basic/Print.jai:152,23)
 
 In a later chapter on Debugging (see § 20), we'll see how you can pinpoint the bug even closer.
 
-## 10.4 Casting to pointer types
+## 10.4 Dangling pointers
+See _10.4_Dangling_pointers.jai_:
+
+```c++
+#import "Basic";
+
+main :: () {
+  a := New(int);
+  print("%\n", a);    // => 14a_f407_6710
+  print("%\n", << a); // => 0
+  << a = 5;
+  print("%\n", << a); // => 5
+
+  free(a);            // (1)
+  print("%\n", << a); // => 5
+  print("%\n", a);    // => 14a_f407_6710
+  a = null;           // (2)
+  print("%\n", a);    // => null
+}
+```
+
+The variable a in the code snippet above is of type *s64, default initialized to 0. Then we give it the value 5. In line (1) its memory is freed, at which point it is called a _dangling pointer_: it no longer points to its memory location. However in Jai a still knows its address and contained value (??). If you really want to be sure the value has been erased, you can assign the `null` value to the pointer, as in line (2). 
+
+## 10.5 Casting to pointer types
 Because a pointer type is like any other type, you can cast a variable to that type, like this:
 ```
 ptr1 := cast(*int) ptr;
 ```
 
-## 10.5 Relative pointers *~snn
+## 10.6 Relative pointers *~snn
 See _10.3_Relative_pointers.jai_:
 
 ```c++

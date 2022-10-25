@@ -63,8 +63,8 @@ There can be no (like main :: ()), one or more arguments.
 
 A proc can change global variables, and also return values. This is indicated by `->` followed by the type of the value it returns. 
 Inside the body, the data is returned by using the keyword **return**, like `return variable(s)`.
-If a proc doesn't return anything (like main :: (), it returns void), you can leave -> out, or you could write `-> void` if you wanted to.
-There can be no (like main :: () {}), one or more return values.
+If a proc doesn't return anything (like main :: ()), it returns void, you can leave -> out, or you could write `-> void` if you wanted to.
+There can be no return values (returns void, like main), or one or several.
 
 ### 17.1.1 Exiting from a proc with return
 `return` breaks out of all scopes to the call site of the proc, so statements after this won’t be executed.

@@ -50,7 +50,8 @@ while true {
 ```
 In line (1), the memory is freed and a new cycle can begin.
 
-`temp` is an abbreviation for Temporary Storage, so the examples in § 21.1 can be rewritten when the Allocator is Temporary Storage as follows:
+`temp` is an abbreviation for `__temporary_allocator` (the long variable name for Temporary Storage), so the examples in § 21.1 can be rewritten when the Allocator is Temporary Storage as follows:
+
 `arrdyn.allocator = temp;`  
 `New(Node, allocator = temp);`
 

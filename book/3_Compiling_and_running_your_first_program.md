@@ -176,7 +176,7 @@ _run a program during compile-time_!
 
 ### 3.2.4 Running code during compile-time
 
-Make a new source file called _3.2_hello_sailor_comptime.jai_ and add the following line after main: `#run main();`, so that we get:
+Make a new source file called _3.2_hello_sailor_comptime.jai_ and add the following line after (or before) main: `#run main();`, so that we get:
 
 ```c++
 #import "Basic";

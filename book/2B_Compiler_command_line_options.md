@@ -37,7 +37,7 @@ Example:     `jai -x64 program.jai -- info for the compile_time execution`
  `-quiet`            Reduces the (statistics) output from the compiler 
 
 **Modules**:  
- `-import_dir arg`   Add this directory to the list of directories searched by #import. Can be used multiple times.
+ `-import_dir arg`   Add this directory (arg is path/to/dir) to the list of directories searched by #import. Can be used multiple times.
 
 **Performance**:  
  `-release`          Build a release build, i.e., tell the default metaprogram to disable stack traces and enable optimizations. This compiles the program with LLVM backend -O2 optimization

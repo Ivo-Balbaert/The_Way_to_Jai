@@ -5,7 +5,9 @@ In § 3.2.2 we saw how we can import a module in our project by using `#import`.
 
 **Searching for identifier names**
 When an identifier for a type, variable or procedure is encountered while compiling, the compiler first looks in the current source file. Then it searches the imported modules (if any, see § 8.1), and it also searches the loaded files (see § 8.2).
-Modules are more or less equivalent to what is called libraries in C/C++, and packages in Java and other languages.
+Modules are more o
+
+Imported modules are always built from source, in full, every time you compile your program.
 
 ## 8.1 Structuring with modules
 Modules mostly contain code that is commonly used to provide basic functionality, what in most languages is called the _standard library_. For example: to use the `print` function we had to import the _Basic_ module with `#import "Basic";`.  
@@ -66,13 +68,19 @@ To illustrate this, `part1.jai` contains the declaration of the variable a_part1
 ## 8.3 Named imports
 Sometimes you want to qualify a function name with the module name it came from (perhaps because that name has already been used, it is duplicate) you can do a named import as follows:	 `Math :: #import "Math";`
 
-Then you have to qualify any function from that module with its module name, like this:
+Then you have to qualify any function from that module with its module name (in other words: you give the proc a namespace), like this:
 
 ```
 	y := Math.sqrt(2.0);
 ```
 
-This improves readability: it makes it clear where a function comes from. The name can also be completely different, so it can be shorter, or be used to differentiate between two modules with the same name.
+This improves readability: it makes it clear where a function comes from. The name can also be completely different, so it can be shorter:
+
+```
+    Long :: #import "Long_Name_Library";
+```
+
+or be used to differentiate between two modules with the same name.
 
 ## 8.4 Structuring a project
 A project can consist of many source files and modules that are called. But there can only be one main source file. This file contains the `main()` procedure and structures the project with #imports and #loads. It is often called `main.jai` or `first.jai`.

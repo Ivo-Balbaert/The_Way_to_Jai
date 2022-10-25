@@ -28,6 +28,13 @@ main :: () {
     c2: **int = *b2;
     d2: ***int = *c2;
     print("%\n", << << << d2); // prints out the value of a2, which is 3
+
+    // New:
+    n := New(int);      // (9)
+    print("%\n", n);    // => 1f7_2f06_6470
+    print("%\n", type_of(n));    // (10) => *s64
+    print("%\n", << n); // => 0
+    free(n);            // (11)
 }
 
 /*
@@ -39,4 +46,7 @@ Value of d is null
 Type of null is *void
 Value of ptr is null
 3
+1f7_2f06_6470
+*s64
+0
 */
