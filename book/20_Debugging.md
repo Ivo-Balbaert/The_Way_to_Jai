@@ -37,7 +37,10 @@ as the very first line in `main()`. That way, if this output is not shown, you k
 ### 20.1.1 Print debugging
 Locate the bug to a certain procedure `proc1` by putting `print("Begin proc1");` and `defer print("End proc1");` statements in each procedure that is suspect. When you have found the faulty procedure, display the value of variables with print statements like `print("var v is %\n", v);`  
 Or when it is a pointer use:  `print("pointer ptr points to %\n", <<ptr);`  
-The obvious disadvantage is that you have this is a lot of work, and the extra lines litter your code.
+The obvious disadvantage is that you have this is a lot of work, and the extra lines litter your code.  
+But you can also do this at compile-time! Quickly check the value or type of some variable `var1` in a very hot code path by just letting the compiler print it using 
+`#run print("value: %, type: %", var1, type_of(var1));`  
+This will not show when you run the program.
 
 ### 20.1.2 Assert debugging
 A somewhat better solution is to use assert statements to test conditions (see § 6.1.3). When you know a variable var must have the value val, you can put  
@@ -53,7 +56,8 @@ In principal (although rarely) a program can crash at compile-time execution. Bu
 
 ### 20.2.1 #assert debugging
 You can also do compile-time asserts with the **#assert** directive.
-These take the form:	`#assert condition message`
+These take the form:	`#assert condition message`  
+This only runs at compile time.
 
 See _20.2_assert.jai_:
 ```c++
