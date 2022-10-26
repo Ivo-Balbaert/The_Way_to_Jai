@@ -269,7 +269,100 @@ In line (1) #insert takes a string containing a line of code, and inserts it as 
 
 
 ## 26.5 Basics of macros
+A macro is also a way to insert code at compile-time. 
+Unlike the C programming language in which a macro is completely arbitrary, Jai macros are more controlled, better supported by the compiler, and come with much better typechecking.
+They make some kinds of meta-programming easier. If they are well designed, they allow you to raise the level of code abstraction, by creating your own mini-language, specific to the problem space, and then you can solve your particular problem in that mini-language. Macros also allow you to cut down the repetition of not only specific actions (procedures are best for that), but of more abstract constructs. When they are not well designed, however, creating and using macros, results in unmaintainable messes (hard to read, to understand, to debug). So you should only resort to macros when it really makes sense in your program's context.  
+Jai's macros are so called _hygienic_:
+- they do not cause any accidental captures of identifiers from the environment;
+- they modify variables only when explicitly allowed;
+  
+The examples in this section are meant to show the basic syntax, they do not show a useful application of macros, where you would prefer them above procs.
+
+Syntactically, macros resemble a procedure: they are defined by adding the **#expand** directive to the end of the proc declaration before the curly brackets. See `macro0` defined in line (1) below, which does nothing. They are called like any proc: `macro_name()`.
 
 See _26.7_macros_basics.jai_:
 ```c++
+#import "Basic";
+
+macro0 :: () #expand { }   // (1)
+
+macro1 :: () #expand {
+  `a += 10;                //  (2) 
+}
+
+maxm :: (a: int, b: int) -> int #expand {  // (4)
+  if a > b then return a;
+  return b;
+}
+
+macro2 :: () -> int #expand {   // (5)
+  if `b < `c {
+    return 0;
+  }
+  defer print("Defer inside macro\n"); // => Defer inside macro
+  return 1;
+}
+
+macro3 :: () #expand {
+  print("This is macro3\n");
+  nested_macro();
+
+  nested_macro :: () #expand {
+    print("This is a nested macro\n");
+  }
+}
+
+factorial :: (n: int) -> int #expand {
+  #if n <= 1 return 1;
+  else {
+    return n * factorial(n-1);
+  }
+}
+
+macfunc :: () -> string {
+  a := 0;
+  b := 100;
+  c := macron();
+  return "none";
+
+  macron :: () -> int #expand {
+    `defer print("Defer inside macro\n");
+    if `a < `b {
+      `return "Backtick return macro"; 
+    }
+    return 1;
+  }
+}
+
+main :: () {
+  a := 0;
+  macro1(); // (3)
+  print("a is: %\n", a); // (4) => a is: 10
+
+  b := 7;
+  c := 3;
+  print("max is %\n", maxm(b, c)); // => max is 7
+
+  print("macro2 returns %\n", macro2()); // => macro2 returns 1
+
+  macro3();
+  // => This is macro3
+  // => This is a nested macro
+
+  x := factorial(5);
+  print("factorial of 5 = %\n", x); // => factorial of 5 = 120
+
+  s := macfunc();  // => Defer inside macro
+  print("%\n", s); // (6) => Backtick return macro
+}
 ```
+
+`macro1` does something new: it adds 10 to the variable `a` found in the outer scope in line (3): the backtick in front of a (`a) denotes that `a` must exist in the outer scope. When `macro1` is called in main(), this is indeed the case. We see in line () that `a` has value 10, through the execution of `macro1`.
+If `a` does not exist, we get the following error in line (2): `Error: Undeclared identifier 'a'.`
+while getting this message at line (3): `Info: While expanding macro 'macro1' here...`
+
+Line (4) shows that a macro can have parameters, just like any proc. This is a way to avoid the ` syntax.
+`macro2` defined in line (5) refers to two outer variables b and c. In this case it returns 1, but just before that prints something by using the `defer` keyword.
+`macro3` shows nested macros: a macro can contain and call macros defined inside itself.  
+`factorial` is an example of a recursive macro; #if needs to be used here, else you get the following `Error: Too many nested macro expansions. (The limit is 1000.)`
+`maxfunc` is a procedure which calls a nested macro `macron`; this returns "Backtick return macro" as return value from `maxfunc`.
