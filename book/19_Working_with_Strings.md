@@ -245,7 +245,7 @@ main :: () {
 The most efficient way to build larger strings from several other strings is to use a **String_Builder** (defined in module _Basic_ ). A string builder works in an incremental, buffered way.
 
 After declaring a variable builder of that type in line (1), call the `init_string_builder(*builder)` in line (3). 
-Then use append(*builder, str) whenever you want to add a string str to the builders’ buffer, like in line (4) and following. Also `print_to_builder` can be used to add a string to the string builder (see line (5)).
+Then use append(*builder, str) whenever you want to add a string str to the builders’ buffer, like in line (4) and following. Also `print_to_builder` can be used to add a formatted string to the string builder (see line (5)).
 It has the following signature:
 
 `print_to_builder :: (builder : *String_Builder, format_string : string, args: .. Any) -> bool;`

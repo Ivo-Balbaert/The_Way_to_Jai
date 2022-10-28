@@ -261,24 +261,60 @@ This technique is used in the _Basic_ module to load specific code depending on 
 ## 26.4 Inserting code with #insert
 The **#insert** directive inserts a piece of compile-time generated code into a procedure or a struct.
 
-See _26.5_if.jai_:
+See _26.6_insert.jai_:
 ```c++
+#import "Basic";
+
+main :: () {
+    a := 1;
+    b := 2;
+    #insert "c := a + b;";   // (1)
+    print("c is %\n", c); // => c is 3
+}
 ```
 
-In line (1) #insert takes a string containing a line of code, and inserts it as code at that location in the source.
+In line (1) `#insert` takes a string containing a line of code, and inserts it as code at that location in the source.  
+Even the entire contents of a struct can be made through a `#insert -> string` construction (see § 26.9.2). 
+
+### 26.4.1 Type Code and #code
+It can also take a variable c of type Code, like this: `#insert(c: Code);`
+A variable of type Code can be constructed by using the **#code** directive:  
+`#code { // a code block }`  
+This can also be one line, like this:  
+`code :: #code a := Vector3.{1,2,3};`
 
 
 ## 26.5 Basics of macros
 A macro is also a way to insert code at compile-time. 
-Unlike the C programming language in which a macro is completely arbitrary, Jai macros are more controlled, better supported by the compiler, and come with much better typechecking.
-They make some kinds of meta-programming easier. If they are well designed, they allow you to raise the level of code abstraction, by creating your own mini-language, specific to the problem space, and then you can solve your particular problem in that mini-language. Macros also allow you to cut down the repetition of not only specific actions (procedures are best for that), but of more abstract constructs. When they are not well designed, however, creating and using macros, results in unmaintainable messes (hard to read, to understand, to debug). So you should only resort to macros when it really makes sense in your program's context.  
+Unlike the C/C++ programming language in which a macro is completely arbitrary, Jai macros are more controlled, better supported by the compiler, and come with much better typechecking. Moreover, they can be debugged with the same techniques we saw in § 20.
+They make some kinds of meta-programming easier. If they are well designed, they allow you to raise the level of code abstraction, by creating your own mini-language, specific to the problem space, and then you can solve your particular problem in that mini-language. Macros also allow you to cut down the repetition of not only specific actions (procedures are best for that), but of more abstract constructs. When they are not well designed, however, creating and using macros, results in unmaintainable messes (hard to read, to understand, to debug). So you should only resort to macros when it really makes sense in your program's context: they are a 'last-resort' thing to use.
+
 Jai's macros are so called _hygienic_:
 - they do not cause any accidental captures of identifiers from the environment;
 - they modify variables only when explicitly allowed;
-  
-The examples in this section are meant to show the basic syntax, they do not show a useful application of macros, where you would prefer them above procs.
 
-Syntactically, macros resemble a procedure: they are defined by adding the **#expand** directive to the end of the proc declaration before the curly brackets. See `macro0` defined in line (1) below, which does nothing. They are called like any proc: `macro_name()`.
+Syntactically, macros resemble a procedure: they are defined by adding the **#expand** directive to the end of the proc declaration before the curly brackets. 
+Let's see this in _26.7A_macros_intro.jai_:
+```c++
+#import "Basic";
+
+// proc1 :: ()         {      // (1)  procedure
+proc1 :: () #expand {      // (2)  macro
+    print("You are in proc1!");
+}   
+
+main :: () {
+    proc1(); // => You are in proc1!
+}
+```
+
+`proc1` in this code is originally a procedure (line (1)). If you add `#expand` before its body (or uncomment it), it becomes a macro (line (2)). The way of calling them is the same, their output is the same.
+
+Expand in `#expand` means that the macro-code is processed, transformed to real code, that is then inserted at the call-site of the macro.
+
+The following examples in this section are meant to show the basic syntax, they do not show a useful application of macros, where you would prefer them above procs.
+
+The syntax is shown in `macro0` defined in line (1) below, which does nothing. A macro is called like any proc: `macro0()`.
 
 See _26.7_macros_basics.jai_:
 ```c++
@@ -287,82 +323,466 @@ See _26.7_macros_basics.jai_:
 macro0 :: () #expand { }   // (1)
 
 macro1 :: () #expand {
-  `a += 10;                //  (2) 
+    print("a at macro1 start is: %\n", `a); //   (4A) => a at macro1 start is: 0
+    `a += 10;                //  (2) 
 }
 
-maxm :: (a: int, b: int) -> int #expand {  // (4)
-  if a > b then return a;
-  return b;
+maxm :: (a: int, b: int) -> int #expand {  // (5)
+    if a > b then return a;
+    return b;
 }
 
-macro2 :: () -> int #expand {   // (5)
-  if `b < `c {
-    return 0;
-  }
-  defer print("Defer inside macro\n"); // => Defer inside macro
-  return 1;
+macro2 :: () -> int #expand {   // (6)
+    if `b < `c {
+      return 0;
+    }
+    defer print("Defer inside macro2\n"); // (6B) // => Defer inside macro2
+    // `defer print("`Defer inside macro2\n"); // (6C) // => `Defer inside macro2
+    return 1;
 }
 
 macro3 :: () #expand {
-  print("This is macro3\n");
-  nested_macro();
+    print("This is macro3\n");
+    `c = 108;
+    nested_macro();
 
-  nested_macro :: () #expand {
-    print("This is a nested macro\n");
-  }
+    nested_macro :: () #expand {
+      print("This is a nested macro\n");
+    }
 }
 
 factorial :: (n: int) -> int #expand {
-  #if n <= 1 return 1;
-  else {
-    return n * factorial(n-1);
-  }
+    #if n <= 1 return 1;
+    else {
+      return n * factorial(n-1);
+    }
 }
 
 macfunc :: () -> string {
-  a := 0;
-  b := 100;
-  c := macron();
-  return "none";
+    a := 0;
+    b := 100;
+    print("In maxfunc just before calling macron\n"); 
+    c := macron();
+    print("In maxfunc just before returning\n");  // never printed!
+    return "none";
 
   macron :: () -> int #expand {
-    `defer print("Defer inside macro\n");
-    if `a < `b {
-      `return "Backtick return macro"; 
-    }
-    return 1;
+      defer print("Defer inside macron\n");  // (7)
+      if `a < `b {
+          `return "Backtick return macron\n"; 
+       }
+       return 1;
   }
 }
 
 main :: () {
-  a := 0;
-  macro1(); // (3)
-  print("a is: %\n", a); // (4) => a is: 10
+    a := 0;
+    macro1(); // (3)
+    print("a is: %\n", a); // (4B) => a is: 10
 
-  b := 7;
-  c := 3;
-  print("max is %\n", maxm(b, c)); // => max is 7
+    b := 7;
+    c := 3;
+    print("max is %\n", maxm(b, c)); // => max is 7
 
-  print("macro2 returns %\n", macro2()); // => macro2 returns 1
+    print("macro2 returns %\n", macro2()); // => macro2 returns 1
 
-  macro3();
-  // => This is macro3
-  // => This is a nested macro
+    macro3();
+    // => This is macro3
+    // => This is a nested macro
+    print("c is %\n", c); // => c is 108
 
-  x := factorial(5);
-  print("factorial of 5 = %\n", x); // => factorial of 5 = 120
 
-  s := macfunc();  // => Defer inside macro
-  print("%\n", s); // (6) => Backtick return macro
+    x := factorial(5);
+    print("factorial of 5 = %\n", x); // => factorial of 5 = 120
+
+    s := macfunc();  
+    // => In maxfunc just before calling macron
+    // => Defer inside macron
+    print("%\n", s); // (8) => Backtick return macron 
 }
+
+/* with defer in macro 2:
+a at macro1 start is: 0
+a is: 10
+max is 7
+Defer inside macro2
+macro2 returns 1
+This is macro3
+This is a nested macro
+c is 108
+factorial of 5 = 120
+In maxfunc just before calling macron
+Defer inside macron
+Backtick return macro
+*/
+
+/* with `defer in macro 2:
+a at macro1 start is: 0
+a is: 10
+max is 7
+macro2 returns 1
+This is macro3
+This is a nested macro
+c is 108
+factorial of 5 = 120
+In maxfunc just before calling macron
+Defer inside macron
+Backtick return macro
+
+`Defer inside macro2
+*/
 ```
 
 `macro1` does something new: it adds 10 to the variable `a` found in the outer scope in line (3): the backtick in front of a (`a) denotes that `a` must exist in the outer scope. When `macro1` is called in main(), this is indeed the case. We see in line () that `a` has value 10, through the execution of `macro1`.
+
+> Macros can have context, namely if indicated with ` they can see variables in their outer scope.
+
 If `a` does not exist, we get the following error in line (2): `Error: Undeclared identifier 'a'.`
 while getting this message at line (3): `Info: While expanding macro 'macro1' here...`
+The ` mechanism for looking up outer variables only works one level up.
 
-Line (4) shows that a macro can have parameters, just like any proc. This is a way to avoid the ` syntax.
-`macro2` defined in line (5) refers to two outer variables b and c. In this case it returns 1, but just before that prints something by using the `defer` keyword.
-`macro3` shows nested macros: a macro can contain and call macros defined inside itself.  
+Line (5) shows that a macro can have parameters, just like any proc. This is a way to avoid the ` syntax.
+`macro2` defined in line (6) refers to two outer variables b and c. In this case it returns 1, but just before leaving the macro, it prints something by using the `defer` keyword in line (6A). But notice what happens when we use `defer in line (6B): because of the ` the defer now takes the scope of the caller (main() in this case) as its scope, and prints its message just before main() ending (see the attached complete output in both cases).
+`macro3` shows _inner_ or _nested_ macros: a macro can contain and call macros defined inside itself.  
 `factorial` is an example of a recursive macro; #if needs to be used here, else you get the following `Error: Too many nested macro expansions. (The limit is 1000.)`
 `maxfunc` is a procedure which calls a nested macro `macron`; this returns "Backtick return macro" as return value from `maxfunc`.
+In § 15.1.3 we showed code that iterated over a linked list with a while loop.
+Wouldn't it be nice if we could do this with a for loop?
+
+## 26.6 Using a for-expansion macro to define a for loop
+As easy as it is to for-loop over an array, this is not defined for other composite data-structures, such as the linked list we discussed in § 12.6. But this can be done with a macro, by defining a so-called _for_expansion_:
+
+See _26.8_linked_list_for_expansion.jai_:
+```c++
+#import "Basic";
+
+ListNode :: struct {
+    data: s64; 
+    next:  *ListNode;
+}
+
+main :: () {
+    lst := New(ListNode); // lst is of type *ListNode
+    lst.data = 0;
+
+    a :=  New(ListNode); 
+    a.data = 12;
+    lst.next = a;
+    
+    b  := New(ListNode);
+    b.data = 24;
+    a.next = b;
+    
+    c  := New(ListNode);
+    c.data = 36;
+    b.next = c;
+
+    c.next = null; 
+
+    print("List printed in a for loop: \n");
+    print("The list starts with a %\n", lst.data);
+    for_expansion :: (list: *ListNode, body: Code, flags: For_Flags) #expand {  // (1)
+        iter := list;   // (2)
+        i := 0;
+        while iter {            // (3)
+            iter = iter.next;
+            if !iter break;     // (4)
+            `it := iter.data;   // (5)
+            `it_index := i;     // (6)
+            #insert body;       // (7)
+            i += 1;             // (8)
+        }
+    }
+
+    for lst {                   // (9)
+        print("List item % is %\n", it_index, it);  // (10)
+    }
+
+// List printed in a for loop:
+// The lists starts with a 0
+// List item 0 is 12
+// List item 1 is 24
+// List item 2 is 36
+
+    free(a); free(b); free(c); free(lst);
+}
+```
+
+We take the linked-list example from § 12.6, the same struct ListNode and *ListNode variable lst.  
+A for-expansion macro is a special kind of macro that uses `i` as counter and `iter` as iteration variable (defined in line (2)).
+The macro is defined in line (1) with the signature:  
+`for_expansion :: (list: *ListNode, body: Code, flags: For_Flags) #expand`  
+It uses the same while loop as in § 15.1.3. Line (4) assures we break out of the loop if iter gets the null value: break when iter is empty (if this would not be here, the program would crash, try it out!).     
+Because we emulate a for-loop, we must give values for the variables  
+`it_index`  : which is of course the counter `i` (line (6))
+and `it`    : which is `iter.data` (line (5))
+They both have to be prefixed with a back-tick, because they are outer variables to the macro.  
+
+The `#insert body;` in line (7) is responsible for printing out the data. `body` is the 2nd argument, and is of type Code. `body` denotes the body of the for-loop, and it is substituted into the expanded code. Its content is the `print` statement in line (10). So `#insert` is used inside macros to insert code in the expansion.  
+There is also a variant directive **#insert,scope()**, which allows you to insert code in the macro itself. A macro often takes an argument suitably named `body: Code`, which is then used to insert in the expansion: `#insert body`.
+
+Line (8) simply increments our counter variable `i`.  
+Now we can print out the data from a linked list in a for-loop like any other array (see line (9))!
+
+> Remark: iterating over data-structures with for seems to have been the primary reason for introducing macros in Jai.
+
+Now let's make a double linked-list:
+## 26.7 Double linked-list
+Let's now define a more general linked list as having a first and a last Node (see line (1)), whereby Node is recursively defined(see line (2)) as having a value, a previous and a next Node. Another advantage is that the type of the value (and Node) is polymorf written as T.
+
+See _26.9_doubly_linked_list.jai_:
+```c++
+#import "Basic";
+// Debug :: #import "Debug";
+
+Linked_List :: struct (T: Type) {  // (1)
+    first: *Node(T); 
+    last:  *Node(T);
+}
+
+Node :: struct (T: Type) {          // (2)
+    value: T;
+    prev: *Node(T);
+    next: *Node(T);
+}
+
+// Version 1:
+for_expansion :: (list: Linked_List, body: Code, flags: For_Flags) #expand {  
+    iter := list.first;     
+    i := 0;
+    // Debug.breakpoint();
+    while iter {            
+        `it := iter.value;   
+        `it_index := i;      
+        iter = iter.next;
+        #insert body;        
+        if !iter break;    
+        i += 1;             
+    }
+}
+
+// Version 2:
+for_expansion :: (list: Linked_List, body: Code, flags: For_Flags) #expand {  
+    `it := list.first;     
+    `it_index := 0;
+    while it {            
+        #insert body;        
+        it = it.next;
+        it_index += 1;             
+    }
+}
+
+Version 3A:
+for_expansion :: (list: Linked_List, body: Code, flags: For_Flags) #expand {
+    `it := ifx flags == For_Flags.REVERSE   list.last   else    list.first;  // (6)
+    `it_index := ifx flags == For_Flags.REVERSE  2  else    0; ;   
+    while it {            
+        #insert body;
+        if flags == For_Flags.REVERSE  { 
+            it = it.prev;
+            it_index -= 1; 
+        } else          {  
+            it = it.next;
+            it_index += 1;   
+        }        
+    }
+}
+
+main :: () {
+    // Debug.init();
+    // Debug.attach_to_debugger();
+    a : Node(int);      // (3)
+    b : Node(int);
+    c : Node(int);
+    a.value = 10;
+    b.value = 20;
+    c.value = 30;
+    a.next = *b;
+    b.prev = *a;
+    b.next = *c;
+    c.prev = *b;
+
+    list: Linked_List(int);
+    list.first = *a;
+    list.last = *c;
+
+    print("List printed in a for loop: \n");
+   
+    for list {                     // (4) 
+        print("List item % is %\n", it_index, << it);      
+    }
+    print("\n");
+    
+    for < list {                   // (5) 
+        print("List item % is %\n", it_index, << it);      
+    }
+
+    free(*a); free(*b); free(*c); free(*list);
+}
+
+/* Version 1:
+List printed in a for loop: 
+List item 0 is 10
+List item 1 is 20
+List item 2 is 30
+*/
+
+/* Version 2:
+List printed in a for loop: 
+List item 0 is {10, null, 9c_e92f_f990}
+List item 1 is {20, 9c_e92f_f9a8, 9c_e92f_f978}
+List item 2 is {30, 9c_e92f_f990, null}
+*/
+
+/* Version 3A:
+List item 2 is {30, d5_6fd4_fcb0, null}
+List item 1 is {20, d5_6fd4_fcc8, d5_6fd4_fc98}
+List item 0 is {10, null, d5_6fd4_fcb0}
+*/
+```
+
+In lines (3) and following we define three Nodes a, b and c, give them values, link them together, and then link a Linked_List lst to them. We don't use New, so these Nodes are stack-allocated. 
+Now we want to be able to write a for-loop like the one in (9), printing out the node position and its value. If we compile this, we get the `Error: Undeclared identifier 'for_expansion'`. So Jai tells us we need to write a for_expansion macro to accomplish this.  
+This can be done with almost exactly the same code as in example 26.8 (because of the different structure, we need to move our break statement). The loop starting in (4) iterates over all the nodes.  
+This example also shows that the for_expansion macro can be outside of main(). In fact, you could make a module for it and import that!
+If you want to experience how easy it is to debug a macro, just uncomment the lines that start with // Debug, and debug until you reach the break when `iter` has become a pointer with value null (here this is the case for c.next).  
+
+But we can do better! (see for_expansion macro Version 2). Just leave out the temporary variables `iter` and `i` and work only with it and it_index. Also note you only have to backtick the variables the first time you use these. Versio2 also prints out the pointers, so we see that a has a prev which is null, and c has a next that is null.
+
+Suppose we want to print out list backwards, like in line (5):  `for < list`
+Then we need `For_flags`, this is an enum defined in module _Preload_ with 2 possible values, POINTER (1) and REVERSE(2). This is done in Version 3A:
+We test on For_Flags.REVERSE to either start with list.first or list.last. Using ifx, we can assign the if or else value to `it. (But we don't know the nodes count, so we hardcoded the last position as 2). We do the same in the while loop, going to next or prev and incrementing or decrementing `it_index`. With version 3A there is one compiled version for the normal for and the for <.
+
+**Exercise**
+Use #if instead of ifx  (see for_expansion_version3B.jai) so that you get 2 different compiled versions, one for the for, and one for the reversed for (<).
+How many compiled versions do you have when using if instead of #ifx? 
+
+
+## 26.8 The #modify directive
+The **#modify** directive can be used to insert some code between the header and body of a procedure or struct, to change the values of the polymorph variables, or to reject the polymorph for some combination of variables.
+
+## 26.9 SOA (Struct of Arrays)
+
+SOA is a special kind of data-design, which makes memory-use much faster, and so enhances performance.
+It is done at compile-time using `#insert`. This mechanism automatically converts between SOA (Structure of Arrays) and AOS (Array of Structures), without breaking the supporting code. This means a completely different memory access pattern, and it allows for quickly changing data layouts with minor code edits.
+
+## 26.9.1 Data-oriented design
+Jai provides built-in support for data-oriented development: it’s a high-level language build for fast memory support. Good memory layout is important because if it is not well done, too many memory cache misses will occur, alongside too much allocator overhead. Moreover consoles and mobile devices tend to have more limited memory constraints. Jai helps you to set up things in memory the way you want, without loss of efficiency or high-level expressiveness.
+
+## 26.9.2 Making a SOA struct using #insert
+For some arrays we can get much better cache performance by changing the order of data. C++ encourages the use of arrays of structures (AOS), but most CPUs work faster when data is laid oud as structures of arrays (SOA). Object-oriented languages prefer AOS, but a data-oriented language should make it easy to lay out your data in SOA format.
+With SOA, arrays are contiguous in memory, and even their member values are contiguous, instead of being scattered on the heap.  
+For example: updating a set of arrays usually happens coordinate by coordinate, first all x coordinates, and so on. Because in the SOA structure all the vector coordinates are adjacent to each other in memory, updates on them are very fast. This is in contrast with an AOS structure, where updates will have to jump over memory all the time.  
+> There are two different ways of storing data here:
+> Array of Structs:(AOS)  A list of objects (like marines) where objects are stored one after another.
+> Struct of Arrays: (SOA) An object that contains lists of fields, so similar fields are stored together.  
+> 
+This is marvelously explained in the following article [SOA vs AOS](https://www.shamusyoung.com/twentysidedtale/?p=48683), which is part of a brilliant series of articles about game programming.
+
+Suppose our program works with `Vec3 :: { x: float, y: float, z: float }` (defined in module _Math_).
+An AOS with Vec3's would be like `[vec31, vec32, vec33, vec34, vec35]`, where vec31: Vec3, and so on, so basically: `[{x1, y1, z1}, {x2, y2, z2}, {x3, y3, z3}, {x4, y4, z4}, {x5, y5, z5}]`  
+An SOA Vec3 struct would be like:  
+```c++
+    SOA_Vec3 :: struct {
+       x: [5] float;
+       y: [5] float;
+       z: [5] float;
+     }
+```
+Accessing all x's and so on will be much faster in the SOA configuration.
+
+Now we discuss an example of how SOA is implemented in Jai as a polymorphic struct with #insert.
+
+See _26.10_soa.jai_:
+```c++
+#import "Basic";
+
+Person :: struct {                      // (1)
+  name: string;
+  age: int;
+  is_cool: bool;
+}
+
+SOA :: struct(T: Type, count: int) {    // (2)
+  #insert -> string {                   // (3)
+    builder: String_Builder;            // (4)
+    defer free_buffers(*builder);
+    t_info := type_info(T);             // (5)
+    for fields: t_info.members {        // (6)
+      print_to_builder(*builder, "  %1: [%2] type_of(T.%1);\n", fields.name, count);  // (7)
+    }
+    result := builder_to_string(*builder);  // (8)
+    return result;
+  }
+}
+
+main :: () {
+  soa_person: SOA(Person, 5);       // (9)
+  print("soa_person is: %\n", soa_person);
+  for i: 0..soa_person.count-1 {    // (10)
+    print("Person[%]: name= %, age= %, is_cool= %\n", i, soa_person.name[i], soa_person.age[i], soa_person.is_cool[i]);
+  } // => see in /* */ after program
+  print("soa_person is: %\n", soa_person);
+  // => soa_person is: {["", "", "", "", ""], [0, 0, 0, 0, 0], [false, false, false, false, false]}
+
+  // an aos example:
+  // if you do: arrp := Person.[p1, p2, p3, p4, p5] , with for example: p1 := Person.{"Ivo", 66, true};
+  // => Error: Attempt to use a non-literal element inside an array literal! (At index 4.)
+  arrp := Person.[Person.{"Ivo", 66, true}, Person.{"Dolf", 42, false}, Person.{"Laura", 28, true}, 
+                Person.{"Gabriel", 30, true}, Person.{"Denise", 63, false}];   // (11)
+  // how to transform aos to soa: arrp --> soa_person
+  for arrp {       // (12)
+    soa_person.name[it_index] = it.name;
+    soa_person.age[it_index] = it.age;
+    soa_person.is_cool[it_index] = it.is_cool;
+  }
+  print("soa_person is: %", soa_person);  
+  // => soa_person is: {["Ivo", "Dolf", "Laura", "Gabriel", "Denise"], [66, 42, 28, 30, 63], 
+  //                    [true, false, true, true, false]}
+}
+
+/*
+Person[0]: name= , age= 0, is_cool= false
+Person[1]: name= , age= 0, is_cool= false
+Person[2]: name= , age= 0, is_cool= false
+Person[3]: name= , age= 0, is_cool= false
+Person[4]: name= , age= 0, is_cool= false
+*/
+```
+
+In line (1) we have a Person struct definition, and in line (2) we have the definition of the **SOA struct**. This takes a polymorphic type T, and an integer count, which is the number of objects.  
+The #insert starts building  a string in line (3):  `#insert -> string { // building string }`  
+In line (4) we define a string builder in which we'll construct our string (we immediately take care of its memory release). In line (5) we extract the type_info from our type T (see § 15.5). Then we loop over all its member fields (line (6)), and use print_to_builder (see § 19.5) to serialize the info into a struct definition. We get a string from the builder in (8) and return that as the SOA struct.
+
+This gets called in line (9):  `soa_person: SOA(Person, 5);`
+where the new SOA type is constructed with T equal to type Person and count equal to 5 and zero-initialized data as shown by printing it out in a for-loop ().
+`soa_person` looks internally like this:
+```
+    soa_person {
+        name[5];
+        age[5];
+        is_cool[5];
+    }
+```
+**How to transform an AOS to an SOA?**
+In line (11) we define an array of Person objects. Line (12) shows that only a simple for loop over the AOS is needed to transfer the data to an SOA.
+
+> Remark: Other references (videos on youtube):
+    • Noel Llopis: Data-oriented design
+    • Chandler Carruth: Efficiency with Algorithms, Performance with Data Structures
+    • Mike Acton: Data-oriented design in C++
+
+
+## 26.10 How to get the generated source files after the meta-program step?
+The piece of source code that gets generated from a #insert can be retrieved from the hidden _.build_ folder. For example: program 26.10_soa.jai generates an additional source file called `.added_strings_w2.jai` in .build with this content:
+```c++
+// Workspace: Target Program
+//
+// #insert text. Generated from d:/Jai/The_Way_to_Jai/examples/26/26.10_soa.jai:10.
+//
+  name: [5] type_of(T.name);
+  age: [5] type_of(T.age);
+  is_cool: [5] type_of(T.is_cool);
+```
+
+Line (10) mentioned here is this line: #insert -> string.

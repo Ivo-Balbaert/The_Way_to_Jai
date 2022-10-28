@@ -3,7 +3,7 @@
 In order to make our code more flexible, we need to have control structures that allow us to branch code or repeat code on whether or not a condition is true. This condition can be any boolean or boolean expression.  
 The condition after an if, while or other code after for doesn’t need to be surrounded by parentheses (), as is the case in C or many other languages..  
 All constructs we discuss here define their own scope in their code blocks, so they can contain local variables.   
-In this section we discover the branching, in the next section the looping capabilities.
+In this section we discover the branching, in the next section the looping capabilities. There is no `goto` in Jai.
 
 ## 14.1 The if-else statement
 See example `14.1_if_else.jai`:

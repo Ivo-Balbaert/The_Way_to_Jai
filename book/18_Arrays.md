@@ -441,15 +441,15 @@ You can also replace both `it` and `it_index` with your own variables as in line
 
 ### 18.6.2 Changing an array by iterating with a pointer
 The it variable is read-only, it cannot be used to change the items of an array (try it out!). Look at the code starting in line (4):  
-- `for *elem: arr {}` we loop over the array with an iteration variable that is a pointer
-- `<<elem = val * val` inside the loop, we dereference that pointer and assign a new value to it.
+- `for * elem: arr {}` we now loop over the array with an iteration variable that is a pointer
+- `<< elem = val * val` inside the loop, we dereference that pointer and assign a new value to it.
 This can even be done more succinct as shown in line (4B). 
 
-So iteration can be done by pointer or by value, and is built-in at a very low level: the compiler understands arrays in depth, and so does the debugger.
+So iteration can be done by pointer or by value, by value you cannot change that over which you iterate, but by pointer you can. Iteration is built-in at a very low level: the compiler understands arrays in depth, and so does the debugger.
 
-**Exercise**
-Double the values of an array in a for loop. Then do the same in a while loop and see what is easiest.  
-(see array_double.jai)
+**Exercises**
+(1) Double the values of an array in a for loop. Then do the same in a while loop and see what is easiest (see array_double.jai).  
+(2) Use module _Random_ to populate a static array of 16 items with random integer numbers (see random_array.jai). 
 
 ### 18.6.3 Reversing a for loop with <
 In line (5) we see that simply writing a `for <` reverses the iteration order.

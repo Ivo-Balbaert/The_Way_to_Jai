@@ -120,7 +120,8 @@ In § 12.6 we constructed a linked-list with a recursive struct ListNode. To pri
     // => List printed in a while loop:
     // => 0 -> 12 -> 24 -> 36 ->
 ```
-We declare a variable r of type *ListNode in line (1). As long as r is not a null pointer, the while loop in (2) will keep on going. We print out the data of the loop and point to the next node in line (3). In our example r becomes null for c, which stops the loop.
+We declare a variable r of type *ListNode in line (1). As long as r is not a null pointer, the while loop in (2) will keep on going. Line (2) is shorthand for:   `while r != null`
+We print out the data of the loop and point to the next node in line (3). In our example r becomes null for c, which stops the loop. In § 26 ?? we'll see how we can print this list out in a kind of for-loop, which we'll discuss next.
 
 
 ## 15.2 For loop
@@ -340,7 +341,7 @@ Direction contains the following values:
 
 In addition to the enum methods we discovered in § 13.6 that give us the range and the member names, we can also user a for-loop shown in line (1) to get the enum's values with the `enum_values_as_s64` proc.  
 
-## 15.5 Looping over a structs fields
+## 15.5 Looping over a structs fields with type_info()
 See _15.7_struct_members.jai_:
 
 ```c++
@@ -381,4 +382,4 @@ We can use `type_info()` on a struct definition and then loop over its members t
 Also the `get_field` method gives you detailed information.
 
 ## 15.6 Serialization
-The methods discussed in the previous sections provide type info which can be used to _serialize_ structs into strings, and vice-versa _deserialize_ strings into structs. They enable us to write serialization procedures, commonly used e.g. in network replication of entities and save game data.
+The methods discussed in the previous sections provide type info which can be used to _serialize_ structs into strings, and vice-versa _deserialize_ strings into structs. They enable us to write serialization procedures, commonly used e.g. in network replication of entities and save game data, see § 26.9.2
