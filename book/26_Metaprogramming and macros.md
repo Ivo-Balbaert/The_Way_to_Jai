@@ -1,4 +1,4 @@
-# 26 - Meta-programming and macros
+# 26 Meta-programming and macros
 
 A 'meta-program' is a piece of code that alters (or 'programs') an existing program (another piece of code).
 In Jai, this takes place solely at compile-time. The compiler gives you the source code in AST format (Abstract Syntax Tree) for you to modify.
@@ -7,7 +7,7 @@ In Jai, this takes place solely at compile-time. The compiler gives you the sour
 
 This functionality has been built into the language from the start. Meta-programs can modify the program in arbitrarily complex ways easily. 
 
-In order to do meta-programming, full type-information is needed. Jai has that available at compile-time (see§ 5.1.4, § 9, § 16),  but also retains static type information for every structure available at runtime (see § 26.1).
+In order to do meta-programming, full type-information is needed. Jai has that available at compile-time (see § 5.1.4, § 9, § 16),  but also retains static type information for every structure available at runtime (see § 26.1).
 In § 13.6 and § 15.4 we discussed some useful reflection methods for enums. In § 15.5 we highlighted useful reflection methods for structs, useful for serialization (see § 15.6).
 
 Using type info to meta-program is also called _reflection_ or _introspection_ in other languages.
@@ -59,7 +59,7 @@ This structure is not directly accessible, you have to use the proc `get_type_ta
 ## 26.2 Running code at compile time with #run
 We first discovered that this was possible in §3.2.4. We talked about the bytecode interpreter in § 4.2, saw how constants can be calculated at compile time in §5.2.2, and how this can be used for debugging purposes in § 20.  
 We already know that we need to use `#run main()` to run the whole program at compile-time.
-In fact, any code (a code-line, a block of code or a procedure) can be run at compile time with ****#run**. 
+In fact, any code (a code-line, a block of code or a procedure) can be run at compile time with **#run**. 
 
 See _26.2_run.jai_:
 ```c++
@@ -441,7 +441,7 @@ If `a` does not exist, we get the following error in line (2): `Error: Undeclare
 while getting this message at line (3): `Info: While expanding macro 'macro1' here...`
 The ` mechanism for looking up outer variables only works one level up.
 
-Line (5) shows that a macro can have parameters, just like any proc. This is a way to avoid the ` syntax.
+Line (5) shows that a macro can have parameters, just like any proc. This is a way to avoid the backtick syntax.
 `macro2` defined in line (6) refers to two outer variables b and c. In this case it returns 1, but just before leaving the macro, it prints something by using the `defer` keyword in line (6A). But notice what happens when we use `defer in line (6B): because of the ` the defer now takes the scope of the caller (main() in this case) as its scope, and prints its message just before main() ending (see the attached complete output in both cases).
 `macro3` shows _inner_ or _nested_ macros: a macro can contain and call macros defined inside itself.  
 `factorial` is an example of a recursive macro; #if needs to be used here, else you get the following `Error: Too many nested macro expansions. (The limit is 1000.)`

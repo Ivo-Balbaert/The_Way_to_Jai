@@ -1,7 +1,7 @@
 #import "Basic";
 
 // proc1 :: ()         {      // (1)  procedure
-proc1 :: () #expand {      // (2)  macro
+proc1 :: () #expand {         // (2)  macro
     print("You are in proc1!");
 }   
 
