@@ -651,7 +651,7 @@ But we can do better! (see for_expansion macro Version 2). Just leave out the te
 
 Suppose we want to print out list backwards, like in line (5):  `for < list`
 Then we need `For_flags`, this is an enum defined in module _Preload_ with 2 possible values, POINTER (1) and REVERSE(2). This is done in Version 3A:
-We test on For_Flags.REVERSE to either start with list.first or list.last. Using ifx, we can assign the if or else value to '`it'. (But we don't know the nodes count, so we hardcoded the last position as 2). We do the same in the while loop, going to next or prev and incrementing or decrementing `it_index`. With version 3A there is one compiled version for the normal for and the for <.
+We test on For_Flags.REVERSE to either start with list.first or list.last. Using ifx, we can assign the if or else value to \`it. (But we don't know the nodes count, so we hardcoded the last position as 2). We do the same in the while loop, going to next or prev and incrementing or decrementing `it_index`. With version 3A there is one compiled version for the normal for and the for <.
 
 **Exercise**
 Use #if instead of ifx  (see for_expansion_version3B.jai) so that you get 2 different compiled versions, one for the for, and one for the reversed for (<).
