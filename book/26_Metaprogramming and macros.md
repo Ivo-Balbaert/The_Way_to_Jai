@@ -666,10 +666,10 @@ The **#modify** directive can be used to insert some code between the header and
 SOA is a special kind of data-design, which makes memory-use much faster, and so enhances performance.
 It is done at compile-time using `#insert`. This mechanism automatically converts between SOA (Structure of Arrays) and AOS (Array of Structures), without breaking the supporting code. This means a completely different memory access pattern, and it allows for quickly changing data layouts with minor code edits.
 
-## 26.9.1 Data-oriented design
+### 26.9.1 Data-oriented design
 Jai provides built-in support for data-oriented development: it’s a high-level language build for fast memory support. Good memory layout is important because if it is not well done, too many memory cache misses will occur, alongside too much allocator overhead. Moreover consoles and mobile devices tend to have more limited memory constraints. Jai helps you to set up things in memory the way you want, without loss of efficiency or high-level expressiveness.
 
-## 26.9.2 Making a SOA struct using #insert
+### 26.9.2 Making a SOA struct using #insert
 For some arrays we can get much better cache performance by changing the order of data. C++ encourages the use of arrays of structures (AOS), but most CPUs work faster when data is laid oud as structures of arrays (SOA). Object-oriented languages prefer AOS, but a data-oriented language should make it easy to lay out your data in SOA format.
 With SOA, arrays are contiguous in memory, and even their member values are contiguous, instead of being scattered on the heap.  
 For example: updating a set of arrays usually happens coordinate by coordinate, first all x coordinates, and so on. Because in the SOA structure all the vector coordinates are adjacent to each other in memory, updates on them are very fast. This is in contrast with an AOS structure, where updates will have to jump over memory all the time.  
