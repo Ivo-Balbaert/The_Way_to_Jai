@@ -442,7 +442,7 @@ while getting this message at line (3): `Info: While expanding macro 'macro1' he
 The ` mechanism for looking up outer variables only works one level up.
 
 Line (5) shows that a macro can have parameters, just like any proc. This is a way to avoid the backtick syntax.
-`macro2` defined in line (6) refers to two outer variables b and c. In this case it returns 1, but just before leaving the macro, it prints something by using the `defer` keyword in line (6A). But notice what happens when we use `defer in line (6B): because of the ` the defer now takes the scope of the caller (main() in this case) as its scope, and prints its message just before main() ending (see the attached complete output in both cases).
+`macro2` defined in line (6) refers to two outer variables b and c. In this case it returns 1, but just before leaving the macro, it prints something by using the `defer` keyword in line (6A). But notice what happens when we use `defer in line (6B): because of the backtick the defer now takes the scope of the caller (main() in this case) as its scope, and prints its message just before main() ending (see the attached complete output in both cases).
 `macro3` shows _inner_ or _nested_ macros: a macro can contain and call macros defined inside itself.  
 `factorial` is an example of a recursive macro; #if needs to be used here, else you get the following `Error: Too many nested macro expansions. (The limit is 1000.)`
 `maxfunc` is a procedure which calls a nested macro `macron`; this returns "Backtick return macro" as return value from `maxfunc`.
@@ -527,7 +527,7 @@ Now we can print out the data from a linked list in a for-loop like any other ar
 > Remark: iterating over data-structures with for seems to have been the primary reason for introducing macros in Jai.
 
 Now let's make a double linked-list:
-## 26.7 Double linked-list
+## 26.7 A for-expansion macro for a double linked-list
 Let's now define a more general linked list as having a first and a last Node (see line (1)), whereby Node is recursively defined(see line (2)) as having a value, a previous and a next Node. Another advantage is that the type of the value (and Node) is polymorf written as T.
 
 See _26.9_doubly_linked_list.jai_:
@@ -651,7 +651,7 @@ But we can do better! (see for_expansion macro Version 2). Just leave out the te
 
 Suppose we want to print out list backwards, like in line (5):  `for < list`
 Then we need `For_flags`, this is an enum defined in module _Preload_ with 2 possible values, POINTER (1) and REVERSE(2). This is done in Version 3A:
-We test on For_Flags.REVERSE to either start with list.first or list.last. Using ifx, we can assign the if or else value to `it. (But we don't know the nodes count, so we hardcoded the last position as 2). We do the same in the while loop, going to next or prev and incrementing or decrementing `it_index`. With version 3A there is one compiled version for the normal for and the for <.
+We test on For_Flags.REVERSE to either start with list.first or list.last. Using ifx, we can assign the if or else value to '`it'. (But we don't know the nodes count, so we hardcoded the last position as 2). We do the same in the while loop, going to next or prev and incrementing or decrementing `it_index`. With version 3A there is one compiled version for the normal for and the for <.
 
 **Exercise**
 Use #if instead of ifx  (see for_expansion_version3B.jai) so that you get 2 different compiled versions, one for the for, and one for the reversed for (<).
