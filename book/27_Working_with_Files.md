@@ -59,6 +59,7 @@ main :: () {
         print("Could not open file % for writing.\n", TESTFILE);
         return;
     }
+    defer file_close(*file);  // (10B)
 
     length :=  file_length(file);
     buffer := cast(*u8) alloc(length);
@@ -75,8 +76,6 @@ main :: () {
 
     print("Contents is: %\n", data2);
     free(buffer);
-
-    file_close(*file);
 }
 
 /* After the end of the program the contents is:
@@ -104,7 +103,11 @@ The `file_open` operation (line (6)) has the following signature:
 It's first return value is a file handle on Windows or a pointer to a file in Unix, of type `File` (defined in windows.jai / unix.jai).
 If we want to add data to the file, we must first know its length, and then advance the cursor to that position in the file: lines (7) and following.
 
-In line (8), we add another string to the file; make sure in line (9) to close the file after this to write to disk. 
+In line (8), we add another string to the file; make sure in line (9) to close the file after this to write to disk.
+
+** use defer to close a file**
+If you open a file read-only, you can use `defer file_close(*file);` as in line (11B) immediately after the success check. 
+
 We then read the entire contents back in line (11).
 `file_read` has the following signature:
 `file_read :: (f: File, vdata: *void, bytes_to_read: s64) -> (success: bool, bytes_read: s64)`

@@ -49,6 +49,7 @@ main :: () {
         print("Could not open file % for writing.\n", TESTFILE);
         return;
     }
+    defer file_close(*file);
 
     length :=  file_length(file);
     buffer := cast(*u8) alloc(length);
@@ -65,8 +66,6 @@ main :: () {
 
     print("Contents is: %\n", data2);
     free(buffer);
-
-    file_close(*file);
 }
 
 /* After the end of the program the contents is:
