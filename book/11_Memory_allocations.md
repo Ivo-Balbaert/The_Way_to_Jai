@@ -102,23 +102,26 @@ Let's take a look at _11.4_memory.jai_:
 #import "Basic";
 
 main :: () {
-  n0 := 3;                    // (1) - on stack
+    n0 := 3;                    // (1) - on stack
 
-  n1 := cast(*int) alloc(size_of(int));  // (2) - on heap
-  defer free(n1);             // (3)
-  print("The address n1 points at is %\n", n1); // => The address n1 points at is 2ad_131f_5700
-  print("The value n1 points at is %\n", << n1); // => The value n1 points at is 0
-  print("The type of n1 is %\n", type_of(n1)); // => The type of n1 is *s64
-  << n1 = 7;   // (4) fill in a value for n1 to point to
-  print("%\n", << n1); // => 7
+    n1 := cast(*int) alloc(size_of(int));  // (2) - on heap
+    defer free(n1);             // (3)
+    print("The address n1 points at is %\n", n1); // => The address n1 points at is 2ad_131f_5700
+    print("The value n1 points at is %\n", << n1); // => The value n1 points at is 0
+    print("The type of n1 is %\n", type_of(n1)); // => The type of n1 is *s64
+    << n1 = 7;   // (4) fill in a value for n1 to point to
+    print("%\n", << n1); // => 7
 
-  // alternative way:
-  n2 := New(int);   // (5)
-  defer free(n2);   // (6)
-  print("%\n", type_of(n2)); // => *s64
-  << n2 = 8;
-  print("%\n", << n2); // => 8
-  n2 = null;  // (7) to really wipe out the previous value in that memory location
+    length := 108;
+    buffer := cast(*u8) alloc(length); // (4B)
+
+    // alternative way:
+    n2 := New(int);   // (5)
+    defer free(n2);   // (6)
+    print("%\n", type_of(n2)); // => *s64
+    << n2 = 8;
+    print("%\n", << n2); // => 8
+    n2 = null;  // (7) to really wipe out the previous value in that memory location
 }
 
 /*
@@ -154,6 +157,7 @@ The 1st argument of `free` is a void pointer to the memory to be freed (de-alloc
 Also a  `realloc` proc exists to resize already allocated memory:  
 `realloc :: (memory: *void, size: s64, old_size: s64, allocator: Allocator = .{}) -> *void`
 
+Line (4B) shows a common way to allocate a buffer for `length` number of bytes.
 
 Using `alloc` this way is a bit cumbersome. In line (5) the exact same thing is accomplished with **New**:  `n2 := New(int);`
 New always allocates memory on the heap, and must be followed with a `free` of that memory (line (6)). New just calls alloc and then the initializer, which sets the memory to its default zero-value.  

@@ -180,6 +180,8 @@ If you call `<< type_info(Type1)` on any Type1, it will give you all the info it
 The same info can be obtained by doing an explicit  
 cast(*Type_Info_Struct), as shown from line (4).
 
+Also:   `type_info(Any).type is .ANY`
+
 ## 16.3.3 Checking whether an enum is #specified
 A field `enum_type_flags` in Type_Info_Enum can give you more info on the enum, for example: a flag SPECIFIED tells you whether an enum has been specified, see line (5) and following.
 

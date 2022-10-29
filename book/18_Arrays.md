@@ -422,8 +422,8 @@ main :: () {
     print("arr is: %\n", arr); // => arr is: [1, 4, 9, 16, 25]
 
     // reversing the iteration:
-    static_array := int.[1, 2, 3, 4, 5];
-    for < static_array  print(" % ", it);  // (5)
+    static_array2 := int.[1, 2, 3, 4, 5];
+    for < static_array2  print(" % ", it);  // (5)
     // => 5  4  3  2  1
 } 
 ```

@@ -86,4 +86,11 @@ main :: ()  {
     x.count -= 1;
     x.data += 1; // <-- pointer advances 1 byte, and now points to 'a'
     print("x is: '%'\n", x);    // => x is: 'ail'
+
+    length := 108;
+    buffer := cast(*u8) alloc(length);     // (14)
+    // fill up buffer in some way or other, 
+    strdata: string;           
+    strdata.data = buffer;
+    strdata.count = length;
 }

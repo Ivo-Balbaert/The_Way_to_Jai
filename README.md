@@ -32,7 +32,7 @@ _Table of Contents_
    [18B - Ordered remove in Arrays](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/18B_Ordered%20remove%20in%20arrays.md)  
    [19 - Working with strings](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/19_Working_with_Strings.md)  
    [20 - Debugging](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/20_Debugging.md)    
-   [21 - Allocators and Temporary Storage](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/21_Allocators_and_Temporary_Storage.md)  
+   [21 - Memory Allocators and Temporary Storage](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/21_Memory_Allocators_and_Temporary_Storage.md)  
    [22 - Polymorphic procedures](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/22_Polymorphic%20procedures.md)  
    [23 - Polymorphic arrays and structs](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/23_Polymorphic%20arrays_and_structs.md)  
    [24 - Operator overloading](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/24_Operator_Overloading.md)  

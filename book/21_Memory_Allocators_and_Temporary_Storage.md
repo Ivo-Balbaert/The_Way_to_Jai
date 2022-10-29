@@ -1,6 +1,7 @@
-# 21 – Allocators and Temporary Storage
+# 21 – Memory Allocators and Temporary Storage
 
 Previously (see § 11) we saw how to use alloc / New and free for using heap memory:  
+- alloc(n) is used to allocate n bytes of memory
 - New and free is used for structs (see § 12.5)
 - NewArray or New and free for static arrays (see § 18.3)
 - array_reserve and array_free or free for dynamic arrays (see § 18.4)
@@ -10,8 +11,8 @@ Previously (see § 11) we saw how to use alloc / New and free for using heap mem
 
 For these methods, the heap is just a giant storage facility.
 The compiler does not check whether memory is freed, so this is your responsibility as a developer.
-Doing a free for every object can be cumbersome and forgotten.
-Luckily Jai also has in-built special storage mechanisms for data structures, called **Allocators**, that can help tremendously in this respect.
+Doing a free for every object allocated on the heap can be cumbersome and forgotten.
+Luckily Jai also has in-built special storage mechanisms for data structures, called **Allocators**, that can help tremendously in this respect. And there is also a built-in **memory-leak detector!** (see § 21.4).
 
 ## 21.1 Allocators
 In § 18.4 we discovered that the definition of a Resizable_Array contains a field `allocator : Allocator`.
@@ -35,7 +36,7 @@ Temporary storage is a special kind of Allocator. It is defined as a struct in t
 It's a linear allocator, the fastest kind. There is a pointer to the start of free memory. If enough free memory is available to service your request, the pointer is advanced and returns the result. If there's not enough free memory, we ask the OS for more RAM. Because Temporary_Storage is expected to be for small-to-medium-sized allocations, we don't expect this to happen very often (and if we want, we can pre-allocate all the memory and lock it down so that the OS is never consulted.)  
 
 When does the memory get freed? 	_Fire and forget!_
-It happens when your program  calls `Basic.reset_temporary_storage()`. When does this happen? Whenever you want, but many programs have a natural time at which it is best to call this. For example, interactive programs like games or phone applications tend to run in a loop, drawing one frame for each iteration of the loop. You can call `reset_temporary_storage()` at the end of each frame. This makes a clear boundary that you know temporarily-allocated memory cannot cross: at the end of the loop, it's all gone. You can't free individual items in Temporary Storage.
+It happens when your program  calls `Basic.reset_temporary_storage()`. When does this happen? Whenever you want, but many programs have a natural time at which it is best to call this. For example, interactive programs like games or phone applications tend to run in a loop, drawing one frame for each iteration of the loop. You can call `reset_temporary_storage()` at the end of each frame. This makes a clear boundary that you know temporarily-allocated memory cannot cross: at the end of the loop, it's all gone. You can't free individual items in Temporary Storage. Also, don't keep pointers to things in Temporary Storage.
 
 A typical game loop goes like this:
 
@@ -80,14 +81,18 @@ main :: () {
     // => Temporary_Storage uses 88 bytes
     reset_temporary_storage(); // (4)
     print("Temporary_Storage uses % bytes\n", context.temporary_storage.occupied); // (5)
-    // => Temporary_Storage uses 88 bytes
+    // => Temporary_Storage uses 0 bytes
+
+    s := talloc_string(256); // (6)
+    print("Temporary_Storage uses % bytes\n", context.temporary_storage.occupied); 
+    // => Temporary_Storage uses 256 bytes
 }
 ```
 
 _Basic_ defines a function `temporary_alloc`, that is just like `alloc` but uses Temporary_Storage. 
 
 ## 21.3.1 Storing strings in temp with tprint
-`talloc_string :: (count: int) -> string` is the equivalent of `alloc_string` that uses Temporary Storage.  
+`talloc_string :: (count: int) -> string` is the equivalent of `alloc_string` that uses Temporary Storage, see it used in line (6).  
 But even easier to use is the `tprint` proc, which is the equivalent of `sprint` (see § 19.4.5) that uses Temporary Storage.
 It is defined as: 
 `tprint :: (format_string: string, args: .. Any) -> string;`  
@@ -102,3 +107,42 @@ Line (1) shows how to use the temporary allocator for creating a dynamic array. 
 This is given by the field: `context.temporary_storage.occupied`.  
 We see in line (5) that it goes back to 0 after the temp memory has been reset in (4).
 
+## 21.4 Memory-leak detector
+To cope with a possible problem of memory-leakage, Jai has a built-in memory-leak detector. It can be activated by importing _Basic_ like this:
+`#import "Basic"()(MEMORY_DEBUGGER=true);`
+
+See _21.2_leak_detect.jai_:
+```c++
+#import "Basic"()(MEMORY_DEBUGGER=true);
+
+main :: () {
+    x := alloc(100);                // (1)
+    // ....
+    free(x);                        // (2)
+
+    report := make_leak_report();   // (2)
+    log_leak_report(report);        // (3)
+}
+
+/* When not freed:
+----- 100 bytes in 1 allocation -----
+alloc  c:/jai/modules/Basic/module.jai:87
+main   d:/Jai/The_Way_to_Jai/examples/21/21.2_leak_detect.jai:4
+
+Total: 100 bytes in 1 allocation.
+
+Marked as non-leaks: 0 bytes in 0 allocations.
+*/
+
+/* When freed:
+Total: 0 bytes in 0 allocations.
+
+Marked as non-leaks: 0 bytes in 0 allocations.
+*/
+```
+
+In line (1) we allocate 100 bytes which is never freed. Starting the leak detector in line (2), and showing its log report through line (3) shows that these 100 bytes, allocated in line number 4, were never freed.
+If we do free them, we get the 2nd output.
+
+**Exercise**
+Try this out on program 18.5_array_for.jai, without and with free (see leak_array_for.jai).

@@ -6,7 +6,6 @@ We encountered strings first in § 5.1 and we've used them ever since. Here we'l
 - what are common operations for strings?  
 But you can be assured that strings in Jai are simple and performant, unlike in C++.
 
-
 ## 19.1 What are strings?
 (see _19.1_strings.jai)
 
@@ -99,6 +98,13 @@ main :: ()  {
     x.count -= 1;
     x.data += 1; // <-- pointer advances 1 byte, and now points to 'a'
     print("x is: '%'\n", x);    // => x is: 'ail'
+
+    buffer := cast(*u8) alloc(length);     // (14)
+    // fill up buffer in some way or other, 
+    data2: string;           
+    data2.data = buffer;
+    data2.count = length;
+
 }
 ```
 
@@ -121,6 +127,12 @@ When we declare a Unicode string such as ch in line (3), we see that the number 
 Also notice that `Newstring` is the exact same definition as `Array_View_64`. 
 A variable of type string is in fact an _array view_, where the data is an array of u8  (written as []u8), which is NOT '0'-terminated.
 
+Another way to create a string strdata when you have a buffer with length bytes in it is shown in line (14) and following:
+```
+strdata: string;
+strdata.count = length;
+strdata.data = buffer;
+```
 String constants can be implicitly cast to *u8 or *s8, but `y := "Hello"` cannot be cast implicitly to *u8.
 
 ## 19.2 Some basic operations on bytes
@@ -428,5 +440,3 @@ main :: ()  {
 ```
 The memory of C strings has to be freed, as shown in line (1) with `free`.
 The while loop around line (2) shows how to get the length of a C string by dereferencing and incrementing the pointer. When c_string points to the ending 0 value, its value is evaluated as false and the while loop terminates.
-
-

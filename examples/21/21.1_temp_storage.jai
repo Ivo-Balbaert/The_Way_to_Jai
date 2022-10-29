@@ -22,4 +22,8 @@ main :: () {
     reset_temporary_storage(); // (4)
     print("Temporary_Storage uses % bytes\n", context.temporary_storage.occupied); // (5)
     // => Temporary_Storage uses 88 bytes
+
+    s := talloc_string(256); // (6)
+    print("Temporary_Storage uses % bytes\n", context.temporary_storage.occupied); 
+    // => Temporary_Storage uses 256 bytes
 }

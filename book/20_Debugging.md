@@ -256,12 +256,7 @@ Instructions for how to install or customize a natvis file are available [here](
 
 For more info see [this article](https://simoncoenen.com/blog/programming/Natvis).
 
-
-
-
-
-
-
+## 20.7 Some general info
 For Linux and macOS a debugger written in Jai called **Smash** is being built: [Smash](https://github.com/rluba/smash).
 
 Jonathan Blow uses Visual Studio for debugging the compiler (C++) (for Jai??), and uses [RemedyBG](https://remedybg.itch.io/remedybg) for debugging the Sokoban game.    
