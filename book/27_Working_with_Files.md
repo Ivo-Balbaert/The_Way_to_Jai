@@ -6,7 +6,7 @@ Because of the OS differences, there is often a Windows variant and a Unix varia
 Here are some examples of the most common operations:
 
 ## 27.1 Basic file operations
-See _27.1_workings_with_files.jai_:
+See _27.1_working_with_files.jai_:
 ```c++
 #import "Basic";
 #import "File";               // (1)
