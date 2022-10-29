@@ -38,7 +38,8 @@ _Table of Contents_
    [24 - Operator overloading](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/24_Operator_Overloading.md)  
    [25 - Context](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/25_Context.md)  
    [26 - Meta-programming and macros](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/26_Metaprogramming%20and%20macros.md)       
-   
+   [27 - Working with files](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/27_Working_with_Files.md)       
+ 
      
    
 
