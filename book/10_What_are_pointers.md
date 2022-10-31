@@ -97,6 +97,14 @@ New allocates memory on the heap, so you have to free it yourself, as done in li
 
 *void can be casted to any type, and it has the same functionality as in C. 
 
+Taking a pointer and then dereferencing cancels each other out:
+```
+a : int = 5;
+b := <<*a; // b also has the value 5
+```
+
+
+
 ## 10.2 Pointers to pointer
 We saw that a pointer has also an address, so nothing prevents you from having a pointer to a pointer. This can even be several levels of _indirection_ deep, as lines (8) and following show. 
 To get to the value of a three-level pointer, you have to dereference three times:  
