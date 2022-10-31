@@ -607,3 +607,10 @@ Line (2) shows how an instance of B can pass seamlessly for an instance of A. In
 **Exercise**
 Use struct Person from § 17.3. Add fields name and location, which is a Vector2 used from module _Math_. Define a proc `move_person`, which can change a person's location. Test it out!
 (see structs_and_procs.jai)
+
+## 17.14 #deprecated
+You can mark a function as deprecated with the **#deprecated** directive. Calling a deprecated function leads to a compiler warning.  
+You can add string messages after deprecated procedures as warnings to tell someone to use a different procedure or different set of instructions to accomplish what you want.
+
+The purpose is to indicate to a developer using your code(or yourself):  
+Look, this is an older version of this function, and in a short time this function will no longer exist. You can continue to use this function for now, but you should replace it with this new_function.

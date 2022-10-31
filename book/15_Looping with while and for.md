@@ -341,32 +341,31 @@ Direction contains the following values:
 
 In addition to the enum methods we discovered in § 13.6 that give us the range and the member names, we can also user a for-loop shown in line (1) to get the enum's values with the `enum_values_as_s64` proc.  
 
-## 15.5 Looping over a structs fields with type_info()
+## 15.5 Looping over a struct's fields with type_info()
 See _15.7_struct_members.jai_:
 
 ```c++
 #import "Basic";
 #import "Math";
 
-Person :: struct {
+Person :: struct @Version9 {                  // (1)
     name            : string;
     age             : int;
-    location        : Vector2;
+    location        : Vector2;  @NoSerialize  // (2)
 }
 
 main :: ()  {
     pinfo := type_info(Person);
-    for member: pinfo.members {      // (1)
+    for member: pinfo.members {       // (3)
         print("% - ", member.name);  
         print("% - ", << member.type);  
-        print("% - ", member.notes);  
-        print("% - ", member.flags);   
+        print("% - ", member.notes);  // (4)
+        print("% - ", member.flags);  
     }
     print("\n");
-    member, offset := get_field(pinfo, "age");
+    member, offset := get_field(pinfo, "age");  // (5)
     print("info age field: % and has offset %\n", << member, offset);
     print("\n");
-
 }
 /*
 name - {STRING, 16} - [] - 0 - 
@@ -376,10 +375,21 @@ location - {STRUCT, 8} - [] - 0 -
 info age field: {name = "age"; type = 7ff6_5021_4000; offset_in_bytes = 16; 
 flags = 0; notes = []; offset_into_constant_storage = 0; } and has offset 16
 
-*/   
+*/    
 ```
-We can use `type_info()` on a struct definition and then loop over its members to get their names, their type, and if present, flags and attached notes.
-Also the `get_field` method gives you detailed information.
+We can use `type_info()` on a struct definition and then loop over its members (as in line (3)) to get their names, their type, and if present, flags and attached notes.
+Also the `get_field` method (line (5) gives you detailed information.
 
 ## 15.6 Serialization
 The methods discussed in the previous sections provide type info which can be used to _serialize_ structs into strings, and vice-versa _deserialize_ strings into structs. They enable us to write serialization procedures, commonly used e.g. in network replication of entities and save game data, see § 26.9.2
+
+## 15.7 Annotations or notes
+It's also possible to add an annotation to a struct field, for example: to not serialize a certain field with **@NoSerialize**, see line (2).
+This info is stored in the notes field of the Type_Info_Struct_Member struct (?? however field notes = [] in output, line (4)).
+This can be picked up with introspection, and appropriate actions can be taken accordingly.  
+You can also add annotations to a struct itself, for example: to indicate which version of the struct definition is used (see line (1)).
+
+Notes are also abundantly used within code comments to add useful info for refactoring.
+For example: @Incomplete, @Refactor, @Cleanup, @Simplify, @Temporary, ...
+Example of use: Look up in your code editor all occurrences of @Cleanup when you want to further improve your code.
+You can invent your own sorts of notes, they are not limited.

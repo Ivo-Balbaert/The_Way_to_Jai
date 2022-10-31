@@ -116,17 +116,17 @@ See _10.2_dereference_a_null_pointer.jai_:
 #import "Basic";
 
 main :: () {
-  // the explicit null assignment is not needed because null is the zero-value for pointers  
-  // c : *int = null;
-  c : *int;
-  // ... lots of code
-  // print("%\n", c); // (1) => null
-  // assert(c != null);  // (2) => Assertion failed!
+    // the explicit null assignment is not needed because null is the zero-value for pointers  
+    // c : *int = null;
+    c : *int;
+    // ... lots of code
+    // print("%\n", c); // (1) => null
+    // assert(c != null);  // (2) => Assertion failed!
 
-  print("%\n", << c); // program compiles but crashes at run-time with stack trace
+    print("%\n", << c); // (3) program compiles but crashes at run-time with stack trace
 }
 
-// #run main(); // (3)
+// #run main(); // (4)
 ```
 
 Executing the above program on Windows gives the following output:
@@ -177,7 +177,8 @@ c:/jai/modules/Basic/module.jai:74: assert
 d:/Jai/The_Way_to_Jai/examples/10/10.2_dereference_a_null_pointer.jai:9: main
 ```
 
-An even smarter way is to run the program at compile-time with #run main(), as in line (3).
+The program crashes in line (3).
+An even smarter way is to run the program at compile-time with #run main(), as in line (4).
 This gives you almost the same output as when it crashed at run-time, but now you're the only one to see it ;-), and you get the same info:
 
 ```

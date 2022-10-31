@@ -18,7 +18,6 @@ main :: () {
     bob.location.x = 64.14;
     bob.location.y = -21.92;
     print("% is aged % and is currently at %\n", bob.name, bob.age, bob.location);
-    Bob is aged 42 and is currently at {64.139999, -21.92}
 // => Bob is aged 42 and is currently at {64.139999, -21.92}
     v := Vector2.{3.14, 42}; 
     move_person(*bob, v);  // (1)

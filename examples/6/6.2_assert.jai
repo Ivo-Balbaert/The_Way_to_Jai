@@ -2,7 +2,7 @@
 
 main :: () {
     assert(5 == 5.0);
-    assert(4 == 5, "4 does not equal 5");
+//    assert(4 == 5, "4 does not equal 5");
     // (1) print("This is not printed when assert (false)");
 
     n := 42;

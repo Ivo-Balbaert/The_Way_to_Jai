@@ -1,22 +1,22 @@
 #import "Basic";
 #import "Math";
 
-Person :: struct {
+Person :: struct @Version9 {                  // (1)
     name            : string;
     age             : int;
-    location        : Vector2;
+    location        : Vector2;  @NoSerialize  // (2)
 }
 
 main :: ()  {
     pinfo := type_info(Person);
-    for member: pinfo.members {      // (1)
+    for member: pinfo.members {       // (3)
         print("% - ", member.name);  
         print("% - ", << member.type);  
-        print("% - ", member.notes);  
+        print("% - ", member.notes);  // (4)
         print("% - ", member.flags);  
     }
     print("\n");
-    member, offset := get_field(pinfo, "age");
+    member, offset := get_field(pinfo, "age");  // (5)
     print("info age field: % and has offset %\n", << member, offset);
     print("\n");
 }

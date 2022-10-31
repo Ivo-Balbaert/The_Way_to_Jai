@@ -7,10 +7,10 @@ main :: () {
   // ... other pieces of code
   // print("%\n", c); // (1) => null
   // assert(c != null);  // (2) => Assertion failed!
-  print("%\n", << c); // program compiles but crashes at run-time with stack trace
+  // print("%\n", << c); // (3) program compiles but crashes at run-time with stack trace
 }
 
-// #run main(); // (3)
+// #run main(); // (4)
 
 // with assert:
 // D:/jai/testing/test2.jai:5,3: Assertion failed!
