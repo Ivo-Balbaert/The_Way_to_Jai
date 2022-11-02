@@ -54,7 +54,7 @@ Full introspection data is available for all structs, functions, and enums at ru
 This structure is not directly accessible, you have to use the proc `get_type_table` from module _Compiler_,  as we did in line (1).  
 `table` has as type [] *Type_Info.  
 
-(See also build option: `runtime_storageless_type_info`  in § 27.?? )
+(See also build option: `runtime_storageless_type_info`  in § 30.4.7 )
 
 ## 26.2 Running code at compile time with #run
 We first discovered that this was possible in §3.2.4. We talked about the bytecode interpreter in § 4.2, saw how constants can be calculated at compile time in §5.2.2, and how this can be used for debugging purposes in § 20.  

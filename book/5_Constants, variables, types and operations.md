@@ -58,7 +58,7 @@ Eight types exist according to their size (number of bytes) and whether they are
         range: -2,147,483,648 to +2,147,483,647 or 0 to 4,294,967,295
 	`s64` or `u64` - signed and unsigned 8 byte (or 64 bit) integers,  
         range: -9,223,372,036,854,775,808 to +9,223,372,036,854,775,807 or 0 to 18,446,744,073,709,551,615
-	
+
 `int` defaults to `s64`
 
 **float** : literals are of the form `3.141592` or `5.98e24`, with a `.` for separating the decimal part, and an `e` for indicating the power of 10 (exponent).  
@@ -69,6 +69,9 @@ Two floating point number types exist according to their size, they are both sig
 
 `float` defaults to `float32`  
 Use the `0h` prefix to specify floats in hex, in IEEE-754 format. 
+
+Module _Math_ contains the minimum and maximum range values for integer and float types as constants: FLOAT32_MIN, FLOAT32_MAX, S16_MIN, S16_MAX, and so on.
+
 
 **string** : the most common data type, which we have already used, for example: `"Hello from Jai!"`.   
 _Question_: Why are these values strings?  "42", "false" or "0b10".

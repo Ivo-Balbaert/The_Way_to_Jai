@@ -38,7 +38,7 @@ Log_Mode3 :: enum {
     MINIMAL :: NONE;           // 0
     EVERYDAY:: MIDDLE_VALUE;   // (4) 8
     VERBOSE;                   // 9
-}
+} 
 
 main :: () {
     dir1: Compass_Direction = .EAST;
