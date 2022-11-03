@@ -2,7 +2,7 @@
 
 This allows the inclusion of assembly code through the **#asm** directive. You would only do this for portions of the code where you need ultimate performance.
 
-## 28.1 Basic file operations
+## 28.1 Examples of AVX and AVX2 SIMD operations
 See _28.1_assembly.jai_:
 ```c++
 #import "Basic";

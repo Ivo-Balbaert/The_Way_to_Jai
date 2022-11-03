@@ -5,8 +5,9 @@ In Jai, all you would ever need to compile your code is the Jai language and com
 
 > JAI provides an integrated build process. Essentially, your source code is the project file, and the compile options are specified in your code. You communicate with the compiler using the same language you’re writing the program in.
 
-We learned about compiling a program with the `jai` command in § 3, while all command-line options were reviewed in § 2B. This chapter talks about building (compiling/linking while setting options) a Jai project through running another Jai program: the meta-program, which is usually called `build.jai` (it used to be called `first.jai`).  
-Most of the procedures we will need are define in module _Compiler_, so we'll import this module in the programs in this chapter. Most of these programs will also be run at compile-time with #run. By convention a procedure called `build()` is run:  `#run build()`
+We learned about compiling a program with the `jai` command in § 3, while all command-line options were reviewed in § 2B. This chapter talks about building (compiling/linking while setting options) a Jai project through running another Jai program: the **meta-program**, which is usually called `build.jai` (it used to be called `first.jai`).  
+Most of the procedures we will need are define in module _Compiler_, so we'll import this module in the programs in this chapter. Most of these programs will also be run at compile-time with #run.  
+By convention a procedure called `build()` is run:  `#run build()`  
 Any procedure that has the **#compiler** directive is a proc that interfaces with the compiler as a library; it works with compiler internals.
 
 ## 30.1 Workspaces
@@ -46,7 +47,7 @@ To know the current workspace the compiler is working at, use the procedure `get
 You can ask the compiler to create one or several different new workspaces with the procedure `compiler_create_workspace();` which returns a variable of type Workspace (see line (2)). It can only be run at compile-time.  
 Different workspaces run completely separate from each other, one workspace does not affect another workspace.
 
-_Why is the workspace for the target program at the command-line called 'Workspace 2'?_
+_Why is the workspace for the target program at the command-line called 'Workspace 2'?_  
 When launching the compiler, a default workspace (number 1) is started.
 
 ## 30.2 The source file location directives
@@ -62,7 +63,7 @@ main :: () {
 }
 ```
 A few directives exist that can be handy when providing file location information, at run-time as well as during compiling:  
-  **#file**         contains the complete path, filename included of the current file
+  **#file**         contains the complete path, filename included of the current file  
   **#line**         gives the number of the line of code where this directive is used
   **#filepath**     contains the path to the current file, without the filename; it can be a remote filepath.
 
@@ -436,7 +437,7 @@ This program was built with metaprogram 30.8_build_and_run.jai
 ...
 ```
 
-## 30.7 Building and running on successful compilation and compiler command-line argument -- run 
+## 30.7 Building and running with a compiler command-line argument 
 In § 2B we told you that arguments given at the end of a `jai` command with `-- ` are arguments for the meta-program. These arguments are called _arguments for the metaprogram_ or _compiler command-line arguments_.
 Now we will show you how to use them, enhancing our previous program.
 
@@ -562,11 +563,8 @@ It print out `Choosing debug options...` during compilation.
 Calling `main3` now shows: main3
 `This program was built with metaprogram 30.8_debug_release_build.jai`
 
-Here are the alternatives for doing the debug build:
--       `jai 30.8_debug_release_build.jai -- debug`   
--   or  
 
-## 30.9 Applying coding standards
+## 30.9 Enforcing coding standards
 Another use-case would be enforcing coding house rules, an example is shown in 30.9_house_rules.jai: 
 
 ```c++
@@ -682,11 +680,3 @@ See _30.10_generate_llvm_bitcode.jai_:
 ```
 
 The program above shows how to build an optimized LLVM executable; the instructions for optimization are in lines (1) and (2). You might notice that compiling now takes a bit longer. If you don't use the compiler loop, you can just remove it or comment it out.
-
-## 30.10 
-
-
-  
-=======================================================
-Compiler get nodes
-Placeholder ??
