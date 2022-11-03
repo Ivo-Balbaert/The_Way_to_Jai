@@ -67,10 +67,12 @@ In a more complex project, this principle could be applied to lower levels as we
 
 To illustrate this, `part1.jai` contains the declaration of the variable a_part1: `a_part1 := 42;` which is printed out in `main()`. From `part2.jai` you see that you can load a file from an arbitrary path; the path is relative to the calling file.
 
+> Code from a #load-ed file has access to the global scope. Code from a #import-ed module has not!
+
 ## 8.3 Named imports
 Sometimes you want to qualify a function name with the module name it came from (perhaps because that name has already been used, it is duplicate) you can do a named import as follows:	 `Math :: #import "Math";`
 
-Then you have to qualify any function from that module with its module name (in other words: you give the proc a namespace), like this:
+Then you have to qualify all functions from that module with its module name (in other words: you give the proc a namespace), like this:
 
 ```
 	y := Math.sqrt(2.0);

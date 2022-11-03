@@ -3,7 +3,7 @@
 The structure of a typical jai command is as follows:  
 `jai -option1 -option2 file_to_compile.jai -- arguments for metaprogram`
 
-Every argument after -- is ignored by the compiler itself, and is passed to the metaprogram for its own use. Any argument not starting with a -, and before --, is the name of a file to compile.
+Every argument after `-- ` is ignored by the compiler itself (the space after -- is mandatory!), and is passed to the metaprogram for its own use. Any argument not starting with a -, and before --, is the name of a file to compile.
 
 Example:     `jai -x64 program.jai -- info for the compile_time execution` 
 

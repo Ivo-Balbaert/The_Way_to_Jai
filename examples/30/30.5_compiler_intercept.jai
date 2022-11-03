@@ -19,15 +19,43 @@ build :: () {
     
     while true {                     // (2)          
         message := compiler_wait_for_message();  // (3)
-        print(" >> %\n", <<message); // (4) => see output below
-        if !message break;
+//        print(" >> %\n", <<message); // (4) => see output below
+        if !message break; 
         if message.kind == {
             case .COMPLETE;          // (5)
-            break;
+                print(" >> %\n", <<message);
+                break;
+            case .FILE; {            
+                message_file := cast(*Message_File) message;    // (6)
+//                print("Loading file '%'.\n", message_file.fully_pathed_filename); // (7)
+            }
+            case .IMPORT; {            
+                message_import := cast(*Message_Import) message;          // (8)
+//              print("Import module '%'\n", message_import.module_name); // (9)
+            }
+            case .PHASE; {            
+                message_phase := cast(*Message_Phase) message;     // (10)
+//              print("Entering phase %\n", message_phase.phase);  // (11)
+            }
+            case .TYPECHECKED; {            
+                message_typechecked := cast(*Message_Typechecked) message; // (12)
+                for message_typechecked.declarations {  // (13)
+//                    print("Code declaration: %\n", it);
+               }
+            }
+            case .DEBUG_DUMP; {            
+                dump_message := cast(*Message_Debug_Dump) message;   // (14)
+                print("Here is the dump text: %\n", dump_message.dump_text); // (15)
+            }
+            case .ERROR; {            
+                // handle error
+            }
         }
     }
     compiler_end_intercept(w);       // (1B)
 }
+
+
 
 main :: () {}
 

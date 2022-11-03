@@ -39,8 +39,13 @@ _Table of Contents_
    [25 - Context](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/25_Context.md)  
    [26 - Meta-programming and macros](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/26_Metaprogramming%20and%20macros.md)       
    [27 - Working with files](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/27_Working_with_Files.md)       
+   [28 - Inline assembly](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/28_Inline_Assembly.md)  
+   [29 - Interacting with C](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/29_Interacting%20with%20C.md)    
+   [30 - Inline assembly](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/30_Integrated_build_system.md)    
+   [30 - Working with threads](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/30_Integrated_build_system.md)   
  
      
    
+
 
 

@@ -15,19 +15,24 @@ See _24.1_overloading_vec.jai_:
 #import "Math";
 
 main :: () {
-  a := Vector3.{1.0, 2.0, 3.0};
-  b := Vector3.{3.0, 4.0, 2.5};
-  c := a + b;             // (1)
-  c += a;                 // (2)
-  print("c = %\n", c);    // => c = {5, 8, 8.5}
+    a := Vector3.{1.0, 2.0, 3.0};
+    b := Vector3.{3.0, 4.0, 2.5};
+    c := a + b;             // (1)
+    c += a;                 // (2)
+    print("c = %\n", c);    // => c = {5, 8, 8.5}
 
-  a2 := Vector3.{3.0, 4.0, 5.0};  
-  c2 := a2 * 3;           // (3)
-  print("c2 = %\n", c2);  // => c2 = {9, 12, 15}
-  c3 := 3 * a2;           // (4)
-  print("c3 = %\n", c3);  // => c3 = {9, 12, 15}
-}
-```
+    d := Vector3.{3.0, 4.0, 2.5};
+    e := Vector3.{1.0, 2.0, 3.0};
+    f := d - e;         
+    print("f = %\n", f);    // => f = {2, 2, -0.5}
+    print("%\n", operator -(d, e));    // (2B) => {2, 2, -0.5}
+
+    a2 := Vector3.{3.0, 4.0, 5.0};  
+    c2 := a2 * 3;           // (3)
+    print("c2 = %\n", c2);  // => c2 = {9, 12, 15}
+    c3 := 3 * a2;           // (4)
+    print("c3 = %\n", c3);  // => c3 = {9, 12, 15}
+}```
 
 In this code we use the + and * overloaded operators for the Vector3 type from module _Math_.
 
@@ -36,6 +41,7 @@ In lines (1)-(2) we use + with two Vector3 arguments.
 `operator + :: (a: Vector3, b: Vector3) -> Vector3`  
 followed by how the returned Vector3 value is calculated.
 (look it up in Math\module.jai)
+Line 2B shows that you can explicitly call an operator overload, like `operator-(a, b)` or `Basic.operator-(a, b)`.
 
 In lines (3)-(4) we use * with a Vector3 and a float.
 `*` for Vector3 and float is defined with this signature:    

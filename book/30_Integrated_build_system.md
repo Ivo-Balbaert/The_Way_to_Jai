@@ -1,4 +1,4 @@
-# 30 Integrated build system.md
+# 30 Integrated build system
 
 C/C++ compilers do not have a way to specify how to build a program, and are reliant on outside systems foreign to the language to build projects, such as Makefiles, Ninja, and CMake. All these build systems are clunky, need to use a different system for different operating systems, and building a large program can be incredibly messy. 
 In Jai, all you would ever need to compile your code is the Jai language and compiler itself, there are no external dependencies.
@@ -111,6 +111,8 @@ Then we add a file which has to be compiled with the proc `add_build_file` (see 
 When you run the executable `program.exe`, you get the output from `main.jai`:
 `This program was built with a metaprogram build.jai`.
 
+> Remark: The use of a build() function is not mandatory: your build file could just be a #run { ... }, as illustrated in 30.7_generate_llvm_bitcode.
+
 ## 30.4 The build options
 See _30.4_build_options.jai_:
 ```c++
@@ -174,7 +176,7 @@ Possible values are: .NO_OUTPUT; .DYNAMIC_LIBRARY; .STATIC_LIBRARY; .OBJECT_FILE
 This is only the filename of the executable, it includes no extension.
 
 ### 30.4.4 The backend options
-Current options are .LLVM and .X64
+Current options are .LLVM and .X64; X64 is the fastest backend.
 
 ### 30.4.5 Info about runtime errors and crashes
 The `stack_trace` option is by default true. `backtrace_on_crash` is by default .ON
@@ -209,6 +211,7 @@ main :: () {}
 // #run build_release();
 ```
 
+For suitable debug / release options, see § 30.8
 To build for production (release), you would do only `#run build_release();`, or use the command-line option `-run build_release()` while doing `jai build_debug_release.jai`
 
 ## 30.5 Intercepting the compiler message loop
@@ -242,6 +245,32 @@ build :: () {
         if message.kind == {
             case .COMPLETE;          // (5)
             break;
+            }
+            case .FILE; {            
+            message_file := cast(*Message_File) message;    // (6)
+//          print("Loading file '%'.\n", message_file.fully_pathed_filename); // (7)
+            }
+            case .IMPORT; {            
+                message_import := cast(*Message_Import) message;          // (8)
+//              print("Import module '%'\n", message_import.module_name); // (9)
+            }
+            case .PHASE; {            
+                message_phase := cast(*Message_Phase) message;     // (10)
+//              print("Entering phase %\n", message_phase.phase);  // (11)
+            }
+            case .TYPECHECKED; {            
+                message_typechecked := cast(*Message_Typechecked) message; // (12)
+                for message_typechecked.declarations {  // (13)
+//                    print("Code declaration: %\n", it);
+               }
+            }
+            case .DEBUG_DUMP; {            
+               dump_message := cast(*Message_Debug_Dump) message;   // (14)
+//             print("Here is the dump text: %\n", dump_message.dump_text); // (15)
+            }
+            case .ERROR; {            
+                // handle error
+            }
         }
     }
     compiler_end_intercept(w);       // (1B)
@@ -272,8 +301,392 @@ Then in a while true loop in line (2), we do: `message := compiler_wait_for_mess
 In the output, the same kind of messages appear over and over (like IMPORT, FILE, PHASE, TYPECHECKED, ... which is the `kind` of the message), and at the end we get {COMPLETE, 3} (The 3 always refers to workspace 3).
 
 What can we do with this functionality?
+Firstly, we can examine what is exactly happening during code compilation:  
+(Comment out line (4) to focus on a specific message.)
+For other useful examples, see § 30.6 - 30.8.
 
+1) `.FILE` is signalled whenever a new file is loaded. You can see which files are loaded: see lines (6)-(7).  
+This gives as output:  
+```
+Loading file 'c:/jai/modules/Preload.jai'.
+Loading file 'D:/Jai/The_Way_to_Jai/examples/30/main.jai'.
+Loading file 'c:/jai/modules/Runtime_Support.jai'.
+Loading file 'c:/jai/modules/Basic/module.jai'.
+Loading file 'c:/jai/modules/Basic/Array.jai'.
+Loading file 'c:/jai/modules/Basic/Simple_String.jai'.
+Loading file 'c:/jai/modules/Basic/String_Builder.jai'.
+Loading file 'c:/jai/modules/Basic/string_to_float.jai'.
+Loading file 'c:/jai/modules/Basic/Apollo_Time.jai'.
+Loading file 'c:/jai/modules/Basic/Print.jai'.
+Loading file 'c:/jai/modules/Basic/windows.jai'.
+Loading file 'c:/jai/modules/Windows_Utf8.jai'.
+Loading file 'c:/jai/modules/Windows.jai'.
+Loading file 'c:/jai/modules/Runtime_Support_Crash_Handler.jai'.
+Loading file 'c:/jai/modules/stb_sprintf/module.jai'. 
+```
+
+2) `.IMPORTED` is signalled whenever a new module is loaded. You can see which modules are imported: see lines (8)-(9).  
+
+```
+Import module 'Preload'
+Import module ''
+Import module 'Runtime_Support'
+Import module 'Basic'
+Import module 'Runtime_Support'
+Import module 'Windows'
+Import module 'Windows_Utf8'
+Import module 'Runtime_Support_Crash_Handler'
+Import module 'stb_sprintf'
+```
+
+3) `.PHASE` every time when entering a new phase in the compilation. You can see the successive compilation phases : see lines (10)-(11).  
+```
+Entering phase ALL_SOURCE_CODE_PARSED
+Entering phase ALL_SOURCE_CODE_PARSED
+Entering phase ALL_SOURCE_CODE_PARSED
+Entering phase ALL_SOURCE_CODE_PARSED
+Entering phase TYPECHECKED_ALL_WE_CAN
+Entering phase ALL_TARGET_CODE_BUILT
+Entering phase PRE_WRITE_EXECUTABLE
+```
+
+4) `.TYPECHECKED` every time a code declaration is typechecked, this gives an huge amount of output : see lines (12)-(13).  
+
+```
+Code declaration: {adb_1168, [adb_11f0, adb_1168]}
+Code declaration: {adb_22f0, [adb_2378, adb_22f0]}
+Code declaration: {adb_23d8, [adb_2460, adb_23d8]}
+Code declaration: {adb_24a8, [adb_2530, adb_24a8]}
+...
+```
+
+5) `.DEBUG_DUMP` when a crash occurs during compilation, the dump info can be viewed like in lines (14)-(15).
+
+6) `.ERROR`: when an error occurs in the compilation process itself, you can handle it here..
+
+All these enum options contain a lot more useful info (see module _Compile_).
+You can also run any other program after successful completion.
+
+Another use-case would be to run the program after successful completion of the compilation, or any other program for that matter. 
+
+## 30.6 Building and running on successful compilation
+What if we want to build our project, and on successfull completion, run it?
+
+See _30.6_build_and_run.jai_:
+```c++
+#import "Basic";
+#import "Compiler";
+#import "Process";
+
+success := false;
+
+build :: () {
+    w := compiler_create_workspace();                     
+    if !w {
+        print("Workspace creation failed.\n");
+        return;
+    }
+
+    target_options := get_build_options(w);               
+    target_options.output_executable_name = "brun";    
+    set_build_options(target_options, w);                 
+
+    compiler_begin_intercept(w);     
+    add_build_file("main2.jai", w);   
+    
+    while true {                     
+        message := compiler_wait_for_message();  
+        if !message break; 
+        if message.kind == {
+            case .COMPLETE;          // (1)
+                print(" >> %\n", <<message);
+                message_complete := cast(*Message_Complete) message;  // (2)
+                success = message_complete.error_code == 0;           // (3)
+                break;
+        }
+    }
+    compiler_end_intercept(w);   
+
+    if success {            
+        print("[SUCCESS!]\n");
+        run_command(target_options.output_executable_name);  // (4)
+    }    
+}
+
+main :: () {}
+
+#run build();
+
+/*
+...
+>> {COMPLETE, 3}
+[SUCCESS!]
+This program was built with metaprogram 30.8_build_and_run.jai
+...
+*/
+```
+
+This is easily done: when the .COMPLETE message is received, we check that the error_code of the message is 0. If so, we set a global variable `success` to true (see lines (2) and (3)). Then at the end of our build program, we print a "SUCCES" message, and run our compiled program with the `run_command` procedure from module _Process_.  
+In the output we see:
+```
+...
+>> {COMPLETE, 3}
+[SUCCESS!]
+This program was built with metaprogram 30.8_build_and_run.jai
+...
+```
+
+## 30.7 Building and running on successful compilation and compiler command-line argument -- run 
+In § 2B we told you that arguments given at the end of a `jai` command with `-- ` are arguments for the meta-program. These arguments are called _arguments for the metaprogram_ or _compiler command-line arguments_.
+Now we will show you how to use them, enhancing our previous program.
+
+See _30.7_build_and_run2.jai_:
+```c++
+#import "Basic";
+#import "Compiler";
+#import "Process";
+
+success := false;           // compile is successful
+run_on_success := false;    // compiler command line argument --run
+
+build :: () {
+    w := compiler_create_workspace();                     
+    if !w {
+        print("Workspace creation failed.\n");
+        return;
+    }
+
+    target_options := get_build_options(w);               
+    
+    args := target_options.compile_time_command_line;  // (1)
+    for args {                                         // (2)
+        print ("% / ", it);
+        if it == {
+            case "run";
+                run_on_success = true;
+        }
+    }
+   
+    target_options.output_executable_name = "brun";    
+    set_build_options(target_options, w);                 
+
+    compiler_begin_intercept(w);     
+    add_build_file("main2.jai", w);   
+    
+    while true {                     
+        message := compiler_wait_for_message();  
+        if !message break; 
+        if message.kind == {
+            case .COMPLETE;         
+                print(" >> %\n", <<message);
+                message_complete := cast(*Message_Complete) message;  
+                success = message_complete.error_code == 0;           
+                break;
+        }
+    }
+    compiler_end_intercept(w);   
+
+    if success && run_on_success {         // (3)   
+        print("[SUCCESS!]\n");
+        run_command(target_options.output_executable_name);  
+    }    
+}
+
+main :: () {}
+
+#run build();
+```
+
+We define a new global variable `run_on_success` which will become true when we give a metaprogram argument `-- run`.
+In line (1) we get these argument(s) from the property `Build_Options.compile_time_command_line`. Starting in line (2), we loop over them and set `run_on_success` when finding `-- run`. In line (3) we now test both success parameters before running the executable.  
+To get the same output as in the previous section, you now have to call the compiler with:  
+`jai 30.7_build_and_run2.jai -- run`.
+
+## 30.8 Choosing a debug / release build with compiler command-line arguments
+In the same way as in the previous section, we can decide to either do a debug build or a release build based on the given command-line argument. This is shown in the following code, which is a further development of the code in § 30.4.8:
+
+See _30.8_debug_release_build.jai_:
+```c++
+
+#import "Basic";
+#import "Compiler";
+
+#run {
+    w := compiler_create_workspace("workspace");
+    if !w {
+        print("Workspace creation failed.\n");
+        return;
+    }
+    target_options := get_build_options(w);
+    args := target_options.compile_time_command_line;
+    for arg: args {       // (1)
+        if arg == {
+        case "debug";
+        build_debug(w);
+        case "release";
+        build_release(w);
+        }
+    }
+    add_build_file("main3.jai", w);
+}
+
+build_debug :: (w: Workspace) {
+    print("Choosing debug options...\n");
+    target_options := get_build_options(w);
+    target_options.backend =.X64; 
+    target_options.optimization_level = .DEBUG;
+    target_options.array_bounds_check = .ON;
+    target_options.output_executable_name = "main3";   
+    set_build_options(target_options, w);
+}
+
+build_release :: (w: Workspace) {
+    print("Choosing release options...\n");
+    target_options := get_build_options(w);
+    target_options.backend = .LLVM;
+    target_options.optimization_level = .RELEASE;
+    set_optimization_level(*target_options, 2, 0);
+    target_options.output_executable_name = "main3";   
+    set_build_options(target_options, w);
+}
+
+main :: () {}
+```
+
+Again we loop over the meta-program arguments starting in line (1).
+Calling the program as `jai 30.8_debug_release_build.jai -- debug` supplies the meta-program argument  
+`-- debug`, which branches to `case "debug";`, which calls `build_debug(w);` 
+It print out `Choosing debug options...` during compilation.
+(The same logic goes for `-- release.`)    
+
+Calling `main3` now shows: main3
+`This program was built with metaprogram 30.8_debug_release_build.jai`
+
+Here are the alternatives for doing the debug build:
+-       `jai 30.8_debug_release_build.jai -- debug`   
+-   or  
+
+## 30.9 Applying coding standards
+Another use-case would be enforcing coding house rules, an example is shown in 30.9_house_rules.jai: 
+
+```c++
+#import "Basic";
+#import "Compiler";
+
+#run build();
+
+build :: () {
+    w := compiler_create_workspace("Target Program");
+    if !w {
+        print("Workspace creation failed.\n");
+        return;
+    }
+
+    target_options := get_build_options(w);
+    target_options.output_executable_name = "checks";
+    set_build_options(target_options, w);
+
+    compiler_begin_intercept(w);
+    add_build_file("main.jai", w);
+
+    while true {
+        message := compiler_wait_for_message();
+        if !message break;
+        misra_checks(message);  // (1)
+
+        if message.kind == .COMPLETE  break;
+    }
+
+    compiler_end_intercept(w);
+
+    // This metaprogram should not generate any output executable:
+    set_build_options_dc(.{do_output=false});   // (2)
+}
+
+misra_checks :: (message: *Message) {
+    if message.kind != .TYPECHECKED return;
+    code := cast(*Message_Typechecked) message;
+    for code.declarations {
+        decl := it.expression;
+        check_pointer_level_misra_17_5(decl);
+    }
+
+    for tc: code.all {
+        expr := tc.expression;
+        if expr.enclosing_load {
+            if expr.enclosing_load.enclosing_import.module_type != .MAIN_PROGRAM  continue;
+        }
+        
+        for tc.subexpressions {
+            // Check rule 17.5. We already did the pointer-level check for global declarations
+            // but, local declarations don't come in separate messages; instead, we check them here.
+            if it.kind == .DECLARATION {
+                sub_decl := cast(*Code_Declaration) it;
+                check_pointer_level_misra_17_5(sub_decl); 
+            }
+        }
+    }
+
+    check_pointer_level_misra_17_5 :: (decl: *Code_Declaration) {
+        type := decl.type;
+        pointer_level := 0;
+    
+        while type.type == .POINTER {
+            pointer_level += 1;
+            p := cast(*Type_Info_Pointer) type;
+            type = p.pointer_to;
+        }
+        if pointer_level > 2 {
+            location := make_location(decl);
+            compiler_report("Too many levels of pointer indirection.\n", location);
+        }
+    }
+}
+```
+
+During the compiler message loop in line (1), we inject a proc `misra_checks()`, which tests every message on a specific code rule, here the `check_pointer_level_misra_17_5` rule which forbids more than 2 levels of pointer indirection. Line (2) ensures that this metaprogram does not generate any output executable.
+
+## 30.10 Generating LLVM bitcode
+See _30.10_generate_llvm_bitcode.jai_:
+```c++
+#import "Basic";
+#import "Compiler";
+
+#run {
+    w := compiler_create_workspace();
+    if !w {
+        print("Workspace creation failed.\n");
+        return;
+    }
+    target_options := get_build_options(w);
+    target_options.output_executable_name = "exec";
+    target_options.intermediate_path = #filepath;
+    set_optimization_level(*target_options, 2, 0);      // (1)
+    target_options.llvm_options.output_bitcode = true;  // (2)
+    set_build_options(target_options, w);
+
+    compiler_begin_intercept(w);
+    add_build_file("main.jai", w);  
+
+    while true {
+        message := compiler_wait_for_message();
+        if !message break;
+        if message.kind == {
+        case .COMPLETE;
+        break;
+        }
+    }
+    compiler_end_intercept(w);
+    set_build_options_dc(.{do_output=false});  
+}
+```
+
+The program above shows how to build an optimized LLVM executable; the instructions for optimization are in lines (1) and (2). You might notice that compiling now takes a bit longer. If you don't use the compiler loop, you can just remove it or comment it out.
+
+## 30.10 
+
+
+  
 =======================================================
 Compiler get nodes
-Compiler command arguments
 Placeholder ??
