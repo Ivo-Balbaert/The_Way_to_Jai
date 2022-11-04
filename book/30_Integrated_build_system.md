@@ -56,16 +56,20 @@ See _30.2_location.jai_:
 #import "Basic";
 
 main :: () { 
-  print("In file % line %\n", #file, #line); // (1)
-  // => In file d:/Jai/The_Way_to_Jai/examples/30/30.2_location.jai line 5
-  print("Filepath is %\n", #filepath);       // (2)
-  // => Filepath is d:/Jai/The_Way_to_Jai/examples/30/
+    print("In file % line %\n", #file, #line); // (1)
+    // => In file d:/Jai/The_Way_to_Jai/examples/30/30.2_location.jai line 4
+    print("Filepath is %\n", #filepath);       // (2)
+    // => Filepath is d:/Jai/The_Way_to_Jai/examples/30/
+    loc := #location(code);                    // (3)
+    print("The code is at location %:%\n", loc.fully_pathed_filename, loc.line_number);
+    // => The code is at location d:/Jai/The_Way_to_Jai/examples/30/30.2_location.jai:3 
 }
 ```
 A few directives exist that can be handy when providing file location information, at run-time as well as during compiling:  
   **#file**         contains the complete path, filename included of the current file  
   **#line**         gives the number of the line of code where this directive is used
   **#filepath**     contains the path to the current file, without the filename; it can be a remote filepath.
+  **#location**     given a piece of Code, it can extract the full path to that code, as well as its line number.
 
 When using or setting file-paths in Jai, always use the forward slash / as path-separator, even on Windows!
 

@@ -1,5 +1,5 @@
 # The Way to Jai
-A lightweight way to discover and learn the Jai programming language.
+A lightweight way to discover and learn the Jai programming language. All programs work with the latest version of the Jai compiler.
 
 This is a work in progress.
 If you find mistakes, ambiguities, things that are not clear, please create an issue.
