@@ -42,7 +42,7 @@ _Table of Contents_
    [28 - Inline assembly](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/28_Inline_Assembly.md)  
    [29 - Interacting with C](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/29_Interacting%20with%20C.md)    
    [30 - Integrated build system](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/30_Integrated_build_system.md)    
-   [31 - Working with threads](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/30_Integrated_build_system.md)   
+   [31 - Working with threads](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/31_Working%20with%20threads.md)   
  
      
    
