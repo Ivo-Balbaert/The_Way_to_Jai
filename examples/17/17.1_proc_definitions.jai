@@ -28,6 +28,11 @@ main :: () {
     print("0x%\n", cast(*void) sum);  // => 0x7ff7_a9c3_e1b0
     print("Its type is: %\n", type_of(sum));  // (8)
     // => Its type is: procedure (s64, s64, s64) -> s64
+
+    p_ptr: (int, int, int) -> int = sum; // (10)
+    // p_ptr := sum; // (10B)
+    d := p_ptr(1, 2, 3);                 // (11)
+    print("d is %\n", d); // => d is 6
 }   
 
 /*

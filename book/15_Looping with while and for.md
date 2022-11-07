@@ -123,7 +123,6 @@ In § 12.6 we constructed a linked-list with a recursive struct ListNode. To pri
 We declare a variable r of type *ListNode in line (1). As long as r is not a null pointer, the while loop in (2) will keep on going. Line (2) is shorthand for:   `while r != null`
 We print out the data of the loop and point to the next node in line (3). In our example r becomes null for c, which stops the loop. In § 26 ?? we'll see how we can print this list out in a kind of for-loop, which we'll discuss next.
 
-
 ## 15.2 For loop
 When you want to iterate over a range of things, `for` is your best tool.
 
@@ -158,6 +157,11 @@ main :: () {
         }
         print("\n");
     }
+// Casting the index:
+    for i: 0..cast(u8)255 { // (6) // casts i to u8.
+       print("% - ", i);
+    }
+    // => 0 - 1 - 2 - 3 - 4 - 5 - 6 - 7 - ...
 }
 
 /*
@@ -170,10 +174,11 @@ Number 1 - Number 2 - Number 3 - Number 4 - Number 5 -
 3, 10 / 3, 11 / 3, 12 / 3, 13 / 3, 14 / 3, 15 /
 4, 10 / 4, 11 / 4, 12 / 4, 13 / 4, 14 / 4, 15 /
 5, 10 / 5, 11 / 5, 12 / 5, 13 / 5, 14 / 5, 15 /
+0 - 1 - 2 - 3 - 4 - 5 - 6 - 7 - ...
 */
 ```
 
-Jai knows the concept of a **range** like 1..100, which means all successive integers starting from 1 to 100 included.
+Jai knows the concept of a **range** like 1..100, which means all successive integers starting from 1 to 100 included (so like [1, 100] in mathematics).
 In general `for start..end { }`; for an exclusive range write end–1. start and end can be variables, expressions, even procedure calls.
 If there is no name for the loop variable, Jai has its own implicit iteration variable called `it`, see line (1). In line (2) we give the loop variable a name like `number`. This is the same as naming the condition variable in a while. 
 In that case `it` is no longer defined. 
@@ -181,7 +186,7 @@ In that case `it` is no longer defined.
 (1) and (2) are one-line for-loops. (3) shows that we need { } to write a for with a code block; end here is a variable.  
 In line (4) we see a reversed for-loop indicated with **<**. Note that you still have to write the range as end..start, or put it in another way, as : `for < i: max..0 { ... }`.
 
-Like with while we can nest for-loops, as shown in line (5).
+Like with while we can nest for-loops, as shown in line (5). Line (6) shows that we can cast the index (normally type s64) to a smaller integer type (but the cast bounds are checked!) .
 A for-loop over a string does not work.
 
 **Exercises**

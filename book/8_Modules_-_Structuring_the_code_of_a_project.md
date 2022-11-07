@@ -5,7 +5,6 @@ In § 3.2.2 we saw how we can import a module in our project by using `#import`.
 
 **Searching for identifier names**
 When an identifier for a type, variable or procedure is encountered while compiling, the compiler first looks in the current source file. Then it searches the imported modules (if any, see § 8.1), and it also searches the loaded files (see § 8.2).
-Modules are more o
 
 Imported modules are always built from source, in full, every time you compile your program.
 
@@ -86,7 +85,18 @@ This improves readability: it makes it clear where a function comes from. The na
 
 or be used to differentiate between two modules with the same name.
 
-## 8.4 Structuring a project
+## 8.4 Import a file, a dir or a string
+If you only want to import a specific file from a module, you can do it with `#import, file` like this:  
+`module :: #import, file "module1/module.jai";`
+
+To load a directory from a module, use `#import, dir`:  
+`module :: #import, dir "files/directory";`  
+
+You can even import a specific string into your program with `#import, string`:
+`#import, string "factorial :: (x: int) -> int { if x <= 1 return 1; return x * factorial(x-1); }";`
+Then in the .build folder, a file .added_strings_w2.jai is created which contains this added string.
+
+## 8.5 Structuring a project
 A project can consist of many source files and modules that are called. But there can only be one main source file. This file contains the `main()` procedure and structures the project with #imports and #loads. It is often called `main.jai` or `first.jai`.
 
 The order of statements in a Jai source file is not mandatory. However, for readability  it can be good to adhere to some conventions, particularly in a big codebase.
@@ -98,8 +108,8 @@ After the imports/loads come the global declarations of constants, variables, ty
 You always want to be able to find the `main()` procedure quickly, to get an overview of what the program is doing. For that reason:
 > Put the main() procedure at the bottom of the main file.
 
-## 8.5 -import_dir
-An imported module is searched in the _jai\modules_ folder. Additional modules from other directories can be imported via the `-import_dir "Path/To/Module"` flag.
+## 8.6 -import_dir
+An imported module is searched in the _jai\modules_ folder. Additional modules from other directories can be imported via the `-import_dir "Path/To/Module"` flag. The search path which the compiler looks through in search for modules is called the _import_path_.
 Examples:
 - To load a `module.jai` in the same folder as program.jai:  
     `jai program.jai -import_dir "./"`

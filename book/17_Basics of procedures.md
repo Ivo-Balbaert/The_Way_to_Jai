@@ -39,6 +39,11 @@ main :: () {
     print("0x%\n", cast(*void) sum);  // => 0x7ff7_a9c3_e1b0
     print("Its type is: %\n", type_of(sum));  // (8)
     // => Its type is: procedure (s64, s64, s64) -> s64
+
+    p_ptr: (int, int, int) -> int = sum; // (10)
+    // p_ptr := sum; // (10B)
+    d := p_ptr(1, 2, 3);                 // (11)
+    print("d is %\n", d); // => d is 6
 }   
 
 ```
@@ -80,10 +85,11 @@ As we see in line (5), it is always possible to pass the parameter value through
 Line (6) shows that a parameter can just be another proc call.
 
 ### 17.1.2 Getting the type and address of a proc
-Line (7) shows that a proc is an address (often called a **function pointer**), it points to where the code starts in memory. In § 22.4 and 22.6 shows examples where this function pointer is used as a parameter to another procedure.  
+Line (7) shows that a proc is an address (often called a **function pointer**), it points to where the code starts in memory. § 22.4 and 22.6 show examples where this function pointer is used as a parameter to another procedure.  
 Line (8) tells us the type of the sum proc:
 `procedure (s64, s64, s64) -> s64`
 So the **header** or **signature** of a proc (its arguments and return-values list) determine its type.
+In line (10) we declare a proc variable `p_ptr` with the same signature as sum, and we assign sum to it. (10B) shows that this also works with type inference. This allows us to call `sum` with this new name (line (11)).
 
 **Exercises**  
 (1) Write a proc with no arguments that prints "Hello, world!"   (see display.jai). Make the proc run at compile time.  

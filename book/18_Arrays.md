@@ -211,7 +211,7 @@ Arrays are built into the compiler so that they are very fast. The array items c
 
 ## 18.4. Dynamic arrays
 The static arrays we've seen until now were fixed in size: after the size is known to the compiler, they cannot be enlarged, so no items can be added.
-Jai (unlike C) also has **dynamic** or **resizable arrays** , where the size is not known at compile-time and can grow (change) at runtime. Their items as well as the arrays size are stored in heap memory. 
+Jai (unlike C) also has **dynamic** or **resizable arrays** , where the size is not known at compile-time and can grow (change) at runtime. Their items as well as the arrays size are stored in heap memory, more specifically in the memory allocated by the context's default allocator (see § 21).
 
 See _18.3_dynamic_arrays.jai_:
 
@@ -219,43 +219,43 @@ See _18.3_dynamic_arrays.jai_:
 #import "Basic";
 
 main :: () {
-  arrdyn : [..]int;          // (1) dynamic array of integers.
-  another_array : [..]int;      
-  b : [..]string;            // (2) dynamic array of strings.
+    arrdyn : [..]int;          // (1) dynamic array of integers.
+    another_array : [..]int;      
+    b : [..]string;            // (2) dynamic array of strings.
 
-  // clean up memory
-  defer array_free(arrdyn);     // (3)
-  defer free(*another_array);   // (4)
-  defer free(*b);   // 
-   
-  array_add(*arrdyn, 5);  // (5) Add 5 to the end of arrdyn
-  array_add(*arrdyn, 9);  // Add 9 to the end of arrdyn
-  array_add(*arrdyn, 13); // Add 13 to the end of arrdyn
-  print("arrdyn is: %\n", arrdyn); // => arrdyn is: [5, 9, 13]
- 
-  print("%\n", array_find(arrdyn, 5));  // (6) => true -  looks for 5 in arrdyn
+    // clean up memory
+    defer array_free(arrdyn);     // (3)
+    defer free(*another_array);   // (4)
+    defer free(*b);   // 
+    
+    array_add(*arrdyn, 5);  // (5) Add 5 to the end of arrdyn
+    array_add(*arrdyn, 9);  // Add 9 to the end of arrdyn
+    array_add(*arrdyn, 13); // Add 13 to the end of arrdyn
+    print("arrdyn is: %\n", arrdyn); // => arrdyn is: [5, 9, 13]
+    
+    print("%\n", array_find(arrdyn, 5));  // (6) => true -  looks for 5 in arrdyn
 
-  for arrdyn {
-    if it == 5 remove it;       // (7)
-  }
-  print("arrdyn is: %\n", arrdyn); // => arrdyn is: [13, 9]
+    for arrdyn {
+        if it == 5 remove it;       // (7)
+    }
+    print("arrdyn is: %\n", arrdyn); // => arrdyn is: [13, 9]
 
-  print("another_array is: %\n", another_array); // => another_array is: []
-  array_copy(*another_array, arrdyn); // (8) copy arrdyn into another_array
-  print("another_array is: %\n", another_array); // => another_array is: [13, 9]
+    print("another_array is: %\n", another_array); // => another_array is: []
+    array_copy(*another_array, arrdyn); // (8) copy arrdyn into another_array
+    print("another_array is: %\n", another_array); // => another_array is: [13, 9]
 
-  array_reset(*arrdyn);  // (9) Reset (empties) arrdyn
-  print("arrdyn is: %\n", arrdyn); // => arrdyn is: []
+    array_reset(*arrdyn);  // (9) Reset (empties) arrdyn
+    print("arrdyn is: %\n", arrdyn); // => arrdyn is: []
 
-  // filling an array:
-  N :: 100;
-  for 0..N-1  array_add(*arrdyn, it);  // (10)
-  // for i: 0..N-1  array_add(*arrdyn, i); // alternative for (10)
+    // filling an array:
+    N :: 100;
+    for 0..N-1  array_add(*arrdyn, it);  // (10)
+    // for i: 0..N-1  array_add(*arrdyn, i); // alternative for (10)
 
-  M :: 50;
-// more performant way:
-  array_reserve(*arrdyn, M); // (11) - Reserve 50 items!
-  for 1..M array_add(*arrdyn, it);  // 
+    M :: 50;
+    // more performant way:
+    array_reserve(*arrdyn, M); // (11) - Reserve 50 items!
+    for 1..M array_add(*arrdyn, it);  // 
 }
 ```
 
@@ -270,7 +270,7 @@ We check if an item is present in the array in line (6), use **array_find**, whi
 Removal of items within a dynamic array is done with the **remove** proc, as in line (7): we want to remove the item with value 5, so we loop over the array, if-test with it == value, and if true, remove it. This proc is used to safely remove elements while iterating through an array, which is often a problem in other languages. 
 Notes:
 - This proc does not work for fixed-size arrays!  
-- This proc does an unordered remove, the removed item is replaced with the last item. 
+- This proc does an unordered remove, the removed item is replaced with the last item (in fact: a swap with the last item, and then a remove of the last element). The remove happens in constant time O(1).
 (For an ordered remove, see § 18B.) 
 
 To copy an array into another array, use **array_copy**, as in line (8).
