@@ -14,7 +14,7 @@ To access a C function, use the **#foreign**  directive after the Jai declaratio
 
 Some examples:	
 This statement looks for a C function with the name `strlen` and with the same signature and imports it from the C standard library `libc` (on Linux).  
-`strlen := (s: string) -> int     #foreign libc;`
+`strlen := (s: string) -> int     #foreign libc;`  
 `array_count := (array: Any [] *) -> int       #foreign libc;`  
 `printf := (s: string, args: ..[] Any) -> int  #foreign libc;`  
 `rand :: () -> s64                             #foreign libc;`  
