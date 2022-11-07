@@ -419,3 +419,68 @@ can be divided into:
     ptr: *Entity;  // declaration
     ptr = *e;      // assignment
 
+## 12.11 Struct alignment
+
+By aligning certain member fields of structs to 64 bit, we can make memory allocation cache-aligned on 64 bit systems. This can also be done for global variables. This enhances memory efficiency and reduces cache misses. This is shown in the following example:
+
+See _12.7_struct_align.jai_:
+```c++
+#import "Basic";
+
+Accumulator :: struct {
+  accumulation: [2][256] s16 #align 64;         // (1)
+  computedAccumulation: s32;
+}
+
+Object :: struct { member: int #align 64; }
+
+Thing :: struct {
+   member1: u8  #align 1;                        // (2)
+   member2: u32 #align 1;
+}
+
+global_var: [100] int #align 64;                 // (3) 
+
+main :: () {
+    assert(cast(int)(*global_var) % 64 == 0);    // (4)
+    object := New(Object);                       // (5)
+    free(object);
+}
+```
+
+The `Accumulator.accumulation` field and `global_var` in lines (1) and (3) are 64 bit cache-aligned. Line (4) shows that indeed the address of `global_var` is divisible by 64. In line (5) a heap allocation is performed that is 64-bit aligned.
+(2) #align 1 ??
+
+## 12.12 Making definitions in an inner module visible with using
+Create a module TestInside with this content:
+```
+Struct1 :: struct {
+    number: int;
+}
+```
+(You can do this by creating a TestInside.jai in c:\jai\modules or in d:\jai\my_modules and compiling with -import_dir "d:\jai\my_modules".)
+
+Also create a module TestScope with this content:
+```
+#import "TestInside";
+```
+
+Now create a `test.jai` with as content=
+```c++
+#import "Basic";
+#import "TestScope";
+
+main :: () {
+    s1 := Struct1.{number = 42}; // (1) Error: Undeclared identifier 'Str'.
+    print("%", s1);     // => {42}
+}
+```
+
+Compiling `test.jai` gives the Error: Undeclared identifier 'Str'. This is because the definition of Struct1 gets into #scope_module in module TestScope, and is not visible inside our test program.  
+
+If you want `Struct1` to be visible inside the program, change the content of TestScope to:  
+```
+using TestInside :: #import "TestInside"; 
+```
+
+Then we can make an instance s1 of Struct1, and print out its value.

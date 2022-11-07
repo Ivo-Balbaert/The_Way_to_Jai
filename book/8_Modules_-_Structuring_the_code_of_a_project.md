@@ -15,6 +15,14 @@ Modules are stored in the _jai\modules_ folder.
 They are installed globally on a machine, so that all Jai applications need to use the same modules collection. 
 > A system will be made so that modules you use get copied locally into your application. The advantage is that you have a stable build that doesn't randomly break unless you decide to update those modules (see also § 8.5).
 
+When a module (for example TestScope) is not found, the compiler gives the error:  
+`Error: Unable to find a module called 'TestScope' in any of the module search directories.
+
+    #import "Basic";
+    #import "TestScope";
+
+Info: ... Searched path 'c:/jai/modules/'.`
+
 A module can be one file, for example `Random.jai`, imported if needed with `#import "Random";`.  
 
 When a module contains several files, you need to give the module its own folder with the same name, and in it a file `module.jai` is required.
@@ -119,3 +127,5 @@ Examples:
     `jai program.jai -import_dir arg1`
 - You can specify several path arguments to module directories at the same time:
     `jai program.jai -import_dir arg1, arg2, arg3`
+
+For an example of its use, see § 12.12
