@@ -13,16 +13,16 @@ To access a C function, use the **#foreign**  directive after the Jai declaratio
 > #foreign		specifies a foreign (C) procedure 
 
 Some examples:	
-This statement looks for a C function with the name `strlen` and with the same signature and imports it from the C standard library `libc` (on Linux).
+This statement looks for a C function with the name `strlen` and with the same signature and imports it from the C standard library `libc` (on Linux).  
 `strlen := (s: string) -> int     #foreign libc;`
+`array_count := (array: Any [] *) -> int       #foreign libc;`  
+`printf := (s: string, args: ..[] Any) -> int  #foreign libc;`  
+`rand :: () -> s64                             #foreign libc;`  
+`clock :: () -> s64                            #foreign libc;`  	
 
-`array_count := (array: Any [] *) -> int       #foreign libc;`
-`printf := (s: string, args: ..[] Any) -> int  #foreign libc;`
-`rand :: () -> s64                             #foreign libc;`
-`clock :: () -> s64                            #foreign libc;`	
-
-The C library (here libc) also needs to be declared.
-Use the **#foreign_system_library** directive to specify as a constant a system file (library) for foreign functions. For example, declare `libc` as: `libc :: #foreign_system_library "libc";`  
+The C library (here libc) also needs to be declared.  
+Use the **#foreign_system_library** directive to specify as a constant a system file (library) for foreign functions.  
+For example, declare `libc` as: `libc :: #foreign_system_library "libc";`  
 To use the Windows version of the C run time, specify:  `crt :: #foreign_system_library "msvcrt";`  
 To use the Windows `kernel32` library, specify:         `kernel32 :: #foreign_system_library "kernel32";`  
 
