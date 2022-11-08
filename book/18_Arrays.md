@@ -150,10 +150,10 @@ main :: () {
     }
 
      // Heap-allocated arrays:
-    arr_heap := NewArray(4, float); // (9) will heap-allocate an array of 4 floats; from Basic
+    arr_heap := NewArray(4, float); // (9) will heap-allocate an array of 4 floats; from module _Basic_
+    defer array_free(arr_heap);   // (10)
     print("%\n", arr_heap); // => [0, 0, 0, 0]
     // ...
-    defer array_free(arr_heap);   // (10)
 
     // Allocation with New:
     arr_heap2 := New([3] int);    // (11)
@@ -198,7 +198,7 @@ Line (8) shows that we can use an array as a bool (condition): an array that is 
 
 ### 18.3.4 Allocating an array on the heap
 We can force the compiler to allocate an array on the heap with the **NewArray** procedure from module _Basic_: `arr_heap := NewArray(4, float);` (see line (9))
-This proc also has some default vales for arguments like initialized, allocator, and memory alignment; for example: `array := NewArray(500, int, alignment=64);`
+This proc also has some default vales for arguments like initialized, allocator, and memory alignment; for example: `. The types of these arrays are `[] int`.
 Releasing the memory when the array is no longer in use must be done by the developer with defer **array_free** (see line (10)).  
 A more familiar and consistent syntax using **New** and **free** is shown in line (11):  
 `arr_heap2 := New([3] int);`

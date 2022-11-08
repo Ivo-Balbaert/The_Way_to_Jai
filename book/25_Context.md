@@ -102,7 +102,7 @@ For example: to temporarily switch-over to Temporary Storage, do:
 A lot of procs like write_string() and debug_break() defined in _Preload_ are marked with this directive: it tells the compiler that this proc does not use the context. 
 
 ## 25.4 Logging
-The `log()` proc used in line (5) formats a message, then sends it to `context.logger` (it automatically does a newline).
+The `log()` proc from module _Basic_ used in line (5) formats a message, then sends it to `context.logger` (it automatically does a newline).
 You can pass flags, a source_identifier and data gets copied from context.
 Here is its signature:  
 `log :: (format_string: string, args: .. Any, loc := #caller_location, flags := Log_Flags.NONE, user_flags : u32 = 0)`
@@ -110,3 +110,18 @@ Here is its signature:
 ## 25.5 Temporary storage
 Back in § 21.3.3 we saw that Temporary storage characteristics are stored in the context, namely in `context.temporary_storage`  
 In line (6) we print out a number of its properties: its size = 32 Kb,
+
+## 25.6 The stack trace
+In line (4) of the code of `Context_Base`, we see a field called `stack_trace`. What is its purpose?  
+The stack trace is also called the program's **function call stack**, which is a much better description, namely: it is a report of the active stack frames at a certain point in time during the execution of a program. It contains a logging of all function calls, and where they occurred in the program. You'll often see stack traces in the output of program crashes, and they are used for debugging purposes.
+
+See _25.2_stack_trace.jai_:
+```c++
+
+```
+
+_25.2_stack_trace.jai_ is an example of an example of a recursive procedure `proc1` (see line (2)), that calls itself 3 times, starting in line (3). When x gets the value 0, the proc `my_print_stack_trace` from line (1) is called, with the active `context.stack_trace` as argument. This iterates through the nodes of the stack trace, until node becomes `null`. When there is info, we print the procedure's name, the source file and line number where it is called, and the call depth, that is: how 'deep' the recursion is.  
+
+This info is so useful that there is in fact a proc `print_stack_trace` in module _Basic_, which is almost identical and which we call in line (2C). Use it as an aid in debugging if necessary.
+
+> In § 30.4.5 we'll see that there is also a build option called stack_trace, which is by default ON to examine stack traces on program errors/crashes.

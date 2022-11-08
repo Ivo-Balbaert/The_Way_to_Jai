@@ -8,9 +8,9 @@ Calling C is not necessary for performance reasons, but of course a whole univer
 Also it can ease the migration of an existing C project to Jzi: project parts can be converted to Jai incrementally, and the Jai parts can call into the remaining C modules.
 
 ## 29.2 How to call C? The #foreign directives
-To access a C function, use the **#foreign**  directive after the Jai declaration of the C function. The compiler will then import the C function with the specified name in the code. After `#foreign` you can optionally specify an alternative name for the function.
+To access a C function, use the **#foreign**  directive after the Jai declaration of the C function. After `#foreign` you must specify the name of the library where the function is located in. The compiler will then import the C function with the specified name in the code. You can also specify an alternative name for the function as shown in the lz4 examples below.
 
-> #foreign		specifies a foreign (C) procedure 
+> #foreign	library	specifies a foreign (C) procedure 
 
 Some examples:	
 This statement looks for a C function with the name `strlen` and with the same signature and imports it from the C standard library `libc` (on Linux).  
@@ -20,7 +20,7 @@ This statement looks for a C function with the name `strlen` and with the same s
 `rand :: () -> s64                             #foreign libc;`  
 `clock :: () -> s64                            #foreign libc;`  	
 
-The C library (here libc) also needs to be declared.  
+The C library is here libc.  
 Use the **#foreign_system_library** directive to specify as a constant a system file (library) for foreign functions.  
 For example, declare `libc` as: `libc :: #foreign_system_library "libc";`  
 To use the Windows version of the C run time, specify:  `crt :: #foreign_system_library "msvcrt";`  
@@ -66,7 +66,7 @@ main :: () {
 In line (1) we declare the Linux C standard library `libc`, lines (2) and following declare some C function from that library. In lines (3) and following, we call some of these C functions from Jai.
 
 ## 29.4 Examples on Windows 
-See _29.1_call_c_windows.jai_:
+See _29.2_call_c_windows.jai_:
 ```c++
 #import "Basic";
 
@@ -91,4 +91,26 @@ main :: () {
 In line (1) we declare the Windows C standard library `crt`, lines (2) and following declare some C function from that library. In lines (3) and following, we call some of these C functions from Jai.
 
 ## 29.5 The #c_call directive 
-The **#c_call** directive is used to indicate that a procedure follows C ABI conventions: it makes the procedure use the C calling convention. It is Used for interacting with libraries written in C. 
+The **#c_call** directive is used to indicate that a procedure follows C ABI conventions: it makes the procedure use the C calling convention. It is used for interacting with libraries written in C. 
+
+See _29.3_c_call.jai_:
+```c++
+#import "Basic";
+
+IL_LoggingLevel :: u16;
+IL_Logger_Callback :: #type(level: IL_LoggingLevel, text: *u8, ctx: *void) -> void #c_call; // (1)
+
+logger_callback :: (level: IL_LoggingLevel, text: *u8, ctx: *void) #c_call {  // (2)
+    new_context : Context;
+    push_context new_context {
+        log("%", to_string(text));
+    }
+}
+
+main :: () {
+    logger_callback(4, "You have been logged!", null);
+    // => You have been logged!
+}
+```
+
+In line (1) we define a proc called `IL_Logger_Callback` as having the signature type that follows and as following the #c_call conventions (we re-used the example from § 26.13). Then we define a concrete proc `logger_callback` which has the exact same type as `IL_Logger_Callback`. This proc create a temporary new Context called new_context, and calls the proc `log` in this context to log a text string. text is of type `*u8`, so could be a C string.

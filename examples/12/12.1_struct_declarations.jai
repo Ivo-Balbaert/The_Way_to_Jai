@@ -1,5 +1,5 @@
 #import "Basic";
-#import "Math"; // contains Vector2
+#import "Math"; // contains Vector2, Vector3
 
 // default values:
 Vector2d :: struct {
@@ -64,12 +64,37 @@ main :: () {
     bob2 := Person.{"Robert", 42, Vector2.{64.139999, -21.92}}; // (10)
     print("%\n", type_of(bob2)); // => Person
     print("%\n", size_of(Person)); // => 32 // (bytes)
+
+    // formatting printout of structs:
+    v3d := Vector3.{1.0, 2.0, 3.0};
+    print("v3d = %\n", formatStruct(v3d,    // (10)
+        use_long_form_if_more_than_this_many_members = 2, 
+        use_newlines_if_long_form = true));
+    // =>
+    /*
+    v3d = {
+        x = 1;
+        y = 2;
+        z = 3;
+    }
+    */
 }
 
 /*
+{0, 0}
 0 0
 42 108
 1 4
 0 0
+Vector2un
 Robert is aged 42 and is currently at location {64.139999, -21.92}
+{"Robert", 42, {64.139999, -21.92}}
+{2, 6.28}
+Person
+32
+v3d = {
+    x = 1;
+    y = 2;
+    z = 3;
+}
 */

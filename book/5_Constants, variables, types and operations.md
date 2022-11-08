@@ -461,6 +461,7 @@ main :: () {
   print("Hallo Wereld!\n");
   print("¡Hola, mundo!\n"); // (4)
   print("Καλημέρα κόσμε!\n");
+  print("你好！\n"); // prints "hello" in Chinese.
   print("こんにちは 世界!\n"); 
   print("!ہیلو ، دنیا\n");
   print("ສະ​ບາຍ​ດີ​ຊາວ​ໂລກ\n");
@@ -475,6 +476,7 @@ Bonjour tout le monde!
 Hallo Wereld!
 ¡Hola, mundo!
 Καλημέρα κόσμε!
+你好！
 こんにちは 世界!
 !ہیلو ، دنیا
 ສະ​ບາຍ​ດີ​ຊາວ​ໂລກ

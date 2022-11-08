@@ -142,7 +142,7 @@ The n1 variable is created on the heap in line (2) with the `alloc` proc, like t
 n1 := cast(*int) alloc(size_of(int));  // (2) - on heap
 defer free(n1);                        // (3)
 ```
-it returns a pointer to a series of contiguous bytes allocated on the heap.
+it returns a pointer to a series of contiguous bytes allocated on the heap. The cast is needed because `alloc` itself returns `*void`.
 
 `alloc` allocates memory on the _heap_, what is also called _dynamic allocation_. The 1st argument of `alloc` is the size in bytes of the amount of memory to allocate; here we allocate 8 bytes (which is the size of an int). `alloc` returns a (void) pointer to the first byte of the memory allocated, which forms a series of contiguous bytes (we'll discuss the 2nd Allocator argument later, see ??). Because we know n1 will point to an int, we can already cast to it with `cast(*int)`, so the compiler knows it too. Because the allocation is on the heap, we must free this memory ourself. This is done in line (3) with `free(n1`.  
 Notice that we call it with the defer proc from the previous §. The result is that n1's 8 bytes memory will be freed at the closing } of the proc it is defined in, which marks the end of scope or lifetime for n1.  
@@ -160,6 +160,6 @@ Also a  `realloc` proc exists to resize already allocated memory:
 Line (4B) shows a common way to allocate a buffer for `length` number of bytes.
 
 Using `alloc` this way is a bit cumbersome. In line (5) the exact same thing is accomplished with **New**:  `n2 := New(int);`
-New always allocates memory on the heap, and must be followed with a `free` of that memory (line (6)). New just calls alloc and then the initializer, which sets the memory to its default zero-value.  
+New always allocates memory on the heap, returning a pointer. It must be followed with a `free` of that memory (line (6)). New just calls alloc and then the initializer, which sets the memory to its default zero-value.  
 New is not a keyword built into the language, but rather a regular procedure that does heap allocation. It is also defined in the _Basic_ module. 
 You could be extremely careful and write a zero-value (here null) in that memory as in line (7), just to be sure that subsequent use of that memory will be more safe. But this is by no means necessary.

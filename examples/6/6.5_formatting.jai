@@ -5,6 +5,8 @@ main :: () {
     i := 108;
     print("% ", formatInt(i, minimum_digits=2)); // => 108
     print("% ", formatInt(i, base=16, minimum_digits=2)); // => 6c
+    i2 := 0xFF;
+    print("i2 = %\n", formatInt(i2, base=16)); // => i2 = ff
     j := 7;
     print("% ", formatInt(j, minimum_digits=2)); // => 07
     
@@ -17,7 +19,8 @@ main :: () {
 }
 
 /*
-108 6c 07 2.252
+108 6c i2 = ff
+07 2.252
 3.140
 3.14
 */
