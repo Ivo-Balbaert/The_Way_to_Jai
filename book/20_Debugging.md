@@ -146,7 +146,7 @@ v1 = 0
 
 With this tool you can debug every Jai program.
 
-## 20.3 Debugging run-time crash with an external debugger
+## 20.3 Debugging a run-time crash with an external debugger from Visual Studio
 On Windows, we'll want to connect with the external debugger from **Visual Studio**, (VS) which is Windows' flagship IDE (To follow along you'll have to install at least Microsoft Visual Studio Community Edition 2019).   
 To do this, we need the _Debug_ module. Program 20.3_crash.jai is the same as 20.1, only the code for using Debug was added:
 

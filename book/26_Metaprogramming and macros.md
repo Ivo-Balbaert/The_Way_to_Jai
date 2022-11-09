@@ -456,24 +456,24 @@ See _26.8_linked_list_for_expansion.jai_:
 ```c++
 #import "Basic";
 
-ListNode :: struct {
+LinkedList :: struct {
     data: s64; 
-    next:  *ListNode;
+    next:  *LinkedList;
 }
 
 main :: () {
-    lst := New(ListNode); // lst is of type *ListNode
+    lst := New(LinkedList); // lst is of type *LinkedList
     lst.data = 0;
 
-    a :=  New(ListNode); 
+    a :=  New(LinkedList); 
     a.data = 12;
     lst.next = a;
     
-    b  := New(ListNode);
+    b  := New(LinkedList);
     b.data = 24;
     a.next = b;
     
-    c  := New(ListNode);
+    c  := New(LinkedList);
     c.data = 36;
     b.next = c;
 
@@ -481,10 +481,11 @@ main :: () {
 
     print("List printed in a for loop: \n");
     print("The list starts with a %\n", lst.data);
-    for_expansion :: (list: *ListNode, body: Code, flags: For_Flags) #expand {  // (1)
+    // version (1)
+    for_expansion :: (list: *LinkedList, body: Code, flags: For_Flags) #expand {  // (1)
         iter := list;   // (2)
         i := 0;
-        while iter {            // (3)
+        while iter != null {    // (3)
             iter = iter.next;
             if !iter break;     // (4)
             `it := iter.data;   // (5)
@@ -496,6 +497,21 @@ main :: () {
 
     for lst {                   // (9)
         print("List item % is %\n", it_index, it);  // (10)
+    }
+
+    // Version (2):
+    for_expansion :: (list: *LinkedList, body: Code, flags: For_Flags) #expand {  
+        `it := list;        
+        `it_index := 0;
+        while it {            
+            #insert body;       
+            it = it.next;
+            it_index += 1;   
+        }
+    }
+
+    for lst {                   
+        print("List item % is %\n", it_index, it.data);  // (11)
     }
 
 // List printed in a for loop:
@@ -511,7 +527,8 @@ main :: () {
 We take the linked-list example from § 12.6, the same struct ListNode and *ListNode variable lst.  
 A for-expansion macro is a special kind of macro that uses `i` as counter and `iter` as iteration variable (defined in line (2)).
 The macro is defined in line (1) with the signature:  
-`for_expansion :: (list: *ListNode, body: Code, flags: For_Flags) #expand`  
+`for_expansion :: (list: *ListNode, body: Code, flags: For_Flags) #expand`   
+`for_expansion` takes in three parameters: a pointer to the data structure one wants to use the for loop on, a `Code` datatype, and a `For_Flags` flags.
 It uses the same while loop as in § 15.1.3. Line (4) assures we break out of the loop if iter gets the null value: break when iter is empty (if this would not be here, the program would crash, try it out!).     
 Because we emulate a for-loop, we must give values for the variables  
 `it_index`  : which is of course the counter `i` (line (6))
@@ -519,14 +536,23 @@ and `it`    : which is `iter.data` (line (5))
 They both have to be prefixed with a back-tick, because they are outer variables to the macro.  
 
 The `#insert body;` in line (7) is responsible for printing out the data. `body` is the 2nd argument, and is of type Code. `body` denotes the body of the for-loop, and it is substituted into the expanded code. Its content is the `print` statement in line (10). So `#insert` is used inside macros to insert code in the expansion.  
-There is also a variant directive **#insert,scope()**, which allows you to insert code in the macro itself. A macro often takes an argument suitably named `body: Code`, which is then used to insert in the expansion: `#insert body`.
-
+(There is also a variant directive **#insert,scope()**, which allows you to insert code in the macro itself. A macro often takes an argument suitably named `body: Code`, which is then used to insert in the expansion: `#insert body`.)  
+The `For_Flags` enum_flags is found in module _Preload_.jai_ with the following definition:
+```c++
+For_Flags :: enum_flags u32 {
+  POINTER :: 0x1; // this for-loop is done by pointer.
+  REVERSE :: 0x2; // this for-loop is a reverse for loop.
+}
+```
 Line (8) simply increments our counter variable `i`.  
 Now we can print out the data from a linked list in a for-loop like any other array (see line (9))!
 
+But we can do better! (see for_expansion macro Version 2). Just leave out the temporary variables `iter` and `i` and work only with it and it_index. Also note you only have to backtick the variables the first time you use these. Note that in our actual for call, we have to print `it.data`.
+
 > Remark: iterating over data-structures with for seems to have been the primary reason for introducing macros in Jai.
 
-Now let's make a double linked-list:
+Now let's make the same for-loop for a double linked-list:
+
 ## 26.7 A for-expansion macro for a double linked-list
 Let's now define a more general linked list as having a first and a last Node (see line (1)), whereby Node is recursively defined(see line (2)) as having a value, a previous and a next Node. Another advantage is that the type of the value (and Node) is polymorf written as T.
 
@@ -535,7 +561,7 @@ See _26.9_doubly_linked_list.jai_:
 #import "Basic";
 // Debug :: #import "Debug";
 
-Linked_List :: struct (T: Type) {  // (1)
+LinkedList :: struct (T: Type) {  // (1)
     first: *Node(T); 
     last:  *Node(T);
 }
@@ -547,7 +573,7 @@ Node :: struct (T: Type) {          // (2)
 }
 
 // Version 1:
-for_expansion :: (list: Linked_List, body: Code, flags: For_Flags) #expand {  
+for_expansion :: (list: LinkedList, body: Code, flags: For_Flags) #expand {  
     iter := list.first;     
     i := 0;
     // Debug.breakpoint();
@@ -562,7 +588,7 @@ for_expansion :: (list: Linked_List, body: Code, flags: For_Flags) #expand {
 }
 
 // Version 2:
-for_expansion :: (list: Linked_List, body: Code, flags: For_Flags) #expand {  
+for_expansion :: (list: LinkedList, body: Code, flags: For_Flags) #expand {  
     `it := list.first;     
     `it_index := 0;
     while it {            
@@ -572,8 +598,8 @@ for_expansion :: (list: Linked_List, body: Code, flags: For_Flags) #expand {
     }
 }
 
-Version 3A:
-for_expansion :: (list: Linked_List, body: Code, flags: For_Flags) #expand {
+// Version 3A:
+for_expansion :: (list: LinkedList, body: Code, flags: For_Flags) #expand {
     `it := ifx flags == For_Flags.REVERSE   list.last   else    list.first;  // (6)
     `it_index := ifx flags == For_Flags.REVERSE  2  else    0; ;   
     while it {            
@@ -602,7 +628,7 @@ main :: () {
     b.next = *c;
     c.prev = *b;
 
-    list: Linked_List(int);
+    list: LinkedList(int);
     list.first = *a;
     list.last = *c;
 
@@ -641,7 +667,7 @@ List item 0 is {10, null, d5_6fd4_fcb0}
 */
 ```
 
-In lines (3) and following we define three Nodes a, b and c, give them values, link them together, and then link a Linked_List lst to them. We don't use New, so these Nodes are stack-allocated. 
+In lines (3) and following we define three Nodes a, b and c, give them values, link them together, and then link a LinkedList lst to them. We don't use New, so these Nodes are stack-allocated. 
 Now we want to be able to write a for-loop like the one in (9), printing out the node position and its value. If we compile this, we get the `Error: Undeclared identifier 'for_expansion'`. So Jai tells us we need to write a for_expansion macro to accomplish this.  
 This can be done with almost exactly the same code as in example 26.8 (because of the different structure, we need to move our break statement). The loop starting in (4) iterates over all the nodes.  
 This example also shows that the for_expansion macro can be outside of main(). In fact, you could make a module for it and import that!

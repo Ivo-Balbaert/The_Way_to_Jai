@@ -75,3 +75,4 @@ main :: () {
 
 The struct is defined in line (1). In line (2) we use #bake_arguments to bake in one of the dimensions. In line (3) the other dimension is passed when declaring a struct twod.
 Line (4) shows the initial struct. Line (5) shows that we can access the passed parameters on the struct variable's name.
+

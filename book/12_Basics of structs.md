@@ -248,29 +248,30 @@ The stack is limited in size. If your program needs a lot of structs, better use
 ## 12.6 Recursive structs
 A recursive struct is a struct that has as one of its fields a struct of the same type. They can be used to build more complex data structures like linked-lists and trees.
 
+### 12.6.1 Linked List
 In code example _12.3_linked_list.jai_, we see how we can build a simple linked list, where each node has a 'payload' field `data`, and a `next` field that points to the next node:
 
 ```c++
 #import "Basic";
 
-ListNode :: struct {
+LinkedList :: struct {
     data: s64; 
-    next:  *ListNode;
+    next:  *LinkedList;
 }
 
 main :: () {
-    lst := New(ListNode); // lst is of type *ListNode
+    lst := New(LinkedList); // lst is of type *LinkedList
     lst.data = 0;
 
-    a :=  New(ListNode);  // a is of type *ListNode
+    a :=  New(LinkedList);  // a is of type *LinkedList
     a.data = 12;
     lst.next = a;
     
-    b  := New(ListNode);
+    b  := New(LinkedList);
     b.data = 24;
     a.next = b;
     
-    c  := New(ListNode);
+    c  := New(LinkedList);
     c.data = 36;
     b.next = c;
 
@@ -284,8 +285,62 @@ main :: () {
     free(a); free(b); free(c); free(lst);
 }
 ```
+### 12.6.2 Double Linked List
+This can be defined as:
 
-Later on we'll see (§ ??) how to read/print/process such structs out, node by node. 
+```c++
+LinkedList :: struct (T: Type) {  // (1)
+    first: *Node(T); 
+    last:  *Node(T);
+}
+
+Node :: struct (T: Type) {          // (2)
+    value: T;
+    prev: *Node(T);
+    next: *Node(T);
+}
+```
+
+### 12.6.3 Tree
+We can define a Tree structure as follows:
+
+```c++
+Tree :: struct {
+  data: int;
+  left: *Tree;
+  right: *Tree;
+}
+```
+
+Later on we'll see (§ 26.6 and 26.7) how to read/print/process such structs out, node by node. 
+
+### 12.6.4 Circular dependencies
+A program containing the following struct definition:
+```c++
+Node :: struct {
+    owned_a: Node;
+    owned_b: Node;
+    value: int = 0;
+}
+```
+
+gives the compiler error:  
+`Error: The program contains circular dependencies.     
+
+Cycle:
+  [0] declaration of 'owned_a' (d:/Jai/testing/test.jai:4)
+      depends on [1]
+  [1] Node (d:/Jai/testing/test.jai:3)
+      depends on [0]
+`
+Use this definition to get rid of the error:
+```c++
+Node :: struct {
+    owned_a: *Node;
+    owned_b: *Node;
+    value: int = 0;
+}
+```
 
 ## 12.7 A structs namespace
 (see nested_structs)

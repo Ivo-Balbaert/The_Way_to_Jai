@@ -106,7 +106,7 @@ Starting in line (6), we see a loop over counter i which is enclosed with a loop
 In line (7) you see the same while loop as used for the counting down, but now the condition has been given a name (`counting`). This name can be used to break out of the loop when you have nested while loops (see § 15.3).
 
 ### 15.1.3 Printing out a recursive list
-In § 12.6 we constructed a linked-list with a recursive struct ListNode. To print out its data, now we can do this through a loop mechanism, see _15.2_while_looping_through_a_linked_list.jai_. This has the same definition of ListNode and variable lst as in example 13.3_linked_list.jai, so we omit this code here; the following code is used between c.next = null and the free statements:
+In § 12.6 we constructed a linked-list with a recursive struct ListList. To print out its data, now we can do this through a loop mechanism, see _15.2_while_looping_through_a_linked_list.jai_. This has the same definition of LinkedList and variable lst as in example 13.3_linked_list.jai, so we omit this code here; the following code is used between c.next = null and the free statements:
 
 ```c++
     print("List printed in a while loop: \n");
@@ -120,7 +120,7 @@ In § 12.6 we constructed a linked-list with a recursive struct ListNode. To pri
     // => List printed in a while loop:
     // => 0 -> 12 -> 24 -> 36 ->
 ```
-We declare a variable r of type *ListNode in line (1). As long as r is not a null pointer, the while loop in (2) will keep on going. Line (2) is shorthand for:   `while r != null`
+We declare a variable r of type *LinkedList in line (1). As long as r is not a null pointer, the while loop in (2) will keep on going. Line (2) is shorthand for:   `while r != null`
 We print out the data of the loop and point to the next node in line (3). In our example r becomes null for c, which stops the loop. In § 26 ?? we'll see how we can print this list out in a kind of for-loop, which we'll discuss next.
 
 ## 15.2 For loop

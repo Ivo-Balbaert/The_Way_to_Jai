@@ -158,7 +158,7 @@ If q differs in type from p as in line (4), we get an error (again note the very
 Line (5) shows the same error when the types are reversed.
 If the same generic type is used multiple times like here, the '$' indicates what value (here the value for p) is decisive for error messages.
 
-### 22.2.2 T as the type of an arrays items
+### 22.2.2 T as the type of an array's items
 See _22.3_polyproc3.jai_:
 ```c++
 #import "Basic";
@@ -309,17 +309,51 @@ To make the code more readable, we could have defined out lambda as a constant:
 and call add100 like this:
 `add100(array_a, lam)`      (see line (5))
 
-Anonymous functions are useful for passing as arguments to other procedures, or return them from a procedure (example ??). Such procs, like `add100` above, are sometimes called **higher-order functions**.
+Anonymous functions are useful for passing as arguments to other procedures, or return them from a procedure (example ??). Such procs, like `add100` above, are sometimes called **higher-order functions**. 
+
+A procedure is also a type (see § 17.1.2), and therefore also a value (see § 9). This means that procs can be returned as a value from another proc, or they can be used as argument(s) in a proc, as we see here in line (3) where a lambda is used as an argument.
 
 > Unlike C++ or Rust, closures and capture blocks are not supported.
 
 > Remark: `add100` constructs and returns a dynamic array.
 
+## 22.4 A procedure as argument of another proc
+See _22.8_proc_argument.jai_:
+```c++
+#import "Basic";
+#import "Math";
+
+square_and_print :: (v: *Vector3) {     
+    v.x *= v.x;
+    v.y *= v.y;
+    v.z *= v.z;
+    print("v is %, %, %\n", v.x, v.y, v.z);
+} 
+
+do_three_times :: (proc: (*Vector3), arr: *Vector3) {  // (1)
+    for 1..3 proc(arr);
+}
+
+main :: () {
+    v := Vector3.{1.1, 10, 0.5};
+    do_three_times(square_and_print, *v);   // (2)
+}
+
+/*
+v is 1.21, 100, 0.25
+v is 1.4641, 10000, 0.0625
+v is 2.143589, 100000000, 0.003906
+*/
+```
+
+`do_three_times` defined in line (1) has the following signature:
+`do_three_times :: (proc: (*Vector3), arr: *Vector3)`
+It is a higher-order function that takes as 1st argument another procedure with signature `proc: (*Vector3)`. The `square_and_print` proc conforms to this signature. What `do_three_times` does is to call `square_and_print` 3 times on the Vector3. Because this is passed as a pointer, its values are changed.
+
 **Exercise**
 (1) Write a polymorphic proc that returns the count field of an input parameter. Then rewrite this proc as a lambda. Check it for static and dynamic arrays, and strings   (see poly_count.jai).
 
-
-## 22.4 Baked arguments
+## 22.5 Baked arguments
 The directive **#bake_arguments** lets us specify value(s) for argument(s) of a procedure, but leaving some arguments unspecified. The result is a proc with fewer arguments. Lets see an example:
 
 See _22.6_baked_args.jai_:
@@ -351,7 +385,7 @@ This is different from default values (see § 17.4), because a proc made with #b
 
 > So Jai has function currying through #bake_arguments, except function curry only happens at compile time. There is no runtime function currying in Jai. 
 
-## 22.5 A map function
+## 22.6 A map function
 Using polymorphic arguments, we can construct functional-programming like map functions, that take for example an array and a function as arguments.
 
 See _22.7_map.jai_:

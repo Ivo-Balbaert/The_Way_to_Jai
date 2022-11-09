@@ -86,9 +86,9 @@ Line (6) shows that a parameter can just be another proc call.
 
 ### 17.1.2 Getting the type and address of a proc
 Line (7) shows that a proc is an address (often called a **function pointer**), it points to where the code starts in memory. § 22.4 and 22.6 show examples where this function pointer is used as a parameter to another procedure.  
-Line (8) tells us the type of the sum proc:
+Line (8) tells us the **type** of the `sum` proc:
 `procedure (s64, s64, s64) -> s64`
-So the **header** or **signature** of a proc (its arguments and return-values list) determine its type.
+So the **header** or **signature** of a proc (its arguments and return-values list) is its type.
 In line (10) we declare a proc variable `p_ptr` with the same signature as sum, and we assign sum to it. (10B) shows that this also works with type inference. This allows us to call `sum` with this new name (line (11)).
 
 **Exercises**  
@@ -614,7 +614,38 @@ Line (2) shows how an instance of B can pass seamlessly for an instance of A. In
 Use struct Person from § 17.3. Add fields name and location, which is a Vector2 used from module _Math_. Define a proc `move_person`, which can change a person's location. Test it out!
 (see structs_and_procs.jai)
 
-## 17.14 #deprecated
+## 17.14 Reflection on procedures
+As we did in § 16 with structs and enums, we can also obtain reflection info on a procedure, mainly its argument types and return types:
+
+See _17.14_reflection_procedure.jai_:
+
+```c++
+#import "Basic";
+
+add :: (x: int, y: int) -> int {
+    return x + y;
+}
+
+main :: () {
+    info_procedure := cast(*Type_Info_Procedure) type_info(type_of(add)); // (1)
+    print("% (", info_procedure.info.type); // => PROCEDURE  // (2)
+    for info_procedure.argument_types { // (3)
+        print("% - ", << it); 
+        if it_index != info_procedure.argument_types.count-1 then print(", ");
+    } // => ({INTEGER, 8} - , {INTEGER, 8} -
+    print(") -> ");
+    for info_procedure.return_types { // (4)
+        print("% - ", << it); 
+        if it_index != info_procedure.return_types.count-1 then print(", ");
+    } // => ) -> {INTEGER, 8}
+}
+```
+
+In line (1) we take the `type_of` the `add` procedure. From that type we get the `type_info` and cast it to a *Type_Info_Procedure. From that, we see that the `info.type` is a PROCEDURE (line (2)). We can loop over the arrays of argument types and return types in lines (3) and (4). Because these are pointers, we must dereference them.
+The complete output shows the signature of the `add` procedure, obtained by reflection:
+`PROCEDURE ({INTEGER, 8} - , {INTEGER, 8} - ) -> {INTEGER, 8} - `
+
+## 17.15 #deprecated
 You can mark a function as deprecated with the **#deprecated** directive. Calling a deprecated function leads to a compiler warning.  
 You can add string messages after deprecated procedures as warnings to tell someone to use a different procedure or different set of instructions to accomplish what you want.
 

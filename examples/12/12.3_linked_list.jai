@@ -1,23 +1,23 @@
 #import "Basic";
 
-ListNode :: struct {
+LinkedList :: struct {
     data: s64; 
-    next:  *ListNode;
+    next:  *LinkedList;
 }
 
 main :: () {
-    lst := New(ListNode); // lst is of type *ListNode
+    lst := New(LinkedList); // lst is of type *LinkedList
     lst.data = 0;
 
-    a :=  New(ListNode);  // a is of type *ListNode
+    a :=  New(LinkedList);  // a is of type *LinkedList
     a.data = 12;
     lst.next = a;
     
-    b  := New(ListNode);
+    b  := New(LinkedList);
     b.data = 24;
     a.next = b;
     
-    c  := New(ListNode);
+    c  := New(LinkedList);
     c.data = 36;
     b.next = c;
 

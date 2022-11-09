@@ -1,7 +1,7 @@
 #import "Basic";
 // Debug :: #import "Debug";
 
-Linked_List :: struct (T: Type) {  // (1)
+LinkedList :: struct (T: Type) {  // (1)
     first: *Node(T); 
     last:  *Node(T);
 }
@@ -13,10 +13,9 @@ Node :: struct (T: Type) {          // (2)
 }
 
 // Version 1:
-// for_expansion :: (list: Linked_List, body: Code, flags: For_Flags) #expand {  
+// for_expansion :: (list: LinkedList, body: Code, flags: For_Flags) #expand {  
 //     iter := list.first;     
 //     i := 0;
-//     // Debug.breakpoint();
 //     while iter {            
 //         `it := iter.value;   
 //         `it_index := i;      
@@ -28,7 +27,7 @@ Node :: struct (T: Type) {          // (2)
 // }
 
 // Version 2:
-for_expansion :: (list: Linked_List, body: Code, flags: For_Flags) #expand {  
+for_expansion :: (list: LinkedList, body: Code, flags: For_Flags) #expand {  
     `it := list.first;     
     `it_index := 0;
     while it {            
@@ -39,7 +38,7 @@ for_expansion :: (list: Linked_List, body: Code, flags: For_Flags) #expand {
 }
 
 // Version 3A:
-// for_expansion :: (list: Linked_List, body: Code, flags: For_Flags) #expand {
+// for_expansion :: (list: LinkedList, body: Code, flags: For_Flags) #expand {
 //     `it := ifx flags == For_Flags.REVERSE   list.last   else    list.first;  // (6)
 //     `it_index := ifx flags == For_Flags.REVERSE  2  else    0; ;   
 //     while it {            
@@ -68,7 +67,7 @@ main :: () {
     b.next = *c;
     c.prev = *b;
 
-    list: Linked_List(int);
+    list: LinkedList(int);
     list.first = *a;
     list.last = *c;
 
