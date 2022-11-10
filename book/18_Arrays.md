@@ -597,7 +597,9 @@ main :: () {
 Game entities (objects) are most often defined as structs. Each type of entity can have many instances at any time. Because we probably will have thousands of objects, we need to allocate them on the heap with New.  
 A handy way to work with them is to make an array, where each item is a pointer to an entity instance. In our example, arr_dragons is an array of size NR_DRAGONS of pointers to Dragons, the array contains the addresses of the Dragon instances.
 
-## 18.10 Variable number of arguments ..
+## 18.10 Variable number of arguments .. for a procedure
+Such a proc is sometimes called `variadic`.
+
 See _18.10_var_args.jai_:
 
 ```c++

@@ -193,7 +193,7 @@ This example shows in line (1) a procedure arr_sum which takes an array with ite
 T is also used in the body of the proc.
 At the call in line (2), a version of the proc is compiled for T == int, at line (3), a version of the proc is compiled for T == float32.
 
-### 22.2.3 Example with pointers
+### 22.2.3 Example with pointers: Swapping
 See _22.4_polyproc4.jai_:
 ```c++
 #import "Basic";
@@ -257,6 +257,9 @@ swap :: inline (a: $T, b: T) -> T #must, T #must {
 }
 ```
 It uses a multiple return to swap the values, so it is called like `n2, m2 = swap(n2, m2);`. The #must after the return type T ensures that you use this form. Moreover, this is an inlined procedure for performance.
+
+**Exercise**
+Given two Vector3's {1, 4, 9} and {2, 4, 6}, use Swap from _Basic_ tpo swap their values (see swap_vectors.jai)
 
 ### 22.2.4 Example with several polymorphic types
 See § 22.4.
@@ -353,7 +356,7 @@ It is a higher-order function that takes as 1st argument another procedure with 
 **Exercise**
 (1) Write a polymorphic proc that returns the count field of an input parameter. Then rewrite this proc as a lambda. Check it for static and dynamic arrays, and strings   (see poly_count.jai).
 
-## 22.5 Baked arguments
+## 22.5 Baked arguments, $ and $$
 The directive **#bake_arguments** lets us specify value(s) for argument(s) of a procedure, but leaving some arguments unspecified. The result is a proc with fewer arguments. Lets see an example:
 
 See _22.6_baked_args.jai_:
@@ -369,21 +372,44 @@ mult :: (a: float, b: float) -> float {
 
 mult1 :: #bake_arguments mult(b = -9);  // (3)
 
-main :: () {
-  b := 20;
-  c := add10(b);                      // (4)
-  print("c is %\n", c);               // => c is 30
-  print("mult1(2) is %\n",mult1(2));  //(5) => mult1(2) is -18
+proc :: ($a: int) -> int  { return a + 100; } // (6)
+
+proc2 :: ($$a: int) -> int {    // (7)
+    #if is_constant(a) {
+        print("a is constant / ");
+        return a + 100;
+    } else {
+        print("a is not constant / ");
+        return a * 2;
+    }
 }
-```
+
+main :: () {
+    b := 20;
+    c := add10(b);                      // (4)
+    print("c is %\n", c);               // => c is 30
+    print("mult1(2) is %\n", mult1(2));  // (5) => mult1(2) is -18
+    print("proc(42) is %\n", proc(42));  // => proc(42) is 142
+    print("proc2(42) is %\n", proc2(42));  
+    // => a is constant / proc2(42) is 142
+    // print("proc(b) is %\n", proc(b));  
+    // => Error: The declaration of argument 1 requires a value bake 
+    // (it is declared with a $ before the identifier), 
+    // but this expression is not a bakeable literal (its type is s64).
+    print("proc2(b) is %\n", proc2(b));
+    // => a is not constant / proc2(b) is 40
+}```
 
 In line (1) we have a lambda `add`, in line (2) we 'bake in' the value 10 for argument a, so that we get a new proc called `add10`, which only needs one parameter for b.
 This function is called in line (4); it effectively adds 10 to a given number, so it has specialized the original proc by baking in some arguments.
 Similarly, in line (3) a new proc `mult1` is constructed by supplying a value for argument b in proc `mult`, and `mult1` is called in line (5).
-#bake_arguments procedures are pre-compiled functions, they are not closures.
+A `$` in front of an argument 'bakes' that argument into that function, which is illustrated in line (6). If the argument is a variable, you get an error.
+A `$$` in front of an argument will 'bake' the value into the function when it is a constant; if not, it will behave like an ordinary function (see line (7)).
+
+`#bake_arguments` procedures are pre-compiled functions, they are not closures.
 This is different from default values (see § 17.4), because a proc made with #bake_arguments is a different proc than the original one, whereas with default values there is only one procedure.
 
-> So Jai has function currying through #bake_arguments, except function curry only happens at compile time. There is no runtime function currying in Jai. 
+> So Jai has function currying through #bake_arguments, except that it only happens at compile time. There is no runtime function currying in Jai. 
 
 ## 22.6 A map function
 Using polymorphic arguments, we can construct functional-programming like map functions, that take for example an array and a function as arguments.

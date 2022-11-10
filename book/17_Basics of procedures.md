@@ -61,7 +61,7 @@ proc_name :: (arg1: type1, arg2: type2) -> return_type {
 }
 ```
 
-Line (9) also shows a typical functional language syntax for one-line procs:  `lam :: (a, b) => a + b;` (note that types are absent here).  
+Line (9) also shows a typical functional language syntax for one-line procs or **lambdas**:  `lam :: (a, b) => a + b;` (note that types are absent here).  
 Proc names are written the same way as variable names. They are followed by a ::, which indicates they are constants.  
 A proc can use global variables and also receive data from where it is called through its _argument_ list (arg1: type1, arg2: type2). Each argument has to be typed separately.
 There can be no (like main :: ()), one or more arguments.
@@ -269,22 +269,25 @@ main :: () {
 
 As we see in line (1), a procedure can also have two or more return values (like in Go). They are listed after the -> and separated by a `,` If it enhances readability, they may be enclosed between (), like -> (int, int)  
 (These are needed when a proc with multiple return values is used as an argument in another proc).  
-The returned values are assigned to an equal number of variables in the left-hand side (see line (3)); if necessary these variables could have been declared earlier.
-
-You can name the return parameters:		
-`proc1 :: () -> n: int, m: int { … }` 
-You can even have default values for return parameters:
-`proc1 :: () -> (n: int = 1, m: int = 2) { … }`
+The returned values are assigned to an equal number of variables in the left-hand side (see line (3)); if necessary these variables could have been declared earlier. It is not necessary to assign all return values, unless #must is specified (see § 17.6.1)
 
 Unlike languages such as Rust or Go, procs do not return tuple object values, but rather return the values in registers.  
 When a proc returning multiple values is called, you must explicitly assign all values to new variables, calling only proc_mult() only returns the first value. 
 
-### 17.6.1 The #must directive
+## 17.6.1 Named and default return values
+You can name the return parameters:		
+`proc1 :: () -> n: int, m: int { … }` 
+You can also have default values for return parameters:
+`proc1 :: () -> (n: int = 1, m: int = 2) { … }`
+The n and m above are not declared variables, you need to declare them inside the proc and explicitly return them: `return n,m` .
+The default values are returned if the proc does not provide a value for them.
+
+### 17.6.2 The #must directive
 When #must is written after the return values as in line (2),it is not allowed to ignore these: see line (4). The value(s) must be assigned, as in line (5). This prevents a common source of mistakes.
 
 > When a return value is annotated with #must, this indicates that it must be received in a variable at the call site, it cannot be ignored.
 
-### 17.6.2 Example proc: file_open
+### 17.6.3 Example proc: file_open
 As example of a procedure with named arguments, default values and multiple return values, consider the `file_open` proc, which is defined in module _File_ (a different version exists in windows.jai and unix.jai for these OS's, for performance reasons).
 
 `file_open :: (name: string, for_writing := false, keep_existing_content := false, log_errors := false) -> File, bool { ... }`
@@ -322,6 +325,7 @@ proc1 :: (n: u16) -> u16 {
 }     // (2)
 
 proc2 :: (n: u8) { print("In proc2 - u8 line (3)\n"); }            // (3)
+
 proc2 :: (str: string) { print("In proc2 - string line (4)\n"); }  // (4)
 
 main :: () {
@@ -372,12 +376,12 @@ main :: () {
 }
 ```
 
-When you tell the compiler explicitly to **inline** a proc call, it means that the proc code is inserted at the line where the proc is called (the call site), with the parameter values inserted in the right places. So effectively, the proc call is eliminated, thereby saving the overhead of the proc call and enhancing the performance of the program.  
+When you tell the compiler explicitly to **inline** a proc call, it means that the proc body code is inserted at the line where the proc is called (the call site), with the parameter values inserted in the right places. So effectively, the proc call is eliminated, thereby saving the overhead of the proc call and enhancing the performance of the program.  
 The compiler often does this implicitly, without the developer knowing that. But in Jai, the developer can explicitly indicate where to inline (or not line) a proc. This is done with:  
 `:: inline` or `:: no_inline` at the proc declaration
 or:  
 `inline proc_call()` or `no_inline proc_call()` at the call site    
-Inlining is a command to the compiler which must be obeyed, it is not a hint.
+Inlining is a command to the compiler is forced if possible, it is not a hint.
 
 In the snippet above you find a concrete example of each of these cases. A proc declared as :: inline by will by default be inlined.  
 (In certain cases it can be that inlining is impossible, for example inside a recursive proc).
@@ -389,7 +393,7 @@ In the snippet above you find a concrete example of each of these cases. A proc 
 **Exercise**
 In _inlining_ex.jai_, at each of the lines (1) - (7), decide whether the call to the proc is inlined or not.
 
-## 17.9 Recursive procs
+## 17.9 Recursive procs and #this
 See _17.8_recursive.jai_:
 
 ```c++
@@ -400,9 +404,18 @@ factorial :: (n: int) -> int {
     return n * factorial(n - 1);  // (2)
 }
 
+factorial2 :: (n: int) -> int {
+    if n <= 1 return 1;           
+    return n * #this(n - 1);       // (3)
+}
+
 main :: () {
     for i: 1..20 {  // correct till i == 20
         print("The factorial of % is %\n", i, factorial(i));
+    }
+
+    for i: 1..10 {  // correct till i == 20
+        print("The factorial of % is %\n", i, factorial2(i));
     }
 }
 
@@ -437,6 +450,9 @@ Each recursive iteration is put on the stack, and also decrements n, so eventual
 This cannot go on infinitely, once stack memory is depleted (a condition called **stack overflow**), the program crashes: `The program crashed`. (Try this out by changed the end value in the for loop to 10_000, in our case the crash occurred at around recursion 9200).
 A recursive solution may be logically the simplest, but it most probably is not the most performant solution, not withstanding its sometimes incorrect and always stack-limited behavior. 
 
+## 17.9.1 The #this directive
+**#this** refers to the current procedure or struct in the current scope. A trivial use-case is to replace the proc name in the body of a recursive function by #this, as was done in `factorial2`. 
+
 ## 17.10 Swapping values
 See _17.9_swap.jai_:
 
@@ -460,7 +476,7 @@ main :: () {
 ```
 
 Swapping two values through a procedure means returning the values in reverse order. A version for ints is shown in line (1), a version for Any type in line (2).
-In ?? we'll discuss two built-in polymorphic versions of swap.
+In § 22.2.3 we'll discuss two built-in polymorphic versions of swap.
 
 ## 17.11 A println procedure
 See _17.10_println.jai_:

@@ -51,6 +51,8 @@ main :: () {
 ```
 Notice that multiple defer statements execute in reverse LIFO order (Last In First Out) from the order in which they were declared. Also note that variables can change before the defer is actually executed (see _11.3_defer_levels.jai_).
 
+Defer statements in loops (see § 15) are executed at the end of the loop, not the end of the function, which is different from the behavior in Go.
+
 ***Exercises***
 Try your hand at the following exercises.
 

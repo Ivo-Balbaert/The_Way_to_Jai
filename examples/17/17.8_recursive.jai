@@ -5,9 +5,19 @@ factorial :: (n: int) -> int {
     return n * factorial(n - 1);  // (2)
 }
 
+// Version with #this:
+factorial2 :: (n: int) -> int {
+    if n <= 1 return 1;           
+    return n * #this(n - 1);  // (3)
+}
+
 main :: () {
     for i: 1..20 {  // correct till i == 20
         print("The factorial of % is %\n", i, factorial(i));
+    }
+
+    for i: 1..10 {  // correct till i == 20
+        print("The factorial of % is %\n", i, factorial2(i));
     }
 }
 

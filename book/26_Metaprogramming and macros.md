@@ -241,6 +241,8 @@ In line (4) and following, we use this to test on a CONSTANT defined by our prog
 
 > #if is tested at compile-time. When its condition returns true, that block of code is compiled, otherwise it is not compiled.
 
+Cautin: there is no #else, just use else.
+
 Using this feature, code can be conditionally compiled and included in the resulting executable, depending on the target environment (development, test, release) or target platform (different OS's).
 
 This technique is used in the _Basic_ module to load specific code depending on the OS:
@@ -446,6 +448,30 @@ Line (5) shows that a macro can have parameters, just like any proc. This is a w
 `macro3` shows _inner_ or _nested_ macros: a macro can contain and call macros defined inside itself.  
 `factorial` is an example of a recursive macro; #if needs to be used here, else you get the following `Error: Too many nested macro expansions. (The limit is 1000.)`
 `maxfunc` is a procedure which calls a nested macro `macron`; this returns "Backtick return macro" as return value from `maxfunc`.
+
+### 26.5.1 Using a macro for an inner proc
+In § 17.2 we saw that an inner proc cannot access outer variables. A way to circumvent this is to define the inner proc as a macro and use `. The example below is inner_proc() from 17.2_local_procs.jai, which is now redefined as a macro to be able to change the outer variable x.
+
+See _26.13_local_procs.jai_:
+```c++
+#import "Basic";
+
+proc :: () {
+    x := 1;
+    inner_proc();
+    print("x is now %\n", x); // => x is now 42
+
+    inner_proc :: () #expand {
+        `x = 42;
+    }
+}
+
+main :: () {
+    proc();
+}
+```
+
+Jai does not support closures. The technique demonstrated here is a way to emulate a closure.  
 In § 15.1.3 we showed code that iterated over a linked list with a while loop.
 Wouldn't it be nice if we could do this with a for loop?
 
@@ -685,7 +711,7 @@ How many compiled versions do you have when using if instead of #ifx?
 
 
 ## 26.8 The #modify directive
-The **#modify** directive can be used to insert some code between the header and body of a procedure or struct, to change the values of the polymorph variables, or to reject the polymorph for some combination of variables.
+The **#modify** directive can be used to insert some code between the header and body of a procedure or struct, to change the values of the polymorph variables, or to reject the polymorph for some types or combination of variables.
 
 ## 26.9 SOA (Struct of Arrays)
 
