@@ -41,7 +41,7 @@ main :: () {
     x = "Hello";
     x = 2.345;
     x = main;      // (11)
-    print("the type of x is %\n", type_of(x)); // => the type of x is (some type)
+    print("the type of x is %\n", type_of(x)); // => the type of x is Any
     a5 : s32 = 5;
     x2: Any = a5;
     print("the size of Any is %\n", size_of(Any));       // => 16

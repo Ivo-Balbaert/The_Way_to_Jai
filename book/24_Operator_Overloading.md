@@ -6,7 +6,8 @@ In a sense, it's like overloading a procedure (see § 17.7), but now you overloa
 Jai even has a keyword **operator** specifically for that purpose.
 It is used like this (note the resemblance with a procedure):  
 `operator token :: (argument list) ->  (return-type list)`    
-where: token = +, -, +, [], ...
+where: token can be:     +, -, *, /, +=, -=, *=, ==, !=, <<, >>, &, |, [], %, ^, <<<, >>> 
+The following operators cannot be overloaded: = and New.
 
 ## 24.1 Vector operators
 See _24.1_overloading_vec.jai_:
@@ -63,6 +64,10 @@ Obj :: struct {
 
 operator [] :: (obj: Obj, i: int) -> int {  // (1)
   return obj.array[i];
+}
+
+operator []= :: (obj: *Obj, i: int, item: int) {
+  obj.array[i] = item;
 }
 
 operator *= :: (obj: *Obj, scalar: int) {   // (2) 

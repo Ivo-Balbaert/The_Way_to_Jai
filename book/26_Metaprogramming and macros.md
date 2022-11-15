@@ -241,7 +241,7 @@ In line (4) and following, we use this to test on a CONSTANT defined by our prog
 
 > #if is tested at compile-time. When its condition returns true, that block of code is compiled, otherwise it is not compiled.
 
-Cautin: there is no #else, just use else.
+Caution: there is no #else, just use else.
 
 Using this feature, code can be conditionally compiled and included in the resulting executable, depending on the target environment (development, test, release) or target platform (different OS's).
 
@@ -287,7 +287,7 @@ This can also be one line, like this:
 
 
 ## 26.5 Basics of macros
-A macro is also a way to insert code at compile-time. 
+A macro is also a way to insert code at compile-time at the call site, so it is similar to an inlined procedure. 
 Unlike the C/C++ programming language in which a macro is completely arbitrary, Jai macros are more controlled, better supported by the compiler, and come with much better typechecking. Moreover, they can be debugged with the same techniques we saw in § 20.
 They make some kinds of meta-programming easier. If they are well designed, they allow you to raise the level of code abstraction, by creating your own mini-language, specific to the problem space, and then you can solve your particular problem in that mini-language. Macros also allow you to cut down the repetition of not only specific actions (procedures are best for that), but of more abstract constructs. When they are not well designed, however, creating and using macros, results in unmaintainable messes (hard to read, to understand, to debug). So you should only resort to macros when it really makes sense in your program's context: they are a 'last-resort' thing to use.
 
@@ -321,12 +321,14 @@ The syntax is shown in `macro0` defined in line (1) below, which does nothing. A
 See _26.7_macros_basics.jai_:
 ```c++
 #import "Basic";
+#import "Math";
 
 macro0 :: () #expand { }   // (1)
 
 macro1 :: () #expand {
+    a := "No backtick";    // (1B) 
     print("a at macro1 start is: %\n", `a); //   (4A) => a at macro1 start is: 0
-    `a += 10;                //  (2) 
+    `a += 10;              //  (2) 
 }
 
 maxm :: (a: int, b: int) -> int #expand {  // (5)
@@ -377,6 +379,12 @@ macfunc :: () -> string {
   }
 }
 
+macroi :: (c: Code) #expand {   // (9)
+    #insert c;
+    #insert c;
+    #insert c; 
+}
+
 main :: () {
     a := 0;
     macro1(); // (3)
@@ -401,6 +409,10 @@ main :: () {
     // => In maxfunc just before calling macron
     // => Defer inside macron
     print("%\n", s); // (8) => Backtick return macron 
+
+    va := Vector3.{1,2,3};
+    code :: #code print("% - ", va);
+    macroi(code); // => {1, 2, 3} - {1, 2, 3} - {1, 2, 3} -
 }
 
 /* with defer in macro 2:
@@ -416,26 +428,11 @@ factorial of 5 = 120
 In maxfunc just before calling macron
 Defer inside macron
 Backtick return macro
-*/
-
-/* with `defer in macro 2:
-a at macro1 start is: 0
-a is: 10
-max is 7
-macro2 returns 1
-This is macro3
-This is a nested macro
-c is 108
-factorial of 5 = 120
-In maxfunc just before calling macron
-Defer inside macron
-Backtick return macro
-
-`Defer inside macro2
+{1, 2, 3} - {1, 2, 3} - {1, 2, 3} -
 */
 ```
 
-`macro1` does something new: it adds 10 to the variable `a` found in the outer scope in line (3): the backtick in front of a (`a) denotes that `a` must exist in the outer scope. When `macro1` is called in main(), this is indeed the case. We see in line () that `a` has value 10, through the execution of `macro1`.
+`macro1` does something new: it adds 10 to the variable `a` found in the outer scope in line (3): the backtick in front of a (`a) denotes that `a` must exist in the outer scope. When `macro1` is called in main(), this is indeed the case. We see in line (4B) that `a` has value 10, through the execution of `macro1`. The a in line (1B) is just a local (to the macro) variable, it does not pollute the outer scope.
 
 > Macros can have context, namely if indicated with ` they can see variables in their outer scope.
 
@@ -445,11 +442,14 @@ The ` mechanism for looking up outer variables only works one level up.
 
 Line (5) shows that a macro can have parameters, just like any proc. This is a way to avoid the backtick syntax.
 `macro2` defined in line (6) refers to two outer variables b and c. In this case it returns 1, but just before leaving the macro, it prints something by using the `defer` keyword in line (6A). But notice what happens when we use `defer in line (6B): because of the backtick the defer now takes the scope of the caller (main() in this case) as its scope, and prints its message just before main() ending (see the attached complete output in both cases).
-`macro3` shows _inner_ or _nested_ macros: a macro can contain and call macros defined inside itself.  
-`factorial` is an example of a recursive macro; #if needs to be used here, else you get the following `Error: Too many nested macro expansions. (The limit is 1000.)`
-`maxfunc` is a procedure which calls a nested macro `macron`; this returns "Backtick return macro" as return value from `maxfunc`.
+`macro3` shows _inner_ or _nested_ macros: a macro can contain and call macros defined inside itself. But there is a limit as to how many macro calls you can generate inside another macro.  
+`factorial` is an example of a recursive macro; #if needs to be used here, else you get the following `Error: Too many nested macro expansions. (The limit is 1000.)` 
+`maxfunc` is a procedure which calls a nested macro `macron`; this returns "Backtick return macro" as return value from `maxfunc`.  
 
-### 26.5.1 Using a macro for an inner proc
+### 26.5.1 Using a macro with #insert
+`macroi` in line (9) illustrates that we can use #insert (see § 26.4) inside a macro: it takes a code argument and inserts it 3 times in the main code.
+
+### 26.5.2 Using a macro for an inner proc
 In § 17.2 we saw that an inner proc cannot access outer variables. A way to circumvent this is to define the inner proc as a macro and use `. The example below is inner_proc() from 17.2_local_procs.jai, which is now redefined as a macro to be able to change the outer variable x.
 
 See _26.13_local_procs.jai_:

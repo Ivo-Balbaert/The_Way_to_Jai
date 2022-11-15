@@ -95,9 +95,9 @@ Vector3 :: struct {
 }
 
 main :: () {
-    a : [4]u32;      // (1) A static array of 4 u32 integers.
-    b : [30]float64; // An array of 30 float64's.
-    arr1 : [50]int;  // array of 50 integers
+    a : [4] u32;      // (1) A static array of 4 u32 integers.
+    b : [30] float64; // An array of 30 float64's.
+    arr1 : [50] int;  // array of 50 integers
     i := 5;
     print("%-th item is: %\n", i, arr1[i]); // (2) => 5-th item is: 0
     print("The array a is by default initialized to %\n", a); // (3)
@@ -109,6 +109,21 @@ main :: () {
     arrf[2] = 1.4;
     arrf[3] = 10.0;
     arrf2 := float.[10, 20, 1.4, 10]; // (4B)
+    print("arrf\n");
+    for arrf    print("% - ", it);  // (4C) => 10 - 20 - 1.4 - 10 -
+    print("\n");
+    for arrf    print("% / % - ", it_index, it);  // => 0 / 10 - 1 / 20 - 2 / 1.4 - 3 / 10 -
+    print("\n");
+    for f: arrf print("% - ", f);   // => 10 - 20 - 1.4 - 10 -
+    print("\n");
+    for f, ix: arrf  print("% / % - ", ix, f);   // => 0 / 10 - 1 / 20 - 2 / 1.4 - 3 / 10 -
+    print("\n");
+    for ix: 0..arrf.count-1  print("% / % - ", ix, arrf[ix]); 
+    // => 0 / 10 - 1 / 20 - 2 / 1.4 - 3 / 10 -
+    print("\n");
+    for 0..arrf.count-1  print("% / % - ", it, arrf[it]); 
+    // => 0 / 10 - 1 / 20 - 2 / 1.4 - 3 / 10 -
+    print("\n");
  
     N :: 100;
     static_array : [N]int;      // (5) static array of size N
@@ -164,12 +179,13 @@ main :: () {
 }
 ```
 
-Array literals are in fact static (or fixed-size) arrays. Static arrays are arrays where the size is known at compile time.  
+Array literals are in fact static (or fixed-size or fixed) arrays. Static arrays are arrays where the size is known at compile time.  
 They are declared like this:  `arr_name: [count]type`    
 See some concrete examples in lines (1) and following. The items of an array are by default initialized to their zero-value (see line (3)). The example starting in line (4) shows that the items can be initialized one by one, but if the values are constant, we know that it can be done shorter with an array literal. The size (or count) can also be a constant, as indicated in line (5).  
 The indices of an array arr range from 0 to `arr.count - 1`. 
 
 ### 18.3.1 Setting up an array with a for loop
+Lines (4C) and following show the many different ways to for-loop over an array, either using it and/or it_index, or using own variables for the items and/or the index.
 So you can make a for loop over this range:  `for 0..arr.count-1 { ... }` and initialize the array using the `it` variable as in line (6). (Try out if `for arr` works here).  
 The size in bytes of the i-th item is given by `size_of(arr[i])`.
 Line (7) indicates that you can use Any as the array type if you want to make an array that contains items of different types (The syntax `arr2 = Any.["Hello", 42, Vector3.{1, 2, 3}];` doesn't work here).
@@ -341,11 +357,11 @@ Array views are also bounds-checked, but at run-time: see line (5). The program 
 
 ### 18.5.1 Changing the view and the base array
 In line (1B) we show that you can change the underlying array by manipulating the view with the normal index notation.
-`data` is a pointer to the base data in memory. So by adding an offset to this pointer, and changing the count of the view, the view changes as we want (see line (4)). We can take a slice of the base array.  
+`data` is a pointer to the base data in memory. So by adding an offset to this pointer, and changing the count of the view, the view changes as we want (see line (4)). We can take a slice of the base array. But this can also be dangerous: if count exceeds the bounds of the array, you can read and possibly rewrite adjacent memory parts, which are perhaps not initialized or do not belong to your program! 
 This is the first example of pointer arithmetic we encounter in Jai. Needless to say you must be very careful to stay within the memory limits of the base array.
 >  Incrementing a pointer by 1 adds 8 to the pointer, since a 64-bit integer consists of 8 bytes. The increment for a pointer depends on the size of the data the pointer points to. 
 
-Why are array views important? Besides getting an alternative look on an array without consuming memory, they also allow us to write procedures in a more general way: both static and dynamic arrays are auto-casted to array views if the array view is a parameter, see § 18.8 
+Why are array views important? Besides getting an alternative look on an array without consuming memory, they also allow us to write procedures in a more general way: both static and dynamic arrays are automatically casted to array views if the array view is a parameter, see § 18.8 
 
 ### 18.5.2 Misuse of array views with dynamic arrays
 See _18.8_array_view_misuse.jai_:
@@ -368,9 +384,10 @@ main :: () {
 ```
 Carefully look at the code above: we define and populate a dynamic array a, then take a view v on it, and then add more items to a. Now if we print out a in (4), everything is ok, but if we print out v in (5), we see the result is bad: it only sees 10 items, and the first two are even corrupt data!  
 The reason for this is that any time you call `array_add` on a, it might move its memory. If you do this after assigning the view v, a problem will arise because since 'a' was possibly moved, v points to the wrong memory location!  
-> So only take an array view on a dynamic array when this will no longer be resized.
+> So only take an array view on a dynamic array when this will no longer be resized. In general, making a pointer to an item of a dynamic array is not a good idea, because the array can move in memory when its size grows, and then the pointer becomes invalid!
 
 ## 18.6. For-loops over arrays: more examples
+(See 18.1_static_arrays.jai_ line (4B) and following for examples with static arrays.)
 See _18.5_array_for.jai_:
 
 ```c++

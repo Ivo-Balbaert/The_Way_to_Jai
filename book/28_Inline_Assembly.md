@@ -1,6 +1,11 @@
 # 28 Inline assembly
 
-This allows the inclusion of assembly code through the **#asm** directive. You would only do this for portions of the code where you need ultimate performance.
+This allows the inclusion of assembly code through the **#asm** directive. You would only do this for portions of the code where you need ultimate performance.  
+The inner workings of Apollo Time in _Basic_ use inline assembly and operator overloading.  
+
+Notes:
+- `__reg` is the type for internal registers. 
+
 
 ## 28.1 Examples of AVX and AVX2 SIMD operations
 See _28.1_assembly.jai_:
@@ -71,6 +76,27 @@ c=[1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 29, 31]
 
 #asm takes a code block with assembly instructions (see line (1)). In the last compilation phase they are compiled into machine instructions at that place in the code. In line (2) AVX (Advanced Vector Extensions) instructions are used: #asm AVX.  
 The #asm AVX, AVX2 allows for SIMD operations (see line (3) and following)
-(see [Advanced Vector Extensions](https://en.wikipedia.org/wiki/Advanced_Vector_Extensions) ).  
-`__reg` is the type for internal registers. 
-#asm can also be used inside macros.
+(see [Advanced Vector Extensions](https://en.wikipedia.org/wiki/Advanced_Vector_Extensions) ). 
+
+#asm can also be used inside macros, allowing to combine the power of inline assembly with macros.
+
+## 28.2 Passing Inline Assembly Registers through Macro Arguments
+See _28.2_asm_and_macros.jai_:
+```c++
+add_regs :: (c: __reg, d: __reg) #expand {  // (1)
+  #asm {
+     add c, d;
+  }
+}
+
+main :: () {
+  #asm {            // (2)
+     mov a:, 10;
+     mov b:, 7;
+  }
+
+  add_regs(b, a);   // (3)
+}
+```
+
+In line (1) we define a macro `add_regs` that is called in line (3). It takes 2 parameters b and a, pushes them into 2 registers c and d of type `__reg` and adds them up. 

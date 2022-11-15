@@ -271,6 +271,11 @@ As we see in line (1), a procedure can also have two or more return values (like
 (These are needed when a proc with multiple return values is used as an argument in another proc).  
 The returned values are assigned to an equal number of variables in the left-hand side (see line (3)); if necessary these variables could have been declared earlier. It is not necessary to assign all return values, unless #must is specified (see § 17.6.1)
 
+**The _ token**
+If you would like to discard one or more of the return values, use `_` instead of a variable, like this:
+`result, ok, _ := to_integer(text);`  
+Here we discard the 3rd return value, which is a remainder in which we are not interested.
+
 Unlike languages such as Rust or Go, procs do not return tuple object values, but rather return the values in registers.  
 When a proc returning multiple values is called, you must explicitly assign all values to new variables, calling only proc_mult() only returns the first value. 
 
@@ -447,7 +452,16 @@ A recursive procedure is a proc that calls itself in its body.
 In the example above, we have a proc `factorial`, which prints out the factorial of the first 20 integers (for i > 20, the calculation results in overflow of the int type). It uses a for loop to call itself in line (2).  
 
 Each recursive iteration is put on the stack, and also decrements n, so eventually we arrive at the base case of line (1). Then the stack is unwound in LIFO order, and all calls are calculated.  
-This cannot go on infinitely, once stack memory is depleted (a condition called **stack overflow**), the program crashes: `The program crashed`. (Try this out by changed the end value in the for loop to 10_000, in our case the crash occurred at around recursion 9200).
+This cannot go on infinitely, once stack memory is depleted (a condition called **stack overflow**), the program crashes: `The program crashed`. (Try this out by changed the end value in the for loop to 10_000, in our case the crash occurred at around recursion 9200). So there has to be a base-case (here n <= 1), where the recursive calling in stopped and the stack starts to unwound. The following code snippet recursive calls indefinitely because it has no bas-case to stop:
+```
+fibonacci :: () #expand {
+  fibonacci();
+}
+
+fibonacci();
+```
+It ends with: `The program crashed. Printing the stack trace:`
+
 A recursive solution may be logically the simplest, but it most probably is not the most performant solution, not withstanding its sometimes incorrect and always stack-limited behavior. 
 
 ## 17.9.1 The #this directive
@@ -626,9 +640,13 @@ main :: () {
 In § 12.8 we discussed the usage of the #as directive to implicitly cast a subtype to a supertype. In the above example in line (1) this is declared for B as a subtype of A.  
 Line (2) shows how an instance of B can pass seamlessly for an instance of A. In line (3) we see that the same is true when using the namespace.  
 
-**Exercise**
-Use struct Person from § 17.3. Add fields name and location, which is a Vector2 used from module _Math_. Define a proc `move_person`, which can change a person's location. Test it out!
+**Exercises**
+(1) Use struct Person from § 17.3. Add fields name and location, which is a Vector2 used from module _Math_. Define a proc `move_person`, which can change a person's location. Test it out!
 (see structs_and_procs.jai)
+
+In the solution in line (1) you see that a simple . notation is enough to access the fields (unlike in C/C++), even when the variable is actually a pointer to the struct.
+
+(2) Wrap the code from   which decides whether a variable is of type Complex into a is_complex_number procedure (see is_complex_number.jai)
 
 ## 17.14 Reflection on procedures
 As we did in § 16 with structs and enums, we can also obtain reflection info on a procedure, mainly its argument types and return types:

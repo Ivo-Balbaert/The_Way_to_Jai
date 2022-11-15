@@ -8,7 +8,7 @@ Person :: struct {
 }
 
 move_person :: (person: *Person, newlocation: Vector2) {
-    person.location = newlocation;
+    person.location = newlocation;     // (1)
 }
 
 main :: () {

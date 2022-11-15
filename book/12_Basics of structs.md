@@ -1,13 +1,13 @@
 # Chapter 12 - Basics of structs
 
-Every programming language needs a kind of data structure that can define some kind of entity, that has several characteristics, called **fields** (also called member variables), that can be of a different type. The solution to this is the **struct** type, that is common in many other languages, and is a kind of lightweight version of a class.
+Every programming language needs a kind of data structure to define some kind of entity, having several characteristics, called **fields** (also called member variables), which can be of different types. The solution to this is the **struct** type, that is common in many other languages, and is a kind of lightweight version of a class.
 
 Also because composite types like arrays and strings are defined internally as a struct, we need to have a basic knowledge of that concept first.
 
 ## 12.1 Struct declarations
 See _12.1_struct_declarations.jai_:
 
-```c++
+```c++  
 #import "Basic";
 #import "Math"; // contains Vector2
 
@@ -138,7 +138,7 @@ Person :: struct {
     location        : Vector2;
 }
 ```
-All struct fields are _public_: they can be read and even changed everywhere! There is a convention to prefix fields which should be private by `_`, but the compiler does not enforce that. A struct field can be of type void (why ??).
+All struct fields are _public_: they can be read and even changed everywhere! There is a convention to prefix fields which should be private by `_`, but the compiler does not enforce that. A struct field can be of type void, for example to put notes on struct members that do not take up space (see 13.1_unions.jai).
 
 > Unlike classes in other languages, Jai does NOT have member functions: there is no concept of functions "belonging" to a particular struct or datatype. So it's better to not define a procedure inside a struct.
 
@@ -394,14 +394,24 @@ Person :: struct {
     name: string;
 }
 
-Patient :: struct {    
+Patient :: struct {     // (1)
     using as: Person;
     disease: string;   
 }
 
-Employee :: struct {    // (1)
-    using #as p: Person;
-    profession: string;   
+Employee :: struct {    // (2)
+    #as using p: Person;
+    profession: string;
+}
+
+// Example 2:
+Number :: struct {      // (5)
+  #as i: int;
+  f: float = 3.14;
+}
+
+function :: (i: int) {
+  print("i is %\n", i);
 }
 
 main :: () {
@@ -417,6 +427,11 @@ main :: () {
     // p1 = pat1; // (3) Error: Type mismatch: incompatible structs (wanted 'Person', given 'Patient').
     p1 = emp1;
     print("%\n", p1); // (4) => {"Gates"}
+
+    // Example 2:
+    num := Number.{42, 3.1415};
+    print("num is %\n", num); // => num is {42, 3.1415}
+    function(num); // (6 )=> i is 42
 }
 ```
 
@@ -430,6 +445,9 @@ So #as means we can implicitly cast from the subtype to the supertype!
 #as using p: Person;
    can also be written as:  
 using #as p: Person;
+
+A slightly different way of using #as is demonstrated in Example 2. Here, #as indicates that a struct can implicitly cast to one of its members `i`, and in line (6) 'num' is passed to the function as an int.
+More than one field can be prefixed with #as.
 
 #as is also used in the Type_Info_ types, discussed in § 16.2
 

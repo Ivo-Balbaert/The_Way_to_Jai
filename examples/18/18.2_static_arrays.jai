@@ -5,21 +5,36 @@ Vector3 :: struct {
 }
 
 main :: () {
-    a : [4]u32;      // (1) A static array of 4 u32 integers.
-    b : [30]float64; // An array of 30 float64's.
-    arr1 : [50]int;  // array of 50 integers
+    a : [4] u32;      // (1) A static array of 4 u32 integers.
+    b : [30] float64; // An array of 30 float64's.
+    arr1 : [50] int;  // array of 50 integers
     i := 5;
     print("%-th item is: %\n", i, arr1[i]); // (2) => 5-th item is: 0
     print("The array a is by default initialized to %\n", a); // (3)
     // => The array a is by default initialized to [0, 0, 0, 0]
 
-    arrf : [4]float;    // (4)
+    arrf : [4] float;    // (4)
     arrf[0] = 10.0; 
     arrf[1] = 20.0;
     arrf[2] = 1.4;
     arrf[3] = 10.0;
     arrf2 := float.[10, 20, 1.4, 10]; // (4B)
- 
+    print("arrf\n");
+    for arrf    print("% - ", it);  // (4C) => 10 - 20 - 1.4 - 10 -
+    print("\n");
+    for arrf    print("% / % - ", it_index, it);  // => 0 / 10 - 1 / 20 - 2 / 1.4 - 3 / 10 -
+    print("\n");
+    for f: arrf print("% - ", f);   // => 10 - 20 - 1.4 - 10 -
+    print("\n");
+    for f, ix: arrf  print("% / % - ", ix, f);   // => 0 / 10 - 1 / 20 - 2 / 1.4 - 3 / 10 -
+    print("\n");
+    for ix: 0..arrf.count-1  print("% / % - ", ix, arrf[ix]); 
+    // => 0 / 10 - 1 / 20 - 2 / 1.4 - 3 / 10 -
+    print("\n");
+    for 0..arrf.count-1  print("% / % - ", it, arrf[it]); 
+    // => 0 / 10 - 1 / 20 - 2 / 1.4 - 3 / 10 -
+    print("\n");
+    
     N :: 100;
     static_array : [N]int;      // (5) static array of size N
     print("static_array has the size: %\n", static_array.count);

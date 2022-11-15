@@ -9,6 +9,8 @@ Person :: struct @Version9 {                  // (1)
 
 main :: ()  {
     pinfo := type_info(Person);
+    print("The struct has name: %\n", (<<pinfo).name); 
+    // => The struct has name: Person
     for member: pinfo.members {       // (3)
         print("% - ", member.name);  
         print("% - ", << member.type);  

@@ -133,7 +133,7 @@ strdata: string;
 strdata.count = length;
 strdata.data = buffer;
 ```
-String constants can be implicitly cast to *u8 or *s8, but `y := "Hello"` cannot be cast implicitly to *u8.
+String constants are zero-terminated, and can be implicitly cast to *u8 or *s8, but `y := "Hello"` cannot be cast implicitly to *u8.
 
 ## 19.2 Some basic operations on bytes
 As we know there is no char type in Jai; strings are []u8.
@@ -215,10 +215,9 @@ It can be used to build strings dynamically, as shown in line (11).
 Strings that have been built dynamically have to be de-allocated. This can be done with `free()`, as shown in line (12). An elegant alternative approach is to use the `tprint` twin proc of `sprint` (see § 21.3.1).
 
 ### 19.4.7 Storing code in strings
-In § 16.2 we saw that _Code_ is a type on its own. One of Jai's fortes is meta-programming, that is: manipulating code at compile-time.  
+In § 26.4.1 we'll see that _Code_ is a type on its own. One of Jai's fortes is meta-programming, that is: manipulating code at compile-time.  
 Code can be stored in a string, but because code can contain lots of backslashes and quotes this can become very difficult to read.  
-A better solution is to store code as a constant string (::) or for many code lines as a
-multi-line string (see § 19.4.3).
+A better solution is to store code as a constant string (::) or for many code lines as a multi-line string (see § 19.4.3).
 
 ### 19.4.8 Strings as array views
 Because strings are essentially array views, you can manipulate .count and .data just as with array views, like in line (13) and following.
@@ -350,6 +349,10 @@ main :: ()  {
 > This is a multi return-value proc, when str can be converted to an int, this value is returned together with a true; if not, the value 0 is returned together with false (see line (1)).
 `string_to_float :: (str: string) -> float, bool;` (see line (2)).
 
+The `to_integer` procedure with signature   
+`to_integer :: (s: string) -> result: int, success: bool, remainder: string`  
+uses `string_to_int` for the conversion.
+
 The `parse_int` and `parse_float` procs use `parse_token` and are more robust than the string_to variants.
 
 ?? #### 19.6.1.2 numbers to string  
@@ -400,7 +403,7 @@ slice :: inline (s: string, index: s64, count: s64) -> string;
 
 ## 19.7 C strings
 Jai strings do NOT end with a zero byte \0.  This is in contrast to a C-string, which is '0' terminated, and has the Jai type *u8. 
-JJai strings are much more safe than C strings, because they store their length (count), so manipulations of the string can be bounds-checked (see § 19.4.1).
+Jai strings are much more safe than C strings, because they store their length (count), so manipulations of the string can be bounds-checked (see § 19.4.1).
 
 On the other hand Jai programs will have to work together with C programs/libraries, so Jai needs to be able to interact well with C strings.
 To make it easier to communicate with C, constant Jai strings like `greeting :: "Hello"` are constructed by the compiler with a '0'-termination.

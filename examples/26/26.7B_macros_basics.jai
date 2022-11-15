@@ -1,10 +1,12 @@
 #import "Basic";
+#import "Math";
 
 macro0 :: () #expand { }   // (1)
 
 macro1 :: () #expand {
+    a := "No backtick";    // (1B) 
     print("a at macro1 start is: %\n", `a); //   (4A) => a at macro1 start is: 0
-    `a += 10;                //  (2) 
+    `a += 10;              //  (2) 
 }
 
 maxm :: (a: int, b: int) -> int #expand {  // (5)
@@ -55,6 +57,12 @@ macfunc :: () -> string {
   }
 }
 
+macroi :: (c: Code) #expand {   // (9)
+    #insert c;
+    #insert c;
+    #insert c; 
+}
+
 main :: () {
     a := 0;
     macro1(); // (3)
@@ -79,6 +87,10 @@ main :: () {
     // => In maxfunc just before calling macron
     // => Defer inside macron
     print("%\n", s); // (8) => Backtick return macron 
+
+    va := Vector3.{1,2,3};
+    code :: #code print("% - ", va);
+    macroi(code); // => {1, 2, 3} - {1, 2, 3} - {1, 2, 3} -
 }
 
 /* with defer in macro 2:
@@ -94,20 +106,6 @@ factorial of 5 = 120
 In maxfunc just before calling macron
 Defer inside macron
 Backtick return macro
+{1, 2, 3} - {1, 2, 3} - {1, 2, 3} -
 */
 
-/* with `defer in macro 2:
-a at macro1 start is: 0
-a is: 10
-max is 7
-macro2 returns 1
-This is macro3
-This is a nested macro
-c is 108
-factorial of 5 = 120
-In maxfunc just before calling macron
-Defer inside macron
-Backtick return macro
-
-`Defer inside macro2
-*/

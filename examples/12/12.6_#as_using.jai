@@ -11,7 +11,17 @@ Patient :: struct {     // (1)
 
 Employee :: struct {    // (2)
     #as using p: Person;
-    profession: string;   
+    profession: string;
+}
+
+// Example 2:
+Number :: struct {      // (5)
+  #as i: int;
+  f: float = 3.14;
+}
+
+function :: (i: int) {
+  print("i is %\n", i);
 }
 
 main :: () {
@@ -27,6 +37,11 @@ main :: () {
     // p1 = pat1; // (3) Error: Type mismatch: incompatible structs (wanted 'Person', given 'Patient').
     p1 = emp1;
     print("%\n", p1); // (4) => {"Gates"}
+
+    // Example 2:
+    num := Number.{42, 3.1415};
+    print("num is %\n", num); // => num is {42, 3.1415}
+    function(num); // (6) => a is 42
 }
 
 

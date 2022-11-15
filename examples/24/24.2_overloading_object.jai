@@ -8,6 +8,10 @@ operator [] :: (obj: Obj, i: int) -> int {  // (1)
   return obj.array[i];
 }
 
+operator []= :: (obj: *Obj, i: int, item: int) {
+  obj.array[i] = item;
+}
+
 operator *= :: (obj: *Obj, scalar: int) {   // (2) 
     for obj.array  obj.array[it] *= scalar;
 // alternative:
@@ -17,6 +21,8 @@ operator *= :: (obj: *Obj, scalar: int) {   // (2)
 main :: () {
   o : Obj;
   print("o[0] = %\n", o[0]);  // (1B) => o[0] = 0
+  o[0] = 10;                  // => o[0] = 10
+  print("o[0] = %\n", o[0]);
 
   o2 : Obj;
   o2.array = .[0, 1, 2, 3, 4, 5, 6, 7, 8, 9];

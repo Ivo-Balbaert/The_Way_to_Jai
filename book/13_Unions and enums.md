@@ -1,7 +1,7 @@
 # Chapter 13 - Unions and enums
 
 An union is a special memory-saving kind of struct.  
-An enum on the other hand is an enumeration of possible values a variable can take. Both enums and unions are types.
+An enum on the other hand is an enumeration of possible values a variable can take. Both enums and unions are types. The 'using' keyword to open up a namespace (see § 12.7) works also for enums and unions.
 
 ## 13.1 Working with unions
 A union is kind of like a struct, because it is defined with different fields of possibly different sizes, like a C union. The great difference is that only one field can be active (filled with data) at any one time.
@@ -30,7 +30,7 @@ Ts :: struct {              // (2)
 
 // void as a union member // (2B)
 Object :: struct {
-  member: void; 
+  member: void; @notes
   #place member;
   x: float;
   #place member;
@@ -63,15 +63,15 @@ The size of the union T is 8
 ```
 
 A **union* is defined like a struct, but replacing `struct` by `union`, see line (1). The possible fields are then enumerated, but remember: only one can be active at any time.
-(An alternative definition is to write it as a kind of struct with a **#place** directive.) A union field can be of type void (see line (2B), why ??). 
+(An alternative definition is to write it as a kind of struct with a **#place** directive.) A union field can be of type void (see line (2B), usage ??). 
 
 A variable of the union type is declared in line (3), and one field is given a value in line (4). When another field gets assigned, the value from the previous field is lost and becomes undefined: see line (6).
 
 ## 13.2 Working with enums
-An enum is useful when a property can only take as value one of a limited number of named values, like the compass points north, west, east and south.   
+An enum (enumerator) is useful when a property can only take as value one of a limited number of named values, like the compass points north, west, east and south.   
 Why? Because it is much easier for a developer to work with names than with numbers.
 In combination with if #complete (see ??) it can be checked that all possible values of an enum are used.
-All names are constants, internally they are integers starting from 0 for the 1st value and auto-incrementing by 1.
+All names are constants, internally they are by default 64bit-integers starting from 0 for the 1st value and auto-incrementing by 1.
 _13.2_enums.jai_ shows a few examples:
 
 ```c++
@@ -153,7 +153,7 @@ The first direction is NORTH
 ```
 
 A variable of type Compass_Direction can only take the values NORTH, SOUTH, EAST and WEST (see line (5)), which are its **members**. A possible value is written with the dot (.) notation like `Compass_Direction.WEST` or simply `.WEST` when the enum type is known.
-The member type is by default s64, but you can specify a shorter integer type, as in the `Key_Code :: enum u32` example in line (2).  
+The member type is by default s64, but you can specify a shorter integer type, as in the `Key_Code :: enum u32` example in line (1).  
 You can assign one of the values another integer value, and then subsequent values start incrementing from this value (see lines (3) and (4)).
 As we see in line (4B), each member can be given its own constant integer value.
 These enums are defined in the global data scope. 
@@ -211,21 +211,21 @@ main :: () {
     d: Direction;
     using Direction;
     d = WEST;            
-    print("d is %, of type %.\n", d, type_of(d));
+    print("d is %, of type %.\n", d, type_of(d)); // => d is WEST, of type Direction.
     d = EAST | WEST;
-    print("d is %\n", d);
+    print("d is %\n", d); // => d is EAST | WEST
     d = EAST | WEST | NORTH | SOUTH;
-    print("d is %\n", d);
+    print("d is %\n", d); // => d is EAST | NORTH | WEST | SOUTH
     d &= ~SOUTH;   // (1) mask the SOUTH flag
-    print("d is %\n", d);
-}
+    print("d is %\n", d); // => d is EAST | NORTH | WEST
 
-/*
-d is WEST, of type Direction.
-d is EAST | WEST
-d is EAST | NORTH | WEST | SOUTH
-d is EAST | NORTH | WEST
-*/
+    e: Direction = Direction.WEST | .EAST;   // (1)
+    f: Direction = .WEST;
+    g: Direction = 1; 
+    h: Direction = Direction.WEST + 1;
+    print("e: % - f: % - g: % - h: %\n", e, f, g, h);
+    // => e: EAST | WEST - f: WEST - g: EAST - h: EAST | WEST
+}
 
 /* Explanation:
 0001
@@ -240,7 +240,9 @@ d is EAST | NORTH | WEST
   0111 <--> EAST | NORTH | WEST
   */
 ```
-In line (1) you see how we can mask out a flag by doing `d &= ~SOUTH;` (see the bit explanation in the comments above).
+In the program above, | is the bitwise or operation. In line (1) you see how we can mask out a flag by doing `d &= ~SOUTH;` (see the bit explanation in the comments above).
+
+Lines (1) and following show ways to assign enum flags to variables.
 
 ## 13.6 Some useful enum methods
 _13.4_enum_methods.jai_ shows some useful methods to use with enums:
