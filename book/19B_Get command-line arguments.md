@@ -3,7 +3,8 @@
 Often it is useful to start a program on the command-line with some arguments that will alter the behavior of the program, like this:
 
         `prog1 arg1 arg2 arg3`
-or:     `./prog1 arg1 arg2 arg3`
+or:     
+        `./prog1 arg1 arg2 arg3`
 
 This is done with the `get_command_line_arguments` proc from module _Basic_, which returns an array of type []string.
 
@@ -29,5 +30,7 @@ Position: 3 - Value: 3.14
 ```
 
 Line (1) prints out all the arguments with their positions. From the output we see that the executable's name is at position 0, and the real arguments start from position 1.
+You can use the arguments as args[1], args[2] and so on.
+
 
 Module _Command_Line_ has more sophisticated functionality for processing options on the command-line.

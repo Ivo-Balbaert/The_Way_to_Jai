@@ -259,9 +259,14 @@ swap :: inline (a: $T, b: T) -> T #must, T #must {
 It uses a multiple return to swap the values, so it is called like `n2, m2 = swap(n2, m2);`. The #must after the return type T ensures that you use this form. Moreover, this is an inlined procedure for performance.
 
 **Exercise**
-Given two Vector3's {1, 4, 9} and {2, 4, 6}, use Swap from _Basic_ tpo swap their values (see swap_vectors.jai)
+Given two Vector3's {1, 4, 9} and {2, 4, 6}, use Swap from _Basic_ to swap their values (see swap_vectors.jai)
 
-### 22.2.4 Example with several polymorphic types
+### 22.2.4 Example with structs
+See _22.9_polyproc5.jai_:
+```c++
+```
+
+### 22.2.5 Example with several polymorphic types
 See § 22.4.
 
 **Exercises**  

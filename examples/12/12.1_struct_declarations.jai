@@ -57,8 +57,7 @@ main :: () {
     // struct literals:
     vec2 := Vector2.{2.0, 6.28}; // (9)
     print("%\n", vec2); // => {2, 6.28}
-    // same as:
-    vec3 : Vector2;
+    vec3 : Vector2;      // same as: vec3 : Vector2 = .{};
     vec3 = .{2.0, 6.28};
     vec4:= Vector2.{y = 6.28, x= 2.0}; 
     bob2 := Person.{"Robert", 42, Vector2.{64.139999, -21.92}}; // (10)

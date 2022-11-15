@@ -3,7 +3,7 @@
 Threads are a facility provided by the operating system. A different process can run in each thread. Jai exposes this facility: programs can launch multiple threads so that several processes can run in parallel, that is: simultaneously. To use this you need the _Thread_ module. Jai provides platform-independent thread routines, as well as a Thread_Group functionality.
 
 ## 31.1 Basics of threads
-See _31.1_.jai_:
+See _31.1_basic_threads.jai_:
 ```c++
 #import "Basic";
 #import "Thread";

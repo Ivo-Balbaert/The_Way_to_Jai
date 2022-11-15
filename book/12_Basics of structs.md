@@ -207,7 +207,7 @@ bob2 := Person.{"Robert", 42, Vector2.{64.139999, -21.92}};
 ```
 The Struct_Name. prefix is needed to inform the compiler which struct type is defined here. Note that all values provided in a struct literal must be constant, you can't use variables.
 
-In struct literals you can also name the fields, like `field = value`. This allows you give the values in a different order, and fields that have default values don't need to be specified. 
+In struct literals you can also name the fields, like `field = value`. This allows you give the values in a different order, and fields that have default values don't need to be specified. Struct literals are only for values that are constant at compile-time.
 
 **Exercise:**
 Make a Super_Node struct variable with values 42 and 108; use the long and literal notation(see _making_struct.jai_)

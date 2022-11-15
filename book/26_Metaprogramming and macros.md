@@ -64,6 +64,7 @@ In fact, any code (a code-line, a block of code or a procedure) can be run at co
 See _26.2_run.jai_:
 ```c++
 #import "Basic";
+#import "Math";
 
 proc1 :: () { print("This is proc1 :: ()\n"); }
 proc2 :: () -> int { 
@@ -73,7 +74,7 @@ proc2 :: () -> int {
 
 #run proc1();             // (1) => This is proc1 :: ()
 result := #run proc2();   // (2) => This is proc2 :: ()
-PI :: #run compute_pi();  // (3)
+PIA :: #run compute_pi();  // (3)
 
 compute_pi :: () -> float {
   // calculate pi using the Leibniz formula.
@@ -93,7 +94,7 @@ main :: () {
     proc1();        // => This is proc1 :: () - proc1 is called at run-time
 
     print("result is %\n", result); // => result is 42   
-    print("PI is %\n", PI); // => PI is 3.141699
+    print("PIA is %\n", PI); // => PIA is 3.141699
 
     f1 :: ()  => 1000;
     f2 :: (c) => c + 1;
@@ -106,6 +107,12 @@ main :: () {
         print("I am running this block only at compile-time!");
         n := 108;
     }
+
+    R22 :: 0.7071068; 
+    v: Vector3;
+    v = .{cast(float) #run sin(R22 * .5), 1, 0};
+    TAU :: 6.0;
+    // v2 = .{sin(TAU * .5), 1, 0}; // Error: All values provided in a struct literal must be constant, but argument 1 is not.
 }
 
 /* Output when compiling:
