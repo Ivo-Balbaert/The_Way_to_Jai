@@ -16,6 +16,7 @@ _Table of Contents_
    [5 - Constants, variables, types and operations](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/5_Constants%2C%20variables%2C%20types%20and%20operations.md)  
    [5B - Identifier Backslashes](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/5B_Identifier_Backslashes.md)   
    [6 - Bool and number types](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/6_bool_and_number_types.md)  
+   [6B - Times and dates](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/6B_Times_and_dates.md)   
    [7 - Scope of variables](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/7_Scope_of_Variables.md)  
    [8 - Modules - Structuring the code of a project](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/8_Modules_-_Structuring_the_code_of_a_project.md)  
    [8B - The #scope directives](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/8B_The_scope_directives.md)    
@@ -30,6 +31,7 @@ _Table of Contents_
    [17 - Basics of procedures](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/17_Basics%20of%20procedures.md)  
    [18 - Arrays](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/18_Arrays.md)  
    [18B - Ordered remove in Arrays](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/18B_Ordered%20remove%20in%20arrays.md)  
+   [18C - Copy a struct with memcpy](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/18C_Copying%20a%20struct%20with%20memcpy.md)    
    [19 - Working with strings](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/19_Working_with_Strings.md)  
    [20 - Debugging](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/20_Debugging.md)    
    [21 - Memory Allocators and Temporary Storage](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/21_Memory_Allocators_and_Temporary_Storage.md)  
@@ -42,7 +44,9 @@ _Table of Contents_
    [28 - Inline assembly](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/28_Inline_Assembly.md)  
    [29 - Interacting with C](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/29_Interacting%20with%20C.md)    
    [30 - Integrated build system](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/30_Integrated_build_system.md)    
-   [31 - Working with threads](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/31_Working%20with%20threads.md)   
+   [31 - Working with threads](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/31_Working%20with%20threads.md)  
+
+   [50 - The guessing game](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/50_The%20guessing%20game.md)    
  
      
    
