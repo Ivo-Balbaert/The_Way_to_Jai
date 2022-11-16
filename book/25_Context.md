@@ -1,6 +1,7 @@
 # 25 Context
 
-A central concept in Jai is the **context**.
+A central concept in Jai is the **context**.  
+The context is specifically made to guide different parts of your program to use whatever services you desire.
 
 The `context` struct is defined in module _Preload_ as:  
 ```c++
@@ -117,7 +118,56 @@ The stack trace is also called the program's **function call stack**, which is a
 
 See *25.2_stack_trace.jai*:
 ```c++
+#import "Basic";
 
+my_print_stack_trace :: (node: *Stack_Trace_Node) {     // (1)
+    while node {
+        if node.info {
+        print("[%] at %:%. call depth %\n", 
+                        node.info.name, 
+                        node.info.location.fully_pathed_filename, 
+                        node.line_number, 
+                        node.call_depth);
+        }
+        node = node.next;
+    }
+}
+
+proc1 :: (x: int) {         // (2)
+    print("x is %\n", x);
+    if x < 1 { 
+        // my_print_stack_trace(context.stack_trace);   // (2B)  
+        print_stack_trace(context.stack_trace);         // (2C)  
+    }  
+    else     {  proc1(x - 1); }
+}
+
+main :: () {
+    proc1(3);               // (3)
+}
+```
+
+/*
+// Calling line 2B: //
+x is 3
+x is 2
+x is 1
+x is 0
+[proc1] at d:/Jai/The_Way_to_Jai/examples/25/25.2_stack_trace.jai:21. call depth 4
+[proc1] at d:/Jai/The_Way_to_Jai/examples/25/25.2_stack_trace.jai:21. call depth 3
+[proc1] at d:/Jai/The_Way_to_Jai/examples/25/25.2_stack_trace.jai:21. call depth 2
+[main] at d:/Jai/The_Way_to_Jai/examples/25/25.2_stack_trace.jai:25. call depth 1
+
+// Calling line 2C: //
+x is 3
+x is 2
+x is 1
+x is 0
+'proc1' at d:/Jai/The_Way_to_Jai/examples/25/25.2_stack_trace.jai:22
+'proc1' at d:/Jai/The_Way_to_Jai/examples/25/25.2_stack_trace.jai:22
+'proc1' at d:/Jai/The_Way_to_Jai/examples/25/25.2_stack_trace.jai:22
+'main' at d:/Jai/The_Way_to_Jai/examples/25/25.2_stack_trace.jai:26
+*/
 ```
 
 _25.2_stack_trace.jai* is an example of an example of a recursive procedure `proc1` (see line (2)), that calls itself 3 times, starting in line (3). When x gets the value 0, the proc `my_print_stack_trace` from line (1) is called, with the active `context.stack_trace` as argument. This iterates through the nodes of the stack trace, until node becomes `null`. When there is info, we print the procedure's name, the source file and line number where it is called, and the call depth, that is: how 'deep' the recursion is.  

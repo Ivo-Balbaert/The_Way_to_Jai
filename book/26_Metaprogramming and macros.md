@@ -718,7 +718,11 @@ How many compiled versions do you have when using if instead of #ifx?
 
 
 ## 26.8 The #modify directive
-The **#modify** directive can be used to insert some code between the header and body of a procedure or struct, to change the values of the polymorph variables, or to reject the polymorph for some types or combination of variables.
+The **#modify** directive can be used to insert some code between the header and body of a procedure or struct, to change the values of the polymorph variables, or to reject the polymorph for some types or combination of variables. It is a block of code that is executed at compile-time each time a call to that procedure is resolved.  
+#modify allows to inspect   parameter types at compile-time; when it returns a bool value:
+> true: this signals that $T is a type that will be accepted at compile-time.
+> false: it generates a compile-time error.
+
 
 ## 26.9 SOA (Struct of Arrays)
 

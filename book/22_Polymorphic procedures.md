@@ -86,7 +86,9 @@ main :: () {
 }
 ```
 We only need one version of `convert`, and arg is now said to be **polymorphic**, of a **generic** type **$T**
-This procedure can compile to different versions. Each time the compiler sees that the procedure is called with a different concrete type for T (like s32, float32, string or array in the example), it is compiled to a machine-code version for that type. In Jai parlance this is called: **baking out** a copy of the procedure with the polymorphic type(s) fully known. For example, when called as `convert(0)`, a version will be compiled for type s32, in line (1) a new version will be compiled for type float32, in line (2) a new version will be compiled for type string, and so on.
+This procedure can compile to different versions. Each time the compiler sees that the procedure is called with a different concrete type for T (like s32, float32, string or array in the example), it is compiled to a machine-code version for that type.
+The type T has to be derived by the compiler; it can be any type possible. Of course: the code of the procedure must make sense for that type, otherwise a compiler error is generated.  
+In Jai parlance this is called: **baking out** a copy of the procedure with the polymorphic type(s) fully known. For example, when called as `convert(0)`, a version will be compiled for type s32, in line (1) a new version will be compiled for type float32, in line (2) a new version will be compiled for type string, and so on.
 This will happen only once for each type: when the procedure is called again with the same type, the already compiled version for that type will be re-used.
 
 > Polymorphic functions are generated at compile-time, not at runtime by an interpreter or a JIT compiler, like for example in Julia. Because Jai is a strongly typed language, every call to a polymorphic function is also type-checked at compile-time.
@@ -291,7 +293,11 @@ main :: () {
 `check_temperature` is a polymorphic procedure that needs to match a type for T. The only requirement for T is that it is a struct with a member named 'temperature'. The call in (1) Tells the compiler T can be `Ice_Cream_Info`. (2) doesn't provide any type info for T, so it errors out.
 
 ### 22.2.5 Example with several polymorphic types
-See § 22.4.
+Procedures can have multiple polymorphic variables, like:
+`proc :: (a: $A, b: $B, c: $C) -> B, C {...}`
+whereby some of A, B and C can be the same type.
+
+For an example, see § 22.4.
 
 **Exercises**  
 (1) Use the first Swap version from module _Basic_ to reverse a string (see reverse_string.jai).  
@@ -301,6 +307,8 @@ See § 22.4.
 Now write a polymorphic version that has types $Ta for a and $Tb for b, returning a value of type Ta. Observe that it works like the previous version. Now change the type of a to float32. Explain what happens when you compile (see do_math_things2.jai)  
 (5) Write a polymorphic proc display_xy that shows the x and y coordinates of a Vector2, Vector3 and Vector4 instances; take the Vector definitions from module _Math_ (see display_xy.jai).  
 (6) Try to understand the error you get when compiling polymorph_err.jai  
+
+The following two § are not specific about polymorphism, but they do prepare the way for the `map` polymorphic example in § 22.6
 
 ## 22.3 The lambda notation =>
 See *22.5_lambdas.jai*:
@@ -427,7 +435,8 @@ main :: () {
     // but this expression is not a bakeable literal (its type is s64).
     print("proc2(b) is %\n", proc2(b));
     // => a is not constant / proc2(b) is 40
-}```
+}
+```
 
 In line (1) we have a lambda `add`, in line (2) we 'bake in' the value 10 for argument a, so that we get a new proc called `add10`, which only needs one parameter for b.
 This function is called in line (4); it effectively adds 10 to a given number, so it has specialized the original proc by baking in some arguments.
