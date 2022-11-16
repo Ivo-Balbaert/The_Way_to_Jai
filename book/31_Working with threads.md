@@ -3,7 +3,7 @@
 Threads are a facility provided by the operating system. A different process can run in each thread. Jai exposes this facility: programs can launch multiple threads so that several processes can run in parallel, that is: simultaneously. To use this you need the _Thread_ module. Jai provides platform-independent thread routines, as well as a Thread_Group functionality.
 
 ## 31.1 Basics of threads
-See _31.1_basic_threads.jai_:
+See *31.1_basic_threads.jai*:
 ```c++
 #import "Basic";
 #import "Thread";
@@ -48,7 +48,7 @@ From the output we see that the `main()` thread and the new thread `thread1` hav
 
 In this example, we start from 30.6_build_and_run.jai, to which we have only added 4 lines. While compiling, we are showing an SDL window with title "Compiling..." and a grey background. When the compiler emits the COMPLETE message, we change the window title to "Success!" and the background to green. To accomplish this, OpenGL is used to show the windows in a separate (GUI) thread from the main thread, using macros as well. See it in action: `jai 31.2_build_threads.jai`  
 
-See _31.2_build_threads.jai_:
+See *31.2_build_threads.jai*:
 ```c++
 #import "Basic";
 #import "Compiler";
