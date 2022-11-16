@@ -8,7 +8,7 @@ Notes:
 
 
 ## 28.1 Examples of AVX and AVX2 SIMD operations
-See _28.1_assembly.jai_:
+See *28.1_assembly.jai*:
 ```c++
 #import "Basic";
 
@@ -81,7 +81,7 @@ The #asm AVX, AVX2 allows for SIMD operations (see line (3) and following)
 #asm can also be used inside macros, allowing to combine the power of inline assembly with macros.
 
 ## 28.2 Passing Inline Assembly Registers through Macro Arguments
-See _28.2_asm_and_macros.jai_:
+See *28.2_asm_and_macros.jai*:
 ```c++
 add_regs :: (c: __reg, d: __reg) #expand {  // (1)
   #asm {

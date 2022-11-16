@@ -5,7 +5,7 @@ Every programming language needs a kind of data structure to define some kind of
 Also because composite types like arrays and strings are defined internally as a struct, we need to have a basic knowledge of that concept first.
 
 ## 12.1 Struct declarations
-See _12.1_struct_declarations.jai_:
+See *12.1_struct_declarations.jai*:
 
 ```c++  
 #import "Basic";
@@ -210,10 +210,10 @@ The Struct_Name. prefix is needed to inform the compiler which struct type is de
 In struct literals you can also name the fields, like `field = value`. This allows you give the values in a different order, and fields that have default values don't need to be specified. Struct literals are only for values that are constant at compile-time.
 
 **Exercise:**
-Make a Super_Node struct variable with values 42 and 108; use the long and literal notation(see _making_struct.jai_)
+Make a Super_Node struct variable with values 42 and 108; use the long and literal notation(See *making_struct.jai*)
 
 ## 12.5 Making structs on the heap
-See the code example _12.2_struct_heap.jai_:
+See the code example _12.2_struct_heap.jai*:
 
 ```c++
 #import "Basic";
@@ -249,7 +249,7 @@ The stack is limited in size. If your program needs a lot of structs, better use
 A recursive struct is a struct that has as one of its fields a struct of the same type. They can be used to build more complex data structures like linked-lists and trees.
 
 ### 12.6.1 Linked List
-In code example _12.3_linked_list.jai_, we see how we can build a simple linked list, where each node has a 'payload' field `data`, and a `next` field that points to the next node:
+In code example _12.3_linked_list.jai*, we see how we can build a simple linked list, where each node has a 'payload' field `data`, and a `next` field that points to the next node:
 
 ```c++
 #import "Basic";
@@ -347,7 +347,7 @@ Node :: struct {
 
 Wouldn't it be nice if you could use the fields of a struct without having to prefix them with their struct name? That's possible! A struct defines a **namespace**, which you can locally create with the **using** keyword. Then you don't need to use the struct name anymore.
 
-See __12.4_using.jai_:
+See *_12.4_using.jai*:
 ```c++
 #import "Basic";
 
@@ -385,7 +385,7 @@ See this [Discussion about OOP](https://en.wikipedia.org/wiki/Entity%E2%80%93com
 ## 12.8 The #as directive
 What if we want the power of `using` from § 12.7 and the ability to implicitly cast a variable of the struct subtype to a variable of the struct supertype? This is accomplished with the **#as** directive:
 
-See _12.6_#using_as.jai_:
+See *12.6_#using_as.jai*:
 
 ```c++
 #import "Basic";
@@ -478,7 +478,7 @@ Entity :: struct {
 Now fields can even be switched from Hot to Cold or vice-versa without having to change the code! This can be decided based on the target platform.
 
 ## 12.10 Pointer to struct
-See _12.5_pointer_to_struct.jai_:
+See *12.5_pointer_to_struct.jai*:
 
 ```c++
 #import "Basic";
@@ -524,7 +524,7 @@ can be divided into:
 
 By aligning certain member fields of structs to 64 bit, we can make memory allocation cache-aligned on 64 bit systems. This can also be done for global variables. This enhances memory efficiency and reduces cache misses. This is shown in the following example:
 
-See _12.7_struct_align.jai_:
+See *12.7_struct_align.jai*:
 ```c++
 #import "Basic";
 

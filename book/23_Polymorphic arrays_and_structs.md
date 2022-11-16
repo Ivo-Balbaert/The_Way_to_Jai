@@ -7,7 +7,7 @@ In § 22 we already used arguments of a generic array type [] $T.
 The following example shows that this can also be done for the size of the array with something like [$N]:  
 `x: [$N] $T`
 
-See _23.1_array_polymorph.jai_:
+See *23.1_array_polymorph.jai*:
 ```c++
 #import "Basic";
 
@@ -27,7 +27,7 @@ Of course, $T can be replaced by a type like int, so that a parameter is only us
 We can use this to generalize our earlier map example 22.7_map.jai:  
 `map :: (array_a: [$N] $T, f: (T)-> T ) -> [N] T`
 
-See _23.2_map2.jai_:
+See *23.2_map2.jai*:
 ```c++
 #import "Basic";
 
@@ -53,7 +53,7 @@ This way we get the size passed as a generic parameter. If the applied lambda do
 ## 23.3 Polymorphic structs
 We can also use generic parameters to pass to a struct, in this case to define a 2D array as a struct field:
 
-See _23.3_poly_struct.jai_:
+See *23.3_poly_struct.jai*:
 ```c++
 import "Basic";
 

@@ -3,7 +3,7 @@
 In § 18.4, we used **remove** to delete a value from an array. However, then the value was replace by the last array item. What if we just want the array items to stay in place?
 Solution: use the _array_ordered_remove_by_index_ proc
 
-See _18B_ordered_remove.jai_:
+See *18B_ordered_remove.jai*:
 
 ```c++
 #import "Basic";

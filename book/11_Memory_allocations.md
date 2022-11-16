@@ -11,7 +11,7 @@ Managing memory is not that cumbersome as in C++ however. Later on (see ??) we'l
 The memory occupied by variables must be freed when it is no longer needed. But it can be difficult to manually keep track when this is the case; there can be a lot of code between the variable's creation (the allocation of its memory) and when the variable's lifetime is over (when its memory can be freed).  
 Jai's solution to this is the **defer** keyword (first introduced by Go), which lets us logically free memory right after its allocation, with the compiler ensuring that this really happens at the right time. Thus the developer doesn't need to worry about this anymore, just create and 'free' immediately in code!  
 
-Let's first see how defer works: see _11.1_defer.jai_
+Let's first see how defer works: See *11.1_defer.jai*
 ```c++
 #import "Basic";
 
@@ -35,7 +35,7 @@ This prints at the very end instead of between 2 and 3!
 We see that the defer statement in line (1) only executes right before the closing } of main. This is exactly the behavior we want. If you like, you can enclose the statement after defer within (), but this is optional. defer can also take a code block as argument, enclosed by { }.    
 The execution of every statement or code block after the defer keyword is delayed until the end of the current (present) scope. This means that these deferred statements will be called when code execution has reached the ending }, that is: when we leave the current scope.
 
-Now let's look at a second example, where multiple defer statements are used, see  _11.2_defer.jai_:
+Now let's look at a second example, where multiple defer statements are used, see  _11.2_defer.jai*:
 ```c++
 #import "Basic";
 
@@ -49,7 +49,7 @@ main :: () {
 
 // => 1, 2, 3, 4, 5,
 ```
-Notice that multiple defer statements execute in reverse LIFO order (Last In First Out) from the order in which they were declared. Also note that variables can change before the defer is actually executed (see _11.3_defer_levels.jai_).
+Notice that multiple defer statements execute in reverse LIFO order (Last In First Out) from the order in which they were declared. Also note that variables can change before the defer is actually executed (See *11.3_defer_levels.jai*).
 
 Defer statements in loops (see § 15) are executed at the end of the loop, not the end of the function, which is different from the behavior in Go.
 
@@ -69,7 +69,7 @@ main :: () {
     defer print("Three!\n");
 }
 ```
-Here is another example to demonstrate some subtleties where defer is used with a code block and nested levels, see _11.3_defer_levels.jai_:
+Here is another example to demonstrate some subtleties where defer is used with a code block and nested levels, See *11.3_defer_levels.jai*:
 
 ```c++   
 #import "Basic";
@@ -98,7 +98,7 @@ x is 234
 defer is mainly used to free memory or other resources (closing a file or a database connection), as we'll see in the next sections.
 
 ## 11.2 Allocating and freeing primitive variables
-Let's take a look at _11.4_memory.jai_:
+Let's take a look at _11.4_memory.jai*:
 
 ```c++
 #import "Basic";

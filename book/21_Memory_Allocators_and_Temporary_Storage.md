@@ -57,7 +57,7 @@ In line (1), the memory is freed and a new cycle can begin.
 `New(Node, allocator = temp);`
 
 ## 21.3 Examples of using Temporary Storage
-See _21.1_temp_storage.jai_:
+See *21.1_temp_storage.jai*:
 ```c++
 #import "Basic";
 
@@ -111,7 +111,7 @@ We see in line (5) that it goes back to 0 after the temp memory has been reset i
 To cope with a possible problem of memory-leakage, Jai has a built-in memory-leak detector. It can be activated by importing _Basic_ like this:
 `#import "Basic"()(MEMORY_DEBUGGER=true);`
 
-See _21.2_leak_detect.jai_:
+See *21.2_leak_detect.jai*:
 ```c++
 #import "Basic"()(MEMORY_DEBUGGER=true);
 

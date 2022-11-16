@@ -134,7 +134,7 @@ It also contains very low-level functions or **intrinsics** which closely mimic 
 
 > Notice the #intrinsic directive with which these functions are marked.
 
-For some example code, see _4.1_intrinsics.jai_:
+For some example code, See *4.1_intrinsics.jai*:
 ```c++
 #import "Basic";
 

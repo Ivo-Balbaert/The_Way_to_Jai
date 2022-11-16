@@ -4,7 +4,7 @@ It is important to know how long a variable can be used and stays active, that i
 In fact, there is a hierarchical arrangement of scopes: if you use an identifier, and it's not defined inside the current scope, the compiler looks upward into parent scopes.
 
 ## 7.1 - Data scope and imperative scope                                           
-See _7.1_scope.jai_:
+See *7.1_scope.jai*:
 
 ```c++
 #import "Basic";
@@ -57,7 +57,7 @@ Whenever we try to use a variable in a scope in which it is not defined, we get 
 Unlike Rust's behavior, a block cannot return a value to be assigned, if you try you get  `Error: Unable to parse an expression to the right of this binary operator.`
 
 ## 7.2 - Shadowing of variables
-See _7.2_shadowing.jai_:
+See *7.2_shadowing.jai*:
 
 
 ```c++

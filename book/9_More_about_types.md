@@ -8,7 +8,7 @@ Besides the basic types mentioned in § 5 and § 6, Jai also has  other fundamen
 
 The compiler has complete knowledge of all the types at compile-time, and some of that remains accessible at run-time. We'll later see (§ 26) how to use that.
 
-See _9.1_types.jai_:
+See *9.1_types.jai*:
 
 ```c++
 #import "Basic";

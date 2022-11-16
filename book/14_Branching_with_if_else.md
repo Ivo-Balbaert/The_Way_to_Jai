@@ -241,7 +241,7 @@ As you can see this makes for easy tests on 0 numbers, empty strings and null po
 
 
 ## 14.5 Other useful if tests
-See _14.5_if_tests.jai_:
+See *14.5_if_tests.jai*:
 
 ```c++
 #import "Basic";

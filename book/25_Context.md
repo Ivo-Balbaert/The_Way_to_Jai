@@ -31,7 +31,7 @@ It also contains temporary storage (3), so you can add things yourself to it.
 In Jai, each procedure takes a context-based allocation scheme in which the memory allocator is implicitly passed to all procs (unless otherwise specified with **#c_call**). The context can be overloaded with a custom allocator: this allows memory management to be coordinated between the compiler and the developer.
 You change the way memory is allocated by passing a different context to the function. 
 
-See _25.1_context.jai_:
+See *25.1_context.jai*:
 ```c++
 #import "Basic";
 
@@ -115,12 +115,12 @@ In line (6) we print out a number of its properties: its size = 32 Kb,
 In line (4) of the code of `Context_Base`, we see a field called `stack_trace`. What is its purpose?  
 The stack trace is also called the program's **function call stack**, which is a much better description, namely: it is a report of the active stack frames at a certain point in time during the execution of a program. It contains a logging of all function calls, and where they occurred in the program. You'll often see stack traces in the output of program crashes, and they are used for debugging purposes.
 
-See _25.2_stack_trace.jai_:
+See *25.2_stack_trace.jai*:
 ```c++
 
 ```
 
-_25.2_stack_trace.jai_ is an example of an example of a recursive procedure `proc1` (see line (2)), that calls itself 3 times, starting in line (3). When x gets the value 0, the proc `my_print_stack_trace` from line (1) is called, with the active `context.stack_trace` as argument. This iterates through the nodes of the stack trace, until node becomes `null`. When there is info, we print the procedure's name, the source file and line number where it is called, and the call depth, that is: how 'deep' the recursion is.  
+_25.2_stack_trace.jai* is an example of an example of a recursive procedure `proc1` (see line (2)), that calls itself 3 times, starting in line (3). When x gets the value 0, the proc `my_print_stack_trace` from line (1) is called, with the active `context.stack_trace` as argument. This iterates through the nodes of the stack trace, until node becomes `null`. When there is info, we print the procedure's name, the source file and line number where it is called, and the call depth, that is: how 'deep' the recursion is.  
 
 This info is so useful that there is in fact a proc `print_stack_trace` in module _Basic_, which is almost identical and which we call in line (2C). Use it as an aid in debugging if necessary.
 

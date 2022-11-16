@@ -21,7 +21,7 @@ Each module has its own scope that is completely sealed off: it cannot see the a
 If you want to have some definitions only visible within the module, use the `#scope_module;` directive before these definitions.
 
 ## 8B.3 An example of using the #scope directives
-See _8.2_file_and_global_scopes.jai_ (this is the howto 151_file_and_global_scopes example):  
+See *8.2_file_and_global_scopes.jai* (this is the howto 151_file_and_global_scopes example):  
 
 ```c++
 #import "Basic";
@@ -53,7 +53,7 @@ main :: () {
 }
 ```
 
-_file_alpha.jai_:
+_file_alpha.jai*:
 ```c++
 file_and_application_scope_in_file_alpha :: () {
     print("Whiskey: %\n", whiskey);
@@ -68,7 +68,7 @@ tango :: "File Scope        (in file alpha)";
 foxtrot :: "File Scope        (from file alpha).";
 ```
 
-_file_beta.jai_:
+_file_beta.jai*:
 ```c++
 file_and_application_scope_in_file_beta :: () {
     print("Whiskey: %\n", whiskey);

@@ -66,7 +66,7 @@ Type_Info_Integer :: struct {
 ```
 
 ## 16.3 Ways to dig into type information
-See _16.1_types_in_depth.jai_:
+See *16.1_types_in_depth.jai*:
 
 ```c++
 #import "Basic";

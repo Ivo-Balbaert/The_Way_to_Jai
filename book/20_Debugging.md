@@ -5,7 +5,7 @@ The quest for the bug's cause is even more urgent when a crash of a program occu
 In all these cases we need a good debugging tool that allows us to find the cause quickly. Let's see what Jai and its ecosystem have to offer on this front.  
 
 First we focus on a very obvious case,  
-see _20.1_crash.jai_:
+See *20.1_crash.jai*:
 
 ```c++
 // #run main(); // uncomment this for debugging at compile-time
@@ -59,7 +59,7 @@ You can also do compile-time asserts with the **#assert** directive.
 These take the form:	`#assert condition message`  
 This only runs at compile time.
 
-See _20.2_assert.jai_:
+See *20.2_assert.jai*:
 ```c++
 #assert true "This will never be shown\n";
 #assert false "I just wanted you to fail\n";
@@ -150,7 +150,7 @@ With this tool you can debug every Jai program.
 On Windows, we'll want to connect with the external debugger from **Visual Studio**, (VS) which is Windows' flagship IDE (To follow along you'll have to install at least Microsoft Visual Studio Community Edition 2019).   
 To do this, we need the _Debug_ module. Program 20.3_crash.jai is the same as 20.1, only the code for using Debug was added:
 
-See _20.3_crash.jai_:
+See *20.3_crash.jai*:
 ```c++
 Debug :: #import "Debug";   // (1)
 #import "Basic";
@@ -185,7 +185,7 @@ Now you can put breakpoints in the .jai file (click in the grey margin beside a 
 ## 20.4 Debugging general code
 If you have located the neighborhood where the error occurs, it is possible to attach to the debugger somewhere inside the Jai code.
 
-See _20.4_debugging.jai_:
+See *20.4_debugging.jai*:
 ```c++
 #import "Basic";
 Debug :: #import "Debug";
@@ -235,7 +235,7 @@ Now compile and then execute the program. When the breakpoint is reached, a dial
 ![VS Debugging general code](https://github.com/Ivo-Balbaert/The_Way_to_Jai/tree/main/images/VSdebug2.png)
 
 **Exercise**
-Debug the code of _debugging2.jai_ when inside the nested loop i gets the value 3.
+Debug the code of _debugging2.jai* when inside the nested loop i gets the value 3.
 
 
 ## 20.5 Debugging with natvis

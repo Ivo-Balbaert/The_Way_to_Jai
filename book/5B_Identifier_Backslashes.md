@@ -1,6 +1,6 @@
 # Chapter 5B - Identifier Backslashes
 
-This feature is illustrated here (see _5B.ident_back.jai_ :)
+This feature is illustrated here (See *5B.ident_back.jai* :)
 
 ```c++
 #import "Basic";

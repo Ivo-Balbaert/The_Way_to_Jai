@@ -84,7 +84,7 @@ Jai has no explicit character type. The **#char** directive on a single characte
 (see for example this [ASCII table](https://www.rapidtables.com/code/text/ascii-table.html))
 
 ### 5.1.3 Using print to display a value
-See _5.1_literals.jai_:
+See *5.1_literals.jai*:
 
 ```c++
 #import "Basic";
@@ -138,7 +138,7 @@ The solution is to give such a **constant** a meaningful name, like:
     `MASS_EARTH :: 5.97219e24;     // in kg`  
 Do this in only one place, and then use that name in all places in code where that value is needed. At compile-time, the compiler will substitute the value for the constant's name everywhere.
 
-Here is an example program: see _5.2_constants.jai_
+Here is an example program: See *5.2_constants.jai*
 
 ```c++
 #import "Basic";
@@ -191,7 +191,7 @@ Examples of variable names are:
 The names start with a lowercase letter, and multiple parts of a name are connected with _ .  
 
 ### 5.3.1 - How to declare variables
-See _5.3_variable_declarations.jai_:
+See *5.3_variable_declarations.jai*:
 
 ```c++
 #import "Basic";
@@ -318,7 +318,7 @@ Here are the errors that can occur when defining a variable incorrectly:
 This shows that Jai is a **strongly typed** language.
 
 ## 5.5 - Multiple assignment
-See _5.4_variable_declarations2.jai_:
+See *5.4_variable_declarations2.jai*:
 
 ```c++
 #import "Basic";
@@ -368,7 +368,7 @@ The right-hand sides in such a _multiple assignment_ can also contain expression
 If needed, declaration and assignment can be on separate lines.
 
 ## 5.6 - Swapping values
-See _5.5_swapping.jai_:
+See *5.5_swapping.jai*:
 
 ```c++
 #import "Basic";
@@ -391,7 +391,7 @@ But see § 17.10 for a swap procedure and ?? for built-in versions.
 ## 5.7 - More about printing
 
 ### 5.7.1 - Printing more than one value
-See _5.6_printing.jai_:
+See *5.6_printing.jai*:
 
 ```c++
 #import "Basic";
@@ -430,7 +430,7 @@ In this case only the first two values are displayed.
 If you want to print a literal %, replace the second % with %% as in line (4).
 
 ### 5.7.2 - The write procedures
-See _5.8_write.jai_:
+See *5.8_write.jai*:
 
 ```c++
 main :: () {
@@ -447,10 +447,10 @@ Hello, World!
 */
 ```
 
-Jai has some lower-level write procedures which are declared as #runtime_support(see ??). They are defined in modules _Preload_ and _Runtime_Support.jai_, so they don’t need the Basic module. You can use these when you don't want to import the _Basic_ module.
+Jai has some lower-level write procedures which are declared as #runtime_support(see ??). They are defined in modules _Preload_ and _Runtime_Support.jai*, so they don’t need the Basic module. You can use these when you don't want to import the _Basic_ module.
 
 ### 5.7.3 - Printing Unicode
-See _5.9_printing_unicode.jai_:
+See *5.9_printing_unicode.jai*:
 
 ```c++
 #import "Basic";

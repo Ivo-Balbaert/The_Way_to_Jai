@@ -110,7 +110,7 @@ Here are screenshots of the windows:
 ![Success](https://github.com/Ivo-Balbaert/The_Way_to_Jai/tree/main/images/success.png)
 
 The loaded file `build_gui.jai` contains the following code:
-See _build_gui.jai_:
+See *build_gui.jai*:
 ```c++
 #import "Basic";
 #import "SDL";      // (1)

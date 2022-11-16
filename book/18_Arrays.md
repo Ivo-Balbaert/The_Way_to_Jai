@@ -14,7 +14,7 @@ Array_Type :: enum u32 {
 ```
 
 ## 18.1. Array literals
-See _18.1_array_literals.jai_:
+See *18.1_array_literals.jai*:
 
 ```c++
 #import "Basic";
@@ -85,7 +85,7 @@ Looping over an array while processing each item is made extremely easy with a f
 starting from 0 like in all C-like languages. See § 18.3.1 and 18.6  for more examples.
 
 ## 18.3. Static arrays
-See _18.2_static_arrays.jai_:
+See *18.2_static_arrays.jai*:
 
 ```c++
 #import "Basic";
@@ -229,7 +229,7 @@ Arrays are built into the compiler so that they are very fast. The array items c
 The static arrays we've seen until now were fixed in size: after the size is known to the compiler, they cannot be enlarged, so no items can be added.
 Jai (unlike C) also has **dynamic** or **resizable arrays** , where the size is not known at compile-time and can grow (change) at runtime. Their items as well as the arrays size are stored in heap memory, more specifically in the memory allocated by the context's default allocator (see § 21).
 
-See _18.3_dynamic_arrays.jai_:
+See *18.3_dynamic_arrays.jai*:
 
 ```c++
 #import "Basic";
@@ -312,7 +312,7 @@ Resizable_Array :: struct {
 
 
 ## 18.5. Array views
-See _18.4_array_view.jai_:
+See *18.4_array_view.jai*:
 
 ```c++
 #import "Basic";
@@ -364,7 +364,7 @@ This is the first example of pointer arithmetic we encounter in Jai. Needless to
 Why are array views important? Besides getting an alternative look on an array without consuming memory, they also allow us to write procedures in a more general way: both static and dynamic arrays are automatically casted to array views if the array view is a parameter, see § 18.8 
 
 ### 18.5.2 Misuse of array views with dynamic arrays
-See _18.8_array_view_misuse.jai_:
+See *18.8_array_view_misuse.jai*:
 
 ```c++
 #import "Basic";
@@ -387,8 +387,8 @@ The reason for this is that any time you call `array_add` on a, it might move it
 > So only take an array view on a dynamic array when this will no longer be resized. In general, making a pointer to an item of a dynamic array is not a good idea, because the array can move in memory when its size grows, and then the pointer becomes invalid!
 
 ## 18.6. For-loops over arrays: more examples
-(See 18.1_static_arrays.jai_ line (4B) and following for examples with static arrays.)
-See _18.5_array_for.jai_:
+(See 18.1_static_arrays.jai* line (4B) and following for examples with static arrays.)
+See *18.5_array_for.jai*:
 
 ```c++
 #import "Basic";
@@ -476,7 +476,7 @@ In line (5) we see that simply writing a `for <` reverses the iteration order.
 All the arrays we've encountered until now were 1-dimensional, with an index going from 0 to array.count-1
 But for example when writing a game in 2D or 3D, we easily need objects with that number of dimensions. So how do we define these in Jai?
 
-See _18.6_multidim.jai_:
+See *18.6_multidim.jai*:
 
 ```c++
 #import "Basic";
@@ -519,7 +519,7 @@ main :: () {
 Lines (1) and following show some examples of declaration and initialization. Line (2) prints out a 2D-array within a for loop.
 
 ## 18.8. Passing an array to a procedure
-See _18.7_array_proc.jai_:
+See *18.7_array_proc.jai*:
 
 ```c++
 #import "Basic";
@@ -576,7 +576,7 @@ In Jai, arrays do not automatically cast to pointers as in C. Rather, they are l
 This prevents the many possible bugs resulting from the way C handles this. In Jai the procedure can test that it doesn’t change the array out of bounds, because it knows its size through arr.count. 
 
 ## 18.9. An array of pointers
-See _18.9_array_pointers.jai_:
+See *18.9_array_pointers.jai*:
 
 ```c++
 #import "Basic";
@@ -617,7 +617,7 @@ A handy way to work with them is to make an array, where each item is a pointer 
 ## 18.10 Variable number of arguments .. for a procedure
 Such a proc is sometimes called `variadic`.
 
-See _18.10_var_args.jai_:
+See *18.10_var_args.jai*:
 
 ```c++
 #import "Basic";
@@ -677,7 +677,7 @@ You can spread parameters with a name as well as in line (7B):
 `varargs_proc(f = 5, 3.14 = "How", v = ..array);`
 
 ## 18.11 The print procedure uses variable number of arguments
-See _18.11_print_proc.jai_:
+See *18.11_print_proc.jai*:
 
 ```c++
 #import "Basic";
@@ -691,7 +691,7 @@ main :: () {
 ```
 
 In the above example as well as in § 5.7, we see that `print` can accept a variable number of arguments.
-This is because `print` is defined in module _Basic_ file _Print.jai_ as:  
+This is because `print` is defined in module _Basic_ file _Print.jai* as:  
 `print :: (format_string: string, args: .. Any, to_standard_error := false) -> bytes_printed: s64 {...}` 
 
 We see it has a variable number argument `args`, which makes this possible.

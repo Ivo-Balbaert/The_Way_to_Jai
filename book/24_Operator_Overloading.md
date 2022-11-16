@@ -10,7 +10,7 @@ where: token can be:     +, -, *, /, +=, -=, *=, ==, !=, <<, >>, &, |, [], %, ^,
 The following operators cannot be overloaded: = and New.
 
 ## 24.1 Vector operators
-See _24.1_overloading_vec.jai_:
+See *24.1_overloading_vec.jai*:
 ```c++
 #import "Basic";
 #import "Math";
@@ -54,7 +54,7 @@ The **#symmetric** directive tells us that a Vector3 * a float (like in (3)) or 
 ## 24.2 Object operators
 In this section we make a few operator overloadings ourselves.
 
-See _24.2_overloading_object.jai_:
+See *24.2_overloading_object.jai*:
 ```c++
 #import "Basic";
 

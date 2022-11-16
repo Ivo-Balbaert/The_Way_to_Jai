@@ -17,7 +17,7 @@ We already talked about running code at compile time as early as § 3.2.4. Jai p
 > Remark: because all of this processing happens at compile-time, there is a natural overlap between this chapter and § 27.
 
 ## 26.1 The type table
-See _26.1_type_table.jai_:
+See *26.1_type_table.jai*:
 ```c++
 #import "Basic";
 #import "Compiler";
@@ -61,7 +61,7 @@ We first discovered that this was possible in §3.2.4. We talked about the bytec
 We already know that we need to use `#run main()` to run the whole program at compile-time.
 In fact, any code (a code-line, a block of code or a procedure) can be run at compile time with **#run**. 
 
-See _26.2_run.jai_:
+See *26.2_run.jai*:
 ```c++
 #import "Basic";
 #import "Math";
@@ -160,7 +160,7 @@ or sometimes called:	_"Bake the data into the program binary"_
 ### 26.2.1 The #compile_time directive
 With all these meta-programming functionalities, it can be important to know when you are running in compile-time and when you are really running. Luckily there is a **#compile_time** directive, that is true at compile-time, and false at run-time. However it cannot be used as a constant.
 
-See _26.3_ct.jai_:
+See *26.3_ct.jai*:
 ```c++
 #import "Basic";
 
@@ -183,7 +183,7 @@ Use this for example when you want a procedure to do something different at comp
 Arrays are an exception to what we have seen in this section: when they get values at compile-time, these values are reset (initialized to zeros) before running the program.
 This is shown in the following program:
 
-See _26.4_no_reset.jai_:
+See *26.4_no_reset.jai*:
 ```c++
 #import "Basic";
 
@@ -218,7 +218,7 @@ For example:
 
 This is exactly what **#if** does:
 
-See _26.5_if.jai_:
+See *26.5_if.jai*:
 ```c++
 #import "Basic";
 
@@ -270,7 +270,7 @@ This technique is used in the _Basic_ module to load specific code depending on 
 ## 26.4 Inserting code with #insert
 The **#insert** directive inserts a piece of compile-time generated code into a procedure or a struct.
 
-See _26.6_insert.jai_:
+See *26.6_insert.jai*:
 ```c++
 #import "Basic";
 
@@ -303,7 +303,7 @@ Jai's macros are so called _hygienic_:
 - they modify variables only when explicitly allowed;
 
 Syntactically, macros resemble a procedure: they are defined by adding the **#expand** directive to the end of the proc declaration before the curly brackets. 
-Let's see this in _26.7A_macros_intro.jai_:
+Let's see this in _26.7A_macros_intro.jai*:
 ```c++
 #import "Basic";
 
@@ -325,7 +325,7 @@ The following examples in this section are meant to show the basic syntax, they 
 
 The syntax is shown in `macro0` defined in line (1) below, which does nothing. A macro is called like any proc: `macro0()`.
 
-See _26.7_macros_basics.jai_:
+See *26.7_macros_basics.jai*:
 ```c++
 #import "Basic";
 #import "Math";
@@ -459,7 +459,7 @@ Line (5) shows that a macro can have parameters, just like any proc. This is a w
 ### 26.5.2 Using a macro for an inner proc
 In § 17.2 we saw that an inner proc cannot access outer variables. A way to circumvent this is to define the inner proc as a macro and use `. The example below is inner_proc() from 17.2_local_procs.jai, which is now redefined as a macro to be able to change the outer variable x.
 
-See _26.13_local_procs.jai_:
+See *26.13_local_procs.jai*:
 ```c++
 #import "Basic";
 
@@ -485,7 +485,7 @@ Wouldn't it be nice if we could do this with a for loop?
 ## 26.6 Using a for-expansion macro to define a for loop
 As easy as it is to for-loop over an array, this is not defined for other composite data-structures, such as the linked list we discussed in § 12.6. But this can be done with a macro, by defining a so-called _for_expansion_:
 
-See _26.8_linked_list_for_expansion.jai_:
+See *26.8_linked_list_for_expansion.jai*:
 ```c++
 #import "Basic";
 
@@ -570,7 +570,7 @@ They both have to be prefixed with a back-tick, because they are outer variables
 
 The `#insert body;` in line (7) is responsible for printing out the data. `body` is the 2nd argument, and is of type Code. `body` denotes the body of the for-loop, and it is substituted into the expanded code. Its content is the `print` statement in line (10). So `#insert` is used inside macros to insert code in the expansion.  
 (There is also a variant directive **#insert,scope()**, which allows you to insert code in the macro itself. A macro often takes an argument suitably named `body: Code`, which is then used to insert in the expansion: `#insert body`.)  
-The `For_Flags` enum_flags is found in module _Preload_.jai_ with the following definition:
+The `For_Flags` enum_flags is found in module _Preload_.jai* with the following definition:
 ```c++
 For_Flags :: enum_flags u32 {
   POINTER :: 0x1; // this for-loop is done by pointer.
@@ -589,7 +589,7 @@ Now let's make the same for-loop for a double linked-list:
 ## 26.7 A for-expansion macro for a double linked-list
 Let's now define a more general linked list as having a first and a last Node (see line (1)), whereby Node is recursively defined(see line (2)) as having a value, a previous and a next Node. Another advantage is that the type of the value (and Node) is polymorf written as T.
 
-See _26.9_doubly_linked_list.jai_:
+See *26.9_doubly_linked_list.jai*:
 ```c++
 #import "Basic";
 // Debug :: #import "Debug";
@@ -752,7 +752,7 @@ Accessing all x's and so on will be much faster in the SOA configuration.
 
 Now we discuss an example of how SOA is implemented in Jai as a polymorphic struct with #insert.
 
-See _26.10_soa.jai_:
+See *26.10_soa.jai*:
 ```c++
 #import "Basic";
 
@@ -855,7 +855,7 @@ compiler_get_nodes :: (code: Code) -> (root: *Code_Node, expressions: [] *Code_N
 (`Code_Node` is a struct defined in module _Compiler_)
 In the program below we analyse the nodes of the statement: `code :: #code a := Vector3.{1,2,3};`
 
-See _26.11_code_nodes.jai_:
+See *26.11_code_nodes.jai*:
 ```c++
 # import "Basic";
 # import "Compiler";
@@ -894,7 +894,7 @@ To print out the nodes, we need to import the module _Program_Print_ (line (1)).
 
 ## 26.12 The #placeholder directive
 
-See _26.12_placeholder.jai_:
+See *26.12_placeholder.jai*:
 ```c++
 #import "Basic";
 

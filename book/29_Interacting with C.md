@@ -44,7 +44,7 @@ size_of_state :: () -> s32 #foreign lz4 "LZ4_sizeofState";
 ```
 
 ## 29.3 Examples on Linux 
-See _29.1_call_c_linux.jai_:
+See *29.1_call_c_linux.jai*:
 ```c++
 // This program only works on Linux!
 #import "Basic";
@@ -66,7 +66,7 @@ main :: () {
 In line (1) we declare the Linux C standard library `libc`, lines (2) and following declare some C function from that library. In lines (3) and following, we call some of these C functions from Jai.
 
 ## 29.4 Examples on Windows 
-See _29.2_call_c_windows.jai_:
+See *29.2_call_c_windows.jai*:
 ```c++
 #import "Basic";
 
@@ -93,7 +93,7 @@ In line (1) we declare the Windows C standard library `crt`, lines (2) and follo
 ## 29.5 The #c_call directive 
 The **#c_call** directive is used to indicate that a procedure follows C ABI conventions: it makes the procedure use the C calling convention. It is used for interacting with libraries written in C. 
 
-See _29.3_c_call.jai_:
+See *29.3_c_call.jai*:
 ```c++
 #import "Basic";
 

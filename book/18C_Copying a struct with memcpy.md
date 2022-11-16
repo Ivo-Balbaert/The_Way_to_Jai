@@ -3,7 +3,7 @@
 
 In § 4.9, we saw the low-level memcpy function. We'll use this now to copy the contents of a struct to another struct, using a static array as intermediary. 
 
-See _18C_memcpy_struct.jai_:
+See *18C_memcpy_struct.jai*:
 ```c++
 #import "Basic";
 

@@ -6,7 +6,7 @@ We know that we can create local code blocks (see 7.1.2), and that we can repeat
 ## 17.1 Declaring and calling a proc
 A block of code that is used several times is a good candidate to be wrapped up inside a proc. This reduces code duplication and can enhance code readability.
 
-See _17.1_proc_definitions.jai_:
+See *17.1_proc_definitions.jai*:
 
 ```c++
 #import "Basic";
@@ -101,7 +101,7 @@ In line (10) we declare a proc variable `p_ptr` with the same signature as sum, 
 ## 17.2 Local procs
 Procedures defined at the same top-level as main are called global procs. They can be called by main and can also call each other. An example is `proc` and `proc2` in the following code:
 
-See _17.2_local_procs.jai_:
+See *17.2_local_procs.jai*:
 
 ```c++
 #import "Basic";
@@ -158,7 +158,7 @@ Also a procedure doesn't even see the inner procs defined inside other procs (se
 Using local procs for things like helper procs promotes code hygiene: there are less global procs to worry about. Only make procs global when they are really used in several places.
 
 ## 17.3 Difference between passing a copy and passing a pointer
-See _17.3_passing.jai_:
+See *17.3_passing.jai*:
 
 ```c++
 #import "Basic";
@@ -197,7 +197,7 @@ Passing a pointer to n in (2) allows the proc `passing_pointer` to change the va
 > To change a variable inside a proc, you need to pass a pointer to that variable as parameter to the proc.
 
 ## 17.4 Default values for arguments
-See _17.4_default_args.jai_:
+See *17.4_default_args.jai*:
 
 ```c++
 #import "Basic";
@@ -229,7 +229,7 @@ In line (1) we see how the argument a in proc1 gets a default value of 0. In the
 A default value must not be a literal value, it can be any symbol, like a variable or even another procedure call.
 
 ## 17.5 Named arguments
-We already saw an example of this in line (5) of _17.1_proc_definitions.jai_:  `a2 := square(x = c);`
+We already saw an example of this in line (5) of _17.1_proc_definitions.jai*:  `a2 := square(x = c);`
 the argument which is named x gets the parameter value c in an explicit assignment.  
 Named arguments are useful when you have procs which take many arguments, often of the same type.   
 When arguments are given default values, it can be even more complicated. In such a case it is possible that the compiler can’t distinguish between them if you pass parameters in the wrong order. Named arguments allow you to specify the parameter values in any order.  
@@ -238,7 +238,7 @@ Here is another example to illustrate its usefulness:
 Partially naming arguments is allowed, then you have to be very cautious, but Jai carefully checks the parameters. After using named arguments you cannot switch to unnamed ones.
 
 ## 17.6 #must and multiple return values
-See _17.5_multiple_return.jai_:
+See *17.5_multiple_return.jai*:
 
 ```c++
 #import "Basic";
@@ -314,7 +314,7 @@ By returning a bool which signals success of the file-opening action, we can tes
 ## 17.7 Overloading procedures
 Procedures are said to _overload_ each other when they have the same name, but different argument list. The only things in which they differ are the types of their arguments. Here is an example with two procedures proc1:
 
-See _17.6_overloading.jai_:
+See *17.6_overloading.jai*:
 
 ```c++
 #import "Basic";
@@ -366,7 +366,7 @@ The way the resolution mechanism works is: it looks through all overload version
 You've probably spotted the problem: nearly every procedure will have possibly (many) overloads, differing only in the proc header, the code often stays the same. This promotes code bloat, and a change in logic means changing a number of procs. Lots of programming languages have a solution for this, called generics, templates or parametrization. Jai's solution is called **polymorphic procedures**, which we'll discuss in § 22.
 
 ## 17.8 Inlining procs
-See _17.7_inlining.jai_:
+See *17.7_inlining.jai*:
 
 ```c++
 test_local :: (x: int) { /*... */}
@@ -396,10 +396,10 @@ In the snippet above you find a concrete example of each of these cases. A proc 
 >   2) at the call site: keyword inline before the proc call
 
 **Exercise**
-In _inlining_ex.jai_, at each of the lines (1) - (7), decide whether the call to the proc is inlined or not.
+In _inlining_ex.jai*, at each of the lines (1) - (7), decide whether the call to the proc is inlined or not.
 
 ## 17.9 Recursive procs and #this
-See _17.8_recursive.jai_:
+See *17.8_recursive.jai*:
 
 ```c++
 # import "Basic";
@@ -468,7 +468,7 @@ A recursive solution may be logically the simplest, but it most probably is not 
 **#this** refers to the current procedure or struct in the current scope. A trivial use-case is to replace the proc name in the body of a recursive function by #this, as was done in `factorial2`. 
 
 ## 17.10 Swapping values
-See _17.9_swap.jai_:
+See *17.9_swap.jai*:
 
 ```c++
 #import "Basic";
@@ -493,7 +493,7 @@ Swapping two values through a procedure means returning the values in reverse or
 In § 22.2.3 we'll discuss two built-in polymorphic versions of swap.
 
 ## 17.11 A println procedure
-See _17.10_println.jai_:
+See *17.10_println.jai*:
 
 ```c++
 #import "Basic";
@@ -528,7 +528,7 @@ The code shows two overloading versions. Both have the keyword **inline**, to av
 - (2) takes a format string msg, and takes a variable (..) number of Any type, it calls `print` with the same arguments, and then prints a \n.
 
 ## 17.12 Autocasting a parameter with xx
-See _17.11_autocast.jai_:
+See *17.11_autocast.jai*:
 
 ```c++
 #import "Basic";
@@ -550,14 +550,14 @@ In the call in line (1) a Type mismatch error occurs. This can be solved by pref
 Define your own version of a 2D vector, and write a function make_vec2D that receives 2 floats and returns a 2D Vector.
 The struct literal notation is much shorter than the 'constructor'-like proc, but it has a limitation:   
 Why doesn't this work?      `v := Vec2D.{x, y};`
-(see _make_vector2.jai_) 
+(See *make_vector2.jai*) 
 
 
 ## 17.13 Structs and procs
 Just like with any other types, we can pass struct variables or pointers to them to a procedure.
 
 ## 17.13.1 Using the namespace of a struct in procs
-See _17.11_using_structs_procs.jai_:
+See *17.11_using_structs_procs.jai*:
 
 ```c++
 #import "Basic";
@@ -606,7 +606,7 @@ In the code above we have 4 versions of a `print_position_` proc, which take an 
 - version d: if we do `using entity.position;` x and y can be reached without any qualification.
 
 ## 17.13.2 The #as directive in proc arguments
-See _17.13_using_as_structs.jai_:
+See *17.13_using_as_structs.jai*:
 
 ```c++
 #import "Basic";
@@ -651,7 +651,7 @@ In the solution in line (1) you see that a simple . notation is enough to access
 ## 17.14 Reflection on procedures
 As we did in § 16 with structs and enums, we can also obtain reflection info on a procedure, mainly its argument types and return types:
 
-See _17.14_reflection_procedure.jai_:
+See *17.14_reflection_procedure.jai*:
 
 ```c++
 #import "Basic";

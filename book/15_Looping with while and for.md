@@ -3,7 +3,7 @@
 Often we need to repeat a block of code a number of times (a for-loop) or as long as a condition is true (a while-loop). Looping is also often called _iterating_.
 
 ## 15.1 While loop
-See _15.1_while.jai_:
+See *15.1_while.jai*:
 
 ```c++
 #import "Basic";
@@ -106,7 +106,7 @@ Starting in line (6), we see a loop over counter i which is enclosed with a loop
 In line (7) you see the same while loop as used for the counting down, but now the condition has been given a name (`counting`). This name can be used to break out of the loop when you have nested while loops (see § 15.3).
 
 ### 15.1.3 Printing out a recursive list
-In § 12.6 we constructed a linked-list with a recursive struct LinkedList. To print out its data, now we can do this through a loop mechanism, see _15.2_while_looping_through_a_linked_list.jai_. This has the same definition of LinkedList and variable lst as in example 13.3_linked_list.jai, so we omit this code here; the following code is used between c.next = null and the free statements:
+In § 12.6 we constructed a linked-list with a recursive struct LinkedList. To print out its data, now we can do this through a loop mechanism, See *15.2_while_looping_through_a_linked_list.jai*. This has the same definition of LinkedList and variable lst as in example 13.3_linked_list.jai, so we omit this code here; the following code is used between c.next = null and the free statements:
 
 ```c++
     print("List printed in a while loop: \n");
@@ -126,7 +126,7 @@ We print out the data of the loop and point to the next node in line (3). In our
 ## 15.2 For loop
 When you want to iterate over a range of things, `for` is your best tool.
 
-See _15.3_for.jai_:
+See *15.3_for.jai*:
 
 ```c++
 #import "Basic";
@@ -206,7 +206,7 @@ i) break out of a loop at a certain condition (that is: leave the loop and conti
 ii) break out of the current loop iteration at a certain condition, and continue with the next loop iteration: use the **continue** keyword.
 
 Here are examples of these situations:
-See _15.4_break.jai_:
+See *15.4_break.jai*:
 
 ```c++
 #import "Basic";
@@ -257,7 +257,7 @@ In line (2), we see the same logic written as a while loop. The nested loop in l
 In line (4) we see how you can break out of a while-loop using the condition variable.
 So normally a `break` terminates the current innermost loop immediately, but a `break var` breaks out of the loop where `var` is the iteration or condition variable. 
 
-See _15.5_continue.jai_:
+See *15.5_continue.jai*:
 
 ```c++
 #import "Basic";
@@ -317,7 +317,7 @@ For both break and continue we see that the iteration variable can be used as a 
 Line (4) and following show a combined use of break and continue. A lot of flexibility is possible, but a bug is easily created, so check thoroughly!
 
 ## 15.4 Looping over an enum's values:
-See _15.6_for_enum.jai_:
+See *15.6_for_enum.jai*:
 
 ```c++
 #import "Basic";
@@ -347,7 +347,7 @@ Direction contains the following values:
 In addition to the enum methods we discovered in § 13.6 that give us the range and the member names, we can also user a for-loop shown in line (1) to get the enum's values with the `enum_values_as_s64` proc.  
 
 ## 15.5 Looping over a struct's fields with type_info()
-See _15.7_struct_members.jai_:
+See *15.7_struct_members.jai*:
 
 ```c++
 #import "Basic";

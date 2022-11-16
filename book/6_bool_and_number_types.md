@@ -1,5 +1,5 @@
 # Chapter 6 – Bool and number types
-See _6.1_bools.jai_:
+See *6.1_bools.jai*:
 
 ```c++
 #import "Basic";
@@ -55,7 +55,7 @@ for !! when the 1st operand is true, the 2nd operand is not evaluated, because w
 You can find complete truth tables [here](https://en.wikipedia.org/wiki/Truth_table).
 
 ### 6.1.3 The assert statement
-See _6.2_assert.jai_:
+See *6.2_assert.jai*:
 
 ```c++
 #import "Basic";
@@ -93,7 +93,7 @@ Also you can leave important assert statements in production code and disable th
 > That way you can leave the asserts in your code, without incurring a performance penalty.
 
 ## 6.2 - Number types
-See _6.3_numbers.jai_:
+See *6.3_numbers.jai*:
 
 ```c++
 #import "Basic";
@@ -256,7 +256,7 @@ Arbitrarily complex expressions can be formed with boolean and other operators, 
 The same [precedence rules as in C](https://www.tutorialspoint.com/cprogramming/c_operators_precedence.htm) are followed, but you can override these by using parentheses to make the expression more readable, as the code in line (7) shows.
 
 ### 6.2.7 Bitwise operators
-See _6.4_bitwise.jai_:
+See *6.4_bitwise.jai*:
 
 ```c++
 #import "Basic";
@@ -311,7 +311,7 @@ n & 1 == 0
 ```
 
 ### 6.2.8 Formatting procs
-See _6.5_formatting.jai_:
+See *6.5_formatting.jai*:
 
 ```c++
 #import "Basic";
@@ -349,7 +349,7 @@ These format* procs give additional functionality for formatting integers and fl
 Additionally, you can use print_style.default_format_int and print_style.default_format_float from the context, which contains default Formatters (?? see howto 018).
 
 ### 6.2.9 Random numbers
-See _6.6_random.jai_:
+See *6.6_random.jai*:
 
 ```c++
 #import "Basic";
@@ -369,7 +369,7 @@ A random float between 0 and 100: 75.796494
 */
 ```
 
-The following procedures are defined in the _Random_ module, which is just a file _Random.jai_ in the _modules_ folder.  
+The following procedures are defined in the _Random_ module, which is just a file _Random.jai* in the _modules_ folder.  
 ```c++
 random_get :: () -> u64
 random_get_zero_to_one :: () -> float

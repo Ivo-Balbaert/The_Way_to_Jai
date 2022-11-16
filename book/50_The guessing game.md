@@ -3,7 +3,7 @@
 
 This is a console game. The program randomly chooses a number lower than a certain maximum (say 100). The player inputs an integer between 0 and 100. The program tells if the number is too low or too high, and when you have guessed the right number in how many steps.  
 Here is an example of the interaction between program and player:  
-`ivo@DESKTOP-KN14QQK:~/jai_projects$ ./guessing_game  
+`ivo@DESKTOP-KN14QQK:~/jai*projects$ ./guessing_game  
 Guess a number between 1 and 100: 75  
 75 is too high  
 Guess a number between 1 and 100: 63  
@@ -20,7 +20,7 @@ Total input errors: 0
 The current version works only on Linux: it imports the _POSIX_ module for the `read` function in procedure `read_line` (which uses the `libdl` library).
 
 ## 50.1 Discussion
-See _50.1_guessing_game.jai_:
+See *50.1_guessing_game.jai*:
 ```c++
 #import "Basic";
 #import "Random";

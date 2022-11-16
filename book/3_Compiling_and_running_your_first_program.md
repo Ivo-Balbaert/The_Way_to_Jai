@@ -22,7 +22,7 @@ Some preliminary remarks:
 To start, let's create a folder _jai_projects_.
 Open this folder in VSCode by selecting File, Open Folder.
 Now create a new (empty) text file, and save it as 
-_3.1_hello_sailor.jai_. 
+_3.1_hello_sailor.jai*. 
 
 Now try to compile this empty file: `jai 3.1_hello_sailor.jai`
 
@@ -55,8 +55,8 @@ Because there is no code, it doesn't do anything. But this is the first program 
 `jai 3.1_hello_sailor.jai` now produces the output:
 
 ```
-Running linker: "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\bin\Hostx64\x64\link.exe" /nologo d:/Jai/jai_projects/.build/hello_sailor_0_w2.obj d:/Jai/jai_projects/.build/hello_sailor_1_w2.obj d:/Jai/jai_projects/.build/hello_sailor_2_w2.obj d:/Jai/jai_projects/.build/hello_sailor_3_w2.obj /OUT:hello_sailor.exe /MACHINE:AMD64 /INCREMENTAL:NO /DEBUG /IMPLIB:d:/Jai/jai_projects/.build/hello_sailor.lib /libpath:"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\lib\x64" /libpath:"C:\Program Files (x86)\Windows Kits\10\Lib\10.0.18362.0\um\x64" /libpath:"C:\Program Files (x86)\Windows Kits\10\Lib\10.0.18362.0\ucrt\x64" -nodefaultlib libcmt.lib vcruntime.lib ucrt.lib kernel32.lib msvcrt.lib kernel32.lib
-   Creating library d:/Jai/jai_projects/.build/hello_sailor.lib and object d:/Jai/jai_projects/.build/hello_sailor.exp
+Running linker: "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\bin\Hostx64\x64\link.exe" /nologo d:/Jai/jai*projects/.build/hello_sailor_0_w2.obj d:/Jai/jai*projects/.build/hello_sailor_1_w2.obj d:/Jai/jai*projects/.build/hello_sailor_2_w2.obj d:/Jai/jai*projects/.build/hello_sailor_3_w2.obj /OUT:hello_sailor.exe /MACHINE:AMD64 /INCREMENTAL:NO /DEBUG /IMPLIB:d:/Jai/jai*projects/.build/hello_sailor.lib /libpath:"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\lib\x64" /libpath:"C:\Program Files (x86)\Windows Kits\10\Lib\10.0.18362.0\um\x64" /libpath:"C:\Program Files (x86)\Windows Kits\10\Lib\10.0.18362.0\ucrt\x64" -nodefaultlib libcmt.lib vcruntime.lib ucrt.lib kernel32.lib msvcrt.lib kernel32.lib
+   Creating library d:/Jai/jai*projects/.build/hello_sailor.lib and object d:/Jai/jai*projects/.build/hello_sailor.exp
 
 Stats for Workspace 2 ("Target Program"):
 Lexer lines processed: 663 (983 including blank lines, comments.)
@@ -73,7 +73,7 @@ This only displays some useful compiler and linker info. You will see this whene
 On Linux, you will see an output like this:
 
 ```
-Running linker: /home/ivo/jai//bin/lld-linux -flavor Gnu --eh-frame-hdr -export-dynamic -o hello_sailor /home/ivo/jai_projects/.build/hello_sailor_0_w2.obj /home/ivo/jai_projects/.build/hello_sailor_1_w2.obj /home/ivo/jai_projects/.build/hello_sailor_2_w2.obj /home/ivo/jai_projects/.build/hello_sailor_3_w2.obj /lib/x86_64-linux-gnu/crt1.o /lib/x86_64-linux-gnu/crti.o /lib/x86_64-linux-gnu/crtn.o -L /home/ivo/jai_projects --dynamic-linker /lib64/ld-linux-x86-64.so.2 -rpath='$ORIGIN' -L /lib -L /lib64 -L /usr/lib -L /usr/lib64 -L /usr/local/lib/x86_64-linux-gnu -L /lib/x86_64-linux-gnu -L /usr/lib/x86_64-linux-gnu -L /usr/local/lib -L /usr/lib/x86_64-linux-gnu/libfakeroot -L /usr/lib/wsl/lib -L /home/ivo/jai/modules/ --start-group /lib/x86_64-linux-gnu/libpthread.so /lib/x86_64-linux-gnu/libm.so /lib/x86_64-linux-gnu/libc.so /lib/x86_64-linux-gnu/libdl.so /lib/x86_64-linux-gnu/librt.so /home/ivo/jai/modules/stb_sprintf/linux/stb_sprintf.a --end-group
+Running linker: /home/ivo/jai//bin/lld-linux -flavor Gnu --eh-frame-hdr -export-dynamic -o hello_sailor /home/ivo/jai*projects/.build/hello_sailor_0_w2.obj /home/ivo/jai*projects/.build/hello_sailor_1_w2.obj /home/ivo/jai*projects/.build/hello_sailor_2_w2.obj /home/ivo/jai*projects/.build/hello_sailor_3_w2.obj /lib/x86_64-linux-gnu/crt1.o /lib/x86_64-linux-gnu/crti.o /lib/x86_64-linux-gnu/crtn.o -L /home/ivo/jai*projects --dynamic-linker /lib64/ld-linux-x86-64.so.2 -rpath='$ORIGIN' -L /lib -L /lib64 -L /usr/lib -L /usr/lib64 -L /usr/local/lib/x86_64-linux-gnu -L /lib/x86_64-linux-gnu -L /usr/lib/x86_64-linux-gnu -L /usr/local/lib -L /usr/lib/x86_64-linux-gnu/libfakeroot -L /usr/lib/wsl/lib -L /home/ivo/jai/modules/ --start-group /lib/x86_64-linux-gnu/libpthread.so /lib/x86_64-linux-gnu/libm.so /lib/x86_64-linux-gnu/libc.so /lib/x86_64-linux-gnu/libdl.so /lib/x86_64-linux-gnu/librt.so /home/ivo/jai/modules/stb_sprintf/linux/stb_sprintf.a --end-group
 
 Stats for Workspace 2 ("Target Program"):
 Lexer lines processed: 7582 (11448 including blank lines, comments.)
@@ -176,7 +176,7 @@ _run a program during compile-time_!
 
 ### 3.2.4 Running code during compile-time
 
-Make a new source file called _3.2_hello_sailor_comptime.jai_ and add the following line after (or before) main: `#run main();`, so that we get:
+Make a new source file called _3.2_hello_sailor_comptime.jai* and add the following line after (or before) main: `#run main();`, so that we get:
 
 ```c++
 #import "Basic";
@@ -207,7 +207,7 @@ In case of `#run main()`, you run the whole program during compile-time (see ?? 
 
 ### 3.2.5 Some remarks
 
-  1) Source code file names are usually in lowercase, separated by _ if needed, like _hello_sailor.jai_ or _struct_literals.jai_. Never use space characters in a Jai filename! In chapters with multiple code files, we'll number them like _3.1_hello_sailor.jai_.
+  1) Source code file names are usually in lowercase, separated by _ if needed, like _hello_sailor.jai* or _struct_literals.jai*. Never use space characters in a Jai filename! In chapters with multiple code files, we'll number them like _3.1_hello_sailor.jai*.
 
   2) You might have noticed that the displayed string is immediately followed by the operating system (OS)-prompt. You can separate them with a blanc line by adding a newline character _\n_ to the string like this:  `print("Hello, Sailor from Jai!\n");`  
   Compile and check it.
@@ -261,6 +261,6 @@ You'll notice that the order in which definitions and procedures appear in a Jai
 
 *TIP*: In general it is useful to find `main` quickly, so by convention `main` is usually placed at the end (bottom) of the source file.
 
-4- Write a Jai program that prints "One" and  "Two!" on consecutive lines, and then "Three!" on the same line (see _mini.jai_).
+4- Write a Jai program that prints "One" and  "Two!" on consecutive lines, and then "Three!" on the same line (See *mini.jai*).
 
-5- Investigate whether the compiler really needs source files to have the extension .jai (see _mini.txt_).
+5- Investigate whether the compiler really needs source files to have the extension .jai (See *mini.txt_).

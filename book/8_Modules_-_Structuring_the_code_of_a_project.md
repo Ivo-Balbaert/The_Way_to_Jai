@@ -26,7 +26,7 @@ Info: ... Searched path 'c:/jai/modules/'.`
 A module can be one file, for example `Random.jai`, imported if needed with `#import "Random";`.  
 
 When a module contains several files, you need to give the module its own folder with the same name, and in it a file `module.jai` is required.
-For example, the _Basic_ module has its own folder _/modules/Basic_. In it you'll find a file _Print.jai_, which contains the definition of `print`. But it also contains other source files.
+For example, the _Basic_ module has its own folder _/modules/Basic_. In it you'll find a file _Print.jai*, which contains the definition of `print`. But it also contains other source files.
 
 You can make your own module(s) in /jai/modules. But these could be deleted when a new version of Jai is installed, so better make a separate folder for your own modules, and make it known to Jai with `-import_dir` (see § 8.5).
 

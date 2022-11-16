@@ -6,7 +6,7 @@ The common operations like +, - and so on are operator overloaded, and coded in 
 
 ## 6B.1 - Getting the current time
 
-See _6B.1_times.jai_:
+See *6B.1_times.jai*:
 ```c++
 #import "Basic";
 #import "Random";

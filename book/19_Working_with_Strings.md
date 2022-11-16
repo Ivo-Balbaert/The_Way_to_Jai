@@ -7,7 +7,7 @@ We encountered strings first in § 5.1 and we've used them ever since. Here we'l
 But you can be assured that strings in Jai are simple and performant, unlike in C++.
 
 ## 19.1 What are strings?
-(see _19.1_strings.jai)
+(See *19.1_strings.jai)
 
 ```c++
 #import "Basic";
@@ -139,7 +139,7 @@ String constants are zero-terminated, and can be implicitly cast to *u8 or *s8, 
 As we know there is no char type in Jai; strings are []u8.
 The following operations on bytes, defined in _Basic_, can be useful on occasion:
 
-See _19.2_bytes.jai_:
+See *19.2_bytes.jai*:
 
 ```c++
 #import "Basic";
@@ -224,7 +224,7 @@ Because strings are essentially array views, you can manipulate .count and .data
 
 
 ## 19.5 String builder
-See _19.3_string_builder.jai_:
+See *19.3_string_builder.jai*:
 
 ```c++
 #import "Basic";
@@ -273,7 +273,7 @@ To free the memory used by the string builder, use `free_buffers(*builder);` usu
 ## 19.6 String operations
 These operations are defined in the _Basic_ and in the _String_ module. Here we give some examples of the most used procedures.
 
-See _19.4_string_operations.jai_:
+See *19.4_string_operations.jai*:
 
 ```c++
 #import "Basic";
@@ -417,7 +417,7 @@ c_style_strlen :: (ptr: *u8) -> int;
 
 And here are some examples of usage:
 
-See _19.5_cstrings.jai_:
+See *19.5_cstrings.jai*:
 
 ```c++
 #import "Basic";

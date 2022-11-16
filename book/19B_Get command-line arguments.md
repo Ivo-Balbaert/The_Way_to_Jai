@@ -8,7 +8,7 @@ or:
 
 This is done with the `get_command_line_arguments` proc from module _Basic_, which returns an array of type []string.
 
-See _19B.1_command_line_args.jai)
+See *19B.1_command_line_args.jai)
 ```c++
 #import "Basic";
 

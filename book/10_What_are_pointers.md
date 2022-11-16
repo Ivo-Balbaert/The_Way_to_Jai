@@ -21,7 +21,7 @@ The size of a pointer is always **8 bytes** (a u64 on a 64 bit machine), because
 
 You can have pointers to any type of variable. Pointers can be used with primitive types like ints, floats or bools, but they will more often be used with composite types like strings, arrays and structs (see later for examples).
 
-See _10.1_pointers.jai_:
+See *10.1_pointers.jai*:
 
 ```c++
 #import "Basic";
@@ -118,7 +118,7 @@ To get to the value of a three-level pointer, you have to dereference three time
 Danger zone: attempting to dereference a null pointer makes the program crash at run-time.  
 When this happens in a program, there clearly is a bug, because the pointer didn't point to any value. So Jai's behavior is to stop the program and print out a stack trace where the problem occurred.
 
-See _10.2_dereference_a_null_pointer.jai_:
+See *10.2_dereference_a_null_pointer.jai*:
 
 ```c++
 #import "Basic";
@@ -202,7 +202,7 @@ get_s64_from_void_pointer (c:/jai/modules/Basic/Print.jai:152,23)
 In a later chapter on Debugging (see § 20), we'll see how you can pinpoint the bug even closer.
 
 ## 10.4 Dangling pointers
-See _10.4_Dangling_pointers.jai_:
+See *10.4_Dangling_pointers.jai*:
 
 ```c++
 #import "Basic";
@@ -231,7 +231,7 @@ ptr1 := cast(*int) ptr;
 ```
 
 ## 10.6 Relative pointers *~snn
-See _10.3_Relative_pointers.jai_:
+See *10.3_Relative_pointers.jai*:
 
 ```c++
 #import "Basic";

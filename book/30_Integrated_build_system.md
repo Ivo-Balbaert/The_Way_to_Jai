@@ -15,7 +15,7 @@ You've probably noticed that every successful compile output (let's say `jai pro
 `Stats for Workspace 2 ("Target Program"):`
 The 'Target Program' mentioned here is `program.jai`. For each program that is built by the compiler, a different **workspace** is used. A workspace represents a completely separate environment, inside which we can compile programs. When the compiler starts up, it makes a workspace for the first files that you tell it to compile on the command-line. 
 
-See _30.1_workspaces.jai_:
+See *30.1_workspaces.jai*:
 ```c++
 #import "Basic";
 #import "Compiler";
@@ -51,7 +51,7 @@ _Why is the workspace for the target program at the command-line called 'Workspa
 When launching the compiler, a default workspace (number 1) is started.
 
 ## 30.2 The source file location directives
-See _30.2_location.jai_:
+See *30.2_location.jai*:
 ```c++
 #import "Basic";
 
@@ -74,7 +74,7 @@ A few directives exist that can be handy when providing file location informatio
 When using or setting file-paths in Jai, always use the forward slash / as path-separator, even on Windows!
 
 ## 30.3 A minimal build file
-See _30.3_build.jai_:
+See *30.3_build.jai*:
 ```c++
 #import "Basic";
 #import "Compiler";
@@ -119,7 +119,7 @@ When you run the executable `program.exe`, you get the output from `main.jai`:
 > Remark: The use of a build() function is not mandatory: your build file could just be a #run { ... }, as illustrated in 30.7_generate_llvm_bitcode.
 
 ## 30.4 The build options
-See _30.4_build_options.jai_:
+See *30.4_build_options.jai*:
 ```c++
 #import "Basic";
 #import "Compiler";
@@ -222,7 +222,7 @@ To build for production (release), you would do only `#run build_release();`, or
 ## 30.5 Intercepting the compiler message loop
 As developer you can access the workings of the compiler through the compiler message loop.
 
-See _30.5_compiler_intercept.jai_:
+See *30.5_compiler_intercept.jai*:
 ```c++
 #import "Basic";
 #import "Compiler";
@@ -377,7 +377,7 @@ Another use-case would be to run the program after successful completion of the 
 ## 30.6 Building and running on successful compilation
 What if we want to build our project, and on successfull completion, run it?
 
-See _30.6_build_and_run.jai_:
+See *30.6_build_and_run.jai*:
 ```c++
 #import "Basic";
 #import "Compiler";
@@ -445,7 +445,7 @@ This program was built with metaprogram 30.8_build_and_run.jai
 In § 2B we told you that arguments given at the end of a `jai` command with `-- ` are arguments for the meta-program. These arguments are called _arguments for the metaprogram_ or _compiler command-line arguments_.
 Now we will show you how to use them, enhancing our previous program.
 
-See _30.7_build_and_run2.jai_:
+See *30.7_build_and_run2.jai*:
 ```c++
 #import "Basic";
 #import "Compiler";
@@ -510,7 +510,7 @@ To get the same output as in the previous section, you now have to call the comp
 ## 30.8 Choosing a debug / release build with compiler command-line arguments
 In the same way as in the previous section, we can decide to either do a debug build or a release build based on the given command-line argument. This is shown in the following code, which is a further development of the code in § 30.4.8:
 
-See _30.8_debug_release_build.jai_:
+See *30.8_debug_release_build.jai*:
 ```c++
 
 #import "Basic";
@@ -649,7 +649,7 @@ misra_checks :: (message: *Message) {
 During the compiler message loop in line (1), we inject a proc `misra_checks()`, which tests every message on a specific code rule, here the `check_pointer_level_misra_17_5` rule which forbids more than 2 levels of pointer indirection. Line (2) ensures that this metaprogram does not generate any output executable.
 
 ## 30.10 Generating LLVM bitcode
-See _30.10_generate_llvm_bitcode.jai_:
+See *30.10_generate_llvm_bitcode.jai*:
 ```c++
 #import "Basic";
 #import "Compiler";

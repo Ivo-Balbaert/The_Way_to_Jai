@@ -7,7 +7,7 @@ Polymorphic procedures are similar to C++ templates, Java generics or parameteri
 We want a procedure `convert` to convert a given argument to a bool.
 Our first solution is overloading procedures: 
 
-See _22.1A_manyproc.jai_:
+See *22.1A_manyproc.jai*:
 ```c++
 #import "Basic";
 
@@ -60,7 +60,7 @@ Wouldn't it be nice if we could reduce this to just one version?
 
 Jai's polymorphic procedures allow you to do just that:  
 
-See _22.1B_polyproc.jai_:
+See *22.1B_polyproc.jai*:
 ```c++
 #import "Basic";
 
@@ -107,7 +107,7 @@ However, a definition like $T can only appear once in a polymorphic function, ot
 
 ## 22.2 Some other examples
 ### 22.2.1 T used more than once, and also used as a return type
-See _22.2_polyproc2.jai_:
+See *22.2_polyproc2.jai*:
 ```c++
 #import "Basic";
 
@@ -159,7 +159,7 @@ Line (5) shows the same error when the types are reversed.
 If the same generic type is used multiple times like here, the '$' indicates what value (here the value for p) is decisive for error messages.
 
 ### 22.2.2 T as the type of an array's items
-See _22.3_polyproc3.jai_:
+See *22.3_polyproc3.jai*:
 ```c++
 #import "Basic";
 
@@ -194,7 +194,7 @@ T is also used in the body of the proc.
 At the call in line (2), a version of the proc is compiled for T == int, at line (3), a version of the proc is compiled for T == float32.
 
 ### 22.2.3 Example with pointers: Swapping
-See _22.4_polyproc4.jai_:
+See *22.4_polyproc4.jai*:
 ```c++
 #import "Basic";
 
@@ -262,9 +262,33 @@ It uses a multiple return to swap the values, so it is called like `n2, m2 = swa
 Given two Vector3's {1, 4, 9} and {2, 4, 6}, use Swap from _Basic_ to swap their values (see swap_vectors.jai)
 
 ### 22.2.4 Example with structs
-See _22.9_polyproc5.jai_:
+See *22.9_polyproc5.jai*:
 ```c++
+#import "Basic";
+
+Ice_Cream_Info :: struct {
+    temperature   := -10.0;
+    flavor        := "vanilla";
+    num_scoops    := 2;
+    cone_style    := "waffle";
+    add_sprinkles := false;
+}
+
+check_temperature :: (s: $T) { 
+    if s.temperature < -20  print("Too cold!!!\n");
+    else                    print("Temperature okay!\n");
+}
+
+main :: () {
+    check_temperature(Ice_Cream_Info.{num_scoops=4, add_sprinkles=true}); // (1)
+    // => Temperature okay!
+    // check_temperature(.{num_scoops=4, add_sprinkles=true}); // (2)
+    // => Error: Attempt to match a literal, without a type designation, 
+    // to a polymorphic variable. This would not define the type of the struct literal, so, 
+    // it doesn't make sense.
+}
 ```
+`check_temperature` is a polymorphic procedure that needs to match a type for T. The only requirement for T is that it is a struct with a member named 'temperature'. The call in (1) Tells the compiler T can be `Ice_Cream_Info`. (2) doesn't provide any type info for T, so it errors out.
 
 ### 22.2.5 Example with several polymorphic types
 See § 22.4.
@@ -279,7 +303,7 @@ Now write a polymorphic version that has types $Ta for a and $Tb for b, returnin
 (6) Try to understand the error you get when compiling polymorph_err.jai  
 
 ## 22.3 The lambda notation =>
-See _22.5_lambdas.jai_:
+See *22.5_lambdas.jai*:
 ```c++
 #import "Basic";
 
@@ -326,7 +350,7 @@ A procedure is also a type (see § 17.1.2), and therefore also a value (see § 9
 > Remark: `add100` constructs and returns a dynamic array.
 
 ## 22.4 A procedure as argument of another proc
-See _22.8_proc_argument.jai_:
+See *22.8_proc_argument.jai*:
 ```c++
 #import "Basic";
 #import "Math";
@@ -364,7 +388,7 @@ It is a higher-order function that takes as 1st argument another procedure with 
 ## 22.5 Baked arguments, $ and $$
 The directive **#bake_arguments** lets us specify value(s) for argument(s) of a procedure, but leaving some arguments unspecified. The result is a proc with fewer arguments. Lets see an example:
 
-See _22.6_baked_args.jai_:
+See *22.6_baked_args.jai*:
 ```c++
 #import "Basic";
 
@@ -419,7 +443,7 @@ This is different from default values (see § 17.4), because a proc made with #b
 ## 22.6 A map function
 Using polymorphic arguments, we can construct functional-programming like map functions, that take for example an array and a function as arguments.
 
-See _22.7_map.jai_:
+See *22.7_map.jai*:
 ```c++
 #import "Basic";
 

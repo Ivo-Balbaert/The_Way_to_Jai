@@ -8,7 +8,7 @@ A union is kind of like a struct, because it is defined with different fields of
 
 So what is its purpose? Using a union is data flexible and economizes on storage: it only takes up as much space as the largest type it contains. 
 
-See _13.1_unions.jai_:
+See *13.1_unions.jai*:
 
 ```c++
 #import "Basic";
@@ -72,7 +72,7 @@ An enum (enumerator) is useful when a property can only take as value one of a l
 Why? Because it is much easier for a developer to work with names than with numbers.
 In combination with if #complete (see ??) it can be checked that all possible values of an enum are used.
 All names are constants, internally they are by default 64bit-integers starting from 0 for the 1st value and auto-incrementing by 1.
-_13.2_enums.jai_ shows a few examples:
+_13.2_enums.jai* shows a few examples:
 
 ```c++
 #import "Basic";
@@ -195,7 +195,7 @@ Operating_Systems :: enum u16 #specified {
 If a struct has an enum marked as #specified, you know that it's safe just to serialize that enum member as an integer, or even to just serialize the whole struct as binary.
 
 ## 13.5 enum_flags and masking flags
-A special version of an enum is a **enum_flags**. Here the integer values backing the member names are subsequent powers of 2, like in this example _13.3_enum_flags.jai_:
+A special version of an enum is a **enum_flags**. Here the integer values backing the member names are subsequent powers of 2, like in this example _13.3_enum_flags.jai*:
 
 ```c++
 #import "Basic";
@@ -245,7 +245,7 @@ In the program above, | is the bitwise or operation. In line (1) you see how we 
 Lines (1) and following show ways to assign enum flags to variables.
 
 ## 13.6 Some useful enum methods
-_13.4_enum_methods.jai_ shows some useful methods to use with enums:
+_13.4_enum_methods.jai* shows some useful methods to use with enums:
 
 ```c++
 #import "Basic";
