@@ -235,7 +235,7 @@ Now compile and then execute the program. When the breakpoint is reached, a dial
 ![VS Debugging general code](https://github.com/Ivo-Balbaert/The_Way_to_Jai/tree/main/images/VSdebug2.png)
 
 **Exercise**
-Debug the code of _debugging2.jai* when inside the nested loop i gets the value 3.
+Debug the code of *debugging2.jai* when inside the nested loop i gets the value 3.
 
 
 ## 20.5 Debugging with natvis

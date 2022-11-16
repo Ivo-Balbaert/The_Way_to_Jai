@@ -369,7 +369,7 @@ A random float between 0 and 100: 75.796494
 */
 ```
 
-The following procedures are defined in the _Random_ module, which is just a file _Random.jai* in the _modules_ folder.  
+The following procedures are defined in the _Random_ module, which is just a file *Random.jai* in the _modules_ folder.  
 ```c++
 random_get :: () -> u64
 random_get_zero_to_one :: () -> float

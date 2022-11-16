@@ -35,7 +35,7 @@ This prints at the very end instead of between 2 and 3!
 We see that the defer statement in line (1) only executes right before the closing } of main. This is exactly the behavior we want. If you like, you can enclose the statement after defer within (), but this is optional. defer can also take a code block as argument, enclosed by { }.    
 The execution of every statement or code block after the defer keyword is delayed until the end of the current (present) scope. This means that these deferred statements will be called when code execution has reached the ending }, that is: when we leave the current scope.
 
-Now let's look at a second example, where multiple defer statements are used, see  _11.2_defer.jai*:
+Now let's look at a second example, where multiple defer statements are used, see  *11.2_defer.jai*:
 ```c++
 #import "Basic";
 
@@ -98,7 +98,7 @@ x is 234
 defer is mainly used to free memory or other resources (closing a file or a database connection), as we'll see in the next sections.
 
 ## 11.2 Allocating and freeing primitive variables
-Let's take a look at _11.4_memory.jai*:
+Let's take a look at *11.4_memory.jai*:
 
 ```c++
 #import "Basic";

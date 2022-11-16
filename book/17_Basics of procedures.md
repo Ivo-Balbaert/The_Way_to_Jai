@@ -229,7 +229,7 @@ In line (1) we see how the argument a in proc1 gets a default value of 0. In the
 A default value must not be a literal value, it can be any symbol, like a variable or even another procedure call.
 
 ## 17.5 Named arguments
-We already saw an example of this in line (5) of _17.1_proc_definitions.jai*:  `a2 := square(x = c);`
+We already saw an example of this in line (5) of *17.1_proc_definitions.jai*:  `a2 := square(x = c);`
 the argument which is named x gets the parameter value c in an explicit assignment.  
 Named arguments are useful when you have procs which take many arguments, often of the same type.   
 When arguments are given default values, it can be even more complicated. In such a case it is possible that the compiler can’t distinguish between them if you pass parameters in the wrong order. Named arguments allow you to specify the parameter values in any order.  
@@ -396,7 +396,7 @@ In the snippet above you find a concrete example of each of these cases. A proc 
 >   2) at the call site: keyword inline before the proc call
 
 **Exercise**
-In _inlining_ex.jai*, at each of the lines (1) - (7), decide whether the call to the proc is inlined or not.
+In *inlining_ex.jai*, at each of the lines (1) - (7), decide whether the call to the proc is inlined or not.
 
 ## 17.9 Recursive procs and #this
 See *17.8_recursive.jai*:

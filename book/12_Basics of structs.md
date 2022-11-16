@@ -213,7 +213,7 @@ In struct literals you can also name the fields, like `field = value`. This allo
 Make a Super_Node struct variable with values 42 and 108; use the long and literal notation(See *making_struct.jai*)
 
 ## 12.5 Making structs on the heap
-See the code example _12.2_struct_heap.jai*:
+See the code example *12.2_struct_heap.jai*:
 
 ```c++
 #import "Basic";
@@ -249,7 +249,7 @@ The stack is limited in size. If your program needs a lot of structs, better use
 A recursive struct is a struct that has as one of its fields a struct of the same type. They can be used to build more complex data structures like linked-lists and trees.
 
 ### 12.6.1 Linked List
-In code example _12.3_linked_list.jai*, we see how we can build a simple linked list, where each node has a 'payload' field `data`, and a `next` field that points to the next node:
+In code example *12.3_linked_list.jai*, we see how we can build a simple linked list, where each node has a 'payload' field `data`, and a `next` field that points to the next node:
 
 ```c++
 #import "Basic";
@@ -347,7 +347,7 @@ Node :: struct {
 
 Wouldn't it be nice if you could use the fields of a struct without having to prefix them with their struct name? That's possible! A struct defines a **namespace**, which you can locally create with the **using** keyword. Then you don't need to use the struct name anymore.
 
-See *_12.4_using.jai*:
+See *12.4_using.jai*:
 ```c++
 #import "Basic";
 

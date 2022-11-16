@@ -303,7 +303,7 @@ Jai's macros are so called _hygienic_:
 - they modify variables only when explicitly allowed;
 
 Syntactically, macros resemble a procedure: they are defined by adding the **#expand** directive to the end of the proc declaration before the curly brackets. 
-Let's see this in _26.7A_macros_intro.jai*:
+Let's see this in *26.7A_macros_intro.jai*:
 ```c++
 #import "Basic";
 
@@ -570,7 +570,7 @@ They both have to be prefixed with a back-tick, because they are outer variables
 
 The `#insert body;` in line (7) is responsible for printing out the data. `body` is the 2nd argument, and is of type Code. `body` denotes the body of the for-loop, and it is substituted into the expanded code. Its content is the `print` statement in line (10). So `#insert` is used inside macros to insert code in the expansion.  
 (There is also a variant directive **#insert,scope()**, which allows you to insert code in the macro itself. A macro often takes an argument suitably named `body: Code`, which is then used to insert in the expansion: `#insert body`.)  
-The `For_Flags` enum_flags is found in module _Preload_.jai* with the following definition:
+The `For_Flags` enum_flags is found in module *Preload_.jai* with the following definition:
 ```c++
 For_Flags :: enum_flags u32 {
   POINTER :: 0x1; // this for-loop is done by pointer.

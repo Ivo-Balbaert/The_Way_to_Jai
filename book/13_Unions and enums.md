@@ -195,7 +195,7 @@ Operating_Systems :: enum u16 #specified {
 If a struct has an enum marked as #specified, you know that it's safe just to serialize that enum member as an integer, or even to just serialize the whole struct as binary.
 
 ## 13.5 enum_flags and masking flags
-A special version of an enum is a **enum_flags**. Here the integer values backing the member names are subsequent powers of 2, like in this example _13.3_enum_flags.jai*:
+A special version of an enum is a **enum_flags**. Here the integer values backing the member names are subsequent powers of 2, like in this example *13.3_enum_flags.jai*:
 
 ```c++
 #import "Basic";

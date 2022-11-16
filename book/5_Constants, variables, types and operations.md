@@ -447,7 +447,7 @@ Hello, World!
 */
 ```
 
-Jai has some lower-level write procedures which are declared as #runtime_support(see ??). They are defined in modules _Preload_ and _Runtime_Support.jai*, so they don’t need the Basic module. You can use these when you don't want to import the _Basic_ module.
+Jai has some lower-level write procedures which are declared as #runtime_support(see ??). They are defined in modules _Preload_ and *Runtime_Support.jai*, so they don’t need the Basic module. You can use these when you don't want to import the _Basic_ module.
 
 ### 5.7.3 - Printing Unicode
 See *5.9_printing_unicode.jai*:
