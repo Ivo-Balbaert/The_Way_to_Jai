@@ -176,7 +176,7 @@ _run a program during compile-time_!
 
 ### 3.2.4 Running code during compile-time
 
-Make a new source file called _3.2_hello_sailor_comptime.jai* and add the following line after (or before) main: `#run main();`, so that we get:
+Make a new source file called *3.2_hello_sailor_comptime.jai* and add the following line after (or before) main: `#run main();`, so that we get:
 
 ```c++
 #import "Basic";
@@ -207,7 +207,7 @@ In case of `#run main()`, you run the whole program during compile-time (see ?? 
 
 ### 3.2.5 Some remarks
 
-  1) Source code file names are usually in lowercase, separated by _ if needed, like _hello_sailor.jai* or _struct_literals.jai*. Never use space characters in a Jai filename! In chapters with multiple code files, we'll number them like _3.1_hello_sailor.jai*.
+  1) Source code file names are usually in lowercase, separated by _ if needed, like *hello_sailor.jai* or *struct_literals.jai*. Never use space characters in a Jai filename! In chapters with multiple code files, we'll number them like *3.1_hello_sailor.jai*.
 
   2) You might have noticed that the displayed string is immediately followed by the operating system (OS)-prompt. You can separate them with a blanc line by adding a newline character _\n_ to the string like this:  `print("Hello, Sailor from Jai!\n");`  
   Compile and check it.

@@ -691,7 +691,7 @@ main :: () {
 ```
 
 In the above example as well as in § 5.7, we see that `print` can accept a variable number of arguments.
-This is because `print` is defined in module _Basic_ file _Print.jai* as:  
+This is because `print` is defined in module _Basic_ file *Print.jai* as:  
 `print :: (format_string: string, args: .. Any, to_standard_error := false) -> bytes_printed: s64 {...}` 
 
 We see it has a variable number argument `args`, which makes this possible.
