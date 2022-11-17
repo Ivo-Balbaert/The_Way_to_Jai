@@ -40,6 +40,7 @@ _Table of Contents_
    [21 - Memory Allocators and Temporary Storage](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/21_Memory_Allocators_and_Temporary_Storage.md)  
    [22 - Polymorphic procedures](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/22_Polymorphic%20procedures.md)  
    [23 - Polymorphic arrays and structs](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/23_Polymorphic%20arrays_and_structs.md)  
+   [23B - A showcase of inheritance](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/23B_A%20showcase%20of%20inheritance%20using%20structs%2C%20as%20and%20polymorphism.md)  
    [24 - Operator overloading](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/24_Operator_Overloading.md)  
    [25 - Context](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/25_Context.md)  
    [26 - Meta-programming and macros](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/26_Metaprogramming%20and%20macros.md)       
@@ -53,6 +54,5 @@ _Table of Contents_
  
      
    
-
 
 
