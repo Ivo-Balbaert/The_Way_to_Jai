@@ -1,6 +1,7 @@
 # Chapter 16 - Types in depth
 
-At compile time Jai deduces all there is to know about the types of all variables and objects.  
+We previously talked about types in § 9. 
+At compile time Jai deduces all there is to know about the types of all variables and objects.
 This info is heavily used in meta-programming at compile-time (see § 26).
 In this chapter we'll see which data-structures from built-in modules are used for this processing. Most of these are defined in module _Preload_.
 

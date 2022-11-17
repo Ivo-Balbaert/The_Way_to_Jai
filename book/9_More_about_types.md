@@ -2,9 +2,12 @@
 
 Jai has _first-class types_: with a type you can do the same things that you would do with any other value. This perhaps gives you a first glimpse of the flexibility of the language.  
 All types in Jai have type **Type**, the type of Type is also Type.
-**Code** is also a type (see ??).
+**Code** is also a type (see § 26.4.1).
 
 Besides the basic types mentioned in § 5 and § 6, Jai also has  other fundamental types , such as: string, pointer, function, struct, array, and enum.
+
+If a Type is constant (in other words, known at compile time),
+you can declare other variables of that Type.  
 
 The compiler has complete knowledge of all the types at compile-time, and some of that remains accessible at run-time. We'll later see (§ 26) how to use that.
 

@@ -4,6 +4,8 @@ A lightweight way to discover and learn the Jai programming language. All progra
 This is a work in progress.
 If you find mistakes, ambiguities, things that are not clear, please create an issue.
 
+The text is backed by some 200 complete working Jai examples and growing. They are all automatically tested at each new version of the Jai compiler, so this text and code will never get outdated.
+
 _Table of Contents_
 
    [0 -  Preface](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/0_Preface.md)  

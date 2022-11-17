@@ -282,15 +282,35 @@ main :: () {
 }
 ```
 
-In line (1) `#insert` takes a string containing a line of code, and inserts it as code at that location in the source.  
-Even the entire contents of a struct can be made through a `#insert -> string` construction (see § 26.9.2). 
+The 1st way #insert can be used is illustrated in line (1): there `#insert` takes a string containing a line of code, and inserts it as code at that location in the source.  
+
+2nd way: `#insert` can also take a variable c of type Code, e.g.: `#insert(c: Code);`. It is also often used in the body of a macro like this:  
+```c++ 
+some_macro :: (body: Code) #expand {
+    ...
+    #insert body;
+    ...
+}
+```
+(See § 26.5 Macros, specifically `macroi` in the first example.)
+
+3rd way: Even the entire contents of a struct can be made through a `#insert -> string` construction. This takes the form:
+```c++
+A_Type :: struct( ... ) {
+    #insert -> string { ... }
+}
+``` 
+The `#insert -> string` is in fact a short (lambda) form for:  
+`#insert #run () -> string {  ...  }();`
+(This is applied in the construction of a SOA struct, see § 26.9.2).
+In the same way, you can make a `#insert -> Code {  return #code  ...   }`.
 
 ### 26.4.1 Type Code and #code
-It can also take a variable c of type Code, like this: `#insert(c: Code);`
 A variable of type Code can be constructed by using the **#code** directive:  
-`#code { // a code block }`  
+`#code { // a code block }`, like `#code { x += 7 }`. 
 This can also be one line, like this:  
 `code :: #code a := Vector3.{1,2,3};`
+All these expressions have type Code.
 
 
 ## 26.5 Basics of macros
