@@ -16,15 +16,29 @@ Luckily Jai also has in-built special storage mechanisms for data structures, ca
 
 ## 21.1 Allocators
 In § 18.4 we discovered that the definition of a Resizable_Array contains a field `allocator : Allocator`.
- Allocators are specialized ways you can invoke to allocate memory for an object. They are specialized in the sense that they store data very efficiently, and they often have simpler mechanisms for freeing memory.  
+Allocators are specialized ways you can invoke to allocate memory for an object. They are specialized in the sense that they store data very efficiently, and they often have simpler mechanisms for freeing memory.  
 
-An Allocator is basically a function pointer, for example it can be used as an argument like:	`Allocator = my_malloc,`  
-where my_malloc is a function that allocates memory.
+An Allocator is defined in _Preload_ as a struct:
+```c++
+Allocator :: struct {
+    proc: Allocator_Proc;
+    data: *void;
+}
+```
+
+A proc of type `Allocator_Proc` is basically a function pointer, for example it can be used as an argument like:                    `proc = my_allocator_proc,`  
+where my_allocator_proc is a function that allocates memory.
+
+Here is the signature of `Allocator_Proc` from module _Preload_:
+```c++
+Allocator_Proc :: #type (mode: Allocator_Mode, size: s64, old_size: s64, old_memory: *void, allocator_data: *void) -> *void;
+```
 
 For example module _Basic_ defines a proc `alloc_string`, which can take a specific allocator to store the string:  
 `alloc_string :: (count: int, allocator: Allocator = .{}) -> string`
+
 (The default allocator is .{}, which is ??)
-Also a dynamic array arrdyn could store its data in an allocator Alloc1:  `arrdyn.allocator = Alloc1;`  
+Also a dynamic array arrdyn could store its data in an allocator Alloc1:                                                      `arrdyn.allocator = Alloc1;`  
 A struct Node could be allocated like:  
 `New(Node, allocator = Alloc1);`
 
@@ -33,7 +47,8 @@ You can also write your own allocators.
 ## 21.2 Temporary storage
 Temporary storage is a special kind of Allocator. It is defined as a struct in the _Preload_ module, and module _Basic_ contains support routines to make working with temporary storage very easy.
 
-It's a linear allocator, the fastest kind. There is a pointer to the start of free memory. If enough free memory is available to service your request, the pointer is advanced and returns the result. If there's not enough free memory, we ask the OS for more RAM. Because Temporary_Storage is expected to be for small-to-medium-sized allocations, we don't expect this to happen very often (and if we want, we can pre-allocate all the memory and lock it down so that the OS is never consulted.)  
+It's a linear allocator, the fastest kind, it is much faster than malloc. It helps your program run faster while also providing many of the benefits of garbage collected languages.
+There is a pointer to the start of free memory. If enough free memory is available to service your request, the pointer is advanced and returns the result. If there's not enough free memory, we ask the OS for more RAM. Because Temporary_Storage is expected to be for small-to-medium-sized allocations, we don't expect this to happen very often (and if we want, we can pre-allocate all the memory and lock it down so that the OS is never consulted.)  
 
 When does the memory get freed? 	_Fire and forget!_
 It happens when your program  calls `Basic.reset_temporary_storage()`. When does this happen? Whenever you want, but many programs have a natural time at which it is best to call this. For example, interactive programs like games or phone applications tend to run in a loop, drawing one frame for each iteration of the loop. You can call `reset_temporary_storage()` at the end of each frame. This makes a clear boundary that you know temporarily-allocated memory cannot cross: at the end of the loop, it's all gone. You can't free individual items in Temporary Storage. Also, don't keep pointers to things in Temporary Storage.

@@ -336,8 +336,8 @@ main :: () {
 // or shorter with type inference:
     n3, m3 := 12, 13;
 // works also for one value:
-    p, q := 13;  
-    print("% %\n", p, q); // => 13 13
+    p, q, r := 13;  
+    print("% %\n", p, q, r); // => 13 13 13
 
 // values of different types or expressions:
     x, y := 1, "hello";      // an int and a string
@@ -389,7 +389,7 @@ A swap like n, m = m, n; is allowed, but doesn't work in Jai like you would expe
 But see § 17.10 for a swap procedure and ?? for built-in versions.  
 
 ## 5.7 - More about printing
-
+print is a native routine.                                                                         
 ### 5.7.1 - Printing more than one value
 See *5.6_printing.jai*:
 

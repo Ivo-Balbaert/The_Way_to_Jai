@@ -101,16 +101,22 @@ IL_LoggingLevel :: u16;
 IL_Logger_Callback :: #type(level: IL_LoggingLevel, text: *u8, ctx: *void) -> void #c_call; // (1)
 
 logger_callback :: (level: IL_LoggingLevel, text: *u8, ctx: *void) #c_call {  // (2)
-    new_context : Context;
+    new_context:Context;                                       // print("I am in logger callback"); // (2B)
+    // => Error: Cannot call into a native procedure, 
+    // from a #c_call procedure, without using push_context.
+
     push_context new_context {
         log("%", to_string(text));
+        print("I am in logger callback");
     }
 }
 
 main :: () {
     logger_callback(4, "You have been logged!", null);
+    // => I am in logger callback
     // => You have been logged!
 }
 ```
 
-In line (1) we define a proc called `IL_Logger_Callback` as having the signature type that follows and as following the #c_call conventions (we re-used the example from § 26.13). Then we define a concrete proc `logger_callback` which has the exact same type as `IL_Logger_Callback`. This proc create a temporary new Context called new_context, and calls the proc `log` in this context to log a text string. text is of type `*u8`, so could be a C string.
+In line (1) we define a proc called `IL_Logger_Callback` as having the signature type that follows and as following the #c_call conventions (we re-used the example from § 26.13). Then we define a concrete proc `logger_callback` which has the exact same type as `IL_Logger_Callback`. This proc create a temporary new Context called new_context, and calls the proc `log` in this context to log a text string. text is of type `*u8`, so could be a C string.     
+In line (2B) we see that `print` cannot be called inside a #c_call routine, but it can be called inside the `push_context` section.

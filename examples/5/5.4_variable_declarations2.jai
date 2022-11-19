@@ -12,9 +12,9 @@ main :: () {
     print("% %\n", n2, m2); // => 12 13
 // or shorter with type inference:
     n3, m3 := 12, 13;
-// works also for one value:
-    p, q := 13;  
-    print("% %\n", p, q); // => 13 13
+// works also for one rvalue and multiple lvalues, also for assignment:
+    p, q, r := 13;  
+    print("% % %\n", p, q, r); // => 13 13 13
 
 // values of different types or expressions:
     x, y := 1, "hello";      // an int and a string

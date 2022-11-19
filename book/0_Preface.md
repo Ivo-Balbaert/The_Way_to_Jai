@@ -42,3 +42,6 @@ I would like to express my sincere admiration to **Jonathan Blow** for creating 
 
 
 
+**This book is dedicated to the memory of Jef Inghelbrecht, a close friend who passed away too soon.
+He was also a great software developer, adhering to conservative and noble principles of software development.
+That's why I am very sure he would have been a big fan of Jai.**

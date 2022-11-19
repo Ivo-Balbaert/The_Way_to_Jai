@@ -25,11 +25,11 @@ Context_Base :: struct {
 }
 ```
 
-The context is available at runtime and is globally known in the code. 
-It contains memory allocation ((5)), logging functionality (2), assertion handler (what procedure you will call), thread index, maintains the indexes in dynamic arrays, hashes, and so on.   
+The context is available at runtime and is globally known in the code. In most cases it will be contained completely in cache memory.
+It contains memory allocation ((5)) (so it is also a common shared piece of memory), logging functionality (2), assertion handler (what procedure you will call), thread index, maintains the indexes in dynamic arrays, hashes, and so on.   
 It also contains temporary storage (3), so you can add things yourself to it.
 
-In Jai, each procedure takes a context-based allocation scheme in which the memory allocator is implicitly passed to all procs (unless otherwise specified with **#c_call**). The context can be overloaded with a custom allocator: this allows memory management to be coordinated between the compiler and the developer.
+In Jai, each procedure takes a context-based allocation scheme in which the memory allocator is implicitly passed to all procs (unless otherwise specified with **#c_call**). The basic `alloc` procedure calls `context.allocator` to get its memory. The context can be overloaded with a custom allocator: this allows memory management to be coordinated between the compiler and the developer.
 You change the way memory is allocated by passing a different context to the function. 
 
 See *25.1_context.jai*:
@@ -37,16 +37,23 @@ See *25.1_context.jai*:
 #import "Basic";
 
 #add_context this_is_the_way := true;   // (1)
-
+                                                                   my_allocator_proc :: (mode: Allocator_Mode, size: s64, old_size: s64, old_memory_pointer: *void, proc_data: *void) -> *void {
+    // allocator specific code
+    result := context.default_allocator.proc(mode, size, old_size, old_memory_pointer, proc_data);
+    return result;
+}                                                                   
 main :: () {
     str := "Hello, Sailor!";
     print("The context is %\n", context); // => see below between /* */
     
     new_context: Context;               // (2)
+    new_context.allocator.proc = my_allocator_proc; // (2B)
+    new_context.allocator.data = null;  
+
     push_context new_context {          // (3)
         // Do things within this new context.
         push_allocator(temp);           // (4)
-    }
+    } // (4B)
     log(str);   // (5) => Hello, Sailor!
 
     print("Temp storage is %\n", context.temporary_storage); 
@@ -88,10 +95,10 @@ indentation_depth = 2; log_runtime_errors = true; }, true}
 The directive **#add_context** adds a declaration to a context.
 
 ## 25.1 push_context
+The current context can be assigned to a variable like in (2). If you want you can change the procedure used for allocating memory, like in line (2B). Then we can use the `push_context` proc like in (3) to do something within this new context. `push_context lets you push an entire fresh Context.
 
-The current context can be assigned to a variable like in (2), and then when can use the `push_context` proc like in (3) to do something within this new context.
-
-For example you could just declare a memory arena (see § ??) and use push_context to use it. All code in the push_context block now allocates with the arena, and you can free the arena memory whenever you want.
+For example you could just declare a memory arena (see § ??) and use push_context to use it. All code in the push_context block now allocates with the arena, and you can free the arena memory whenever you want.  
+The new context stops after the closing } (line (4B)), and the initial context is restored.
 
 ## 25.2 push_allocator
 The `push_allocator` proc changes the allocator in the current context in the current scope.
@@ -114,7 +121,7 @@ In line (6) we print out a number of its properties: its size = 32 Kb,
 
 ## 25.6 The stack trace
 In line (4) of the code of `Context_Base`, we see a field called `stack_trace`. What is its purpose?  
-The stack trace is also called the program's **function call stack**, which is a much better description, namely: it is a report of the active stack frames at a certain point in time during the execution of a program. It contains a logging of all function calls, and where they occurred in the program. You'll often see stack traces in the output of program crashes, and they are used for debugging purposes.
+The stack trace is also called the program's **function call stack**, which is a much better description, namely: it is a report of the active stack frames at a certain point in time during the execution of a program. It works cross-platform and contains a logging of all function calls, and where they occurred in the program. You'll often see stack traces in the output of program crashes, and they are used for debugging purposes.
 
 See *25.2_stack_trace.jai*:
 ```c++

@@ -2,11 +2,20 @@
 
 #add_context this_is_the_way := true;   // (1)
 
+my_allocator_proc :: (mode: Allocator_Mode, size: s64, old_size: s64, old_memory_pointer: *void, proc_data: *void) -> *void {
+    // allocator specific code
+    result := context.default_allocator.proc(mode, size, old_size, old_memory_pointer, proc_data);
+    return result;
+}
+
 main :: () {
     str := "Hello, Sailor!";
 //    print("The context is %\n", context); // => see below between /* */
 
     new_context: Context;               // (2)
+    new_context.allocator.proc = my_allocator_proc; // (2B)
+    new_context.allocator.data = null;  
+
     push_context new_context {          // (3)
         // Do things within this new context.
         push_allocator(temp);           // (4)
