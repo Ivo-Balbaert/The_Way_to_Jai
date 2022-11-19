@@ -26,8 +26,9 @@ Allocator :: struct {
 }
 ```
 
-A proc of type `Allocator_Proc` is basically a function pointer, for example it can be used as an argument like:                    `proc = my_allocator_proc,`  
-where my_allocator_proc is a function that allocates memory.
+A proc of type `Allocator_Proc` is basically a function pointer, for example it can be used as an argument like:                    
+`proc = my_allocator_proc,`  
+where `my_allocator_proc` is a function that allocates memory.
 
 Here is the signature of `Allocator_Proc` from module _Preload_:
 ```c++
@@ -45,13 +46,16 @@ A struct Node could be allocated like:
 You can also write your own allocators.
 
 ## 21.2 Temporary storage
-Temporary storage is a special kind of Allocator. It is defined as a struct in the _Preload_ module, and module _Basic_ contains support routines to make working with temporary storage very easy.
+Temporary storage is a special kind of Allocator. It is defined as a struct in the _Preload_ module, and module _Basic_ contains support routines to make working with temporary storage very easy. Its memory resides in the Context (see § 25).
 
 It's a linear allocator, the fastest kind, it is much faster than malloc. It helps your program run faster while also providing many of the benefits of garbage collected languages.
 There is a pointer to the start of free memory. If enough free memory is available to service your request, the pointer is advanced and returns the result. If there's not enough free memory, we ask the OS for more RAM. Because Temporary_Storage is expected to be for small-to-medium-sized allocations, we don't expect this to happen very often (and if we want, we can pre-allocate all the memory and lock it down so that the OS is never consulted.)  
 
 When does the memory get freed? 	_Fire and forget!_
 It happens when your program  calls `Basic.reset_temporary_storage()`. When does this happen? Whenever you want, but many programs have a natural time at which it is best to call this. For example, interactive programs like games or phone applications tend to run in a loop, drawing one frame for each iteration of the loop. You can call `reset_temporary_storage()` at the end of each frame. This makes a clear boundary that you know temporarily-allocated memory cannot cross: at the end of the loop, it's all gone. You can't free individual items in Temporary Storage. Also, don't keep pointers to things in Temporary Storage.
+
+> When is Temporary_Storage appropriate? when your memory allocations have a (relatively) short life-time.  
+> When is Temporary_Storage NOT appropriate? If your data need to live beyond the current frame, or be seen by a separate thread that doesn't re-join before you reset the memory.
 
 A typical game loop goes like this:
 
@@ -92,15 +96,13 @@ main :: () {
     arrdyn := make_array(5);
     print("%\n", arrdyn); // => [1, 2, 3, 4, 5]
     
+    s := talloc_string(256); // (6)
+    
     print("Temporary_Storage uses % bytes\n", context.temporary_storage.occupied); // (3)
-    // => Temporary_Storage uses 88 bytes
+    // => Temporary_Storage uses 344 bytes
     reset_temporary_storage(); // (4)
     print("Temporary_Storage uses % bytes\n", context.temporary_storage.occupied); // (5)
     // => Temporary_Storage uses 0 bytes
-
-    s := talloc_string(256); // (6)
-    print("Temporary_Storage uses % bytes\n", context.temporary_storage.occupied); 
-    // => Temporary_Storage uses 256 bytes
 }
 ```
 

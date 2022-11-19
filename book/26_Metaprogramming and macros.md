@@ -302,7 +302,8 @@ A_Type :: struct( ... ) {
 ``` 
 The `#insert -> string` is in fact a short (lambda) form for:  
 `#insert #run () -> string {  ...  }();`
-(This is applied in the construction of a SOA struct, see § 26.9.2).
+`() -> string` is the declaration of the lambda, { ... } is its code, and it is called with the last () pair like this: `{  ...  }()`
+(This is applied in the unroll for loop in § 26.5.2, and in construction of a SOA struct, see § 26.9.2).
 In the same way, you can make a `#insert -> Code {  return #code  ...   }`.
 
 ### 26.4.1 Type Code and #code
@@ -476,7 +477,37 @@ Line (5) shows that a macro can have parameters, just like any proc. This is a w
 ### 26.5.1 Using a macro with #insert
 `macroi` in line (9) illustrates that we can use #insert (see § 26.4) inside a macro: it takes a code argument and inserts it 3 times in the main code.
 
-### 26.5.2 Using a macro for an inner proc
+### 26.5.2 Using a macro with #insert to unroll a for loop
+See *26.14_insert_for_loop.jai*:
+```c++
+#import "Basic";
+
+unroll_for_loop :: (a: int, b: int, body: Code) #expand {
+  #insert -> string {
+    builder: String_Builder;
+    print_to_builder(*builder, "{\n");
+    print_to_builder(*builder, "`it: int;\n");
+    for i: a..b {
+      print_to_builder(*builder, "it = %;\n", i);
+      print_to_builder(*builder, "#insert body;\n");  // (1)
+    }
+    print_to_builder(*builder, "}\n");
+    return builder_to_string(*builder);
+  }
+}
+
+main ::() {
+  unroll_for_loop(0, 10, #code {
+    print("% - ", it); // => 0 - 1 - 2 - 3 - 4 - 5 - 6 - 7 - 8 - 9 - 10 - 
+  });
+
+}
+```
+
+In the example above `unroll_for_loop` is a macro that receives a Code parameter. It uses the `#insert -> string` shortcut (see § 26.4). In fact, it uses multiple inserts, #insert can be run recursively inside another #insert as seen in line (1).  
+When compiling, you can see what is inserted in `.\build\.added_strings_w2`.
+
+### 26.5.3 Using a macro for an inner proc
 In § 17.2 we saw that an inner proc cannot access outer variables. A way to circumvent this is to define the inner proc as a macro and use `. The example below is inner_proc() from 17.2_local_procs.jai, which is now redefined as a macro to be able to change the outer variable x.
 
 See *26.13_local_procs.jai*:

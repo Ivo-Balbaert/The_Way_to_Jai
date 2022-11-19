@@ -398,6 +398,6 @@ This can be picked up with introspection, and appropriate actions can be taken a
 You can also add annotations to a struct itself, for example: to indicate which version of the struct definition is used (see line (1)).
 
 Notes are also abundantly used within code comments to add useful info for refactoring.
-For example: @Incomplete, @Refactor, @Cleanup, @Simplify, @Temporary, ...
+For example: @Incomplete, @Refactor, @Cleanup, @Simplify, @Temporary, @pure ...
 Example of use: Look up in your code editor all occurrences of @Cleanup when you want to further improve your code.
 You can invent your own sorts of notes, they are not limited.

@@ -16,14 +16,12 @@ main :: () {
 
     arrdyn := make_array(5);
     print("%\n", arrdyn); // => [1, 2, 3, 4, 5]
-    
-    print("Temporary_Storage uses % bytes\n", context.temporary_storage.occupied); // (3)
-    // => Temporary_Storage uses 88 bytes
-    reset_temporary_storage(); // (4)
-    print("Temporary_Storage uses % bytes\n", context.temporary_storage.occupied); // (5)
-    // => Temporary_Storage uses 88 bytes
 
     s := talloc_string(256); // (6)
-    print("Temporary_Storage uses % bytes\n", context.temporary_storage.occupied); 
-    // => Temporary_Storage uses 256 bytes
+    
+    print("Temporary_Storage uses % bytes\n", context.temporary_storage.occupied); // (3)
+    // => Temporary_Storage uses 344 bytes
+    reset_temporary_storage(); // (4)
+    print("Temporary_Storage uses % bytes\n", context.temporary_storage.occupied); // (5)
+    // => Temporary_Storage uses 0 bytes
 }

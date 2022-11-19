@@ -1,6 +1,7 @@
 # 31 Working with Threads
 
-Threads are a facility provided by the operating system. A different process can run in each thread. Jai exposes this facility: programs can launch multiple threads so that several processes can run in parallel, that is: simultaneously. To use this you need the _Thread_ module.                                Jai provides platform-independent thread routines, as well as a Thread_Group functionality. Each thread has its own Context.
+Threads are a facility provided by the operating system. A different process can run in each thread. Jai exposes this facility: programs can launch multiple threads so that several processes can run in parallel, that is: simultaneously. To use this you need the _Thread_ module.                                                      Jai provides platform-independent thread routines, as well as a Thread_Group functionality.  
+Each thread has its own Context. Because Temporary_Storage is in the Context, there's a separate storage space per thread, so you don't have to synchronize between threads, and it is fast.
 
 ## 31.1 Basics of threads
 See *31.1_basic_threads.jai*:
