@@ -21,6 +21,11 @@ main :: ()  {
     str3 := "108";
     i, ok = parse_int(*str3);
     print("i is % and ok is %\n", i, ok); // => i is 108 and ok is true
+
+    a := 4;
+    str := sprint("%", a);                  // (2B)
+    print("a is %, str is -%-\n", a, str);  // => a is 4, str is -4-
+    print("str is type %\n", type_of(str)); // => str is type string
     
     // Comparison functions:
     n := compare(str1, str2); // (3) 

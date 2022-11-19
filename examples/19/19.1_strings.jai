@@ -79,6 +79,14 @@ main :: ()  {
     print("%\n", newstr); // => Resounding 世界!
     free(newstr);  // (12)
 
+    chg_str := sprint("%", str);
+    print("chg_str is %\n", chg_str); // => chg_str is Hello.
+    for i: 0..chg_str.count - 1 {
+       if chg_str[i] == #char "."  chg_str[i] = #char "?";
+    }
+    print("chg_str after for is %\n", chg_str); // => chg_str is Hello?
+    free(chg_str);
+
     // strings are array views:
     x := "Sailor";  // (13)
     x.count = 4;

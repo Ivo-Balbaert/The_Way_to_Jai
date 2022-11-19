@@ -91,6 +91,14 @@ main :: ()  {
     print("%\n", newstr); // => Resounding 世界!
     free(newstr);  // (12)
 
+    chg_str := sprint("%", str);
+    print("chg_str is %\n", chg_str); // => chg_str is Hello.
+    for i: 0..chg_str.count - 1 {     // (12B)
+       if chg_str[i] == #char "."  chg_str[i] = #char "?";
+    }
+    print("chg_str after for is %\n", chg_str); // => chg_str is Hello?
+    free(chg_str);
+
     // strings are array views:
     x := "Sailor";  // (13)
     x.count = 4;
@@ -192,6 +200,7 @@ Using backslashes gets unreadable very quickly.
 String literals like str, a or ch can (because they are array views) also be accessed via index, like in line (5): `str[5]` (46 is the ASCII value for '.')
 But string literals are **immutable** (read-only): you can access a string byte via indexing [], but not change it. For example line (6) crashes the program, see output within code snippet.
 (Also try out str[5] = "!" or str[5] = '!' and explain the compiler error messages)
+You can however make that change as in line (12B): make an sprint() string out of the original string. Because this resides in memory, you can change it like in the for-loop shown here.
 
 String literals are also **bounds-checked** at run-time, see line (7) and the output in the code snippet. We get a clear indication of the cause with **array_bounds_check_fail**
 
@@ -299,6 +308,11 @@ main :: ()  {
     str3 := "108";
     i, ok = parse_int(*str3);
     print("i is % and ok is %\n", i, ok); // => i is 108 and ok is true
+
+    a := 4;
+    str := sprint("%", a);                  // (2B)
+    print("a is %, str is -%-\n", a, str);  // => a is 4, str is -4-
+    print("str is type %\n", type_of(str)); // => str is type string
     
     // Comparison functions:
     n := compare(str1, str2); // (3) 
@@ -355,7 +369,8 @@ uses `string_to_int` for the conversion.
 
 The `parse_int` and `parse_float` procs use `parse_token` and are more robust than the string_to variants.
 
-?? #### 19.6.1.2 numbers to string  
+#### 19.6.1.2 numbers to string
+To accomplish this use `sprint` or `tprint` (see line 2B), or work with a String Builder in more complex cases.   
 
 ### 19.6.2 String comparisons
 Here are the signatures of the most important ones:

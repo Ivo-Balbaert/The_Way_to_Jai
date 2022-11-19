@@ -389,7 +389,7 @@ A swap like n, m = m, n; is allowed, but doesn't work in Jai like you would expe
 But see § 17.10 for a swap procedure and ?? for built-in versions.  
 
 ## 5.7 - More about printing
-print is a native routine.                                                                         
+print is a native routine.                                                              
 ### 5.7.1 - Printing more than one value
 See *5.6_printing.jai*:
 
@@ -410,6 +410,9 @@ main :: () {
     value := 50;
     print("Everything is on sale for %1%% off!\n", value); // (4)
     // => Everything is on sale for 50% off!
+    bytes_printed := print("Everything is on sale for %1%% off!\n", value); // (4B)
+    // => Everything is on sale for 50% off!
+    print("%", bytes_printed); // => 35
 }
 ```
 
@@ -427,7 +430,7 @@ The number of % and supplied values must be the same. If not you get a warning:
 
 The format string requires 2 arguments, but 3 arguments are given.
 In this case only the first two values are displayed.
-If you want to print a literal %, replace the second % with %% as in line (4).
+If you want to print a literal %, replace the second % with %% as in line (4). Although it is nearly always discarded, print returns the number of bytes printed, as shown in line (4B).
 
 ### 5.7.2 - The write procedures
 See *5.8_write.jai*:

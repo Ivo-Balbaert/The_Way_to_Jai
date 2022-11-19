@@ -14,4 +14,7 @@ main :: () {
     value := 50;
     print("Everything is on sale for %1%% off!\n", value); // (4)
     // => Everything is on sale for 50% off!
+    bytes_printed := print("Everything is on sale for %1%% off!\n", value); // (4B)
+    // => Everything is on sale for 50% off!
+    print("%", bytes_printed); // => 35
 }
