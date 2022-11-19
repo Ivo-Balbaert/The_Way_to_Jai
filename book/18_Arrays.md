@@ -78,6 +78,7 @@ In line (10) an array literal is created with the values of an enum.
 
 **Typing of array literals**
 When passed to or returned from a proc where the array type is indicated, array literals can be untyped like .[1, 2, 3, 4, 5], otherwise they have to be typed.
+To return an empty array from a proc, use: `return .[]`
 
 ## 18.2. For loop over arrays
 Looping over an array while processing each item is made extremely easy with a for-loop, which works for all kinds of arrays. From line (11) we see that we still have the `it` variable, which takes in the value of the item in each iteration. But now we have also the `ìt_index` variable, which gives for each item its index position in the array:

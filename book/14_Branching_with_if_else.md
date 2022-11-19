@@ -247,18 +247,18 @@ See *14.5_if_tests.jai*:
 #import "Basic";
 
 main :: () {
-    // Test if n is an even or odd number:
+    // Test if n is an even or uneven number:
     n := 108;
     if n % 2 == 0 print("% is an even number\n", n); // (1)
     // => 108 is an even number
-    if (n & 1) == 0 print ("even\n"); // (2) => even, can also be written as if n & 1
+    if (n & 1) == 0 print ("even\n"); // (2) => even
     n = 109;
-    if n % 2    print("odd\n"); // (3) => odd
-}
-```
+    if n & 1  print ("odd\n"); // => odd
+    if n % 2  print("odd\n"); // (3) => odd
+}```
 
 - Test if n is an even or uneven number: 
-    see line (1) and (2), so if n % 2, n is uneven.
+    see line (1) and (2), so if n % 2 or n & 1, n is odd.
     
 
 
