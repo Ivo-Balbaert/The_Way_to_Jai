@@ -343,8 +343,6 @@ Node :: struct {
 ```
 
 ## 12.7 A structs namespace
-(see nested_structs)
-
 Wouldn't it be nice if you could use the fields of a struct without having to prefix them with their struct name? That's possible! A struct defines a **namespace**, which you can locally create with the **using** keyword. Then you don't need to use the struct name anymore.
 
 See *12.4_using.jai*:
@@ -361,16 +359,18 @@ Patient :: struct {
 }
 
 main :: () {
-    pat1 : Patient;  
+    pat1 : Patient;        // (1B)
     pat1.name = "Johnson"; // (2)
     print("Patient is: %\n", pat1); // => Patient is: {{"Johnson"}, "Bronchitis"}
 
     using pat1;            // (3)
+    // using pat1: Patient;  // (4)
     print("Patient has name: %\n", name); // => Patient has name: Johnson
 }
 ```
 Line (1) tells us Patient can use the namespace of Person. That's why in line (2) we don't need to use Person in order to access the `name` field. Line (3) shows us that we can even use pat1 as a namespace.  
 The keyword using lets you import namespaces, as we did with enums. `pe` is not a keyword here, it can be replaced by any other word, for example `using person: Person`.
+Instead of declaration (1B), we could have written line (4), so that we could use the fields of pat1 without writing pat1.field, just write field.
 **using** allows us to refer to a contained struct's members without referencing that struct. It allows you to bring the member variables of a struct into the scope of another struct (like sub-classing but no methods/overriding) or a proc (like a method but more flexible, see ??).   
 This mimics a kind of _inheritance_: Patient is like a subtype of the supertype Person.  
 We use _composition_ instead of a subclass and can reference the fields of the ‘parent’ struct directly. Jai doesn't have classes and inheritance, but as we see here: first class composition works like inheritance!

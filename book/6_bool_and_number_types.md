@@ -346,7 +346,7 @@ These format* procs give additional functionality for formatting integers and fl
 
 **formatFloat** :: (value : Any, width := -1, trailing_width := -1, mode := FormatFloat.Mode.DECIMAL, zero_removal := FormatFloat.Zero_Removal.YES) -> FormatFloat
 
-Additionally, you can use print_style.default_format_int and print_style.default_format_float from the context, which contains default Formatters (?? see howto 018).
+Additionally, you can use print_style.default_format_int and print_style.default_format_float from the context, which contains default Formatters (see § 25.7).
 
 ### 6.2.9 Random numbers
 See *6.6_random.jai*:

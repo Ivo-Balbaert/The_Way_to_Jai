@@ -152,7 +152,7 @@ proc1 :: (x: int) {         // (2)
 main :: () {
     proc1(3);               // (3)
 }
-```
+
 
 /*
 // Calling line 2B: //
@@ -181,4 +181,33 @@ _25.2_stack_trace.jai* is an example of an example of a recursive procedure `pro
 
 This info is so useful that there is in fact a proc `print_stack_trace` in module _Basic_, which is almost identical and which we call in line (2C). Use it as an aid in debugging if necessary.
 
-> In § 30.4.5 we'll see that there is also a build option called stack_trace, which is by default ON to examine stack traces on program errors/crashes.
+In § 30.4.5 we'll see that there is also a build option called stack_trace, which is by default ON to examine stack traces on program errors/crashes.
+
+## 25.7 The print style
+See *25.3_print_style.jai*:
+```c++
+#import "Basic";
+
+main :: () {
+    NUMBERS :: u32.[1, 69105, 1491625];
+    
+    new_context := context;
+    push_context new_context {  
+        format_int := *context.print_style.default_format_int;  // (1)
+        // default is:  format_int.base = 10;
+        for NUMBERS print("% / ", it); // => 1 / 69105 / 1491625 / 
+        print("\n");
+        format_int.base = 16;          // (2)
+        for NUMBERS print("% / ", it); // => 1 / 10df1 / 16c2a9 /
+        print("\n");
+        format_int.base = 2;
+        for NUMBERS print("% /", it); // => 1 /10000110111110001 /101101100001010101001 /
+    }
+    print("\n");
+    for NUMBERS print("% /", it); // (3) => 1 / 69105 / 1491625 / 
+}
+```
+
+Context also contains a member called `print_style`, which contains default Formatters (see § 6.2.8) that are used in combination with `print`. Print_Style is a struct defined in _Basic/Print.jai_ and, and a variable `print_style` pointing to it is added to the Context.  
+In line (1) we take the `default_format_int` from the Context. In lines (2) and following we change the number base, and print some numbers out with that base in the new context working in a `push_context` block. As we see in line (3), once we leave that block we return to the normal defaults.
+Analogous things can be done for formatting floats, structs and arrays in a specific context.

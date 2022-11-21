@@ -70,6 +70,14 @@ main :: () {
         count2-=1;
     }
     print("Lift off!\n");
+
+    // while with defer:
+    x := 0;
+    while x < 10 {
+        defer x += 1;        // (8)
+        if x & 1  continue;  // don't print if x is odd.
+        print("% - ", x); // => 0 - 2 - 4 - 6 - 8 -
+    }
 }
 
 /*
@@ -95,7 +103,8 @@ In line (1) we see the typical while condition { } loop. The one-line while in l
 The while block is executed as long as condition is true, which is checked at the beginning of each new iteration of the loop.
 
 Like with if (see § 14.4) the 'condition' can simply be a variable: as long as the variable is not zero, empty or null the loop can continue. We see this in action in lines (3)-(5).
-Line (6) shows an if inside a while, which is used to terminate the loop. 
+Line (6) shows an if inside a while, which is used to terminate the loop.  
+In line (8) we change the loop variable after a `defer`. Such a defer at the start of the loop ensures that the loop-variable will always change, even with a break or continue.
 
 ### 15.1.1 Nested while loops
 Starting in line (6), we see a loop over counter i which is enclosed with a loop over counter j. At the end of the respective loops, we must increment the counter. Using `defer` we can code this at the start of the loop to achieve that.
@@ -365,9 +374,11 @@ main :: ()  {
     // => The struct has name: Person
     for member: pinfo.members {       // (3)
         print("% - ", member.name);  
-        print("% - ", << member.type);  
+        print("% - ", << member.type);
+        print("% - ", (<< member.type).runtime_size);  
+        print("% - ", member.offset_in_bytes);
         print("% - ", member.notes);  // (4)
-        print("% - ", member.flags);  
+        print("% - \n", member.flags);  
     }
     print("\n");
     member, offset := get_field(pinfo, "age");  // (5)
@@ -375,10 +386,9 @@ main :: ()  {
     print("\n");
 }
 /*
-The struct has name: Person
-name - {STRING, 16} - [] - 0 - 
-age - {INTEGER, 8} - [] - 0 - 
-location - {STRUCT, 8} - [] - 0 -
+name - {STRING, 16} - 16 - 0 - [] - 0 -
+age - {INTEGER, 8} - 8 - 16 - [] - 0 -
+location - {STRUCT, 8} - 8 - 24 - ["NoSerialize"] - 0 -
 
 info age field: {name = "age"; type = 7ff6_5021_4000; offset_in_bytes = 16; 
 flags = 0; notes = []; offset_into_constant_storage = 0; } and has offset 16

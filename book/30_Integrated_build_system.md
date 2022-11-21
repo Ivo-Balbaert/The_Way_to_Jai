@@ -48,7 +48,7 @@ You can ask the compiler to create one or several different new workspaces with 
 Different workspaces run completely separate from each other, one workspace does not affect another workspace.
 
 _Why is the workspace for the target program at the command-line called 'Workspace 2'?_  
-When launching the compiler, a default workspace (number 1) is started.
+When launching the compiler, a default hidden workspace (number 1) is started.
 
 ## 30.2 The source file location directives
 See *30.2_location.jai*:
@@ -92,6 +92,7 @@ build :: () {
     set_build_options(target_options, w);                 // (4)
     // add_build_file("main.jai", w);
     add_build_file(tprint("%/main.jai", #filepath), w);   // (5)
+    set_build_options_dc(.{do_output=false});             // (6)
     }
 
     main :: () {}
@@ -110,6 +111,9 @@ Then we want to configure the build options. We first get the current build opti
 In this first example, we only set the field `output_executable_name` (line (3)).  
 After all necessary build options have been configured, we write them back to the workspace with the proc `set_build_options` (see line (4)).  
 Then we add a file which has to be compiled with the proc `add_build_file` (see line (5)). This takes a string with the complete source file path and the workspace. You can pass the complete path in any form you like, here the file was constructed with tprint for convenience, using the current path `#filepath` and name `main.jai`. In this simple case, `add_build_file("main.jai", w);` works as well. If you have other files to compile, add them one by one with `add_build_file("file.jai", w);`. The compiler will automatically build any files included with the `#load` directive.
+Without line (6), compilation of the build program `30.3_build.jai` produces the specified `program.exe`, but also an executable for the build program itself (in our case named `30.exe`). Normally, you're not interested in this executable. To disable its generation, use line (6):
+`set_build_options_dc(.{do_output=false});`
+_dc means build options during compile, and we specify that we don't want any output. This means no executable for the build program itself and no statistics for its compilation (Workspace 2).
 
 > Remark: The meta-program `build.jai` has an empty main entry: main :: () {} so as not to get the 'No entry point' compiler error.
 

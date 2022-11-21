@@ -9,7 +9,7 @@ main :: () {
         exit;
     }
     
-    if dead {       // (2)
+    if dead /* then */ {       // (2)
         print("Game over!");
         exit;
     } else {  // we are still alive!

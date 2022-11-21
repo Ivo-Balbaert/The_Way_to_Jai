@@ -200,7 +200,7 @@ Using backslashes gets unreadable very quickly.
 String literals like str, a or ch can (because they are array views) also be accessed via index, like in line (5): `str[5]` (46 is the ASCII value for '.')
 But string literals are **immutable** (read-only): you can access a string byte via indexing [], but not change it. For example line (6) crashes the program, see output within code snippet.
 (Also try out str[5] = "!" or str[5] = '!' and explain the compiler error messages)
-You can however make that change as in line (12B): make an sprint() string out of the original string. Because this resides in memory, you can change it like in the for-loop shown here.
+You can however make that change as in line (12B): make an `sprint` string out of the original string. Because this resides in memory, you can change it like in the for-loop shown here.
 
 String literals are also **bounds-checked** at run-time, see line (7) and the output in the code snippet. We get a clear indication of the cause with **array_bounds_check_fail**
 

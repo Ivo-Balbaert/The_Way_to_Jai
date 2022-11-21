@@ -1,7 +1,9 @@
 # Preface - Goals of this Jai tutorial.
 
 This tutorial is meant to help people hit the ground running when The Language is released.  
-That's why it is called **"The Way to Jai"**. While this will not be so useful at this moment when the compiler is still in a closed beta phase (Sep 2022), at some point in time it will be. We'll make sure this text and accompanying code stays up to date.
+That's why it is called **"The Way to Jai"**. While this will not be so useful at this moment when the compiler is still in a closed beta phase (Sep 2022), at some point in time it will be. We'll make sure this text and accompanying code stays up to date.  
+
+This text is based upon notes taken while watching Jon Blows videos starting from Sep 2014, and from primers and tutorials that appeared in the course of the years.
 
 The [Jai Community Library Wiki](https://github.com/Jai-Community/Jai-Community-Library/wiki) does an excellent job in providing many details about the Jai language, and a lot of useful code snippets.
 However the wiki intentionally addresses more experienced developers.

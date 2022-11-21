@@ -77,7 +77,8 @@ To illustrate this, `part1.jai` contains the declaration of the variable a_part1
 > Code from a #load-ed file has access to the global scope. Code from a #import-ed module has not!
 
 ## 8.3 Named imports
-Sometimes you want to qualify a function name with the module name it came from (perhaps because that name has already been used, it is duplicate) you can do a named import as follows:	 `Math :: #import "Math";`
+Sometimes you want to qualify a function name with the module name it came from (perhaps because that name has already been used, it is duplicate) you can do a named import as follows:	 
+`Math :: #import "Math";`
 
 Then you have to qualify all functions from that module with its module name (in other words: you give the proc a namespace), like this:
 
@@ -85,7 +86,14 @@ Then you have to qualify all functions from that module with its module name (in
 	y := Math.sqrt(2.0);
 ```
 
-This improves readability: it makes it clear where a function comes from. The name can also be completely different, so it can be shorter:
+This improves readability: it makes it clear where a function comes from.  
+Alternatively, you can work with `using` so that you don't need to use the module's name:
+```
+    using Math;
+	y := sqrt(2.0);
+```
+
+The name can also be completely different, so it can be shorter:
 
 ```
     Long :: #import "Long_Name_Library";

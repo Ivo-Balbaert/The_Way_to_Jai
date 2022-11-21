@@ -175,7 +175,7 @@ We can test on a.type.type with if/else or if/case as in line (2).
 There is also a `type_info()` proc: its argument must be a type and it returns a *Type_Info. Through it you can access all specific info from the specific Type_Info_ struct.
 It is particularly handy when used on structs: see line 2B, where we iterate over the struct fields `members` with a for-loop (we can do that because members is an array. It was first introduced in § 15.5.
 
-It is commonly used in polymorphic procedures (see ??) to test the type of a $T argument.  
+It is commonly used in polymorphic procedures (see § 22 =) to test the type of a $T argument.  
 If you call `<< type_info(Type1)` on any Type1, it will give you all the info it has on that type (see line (3) and following).
 
 The same info can be obtained by doing an explicit  

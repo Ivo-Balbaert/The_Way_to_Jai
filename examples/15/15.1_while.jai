@@ -62,6 +62,14 @@ main :: () {
         count2-=1;
     }
     print("Lift off!\n");
+
+    // while with defer:
+    x := 0;
+    while x < 10 {
+        defer x += 1;        // (8)
+        if x & 1  continue;  // don't print if x is odd.
+        print("% - ", x); // => 0 - 2 - 4 - 6 - 8 -
+    }
 }
 
 /*
@@ -80,4 +88,5 @@ ptr now is 41_b68f_fba0
 (0, 3) - (1, 3) - (2, 3) - (3, 3) - 
 Counting down 2
 10 - 9 - 8 - 7 - 6 - 5 - 4 - 3 - 2 - 1 - Lift off!
+0 - 2 - 4 - 6 - 8 -
 */

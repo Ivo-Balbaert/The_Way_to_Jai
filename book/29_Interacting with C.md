@@ -21,21 +21,26 @@ This statement looks for a C function with the name `strlen` and with the same s
 `clock :: () -> s64                            #foreign libc;`  	
 
 The C library is here libc.  
-Use the **#foreign_system_library** directive to specify as a constant a system file (library) for foreign functions.  
+Use the **#foreign_system_library** directive to specify as a constant an OS system file (library) for foreign functions.  
 For example, declare `libc` as: `libc :: #foreign_system_library "libc";`  
 To use the Windows version of the C run time, specify:  `crt :: #foreign_system_library "msvcrt";`  
 To use the Windows `kernel32` library, specify:         `kernel32 :: #foreign_system_library "kernel32";`  
 
+## 29.3 Mapping a dynamic library
+Functions from a dynamic library (.dll/.so file) also need 2 #foreign directives to be specified.
+
 The **#foreign_library** directive specifies a file (library) for foreign functions. For example, if you want to use the `lz4` fast-compression C library in your Jai code, you specify it as:
 `lz4 :: #foreign_library "liblz4";`
 
-Then you declare the functions from that library you want to use, for example:
+> Remark: Inside the "" you can write the full path to the library
+> The .dll must be copied next to the Jai .exe 
+
+Then you declare the functions (their signatures) from that library you want to use, for example:
 ```
 LZ4_compressBound :: (inputSize: s32) -> s32 #foreign lz4;
 LZ4_compress_fast :: (source: *u8, dest: *u8, sourceSize: s32, maxDestSize: s32, acceleration: s32) -> s32 #foreign lz4;
 LZ4_sizeofState :: () -> s32 #foreign lz4;
 ```
-
 You can also give them another name to use in Jai code like this:
 ```
 compress_bound :: (inputSize: s32) -> s32 #foreign lz4 "LZ4_compressBound";
@@ -43,7 +48,26 @@ compress_fast :: (source: *u8, dest: *u8, sourceSize: s32, maxDestSize: s32, acc
 size_of_state :: () -> s32 #foreign lz4 "LZ4_sizeofState";
 ```
 
-## 29.3 Examples on Linux 
+Linking to a system-library is also done with:
+`#foreign_system_library "d3d11";`
+
+## 29.4 Converting a C header (.h) file
+The steps are:  
+- put in the ::
+- move the return type to the end 
+- add the #foreign library declaration
+- swap the parameter types and names. 
+
+Attention points:  
+- a C pointer to char becomes a *u8
+- remove extraneous prefixes (i.e. `const` before parameters, macros, and so on)
+- C references become pointers (i.e. & becomes *)
+- almost always specify a 32-bit size for an enum, i.e. `IL_Result :: enum s32`, or `D3DCOMPILE_FLAGS :: enum_flags u32`.
+- the size of int and float may be hard to ascertain; if you can't work it out from the code, comments or documentation then go for 32-bit versions; if your data comes out mangled you can use different-size types.
+- rename any C parameter/variable which happens to coincide with a Jai keyword: for example: context -> ctx.
+- when the code compiles and runs, check the data that's being passed back and forth from the library: incorrect values will likely indicate incorrectly sized struct members, variables, constants, or parameters.
+
+## 29.5 Examples on Linux 
 See *29.1_call_c_linux.jai*:
 ```c++
 // This program only works on Linux!
@@ -65,7 +89,7 @@ main :: () {
 
 In line (1) we declare the Linux C standard library `libc`, lines (2) and following declare some C function from that library. In lines (3) and following, we call some of these C functions from Jai.
 
-## 29.4 Examples on Windows 
+## 29.6 Examples on Windows 
 See *29.2_call_c_windows.jai*:
 ```c++
 #import "Basic";
@@ -90,8 +114,10 @@ main :: () {
 
 In line (1) we declare the Windows C standard library `crt`, lines (2) and following declare some C function from that library. In lines (3) and following, we call some of these C functions from Jai.
 
-## 29.5 The #c_call directive 
-The **#c_call** directive is used to indicate that a procedure follows C ABI conventions: it makes the procedure use the C calling convention. It is used for interacting with libraries written in C. 
+## 29.7 Callbacks and the #c_call directive 
+The **#c_call** directive is used to indicate that a procedure follows C ABI conventions: it makes the procedure use the C calling convention. It is used for interacting with libraries written in C. All C / C++ functions need some decorators like #c_call.  
+The **#type** directive lets us specify the expected parameters of the callback, rather than just using a *void.
+`IL_Logger_Callback` is an example of a callback-function which has both directives.
 
 See *29.3_c_call.jai*:
 ```c++
@@ -118,5 +144,5 @@ main :: () {
 }
 ```
 
-In line (1) we define a proc called `IL_Logger_Callback` as having the signature type that follows and as following the #c_call conventions (we re-used the example from § 26.13). Then we define a concrete proc `logger_callback` which has the exact same type as `IL_Logger_Callback`. This proc create a temporary new Context called new_context, and calls the proc `log` in this context to log a text string. text is of type `*u8`, so could be a C string.     
+In line (1) we define a proc called `IL_Logger_Callback` as having the signature type that follows and as following the #c_call conventions (we re-used the example from § 26.13). If it doesn't return anything, `void` needs to be specified. Then we define a concrete proc `logger_callback` which has the exact same type as `IL_Logger_Callback`. This proc create a temporary new Context called new_context, and calls the proc `log` in this context to log a text string. text is of type `*u8`, so could be a C string.     
 In line (2B) we see that `print` cannot be called inside a #c_call routine, but it can be called inside the `push_context` section.
