@@ -137,3 +137,49 @@ Examples:
     `jai program.jai -import_dir arg1, arg2, arg3`
 
 For an example of its use, see § 12.12
+
+## 8.7 Module parameters
+### 8.7.1 Definition and use
+In § 6.1.3 we already encountered the ENABLE_ASSERT module parameter from _Basic_, which by default enables assert debugging (see § 20.1.2). 
+A **module parameter** is a parameter defined in and set by a module, like `ENABLE_ASSERT := true` in _Basic_. Here is its definition at the start of _Basic/module.jai_: 
+`#module_parameters () (ENABLE_ASSERT := true);`  
+Code that imports this parameter can decide to change its value. This is done in the import line:
+`#import "Basic"()(ENABLE_ASSERT=false);`  
+
+In fact, module _Basic_ has several module parameters:  
+`#module_parameters () (MEMORY_DEBUGGER := false, ENABLE_ASSERT := true, REPLACEMENT_INTERFACE: $I/interface Memory_Debugger_Interface = Memory_Debugger_Interface, VISUALIZE_MEMORY_DEBUGGER := true);`  
+(We've also used the MEMORY_DEBUGGER parameter in § 21.4).
+
+> So module parameters can be used to declare parameters that code can set when importing a module. If no explicit setting is done at import, the default value from the module is used.
+
+### 8.7.2 Creating your own module parameters
+Let's create our own module `TestModule_Params` in d:\my_modules\TestModule_Params\module.jai with the following contents:
+
+```c++
+#import "Basic";
+#module_parameters(VERBOSE := false);            // (1)
+
+#run {                                          // (2)
+  if VERBOSE {
+    print("The module is in VERBOSE mode\n");
+  } else {
+    print("The module is in NON_VERBOSE mode\n");
+  }
+}
+```
+
+In line (1) we define a module parameter `VERBOSE` with default value false. Line (2) runs a code block at compile-time and prints a message according to the value of `VERBOSE`. 
+In our main file `8.2_main.jai` we have the code:
+
+```c++
+#import "TestModule_Params" (VERBOSE=true); // (1)
+
+main :: () {}
+```
+
+This block executes as module `TestModule_Params` is imported in line (1).
+To test this, compile the main file with the command:  
+`jai 8.2_main.jai -import_dir "d:\jai\The_Way_To_Jai\my_modules"`  
+The following message is printed out:
+`The module is in VERBOSE mode`  
+Verify that the other message appears when you set VERBOSE to false in `8.2_main.jai`.

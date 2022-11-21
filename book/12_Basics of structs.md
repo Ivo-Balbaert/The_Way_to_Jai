@@ -559,14 +559,14 @@ Struct1 :: struct {
     number: int;
 }
 ```
-(You can do this by creating a TestInside.jai in c:\jai\modules or in d:\jai\my_modules and compiling with -import_dir "d:\jai\my_modules".)
+(You can do this by creating a TestInside.jai in c:\jai\modules or in d:\jai\The_Way_To_Jai\my_modules and compiling with -import_dir "d:\jai\The_Way_To_Jai\my_modules".)
 
 Also create a module TestScope with this content:
 ```
 #import "TestInside";
 ```
 
-Now create a `test.jai` with as content=
+Now create a `12.8_inner_module_test.jai` with as content:
 ```c++
 #import "Basic";
 #import "TestScope";
@@ -577,11 +577,15 @@ main :: () {
 }
 ```
 
-Compiling `test.jai` gives the Error: Undeclared identifier 'Str'. This is because the definition of Struct1 gets into #scope_module in module TestScope, and is not visible inside our test program.  
+Compiling `12.8_inner_module_test.jai` gives the Error: Undeclared identifier 'Str'. This is because the definition of Struct1 gets into #scope_module in module TestScope, and is not visible inside our test program.  
 
 If you want `Struct1` to be visible inside the program, change the content of TestScope to:  
 ```
 using TestInside :: #import "TestInside"; 
 ```
 
-Then we can make an instance s1 of Struct1, and print out its value.
+Then we can make an instance s1 of Struct1, and print out its value {42}. 
+Compile `12.8_inner_module_test.jai` with:
+`jai 12.8_inner_module_test.jai -import_dir "d:\jai\The_Way_To_Jai\my_modules"`
+
+and then run it with:  12
