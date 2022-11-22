@@ -14,7 +14,7 @@ main :: () {
 
     new_context: Context;               // (2)
     new_context.allocator.proc = my_allocator_proc; // (2B)
-    new_context.allocator.data = null;  
+    new_context.allocator.data = null;
 
     push_context new_context {          // (3)
         // Do things within this new context.

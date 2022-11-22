@@ -39,7 +39,8 @@ For example module _Basic_ defines a proc `alloc_string`, which can take a speci
 `alloc_string :: (count: int, allocator: Allocator = .{}) -> string`
 
 (The default allocator is .{}, which is ??)
-Also a dynamic array arrdyn could store its data in an allocator Alloc1:                                                      `arrdyn.allocator = Alloc1;`  
+Also a dynamic array arrdyn could store its data in an allocator Alloc1:                                                      `arrdyn.allocator = Alloc1;`
+
 A struct Node could be allocated like:  
 `New(Node, allocator = Alloc1);`
 
@@ -48,11 +49,34 @@ You can also write your own allocators.
 ## 21.2 Temporary storage
 Temporary storage is a special kind of Allocator. It is defined as a struct in the _Preload_ module, and module _Basic_ contains support routines to make working with temporary storage very easy. Its memory resides in the Context (see § 25).
 
-It's a linear allocator, the fastest kind, it is much faster than malloc. It helps your program run faster while also providing many of the benefits of garbage collected languages.
-There is a pointer to the start of free memory. If enough free memory is available to service your request, the pointer is advanced and returns the result. If there's not enough free memory, we ask the OS for more RAM. Because Temporary_Storage is expected to be for small-to-medium-sized allocations, we don't expect this to happen very often (and if we want, we can pre-allocate all the memory and lock it down so that the OS is never consulted.)  
+Here is the struct's definition:
+```c++
+Temporary_Storage :: struct {  
+    data:     *u8;
+    size:     s64;
+    occupied: s64;
+    high_water_mark: s64;
+    overflow_allocator := Allocator.{__default_allocator_proc, null};
+    overflow_pages: *Overflow_Page;
+    original_data: *u8;  
+    original_size: s64;
+    
+    Overflow_Page :: struct {
+        next: *Overflow_Page;
+        allocator: Allocator;
+        size: s64;
+    }
+}
+```
+
+It's a linear allocator, the fastest kind, it is much faster than malloc. It helps your program run faster while also providing many of the benefits of garbage collected languages. Normally Temporary_Storage will allocate heap memory, but see § 21.3.4 
+There is a pointer `data` to the start of free memory. If enough free memory is available to service your request, this pointer is advanced and returns the result. If there's not enough free memory, we ask the OS for more RAM. Because Temporary_Storage is expected to be for small-to-medium-sized allocations, we don't expect this to happen very often (and if we want, we can pre-allocate all the memory and lock it down so that the OS is never consulted.)  
 
 When does the memory get freed? 	_Fire and forget!_
-It happens when your program  calls `Basic.reset_temporary_storage()`. When does this happen? Whenever you want, but many programs have a natural time at which it is best to call this. For example, interactive programs like games or phone applications tend to run in a loop, drawing one frame for each iteration of the loop. You can call `reset_temporary_storage()` at the end of each frame. This makes a clear boundary that you know temporarily-allocated memory cannot cross: at the end of the loop, it's all gone. You can't free individual items in Temporary Storage. Also, don't keep pointers to things in Temporary Storage.
+It happens when your program  calls `Basic.reset_temporary_storage()`. When does this happen? Whenever you want, but many programs have a natural time at which it is best to call this. For example, interactive programs like games or phone applications tend to run in a loop, drawing one frame for each iteration of the loop. You can call `reset_temporary_storage()` at the end (or beginning) of each frame. This makes a clear boundary that you know temporarily-allocated memory cannot cross: at the end of the loop, it's all gone. You can't free individual items in Temporary Storage. Also, don't keep pointers to things in Temporary Storage.
+
+> What happens when Temporary Storage is completely occupied?
+> In a debug build, if the `high_water_mark` exceeds the temporary storage memory capacity, temporary storage will default back to the normal heap allocator to allocate more memory. In a release build, your program might crash, or have memory corruption problems. Use the memory-leak detector discussed in § 21.4 to investigate such cases.
 
 > When is Temporary_Storage appropriate? when your memory allocations have a (relatively) short life-time.  
 > When is Temporary_Storage NOT appropriate? If your data need to live beyond the current frame, or be seen by a separate thread that doesn't re-join before you reset the memory.
@@ -71,9 +95,6 @@ while true {
 In line (1), the memory is freed and a new cycle can begin.
 
 `temp` is an abbreviation for `__temporary_allocator` (the long variable name for Temporary Storage), so the examples in § 21.1 can be rewritten when the Allocator is Temporary Storage as follows:
-
-`arrdyn.allocator = temp;`  
-`New(Node, allocator = temp);`
 
 ## 21.3 Examples of using Temporary Storage
 See *21.1_temp_storage.jai*:
@@ -120,7 +141,27 @@ It is used in line (2).
 ## 21.3.2 Storing arrays in temp
 Line (1) shows how to use the temporary allocator for creating a dynamic array. If you need this frequently, you can write your own `make_array` proc.
 
-## 21.3.3 How much memory is allocated in temp?
+## 21.3.3 Using New with temp
+As we saw in § 21.1, New can take any defined Allocator, so also `temp`! This can be done with the following code:
+
+```c++
+Node :: struct {
+  value: int;
+  name: string;
+}
+
+node  := New(Node, allocator=temp);
+array := NewArray(10, int, temp);
+
+arrdyn: [..] int;
+arrdyn.allocator = temp;
+```
+
+## 21.3.4 Using Temporary Storage on the Stack
+This can be done by using the `auto_release_temp` macro to set the mark. Then you can allocate whatever you want temporarily, then release all the memory at once when the stack unwinds by setting the mark back to the original location with `auto_release_temp()`.
+(example ??)
+
+## 21.3.5 How much memory is allocated in temp?
 This is given by the field: `context.temporary_storage.occupied`.  
 We see in line (5) that it goes back to 0 after the temp memory has been reset in (4).
 
@@ -163,3 +204,5 @@ If we do free them, we get the 2nd output.
 
 **Exercise**
 Try this out on program 18.5_array_for.jai, without and with free (see leak_array_for.jai).
+
+See also: § 25.2, `push_allocator` can be used with temp.

@@ -188,7 +188,8 @@ This is only the filename of the executable, it includes no extension.
 Current options are .LLVM and .X64; X64 is the fastest backend.
 
 ### 30.4.5 Info about runtime errors and crashes
-The `stack_trace` option is by default true. `backtrace_on_crash` is by default .ON
+The `stack_trace` option is by default true. For a release build, set `target_options.stack_trace = false;`  
+`backtrace_on_crash` is by default .ON
 
 ### 30.4.6 Checks at runtime
 Array bounds operations, castings and null pointer checks can be turned ON at runtime to increase robustness of your program, they are so by default. If you are very sure, you can turn them off (which is done in this program) to increase performance
