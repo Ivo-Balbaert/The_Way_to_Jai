@@ -474,6 +474,9 @@ Line (5) shows that a macro can have parameters, just like any proc. This is a w
 `factorial` is an example of a recursive macro; #if needs to be used here, else you get the following `Error: Too many nested macro expansions. (The limit is 1000.)` 
 `maxfunc` is a procedure which calls a nested macro `macron`; this returns "Backtick return macro" as return value from `maxfunc`.  
 
+**Exercise** (see changer_macro.jai)  
+Write a macro changer that takes 2 integer arguments and can access an outer variable x. x is multiplied with the 1st argument, and the 2nd argument is added to it.
+
 ### 26.5.1 Using a macro with #insert
 `macroi` in line (9) illustrates that we can use #insert (see § 26.4) inside a macro: it takes a code argument and inserts it 3 times in the main code.
 

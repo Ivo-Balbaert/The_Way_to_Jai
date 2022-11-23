@@ -37,7 +37,7 @@ There are two different kinds of scope: _data scope_ and _imperative scope_:
   A _data scope_ (also called _global scope_ or _application scope_, like in lines 10-19) is outside of any procedures, including main. There's no actively running code in such a scope, you can't call a procedure to run. Data scope only contains declarations of variables like you have at the top level of a file. There's no notion of time in a data scope, and different declarations are unordered with respect to each other. In this scope global constants and variables can be defined, as well as enums and struct types.
   By default, all declarations in a source file go into the application scope; they are _exported_. In § 8B, we'll see a way to make exceptions to this rule.   
 
-  _Imperative_ (or _procedural_) scopes represent the code inside procedures like `main()` that can be run at runtime. We'll talk about procedures shortly in § ??.
+  _Imperative_ (or _procedural_) scopes represent the code inside procedures like `main()` that can be run at runtime. We'll talk about procedures shortly in § 17.
   The statements in these scopes are to be executed from top to bottom.
 
 ### 7.1.1 - Global constants and variables
@@ -48,7 +48,7 @@ They will occupy memory throughout the entire time the program is running. That 
 
 ### 7.1.2 - Local variables
 All other variables or constants are defined and only known within the code block in which they are defined: they are local variables and have local scope: : they automatically get freed when the procedure is exited (just after the closing }).   
-Procedures define local scope,as well as all kinds of coding structures for conditions and repetitions (see § ??).
+Procedures define local scope,as well as all kinds of coding structures for conditions and repetitions (see § 14-15).
 
 We can also define a new local scope simply by starting a new _anonymous code block_  (surrounded by { } ) as in line (1) at the top-level or inside any other block. 
 
@@ -58,7 +58,6 @@ Unlike Rust's behavior, a block cannot return a value to be assigned, if you try
 
 ## 7.2 - Shadowing of variables
 See *7.2_shadowing.jai*:
-
 
 ```c++
 #import "Basic";
@@ -80,5 +79,5 @@ A variable in a more inner block can shadow a variable with the same name from a
 > Shadowing can be confusing, use it only when it is really necessary.
 
 Procedures can use global variables from a data scope.
-A procedure, that's defined inside another procedure, cannot use the local variables of that outer procedure, because it has to be able to run independently by itself (see example ??). However, it can use all constants, defined in any outer scope, also imperative. Because procedures are constants, they can also be called  
+A procedure, that's defined inside another procedure, cannot use the local variables of that outer procedure, because it has to be able to run independently by itself (see example ??). However, it can use all constants, defined in any outer scope, also imperative. Because procedures are constants, they can also be called.  
 

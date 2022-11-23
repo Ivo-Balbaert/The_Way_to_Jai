@@ -142,7 +142,6 @@ All struct fields are _public_: they can be read and even changed everywhere! Th
 
 > Unlike classes in other languages, Jai does NOT have member functions: there is no concept of functions "belonging" to a particular struct or datatype. So it's better to not define a procedure inside a struct.
 
-
 A struct definition must occur in a data scope (see § 7).
 
 An **anonymous struct** can be defined as for example:
@@ -154,7 +153,10 @@ struct {
 }
 ```
 ( example of use ??)
-> Declaring a struct doesn't allocate memory, it just defines a kind of template or blue-print for a data structure to be defined in imperative scope.
+
+Declaring a struct doesn't allocate memory, it just defines a kind of template or blue-print for a data structure to be defined in imperative scope. An **instance** or object of a struct is created with for example:  
+`bob: Person;`
+Here the instance is `bob`, and the struct is `Person`. When this code executes, memory is allocated (when nothing else is specified, all members get their default zero values).
 
 > A struct cannot be casted to a bool.
 
@@ -589,3 +591,32 @@ Compile `12.8_inner_module_test.jai` with:
 `jai 12.8_inner_module_test.jai -import_dir "d:\jai\The_Way_To_Jai\my_modules"`
 
 and then run it with:  12
+
+## 12.13 Struct parameters
+See *12.8_struct_parameters.jai*
+```c++
+#import "Basic";
+
+OUTER_VALUE :: 5;
+    
+A_Struct :: struct (param := "Hello") {  // (1)
+    x := OUTER_VALUE;
+    y := param;
+}               
+
+main :: () {
+    a: A_Struct;
+    print("a is: %\n", a); // => a is: {5, "Hello"}
+    print("a.x is: %\n", a.x); // => a.x is: 5
+    print("a.param is: %\n", a.param); // => a.param is: "Hello"
+    // print("a.OUTER_VALUE is: %\n", a.OUTER_VALUE);  
+    // Error: 'OUTER_VALUE' is not a member of A_Struct.
+
+    b: A_Struct(param = "Sailor!");  // (2)
+    print("b is: %\n", b); // => b is: {5, "Sailor!"}
+}
+```
+
+As you can see in line (1), a struct can take one or more parameters, even with default values. They are used to set some member fields.
+Line (2) shows that we can give another value for the parameter(s) when a struct is instantiated.
+Also a struct can use outer constant values.

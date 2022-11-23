@@ -390,10 +390,33 @@ v is 2.143589, 100000000, 0.003906
 `do_three_times :: (proc: (*Vector3), arr: *Vector3)`
 It is a higher-order function that takes as 1st argument another procedure with signature `proc: (*Vector3)`. The `square_and_print` proc conforms to this signature. What `do_three_times` does is to call `square_and_print` 3 times on the Vector3. Because this is passed as a pointer, its values are changed.
 
+## 22.5 A polymorphic recursive lambda as argument of another proc
+See *22.10_poly_lambda.jai*:
+```c++
+#import "Basic";
+
+main :: () {
+    call_with :: (arg: $T, f: (T)) {      // (1)
+        f(arg);
+    }
+    call_with(5, x => { print("x is %\n", x); if x > 0 then #this(x-1); }); // (2)
+}
+/* 
+x is 5
+x is 4
+x is 3
+x is 2
+x is 1
+x is 0
+*/
+```
+`call_with` (see line (1)) is a polymorphic proc, that applies the 2nd function argument onto the 1st argument of type T.  
+Is is then called in line (2) with 5 and a lambda `x => { ... #this(x-1); }` that calls itself recursively with #this.
+
 **Exercise**
 (1) Write a polymorphic proc that returns the count field of an input parameter. Then rewrite this proc as a lambda. Check it for static and dynamic arrays, and strings   (see poly_count.jai).
 
-## 22.5 #bake_arguments, $ and $$
+## 22.6 #bake_arguments, $ and $$
 The directive **#bake_arguments** lets us specify value(s) for argument(s) of a procedure, but leaving some arguments unspecified. The result is a proc with fewer arguments. Lets see an example:
 
 See *22.6_baked_args.jai*:
@@ -449,7 +472,7 @@ This is different from default values (see § 17.4), because a proc made with #b
 
 > So Jai has function currying through #bake_arguments, except that it only happens at compile time. There is no runtime function currying in Jai. 
 
-## 22.6 A map function
+## 22.7 A map function
 Using polymorphic arguments, we can construct functional-programming like map functions, that take for example an array and a function as arguments.
 
 See *22.7_map.jai*:
