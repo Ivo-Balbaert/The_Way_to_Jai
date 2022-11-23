@@ -246,7 +246,7 @@ Why would you use structs on the heap?
 The stack is limited in size. If your program needs a lot of structs, better use the heap.
 
 ## 12.6 Recursive structs
-A recursive struct is a struct that has as one of its fields a struct of the same type. They can be used to build more complex data structures like linked-lists and trees.
+A recursive struct is a struct that has as one (or more) of its fields a struct of its own type (in most cases it will be a pointer to that type). They can be used to build more complex data structures like linked-lists and trees.
 
 ### 12.6.1 Linked List
 In code example *12.3_linked_list.jai*, we see how we can build a simple linked list, where each node has a 'payload' field `data`, and a `next` field that points to the next node:

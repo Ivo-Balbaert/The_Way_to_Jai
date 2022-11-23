@@ -422,6 +422,11 @@ main :: () {
     for i: 1..10 {  // correct till i == 20
         print("The factorial of % is %\n", i, factorial2(i));
     }
+
+    print("#this is %\n", #this); //(4) => #this is procedure 0x7ff7_3ce5_13c0
+    print("#this is constant? %\n", is_constant(#this));
+    // (5) => #this is constant? true
+    THIS :: #this;    // (6) 
 }
 
 /*
@@ -464,9 +469,17 @@ It ends with: `The program crashed. Printing the stack trace:`
 
 A recursive solution may be logically the simplest, but it most probably is not the most performant solution, not withstanding its sometimes incorrect and always stack-limited behavior. 
 
-## 17.9.1 The #this directive
-**#this** refers to the current procedure or struct in the current scope. A trivial use-case is to replace the proc name in the body of a recursive function by #this, as was done in `factorial2`. 
+### 17.9.1 The #this directive
+**#this** refers to the current procedure, struct type or data scope that contains it, as a compile-time constant. A trivial use-case is to replace the proc name in the body of a recursive function by #this, as was done in `factorial2`.  
+The #this in line (4) points to the address of `main`. Lines (5) and (6) show that #this effectively is a compile-time constant (is_constant returns true and :: only works for constants).
 
+### 17.9.2 Recursive structs and #this
+#this can also be used to declare recursive structs, see *17.16_recursive_this.jai*:
+
+```c++
+
+```
+The highly-recursive struct Self_Referential from (1) can be rewritten as in (2) with #this. At the start, both pointers are null, see (3). When we point both fields to itself, we see in (4) that they have the same address.
 ## 17.10 Swapping values
 See *17.9_swap.jai*:
 
@@ -679,9 +692,27 @@ In line (1) we take the `type_of` the `add` procedure. From that type we get the
 The complete output shows the signature of the `add` procedure, obtained by reflection:
 `PROCEDURE ({INTEGER, 8} - , {INTEGER, 8} - ) -> {INTEGER, 8} - `
 
+## 17.14.1 The #procedure_name directive
+This directive returns the statically-known at-compile-time name of a procedure, See *17.15_procedure_name.jai*:
+
+```c++
+#import "Basic";
+
+add :: (x: int, y: int) -> int {
+    print("The proc name is: %", #procedure_name());
+    return x + y;
+}
+main :: () {
+    print("The main name is: %\n", #procedure_name());
+    // => The main name is: main
+    add(2, 3); // => The proc name is: add
+}
+```
+
 ## 17.15 #deprecated
 You can mark a function as deprecated with the **#deprecated** directive. Calling a deprecated function leads to a compiler warning.  
 You can add string messages after deprecated procedures as warnings to tell someone to use a different procedure or different set of instructions to accomplish what you want.
 
 The purpose is to indicate to a developer using your code(or yourself):  
 Look, this is an older version of this function, and in a short time this function will no longer exist. You can continue to use this function for now, but you should replace it with this new_function.
+

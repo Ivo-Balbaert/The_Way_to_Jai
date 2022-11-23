@@ -393,7 +393,7 @@ It is a higher-order function that takes as 1st argument another procedure with 
 **Exercise**
 (1) Write a polymorphic proc that returns the count field of an input parameter. Then rewrite this proc as a lambda. Check it for static and dynamic arrays, and strings   (see poly_count.jai).
 
-## 22.5 Baked arguments, $ and $$
+## 22.5 #bake_arguments, $ and $$
 The directive **#bake_arguments** lets us specify value(s) for argument(s) of a procedure, but leaving some arguments unspecified. The result is a proc with fewer arguments. Lets see an example:
 
 See *22.6_baked_args.jai*:

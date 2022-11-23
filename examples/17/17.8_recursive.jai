@@ -19,6 +19,11 @@ main :: () {
     for i: 1..10 {  // correct till i == 20
         print("The factorial of % is %\n", i, factorial2(i));
     }
+
+    print("#this is %\n", #this); //(4) => #this is procedure 0x7ff7_3ce5_13c0
+    print("#this is constant? %\n", is_constant(#this));
+    // (5) => #this is constant? true
+    THIS :: #this;    // (6) 
 }
 
 /*

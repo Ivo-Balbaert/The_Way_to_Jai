@@ -143,3 +143,38 @@ See this applied in module _Math/module.jai_ and _Math/matrix.jai_.
 
 See also the use of a polymorphic struct when constructing an SOA data design in § 26.9.2
 
+## 23.7 Polymorphic struct using #this and #bake_constants
+See *23.5_bake_constants.jai*:
+```c++
+#import "Basic";
+
+printer :: (x: $T) {                // (1)
+    print("PRINTING!!! %\n", x);
+}
+
+Polymorphic_Struct :: struct (T: Type, N: int) { // (2)
+    values:   [N] T;
+    pointer: *#this;
+
+    proc :: #bake_constants printer(T=#this);  // (3)
+}
+
+main :: () {
+    p0: Polymorphic_Struct(float, 3);    //   (4)
+    p1: Polymorphic_Struct(string, 2);   //   (5)
+
+    print("p0 is %\n", p0); // (6) => p0 is {[0, 0, 0], null} 
+    print("p1 is %\n", p1); // => p1 is {["", ""], null}
+
+    p0.proc(p0);  // => PRINTING!!! {[0, 0, 0], null}  // (7)
+    p1.proc(p1);  // => PRINTING!!! {["", ""], null}   // (8)
+
+    assert(type_of(p0.pointer) == *type_of(p0));
+    assert(type_of(p1.pointer) == *type_of(p1));
+}
+```
+
+We already discussed #this in § 17.9. In § 22.5 we discovered #bake_arguments, where you can bake in the value of a parameter at compile time. There also exists a **#bake_constants** directive, where you can bake in a polymorphic type with a concrete type.  
+Line (1) presents a very simple polymorphic function `printer`. Line (2) defines a polymorphic struct with generic T and N. Field `pointer` points to itself with #this. WHat is new is that this struct contains a proc, which bakes in the #this (which is Polymorphic_Struct) into printer.  
+In line (4), we declare an instance of Polymorphic_Struct, with T == float and N == 3; we do the same in (5) for T==string and N == 2. We print these out in line (6).  
+In line (7), we call proc on p0 with p0.proc, and give it p0 as parameter; this means T becomes the type of #this, which is here p0. This call to printer prints out p0. The same goes for `p1.proc(p1);`
