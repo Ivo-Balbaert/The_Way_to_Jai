@@ -4,6 +4,8 @@ A 'meta-program' is a piece of code that alters (or 'programs') an existing prog
 In Jai, this takes place solely at compile-time. The compiler gives you the source code in AST format (Abstract Syntax Tree) for you to modify.
 
 > Jai offers arbitrary compile-time execution, with powerful meta-programming features to modify your code in whatever way you want, but all meta-programming is limited strictly to compile-time execution. This capability is one of the main pillars of the language.
+> One could even argue that Jai introduces another programming paradigm: "Metaprogramming oriented programming" or "Compiler oriented programming".
+> In short it's about maximizing code generation at compile time with a nice tool-set: macros, types as first class values, polymorphic procedures and data structures, built-in build system, understanding of AST and so on.
 
 This functionality has been built into the language from the start. Meta-programs can modify the program in arbitrarily complex ways easily. 
 

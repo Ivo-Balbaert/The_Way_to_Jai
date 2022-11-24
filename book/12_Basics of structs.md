@@ -620,3 +620,40 @@ main :: () {
 As you can see in line (1), a struct can take one or more parameters, even with default values. They are used to set some member fields.
 Line (2) shows that we can give another value for the parameter(s) when a struct is instantiated.
 Also a struct can use outer constant values.
+
+## 12.14 Structs with relative pointers
+Relative pointers (first discussed in § 10.6) are particularly suited when they point to an object in the memory vicinity, as is the case between member fields of a struct instance.
+
+See *12.9_struct_relative_pointer.jai*
+```c++
+#import "Basic";
+
+Holder :: struct {
+    a: *~s16 float;     // (1)
+    b: float;
+}
+
+make_holder :: (value: float) -> *Holder {
+    holder := New(Holder);
+    holder.a = *holder.b;   // (2)
+    holder.b = value;
+    
+    return holder;
+}
+
+main :: () {
+    holder := make_holder(42.42);
+    print("    holder is: %\n", holder); // => holder is: 200_3893_57a0
+    print("    type_of(holder.a) is: %\n", type_of(holder.a));
+    // => type_of(holder.a) is: *~s16 float32
+
+    pointer_from_stack := holder.a;  // (3) 
+    print("    type_of(pointer_from_stack) is: %\n", type_of(pointer_from_stack));
+    // =>  type_of(pointer_from_stack) is: *float32
+    print("    Dereferencing pointer_from_stack: %\n", << pointer_from_stack);
+    // (4) => Dereferencing pointer_from_stack: 42.419998
+ }
+```
+
+Type Holder in line (1) has a 16 bit relative pointer field a, which points to a float. Field a points to field b (line (2)), which indeed is a float.  
+(3) is a declaration assigning to the relative pointer a, but its type is a full pointer, not a relative pointer. This is necessary, because when we copy the relative pointer to the stack, the resulting pointer would overflow and not be valid, because there is no way to reach that data structure from the stack. By converting it to a full pointer, we are able to point to the original value 42.42, as shown in line (4).

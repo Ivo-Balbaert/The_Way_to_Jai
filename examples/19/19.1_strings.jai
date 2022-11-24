@@ -72,6 +72,9 @@ main :: ()  {
             print("% -", ch[i]);
     } // => 228 -184 -150 -231 -149 -140
     print("\n");
+    for cast([] u8) str {             // (10B)
+        print("% -", it);
+    } // => 72 -101 -108 -108 -111 -46 -
 
     // sprint:
     b := "Resounding ";

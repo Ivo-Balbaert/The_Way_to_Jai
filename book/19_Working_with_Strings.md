@@ -84,6 +84,9 @@ main :: ()  {
             print("% -", ch[i]);
     } // => 228 -184 -150 -231 -149 -140
     print("\n");
+    for cast([] u8) str {             // (10B)
+        print("% -", it);
+    } // => 72 -101 -108 -108 -111 -46 -
     
     // sprint:
     b := "Resounding ";
@@ -213,7 +216,9 @@ A multi-line string (also called here or doc string) is defined as in line (9) w
 ### 19.4.4 Looping over the characters in a string str with for
 Line (10) shows this is done as follows:  ` for i: 0..str.count-1`  
 You can print out or process each byte, but not change them in the string itself.  
-( `for str   print("% -", str[it]);` does NOT work. )
+( `for str   print("% -", str[it]);` does NOT work. )  
+Another way of looping over a string is shown in line (10B): `for cast([] u8) str  { }`
+Simply cast the string to an array of bytes, and then you can use `it` in the loop.
 
 ### 19.4.5 The sprint procedure
 `sprint` is just like `print`, but allocates and returns the result as a string instead of printing it out. It has the following signature:  

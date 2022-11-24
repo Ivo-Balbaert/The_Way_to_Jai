@@ -254,5 +254,4 @@ main :: () {
 ```
 
 In § 10.1 we saw that a pointer like in line (1) on a 64 bit OS is 8 bytes in size, which is quite large.  
-Jai allows you to use smaller, so called _relative pointers_, respectively of 4, 2 and 1 byte(s) in size, which can be used to point to an object from a place in the memory vicinity. These pointers are serializable.
-
+Jai allows you to use smaller, so called _relative pointers_, respectively of 4, 2 and 1 byte(s) in size, which can be used to point to an object at a place in the memory vicinity. Relative pointers are limited in range, so they can only point to nearby things. That's why they are typically used to point from one member field to another (see § 12.14). These types of pointers are serializable, and they can be cast to a non-relative pointer whenever needed.  

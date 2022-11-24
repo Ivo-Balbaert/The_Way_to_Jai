@@ -35,7 +35,7 @@ Values of different types don't easily combine in operations, often the values o
 _Question:_ How would you convert `"Hello"` to a number?  
 Often these conversions won't work, and you'll get a compiler error.
 
-Jai is a _strongly_ and _statically typed_ language: the compiler must know the types of all the program’s constants and variables at compile time, and a variable cannot change type, like from number to string as in dynamic languages.
+Jai is a _strongly_ and _statically typed_ language: the compiler must know the types of all the program’s constants, variables and expressions at compile time, and a variable cannot change type, like from number to string as in dynamic languages. This allows Jai to run fast at runtime.
 > Except when the variable has type Any (see ??).  
  
 Conversion of the type of a variable is strictly controlled, and operations can only work on certain types. This all adds up to better error-checking by the compiler, and thus more robust, safer and much faster programs. 

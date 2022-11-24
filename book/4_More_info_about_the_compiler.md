@@ -19,7 +19,7 @@ Here is an overall schema of the compiler architecture:
 
 As we see in the diagram, Jai source code is first converted to an _abstract syntax tree_ (AST), which is then converted to an internal _byte-code_.
 
-The developer can modify the generated AST at compile-time(see Metaprogramming and macros § 26), and can access the compiler through a _compiler message loop_ (see ??).
+The developer can modify the generated AST at compile-time(see Metaprogramming and macros § 26), and can access the compiler through a _compiler message loop_ (see § 30.5).
 
 
 ## 4.2 Internal byte-code interpreter
