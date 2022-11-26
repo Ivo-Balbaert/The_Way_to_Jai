@@ -157,4 +157,32 @@ Variables of a basic type are stored by default in _stack_ memory for performanc
 However most of your program's memory will be allocated in the _heap_. Jai has no automatic memory management, so the developer is responsable for releasing (freeing) that memory.
 We'll later (see ??) detail the mechanisms Jai offers to do that.
 
-For a good discussion about these two types of memory, see [Stack vs Heap](https://hackr.io/blog/stack-vs-heap).
+For a good discussion about these two types of memory, see [Stack vs Heap](https://hackr.io/blog/stack-vs-heap).  
+
+## 4.11 What happens when Jai starts up?
+The actual entry point of any Jai program is called `__system_entry_point`, found in _modules/Runtime_Support.jai_:
+
+```c++
+#program_export "main"
+__system_entry_point :: (argc: s32, argv: **u8) -> s32 #c_call {
+    __jai_runtime_init(argc, argv);  // (1)
+
+    push_context first_thread_context {
+        #if ENABLE_BACKTRACE_ON_CRASH {
+            Handler :: #import "Runtime_Support_Crash_Handler";
+            Handler.init();
+        }
+
+        __instrumentation_first ();
+        __instrumentation_second();
+        
+        __program_main :: () #runtime_support;
+        __program_main();   // (2)
+    }
+    
+    return 0;
+}
+```
+
+This first starts up a `__jai_runtime_init(argc, argv);` proc. This proc is also defined in the _Runtime_Support_ module. Its job is to take in the command-line arguments, and initialize the primary context.
+Then back in `__system_entry_point` the runtime crash handler is activated and `main` is started.

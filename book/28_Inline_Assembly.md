@@ -1,13 +1,13 @@
 # 28 Inline assembly
+This allows the inclusion of assembly code through the **#asm** directive. You would only do this for portions of the code where you need ultimate performance. That said, inline assembly is being used inside some of the more critical performance standard modules (see below).  
 
-This allows the inclusion of assembly code through the **#asm** directive. You would only do this for portions of the code where you need ultimate performance.  
-The inner workings of Apollo Time in _Basic_ use inline assembly and operator overloading.  
+Assembly language is mainly used to generate custom CPU instructions, support SIMD (Single Instruction, Multiple Data see: [Wikipedia SIMD](https://en.wikipedia.org/wiki/Single_instruction,_multiple_datainstructions)) for parallelizing data transformations, or take explicit control over the code generation to get the most optimized code.
+At this stage only the x64 platform is supported. Inline assembly does not support jumping, branching, NOP (No Operation instruction), or calling functions; use Jai for that.  
 
-Notes:
-- `__reg` is the type for internal registers. 
+The inner workings of Apollo Time in _Basic_ use inline assembly and operator overloading. Other inline assembly examples can be found in: _modules/Atomics_, *modules/Bit_Operations*, *modules/Runtime_Support*. 
+Module *Machine_X64.jai* contains useful routines for 64-bit Intel x86 machines.
 
-
-## 28.1 Examples of AVX and AVX2 SIMD operations
+## 28.1 Examples of using AVX and AVX2 SIMD operations
 See *28.1_assembly.jai*:
 ```c++
 #import "Basic";
@@ -74,15 +74,55 @@ c=[1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 29, 31]
 */
 ```
 
-#asm takes a code block with assembly instructions (see line (1)). In the last compilation phase they are compiled into machine instructions at that place in the code. In line (2) AVX (Advanced Vector Extensions) instructions are used: #asm AVX.  
+#asm takes a code block with assembly instructions (see line (1)). In the last compilation phase they are compiled into machine instructions at that place in the code. In line (2) AVX instructions are used: #asm AVX.  
 The #asm AVX, AVX2 allows for SIMD operations (see line (3) and following)
-(see [Advanced Vector Extensions](https://en.wikipedia.org/wiki/Advanced_Vector_Extensions) ). 
+(see [Advanced Vector Extensions](https://en.wikipedia.org/wiki/Advanced_Vector_Extensions) ).
+In line (1), .x means that 4 32-bit floats are added at the same time (in parallel).
+In line (2), .y indicates that 8 32-bit floats are added at the same time.
+Line (3) uses basic SIMD Vector Code for adding 8-bit integers together at the same time: .x indicates a 128-bit vector lane, and since 128/8 is 16, this piece of code is adding 16 8-bit integers all at once. We use `paddb`, or add packed integers assembly instruction to add all the integers together using SIMD.
+
+### 28.1.1 Assembly Feature Flags
+`#asm AVX, AVX2 { }` are called Assembly Feature Flags.
+x86 does not have a single set of instructions. Rather, there are feature flags that tell someone whether or not a particular set of instructions is present or not.
+
+Some instruction sets include:
+* AVX (Advanced Vector Extensions)
+* AVX2 (Haswell New Instructions)
+* AVX-512 (extension to 512 bits)
+* MMX (MMX instructions)
+* SSE3 (SSE3 instructions)
+
+You can test on which instruction sets are available with the proc `get_cpu_info` from module _Machine_X64_:
+See *28.5_get_cpu_info_feature_flags.jai*
+```c++
+#import "Basic";
+#import "Machine_X64";
+
+main :: () {
+    cpu_info := get_cpu_info();         // (1)
+    print("cpu_info: %", cpu_info);
+    // => cpu_info: {INTEL, [3219913727, 4294636431, 0, 739248128, 289, 0, 10250153, 0, 3154117632, 0, 15]}
+    if check_feature(cpu_info.feature_leaves, x86_Feature_Flag.AVX2) {  // (2)
+        print("Yes, we have AVX2!"); // => Yes, we have AVX2!
+        #asm AVX2 {
+    // Here the pxor gets the 256-bit .y version, since that is the default operand size with AVX. In an AVX512 block, the default operand size would be the 512-bit .z.
+            pxor v1:, v1, v1;
+        }
+    } else {
+    // AVX2 is not available on this processor, we have to run our fallback path...
+    }   
+}
+```
+We call the proc in line (1), and test whether it is AVX2 capable in line (2).
 
 #asm can also be used inside macros, allowing to combine the power of inline assembly with macros.
 
 ## 28.2 Passing Inline Assembly Registers through Macro Arguments
+`__reg` is the type for internal registers. 
+
 See *28.2_asm_and_macros.jai*:
 ```c++
+
 add_regs :: (c: __reg, d: __reg) #expand {  // (1)
   #asm {
      add c, d;
@@ -99,4 +139,69 @@ main :: () {
 }
 ```
 
-In line (1) we define a macro `add_regs` that is called in line (3). It takes 2 parameters b and a, pushes them into 2 registers c and d of type `__reg` and adds them up. 
+In line (1) we define a macro `add_regs` that is called in line (3). It takes 2 parameters b and a, pushes them into 2 registers c and d of type `__reg` and adds them up.
+
+## 28.3 Overview of Inline Assembly instructions
+Instructions are named based on the mnemonic and operands provided and are identical to the official mnemonic provided by Intel and AMD.  
+Here you can find the [list](https://www.felixcloutier.com/x86/index.html).
+
+## 28.4 Assembly Language Data Types
+The types are: `gpr`, `str`, `vec`, and `omr`.
+* gpr stands for general purpose register.
+    gpr.a means that the gpr must be pinned to the register a (e.g. EAX: gpr === a)
+* imm8 is an 8 bit immediate
+* mem means the operation must be a memory operand (e.g. lea.q [EAX], rax)
+* str stands for stack register, this is used by the fpu and mmx instructions.
+* vec stands for a vector type. This is used for manipulating SIMD instructions
+* omr stands for op-mask register, only available with AVX512
+
+### 28.4.1 Declaration of variables
+See *28.3_declarations.jai*:
+```c++
+main :: () {
+    #asm {
+        var: gpr; // declared a general purpose register named 'var'
+        mov var, 1; // assign var = 1
+    }
+
+    #asm {
+        // declared a general purpose register named 'var2', and mov 1 into it
+        mov var2: gpr, 1; // assign var2 = 1
+    }
+
+    #asm {
+        // implicitly declare 'var3' without specifying the type
+        mov var3:, 1;
+    }
+}
+```
+
+### 28.4.2 List of different operations
+These specify the assignment-size:
+
+* .q is quad-word (64-bit integer).
+* .d is double-word (32-bit integer).
+* .w is a regular word (16-bit integer).
+* .b is a byte (8-bit integer).
+* .x is the SSE is in the feature set, xmmword (128-bit)
+* .y is the AVX is in the feature set, ymmword (256-bit)
+* .z is the AVX512F is in the feature set, zmmword (512-bit)
+
+### 28.4.3 List of registers
+The allowed registers are:   
+a, b, c, d, sp, bp, si, di,  
+or an integer between 0 and 15 (representing SIMD registers from xmm0 to xmm15).
+
+The `===` operator is used to put values in registers, for example:
+`result === a`  //  result is represented as register a
+
+See the following examples: *28.4_other_examples.jai*
+```c++
+```
+
+#asm blocks can be named, so that variables can be cross-referenced:  
+```
+block_1 :: #asm { pxor x:, x; }
+block_2 :: #asm { movdqu y:, block_1.x; }
+```
+

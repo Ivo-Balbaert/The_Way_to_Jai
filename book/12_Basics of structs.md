@@ -524,7 +524,10 @@ can be divided into:
 
 ## 12.11 Struct alignment
 
-By aligning certain member fields of structs to 64 bit, we can make memory allocation cache-aligned on 64 bit systems. This can also be done for global variables. This enhances memory efficiency and reduces cache misses. This is shown in the following example:
+By aligning certain member fields of structs to 64 bit, we can make memory allocation cache-aligned on 64 bit systems. This can also be done for global variables.  
+The **#align** directive takes care of aligning struct member fields relative to the start of the struct. If the start is 64 bit aligned, and a member field has #align 64, then this fields will also be 64 bit aligned. The same goes for `#align 32` and `#align 16`.
+The start or base of the struct must be #align-ed correctly, otherwise it won't work. You can't do this on the structs definition, like in (1B), this has no effect. You must use the 2nd parameter `alignment` of New when creating a new struct instance (see line (5))  
+This enhances memory efficiency and reduces cache misses for cache-sensitive data-structures. This is shown in the following example:
 
 See *12.7_struct_align.jai*:
 ```c++
@@ -535,7 +538,7 @@ Accumulator :: struct {
   computedAccumulation: s32;
 }
 
-Object :: struct { member: int #align 64; }
+Object :: struct { member: int #align 64; }     // (1B)
 
 Thing :: struct {
    member1: u8  #align 1;                        // (2)
@@ -547,11 +550,18 @@ global_var: [100] int #align 64;                 // (3)
 main :: () {
     assert(cast(int)(*global_var) % 64 == 0);    // (4)
     object := New(Object);                       // (5)
+    // assert(cast(int)(*object) % 64 == 0); // => Assertion failed
     free(object);
+    N :: 100;
+    object_array := NewArray(N, Object, alignment=64);  // (6)
+    assert(cast(int)(*object_array[0]) % 64 == 0);      // (7)
+    assert(cast(int)(*object_array[1]) % 64 == 0);
+    assert(cast(int)(*object_array[10]) % 64 == 0);
 }
 ```
 
-The `Accumulator.accumulation` field and `global_var` in lines (1) and (3) are 64 bit cache-aligned. Line (4) shows that indeed the address of `global_var` is divisible by 64. In line (5) a heap allocation is performed that is 64-bit aligned.
+The `Accumulator.accumulation` field and `global_var` in lines (1) and (3) are 64 bit cache-aligned. Line (4) shows that indeed the address of `global_var` is divisible by 64. In line (5) the heap allocation is NOT 64-bit aligned. (Line (1B) doesn't have any effect.)
+However, in line (6), the array is 64 bit aligned, as proven by the assertions in line (7) and following.
 (2) #align 1 ??
 
 ## 12.12 Making definitions in an inner module visible with using

@@ -9,6 +9,8 @@ It is used like this (note the resemblance with a procedure):
 where: token can be:     +, -, *, /, +=, -=, *=, ==, !=, <<, >>, &, |, [], %, ^, <<<, >>> 
 The following operators cannot be overloaded: = and New.
 
+> Operator overloading allows the programmer to define implementations for the fundamental operators like +, -, and so on, that can be used on custom-defined data types.
+
 ## 24.1 Vector operators
 See *24.1_overloading_vec.jai*:
 ```c++
@@ -91,3 +93,6 @@ main :: () {
 Suppose we have an object obj which has an array field. Instead of doing `obj.array[i]` we would like to shorten this to `obj[i]`. We can do this by overloading the `[]` operator as in line (1), which is applied in line (1B).
 
 In line (2) we overload `*=` for an Object and a integer, to mean that every item of the array is multiplied by the integer. This is used in line (2B).
+
+**Exercise** (see complex_overload.jai)
+Define a struct type Complex for complex numbers, together with two operators for + and *. Test out/

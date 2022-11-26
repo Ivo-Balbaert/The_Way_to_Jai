@@ -55,6 +55,11 @@ See *30.2_location.jai*:
 ```c++
 #import "Basic";
 
+add :: (x: int, y: int, loc := #caller_location) -> int {
+    print("add was called from line %.\n", loc.line_number); // => add was called from line 18.
+    return x + y;
+}
+
 main :: () { 
     print("In file % line %\n", #file, #line); // (1)
     // => In file d:/Jai/The_Way_to_Jai/examples/30/30.2_location.jai line 4
@@ -62,7 +67,8 @@ main :: () {
     // => Filepath is d:/Jai/The_Way_to_Jai/examples/30/
     loc := #location(code);                    // (3)
     print("The code is at location %:%\n", loc.fully_pathed_filename, loc.line_number);
-    // => The code is at location d:/Jai/The_Way_to_Jai/examples/30/30.2_location.jai:3 
+    // => The code is at location d:/Jai/The_Way_to_Jai/examples/30/30.2_location.jai:3
+    add(2, 4);
 }
 ```
 A few directives exist that can be handy when providing file location information, at run-time as well as during compiling:  
@@ -70,6 +76,7 @@ A few directives exist that can be handy when providing file location informatio
   **#line**         gives the number of the line of code where this directive is used
   **#filepath**     contains the path to the current file, without the filename; it can be a remote filepath.
   **#location**     given a piece of Code, it can extract the full path to that code, as well as its line number.
+  **#caller_location**  it gives the line number from where a procedure is called.  
 
 When using or setting file-paths in Jai, always use the forward slash / as path-separator, even on Windows!
 
