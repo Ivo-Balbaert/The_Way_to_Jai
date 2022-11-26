@@ -6,6 +6,8 @@ If you find mistakes, ambiguities, things that are not clear, please create an i
 
 The text is backed by some 200 complete working Jai examples and growing. They are all automatically tested at each new version of the Jai compiler, so this text and code will never get outdated.
 
+[Code certified to run with Jai version beta 0.1.045]
+
 _Table of Contents_
 
    [0 -  Preface](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/0_Preface.md)  
