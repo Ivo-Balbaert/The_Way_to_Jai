@@ -35,7 +35,8 @@ main :: () {
     print("c2 = %\n", c2);  // => c2 = {9, 12, 15}
     c3 := 3 * a2;           // (4)
     print("c3 = %\n", c3);  // => c3 = {9, 12, 15}
-}```
+}
+```
 
 In this code we use the + and * overloaded operators for the Vector3 type from module _Math_.
 
@@ -61,38 +62,54 @@ See *24.2_overloading_object.jai*:
 #import "Basic";
 
 Obj :: struct {     
-  array: [10]int;
+    array: [10]int;
 }
 
-operator [] :: (obj: Obj, i: int) -> int {  // (1)
-  return obj.array[i];
+operator [] :: (obj: Obj, i: int) -> int {       // (1)
+    return obj.array[i];
 }
 
-operator []= :: (obj: *Obj, i: int, item: int) {
-  obj.array[i] = item;
+operator []= :: (obj: *Obj, i: int, item: int) { // (2)
+    obj.array[i] = item;
 }
 
-operator *= :: (obj: *Obj, scalar: int) {   // (2) 
+operator *[] :: (obj: *Obj, i: int) -> *int {    // (3)
+    return *obj.array[i];
+}
+
+operator *= :: (obj: *Obj, scalar: int) {        // (4) 
     for obj.array  obj.array[it] *= scalar;
 // alternative:
 //     for *a: obj.array  { <<a *= scalar; }
 }
 
 main :: () {
-  o : Obj;
-  print("o[0] = %\n", o[0]);  // (1B) => o[0] = 0
+    o : Obj;
+    print("o[0] = %\n", o[0]);  // (1B) => o[0] = 0
+    o[0] = 10;                  // => o[0] = 10
+    print("o[0] = %\n", o[0]);
 
-  o2 : Obj;
-  o2.array = .[0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
-  o2 *= 100;                  // (2B)
-  print("o2.array = %\n", o2.array);  
-  // => o2.array = [0, 100, 200, 300, 400, 500, 600, 700, 800, 900]
+    p : Obj;
+    p.array = .[0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+    p *= 100;                  // (4B)
+    print("p.array = %\n", p.array);  
+    // => p.array = [0, 100, 200, 300, 400, 500, 600, 700, 800, 900]
+
+    ptr := *p[7];              // (3B)
+    print("<<ptr is %\n", <<ptr); // => <<ptr is 700
+    <<ptr *= 3;
+    print("<<ptr is %\n", <<ptr); // => <<ptr is 2100
+    print("p[7] is %\n", p[7]);   // => p[7] is 2100
 }
 ```
 
-Suppose we have an object obj which has an array field. Instead of doing `obj.array[i]` we would like to shorten this to `obj[i]`. We can do this by overloading the `[]` operator as in line (1), which is applied in line (1B).
+Suppose we have an object obj which has an `array` field. Instead of doing `obj.array[i]` we would like to shorten this to `obj[i]`. We can do this by overloading the `[]` operator as in line (1), which is applied in line (1B).
 
-In line (2) we overload `*=` for an Object and a integer, to mean that every item of the array is multiplied by the integer. This is used in line (2B).
+In line (2) we overload the operator []= , which allows us to set each any member array item to a new value. This doesn't just enable the raw '=' operator; it enables all the assignment operators, like +=, *=, /=, ^=, and so on, to work.
+
+In line (3) we overload the operator *[], which allows us to get a pointer to any member array item. This also allows to change these items, see line (3B) and following.
+
+In line (4) we overload `*=` for an Object and a integer, to mean that every item of the array is multiplied by the integer. This is used in line (4B).
 
 **Exercise** (see complex_overload.jai)
 Define a struct type Complex for complex numbers, together with two operators for + and *. Test out/

@@ -146,3 +146,72 @@ main :: () {
 
 In line (1) we define a proc called `IL_Logger_Callback` as having the signature type that follows and as following the #c_call conventions (we re-used the example from § 26.13). If it doesn't return anything, `void` needs to be specified. Then we define a concrete proc `logger_callback` which has the exact same type as `IL_Logger_Callback`. This proc create a temporary new Context called new_context, and calls the proc `log` in this context to log a text string. text is of type `*u8`, so could be a C string.     
 In line (2B) we see that `print` cannot be called inside a #c_call routine, but it can be called inside the `push_context` section.
+
+## 29.8 Getting the computer name: using #if, OS and C interaction
+
+See *29.4_get_computer_name.jai*:
+```c++
+#import "Basic";
+
+alloc_string :: (data: *u8, bytes_excluding_zero: s64) -> string { 
+    count := bytes_excluding_zero;
+    assert(count >= 0);
+    
+    s: string;
+    s.count = count;
+    s.data  = alloc(count);
+    memcpy(s.data, data, count);
+
+    return s;
+}
+
+#if OS == .WINDOWS {                    // (1)
+    kernel32 :: #foreign_system_library "kernel32";
+    GetComputerNameA :: (lpBuffer: *u8, nSize: *u32) -> s32 #foreign kernel32; // (1B)
+
+    get_computer_name :: () -> string {
+        buffer: [500] u8;
+        size: u32 = buffer.count;
+        
+        success := GetComputerNameA(buffer.data, *size); 
+        if success return alloc_string(buffer.data, size);
+        return copy_string("unknown");
+    }
+} else #if OS == .LINUX {               // (2)
+    libc   :: #foreign_system_library "libc";
+    size_t :: u64;
+    gethostname :: (name: *s8, namelen: size_t) -> s32 #foreign libc; // (2B)
+
+    get_computer_name :: () -> string {
+        buffer: [500] u8;
+
+        result := gethostname(cast(*s8) buffer.data, buffer.count); 
+        if result != 0 return copy_string("unknown");
+        return alloc_string(buffer.data, c_style_strlen(buffer.data));
+    }
+} else {
+    // Fall back to some other default processing
+    get_computer_name :: () -> string {
+        return copy_string("unknown");
+    }
+}
+    
+main :: () {
+    print("OS is %\n", OS);
+    name := get_computer_name();                // (3)
+    defer free(name);   
+    print("The computer name is: '%'\n", name); // (4)
+    // On Windows:
+    // => OS is Windows
+    // => The computer name is: 'DESKTOP-KN14QQK'
+    // On Ubuntu 21:
+    // OS is Linux
+    // => The computer name is: 'ivo-B460MDS3H'
+}
+```
+
+Because the way to get to that info is OS dependent, we need to write (at least) two different `get_computer_name` procs. This is easily managed with #if (see lines (1) and (2)). We also need a platform independent routine to allocate a string; `alloc_string`.  
+In Windows, we need the `GetComputerNameA` proc from the kernel32 system-library   (1B).   
+In Linux, we need the `gethostname` proc from the libc system-library (2B).
+
+Due to the #if, only the code specified for the current OS will be compiled: ine line (3), the OS-specific version of `get_computer_name` is called. In line (4), we see the different computer names that happen to be the names of my Windows- and Ubuntu machines.

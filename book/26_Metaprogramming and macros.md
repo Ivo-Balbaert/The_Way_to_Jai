@@ -61,7 +61,7 @@ This structure is not directly accessible, you have to use the proc `get_type_ta
 ## 26.2 Running code at compile time with #run
 We first discovered that this was possible in §3.2.4. We talked about the bytecode interpreter in § 4.2, saw how constants can be calculated at compile time in §5.2.2, and how this can be used for debugging purposes in § 20.  
 We already know that we need to use `#run main()` to run the whole program at compile-time.
-In fact, any code (a code-line, a block of code or a procedure) can be run at compile time with **#run**. 
+In fact, any code (a code-line, a block of code or a procedure) can be run at compile time with **#run**. #run produces a constant as result.
 
 See *26.2_run.jai*:
 ```c++
@@ -223,8 +223,34 @@ This is exactly what **#if** does:
 See *26.5_if.jai*:
 ```c++
 #import "Basic";
+#import "Math";
 
 CONSTANT :: 3;
+
+ENABLE_EXTRA_MODES :: true;
+
+Log_Mode :: enum {
+    NONE;           
+    MINIMAL;        
+    EVERYDAY;       
+    VERBOSE;
+
+    #if ENABLE_EXTRA_MODES {           // (5)
+            VERY_VERBOSE;
+            SECRET;
+            TOP_SECRET;
+    }       
+}
+
+IS_PATIENT :: true;
+
+Person :: struct {
+    name            : string;
+    age             : int;
+    location        : Vector2;
+
+    #if IS_PATIENT  disease := "common cold"; // (6)
+}
 
 main :: () {
     print("The operating system is %\n", OS); // (1) => The operating system is WINDOWS
@@ -242,15 +268,30 @@ main :: () {
     }   else {  
         print("CONSTANT is %\n", CONSTANT); // => CONSTANT is 3
     }
+
+    name := #ifx OS == .WINDOWS then "Microsoft Windows"; else "Linux"; // (7)
+    print("name is %\n", name); // => name is Microsoft Windows
+
 }
 ```
 
-At the start of a program compilation, the operating system on which it runs is stored in the variable (??) OS (see line (1)). We check in line (2) whether this is ".WINDOWS". Only then line (3) is compiled into the executable. In other words: the 2nd #if-construct for .LINUX is not compiled into the executable when we compile on another OS!  
+At the start of a program compilation, the operating system on which it runs is stored in the global compiler constant OS (see line (1)). We check in line (2) whether this is ".WINDOWS". Only then line (3) is compiled into the executable. In other words: the 2nd #if-construct for .LINUX is not compiled into the executable when we compile on another OS!  
 In line (4) and following, we use this to test on a CONSTANT defined by our program itself.
+Line (5) shows that #if can also be used inside enums to conditionally define new enum values.  
+The same is true for struct fields, see line (6).
+
+Note that the condition after #if must be a compile-time constant (can be checked with `is_constant`, see § 5.2.2). This includes anything calculated with #run. Also all code after #if / else branches must be syntactically correct, and the code blocks after #if / else define no scope of their own (contrary to if / else blocks).  
+#if's can also be nested.
 
 > #if is tested at compile-time. When its condition returns true, that block of code is compiled, otherwise it is not compiled.
 
-Caution: there is no #else, just use else.
+Summarized:  
+If the condition that follows is false:
+> if will not execute the block
+> #if will not compile the block
+
+Caution: there is no #else, just use else.  
+For one-liners, there is #ifx (see line (7)).
 
 Using this feature, code can be conditionally compiled and included in the resulting executable, depending on the target environment (development, test, release) or target platform (different OS's).
 
@@ -268,6 +309,8 @@ This technique is used in the _Basic_ module to load specific code depending on 
     #load "osx.jai";
 }
 ```
+There is a nice illustration of this in example § 29.8.
+
 
 ## 26.4 Inserting code with #insert
 The **#insert** directive inserts a piece of compile-time generated code into a procedure or a struct.
