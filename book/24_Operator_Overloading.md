@@ -111,5 +111,7 @@ In line (3) we overload the operator *[], which allows us to get a pointer to an
 
 In line (4) we overload `*=` for an Object and a integer, to mean that every item of the array is multiplied by the integer. This is used in line (4B).
 
-**Exercise** (see complex_overload.jai)
-Define a struct type Complex for complex numbers, together with two operators for + and *. Test out/
+**Exercise** 
+1) Define a struct type Complex for complex numbers, together with two operators for + and *. Test out (see complex_overload.jai).
+2) Define a polymorphic `square` proc that works for all number types. Then define a Vector3 type as a struct with x, y, z: float. Verify that square doesn't work for Vector3. Now define an operator * for Vector3 so that it does!
+(see poly_square.jai).

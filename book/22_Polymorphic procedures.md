@@ -1,7 +1,7 @@
 # 22 Polymorphic Procedures
 
 In § 17.7 we discussed overloading procedures, which is a solution for using the same logic for several different types. But this gives rise to duplication of code (as we'll see in the next example), increasing code size and a source for bugs. But Jai offers a solution, many overloading procedures can be reduced to one **polymorphic procedure**, thereby solving the code duplication problem, while retaining the same advantages.  
-Polymorphic procedures are similar to C++ templates, Java generics or parameterized functions in other languages.
+Polymorphic procedures are similar to C++ templates, Java/C# generics or parameterized functions in other languages.
 
 ## 22.1 First example
 We want a procedure `convert` to convert a given argument to a bool.
@@ -89,7 +89,8 @@ We only need one version of `convert`, and arg is now said to be **polymorphic**
 This procedure can compile to different versions. Each time the compiler sees that the procedure is called with a different concrete type for T (like s32, float32, string or array in the example), it is compiled to a machine-code version for that type.
 The type T has to be derived by the compiler; it can be any type possible. Of course: the code of the procedure must make sense for that type, otherwise a compiler error is generated.  
 In Jai parlance this is called: **baking out** a copy of the procedure with the polymorphic type(s) fully known. For example, when called as `convert(0)`, a version will be compiled for type s32, in line (1) a new version will be compiled for type float32, in line (2) a new version will be compiled for type string, and so on.
-This will happen only once for each type: when the procedure is called again with the same type, the already compiled version for that type will be re-used.
+This will happen only once for each type: when the procedure is called again with the same type, the already compiled version for that type will be re-used.  
+Polymorphic functions will work correctly as long as the code inside them compiles for the input types.
 
 > Polymorphic functions are generated at compile-time, not at runtime by an interpreter or a JIT compiler, like for example in Julia. Because Jai is a strongly typed language, every call to a polymorphic function is also type-checked at compile-time.
 
@@ -102,10 +103,13 @@ Polymorphic procedures are used all over in the Jai library modules, look for ex
 In the `convert` proc of program 22.1B, the type itself is a variable, that we call T.
 T is just a name for a generic type, it could also be S, R, U, V, or Targ and so on, or any name that starts with a capital letter.
 The $ before the T indicates that this is a compile-time type variable: it _defines_ T to be whatever type you called it with. T can also be used without the $ (see example 22.2_polyproc2.jai), but there must be one defining instance $T.  
-There can be several different polymorphic types in a procedure (like S, T, R, and so on), in the argument list as well as return type(s) list. They can also be mixed with other types (?? see for example repeat in 100_)<;  >  
+There can be several different polymorphic types in a procedure (like S, T, R, and so on), in the argument list as well as return type(s) list. They can also be mixed with other types (?? see for example repeat in 100_) 
 However, a definition like $T can only appear once in a polymorphic function, otherwise you get the Error: "is already defined as polymorphic variable".
 
 > This behavior can be shown with the info_flags POLYMORPH_MATCH and POLYMORPH_DEDUPLICATE defined in the _Compiler_ module.
+
+**About performance**
+There is no performance-hit with polymorphism, because it doesn't need dynamic type checking as in some languages. The function produced by a polymorphic call is just as low-level as a non-polymorphic one. The resulting code will be exactly the same, because after polymorph resolution, when we solve for $T and whatever else, the next step is just to bake out a full copy of the procedure with those types fully known. This can be demonstrated by comparing a dump of the byte code (see #dump § 20.2.3) of a normal proc and its polymorphic version, called with the same parameters.
 
 ## 22.2 Some other examples
 ### 22.2.1 T used more than once, and also used as a return type
@@ -390,7 +394,7 @@ v is 2.143589, 100000000, 0.003906
 `do_three_times :: (proc: (*Vector3), arr: *Vector3)`
 It is a higher-order function that takes as 1st argument another procedure with signature `proc: (*Vector3)`. The `square_and_print` proc conforms to this signature. What `do_three_times` does is to call `square_and_print` 3 times on the Vector3. Because this is passed as a pointer, its values are changed.
 
-## 22.5 A polymorphic recursive lambda as argument of another proc
+## 22.5 A recursive lambda as argument of a polymorphic proc
 See *22.10_poly_lambda.jai*:
 ```c++
 #import "Basic";
