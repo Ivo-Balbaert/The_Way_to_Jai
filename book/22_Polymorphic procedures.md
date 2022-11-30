@@ -357,7 +357,7 @@ This is a proc that takes an int as argument and returns an int.
 Our lambda above conforms to that signature.
 In line (2), we loop over a (here array_a), apply our lambda as proc to each of its items, and adding these to the dynamic array result, which is returned after the loop.
 
-To make the code more readable, we could have defined out lambda as a constant:  
+To make the code more readable, we could have defined lambda as a constant:  
 `lam :: (x) => x + 100;`    (see line (4))
 and call add100 like this:
 `add100(array_a, lam)`      (see line (5))
@@ -402,6 +402,28 @@ v is 2.143589, 100000000, 0.003906
 `do_three_times` defined in line (1) has the following signature:
 `do_three_times :: (proc: (*Vector3), arr: *Vector3)`
 It is a higher-order function that takes as 1st argument another procedure with signature `proc: (*Vector3)`. The `square_and_print` proc conforms to this signature. What `do_three_times` does is to call `square_and_print` 3 times on the Vector3. Because this is passed as a pointer, its values are changed.
+
+The procedure passed as argument can also be polymorphic:
+See *22.11_polyproc_argument.jai*:
+```c++
+#import "Basic";
+
+apply_int :: (f: (x: int) -> int, x: int, count: int) -> int {
+        for 1..count x = f(x);
+        return x;
+}
+
+square :: (x: $T) -> T {
+        return x * x;
+}
+
+main :: () {
+    b := apply_int(square, 4, 4);  // (1)
+    print("b is %, of type %\n", b, type_of(b)); // => b is 4294967296, of type s64
+}
+```
+
+`apply_int` applies proc f on x count times. In line (1), we call `apply_int` with a proc `square` which is polymorph. By matching `square` with proc f, T gets assigned type int.
 
 ## 22.5 A recursive lambda as argument of a polymorphic proc
 See *22.10_poly_lambda.jai*:
@@ -505,17 +527,27 @@ square :: (n: int) -> int { return n*n; }       // (2)
 main :: () {
     N :: 5;
     a: [N] int;
-    for 0..N-1 a[it] = it+1;
+    for 0..N-1 a[it] = it + 1;
     print("a is %\n", a); // => a is [1, 2, 3, 4, 5]
 
     b := map(a, square);                        // (3)
     print("b is %\n", b); // => b is [1, 4, 9, 16, 25]
+
+    c := map(a, x => x * x);                    // (4)
+    print("c is %\n", c); // => c is [1, 4, 9, 16, 25]
+
+    d := map(a, x => -x);                    
+    print("d is %\n", d); // => d is [-1, -2, -3, -4, -5]
+
+    e := map(a, x => x + 100);                    
+    print("e is %\n", e); // => e is [101, 102, 103, 104, 105]
 }
 ```
 
 The code above presents an example of a polymorphic procedure `map` with several polymorphic types (called T and R): `map :: (array: [] $T, f: (T) -> $R) -> [] R`
 It is also an example of a **higher-order function**, because the 2nd argument of map is itself a proc: `f: (T) -> $R`.  
 The proc `square` in line (2) fulfills that signature. `map` is called in line (3) with `square` as a 2nd parameter. That proc is applied to each element of the array, returning a new array as result. 
+If you prefer the shorter lambda style, see lines (4) andd following. 
 
 > Remark: `map` constructs and returns a static array.
 > In § 23.?? we'll see another version of map.
