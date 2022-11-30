@@ -126,11 +126,17 @@ main :: () {
     i2: int = 2;
     i3 := add(i1, i2);  // (2)
     print("i3 is %\n", i3); // => i3 is 3
+    proc :: #procedure_of_call add(i1, i2);  // (6) 
+    print("type_of(proc) is %\n", type_of(proc));
+    // => type_of(proc) is procedure (s64, s64) -> s64
 
     f1: float = 1;
     f2: float = 2;
     f3 := add(f1, f2);  // (3)
     print("f3 is %\n", f3); // => f3 is 3
+    proc2 :: #procedure_of_call add(f1, f2);  // (7)
+    print("type_of(proc2) is %\n", type_of(proc2));
+    // => type_of(proc2) is procedure (float32, float32) -> float32
 
     i4: int = 5;
     f4: float = 7.3;
@@ -163,6 +169,8 @@ In the call in line (2), i1 specifies that the type T is int. The signature of `
 If q differs in type from p as in line (4), we get an error (again note the very clear message). i4 is an int, so at the call add(i4, f4), the compiler decides that T is int, so f4 must also be of type int, hence the error.
 Line (5) shows the same error when the types are reversed.
 If the same generic type is used multiple times like here, the '$' indicates what value (here the value for p) is decisive for error messages.
+
+Another way to show what procedure would be called in a particular case is to use the **#procedure_of_call** as in line (6)-(7). This does not call the procedures themselves, but only gets the type of the procs. When we print that out, we see that in both cases the called functions have their concrete types baked in. This is a useful way to check which particular procedure is executed in an overloads, and inspect the results of polymorphic calls.
 
 ### 22.2.2 T as the type of an array's items
 See *22.3_polyproc3.jai*:
@@ -310,7 +318,8 @@ For an example, see § 22.4.
 (4) Write a global procedure `mult_and_add_with_constants` that takes two float64 a and b, and returns as result (1.5 * a + 4.6 * b). Then call this proc from a nested procedure `do_math_things` in main (see do_math_things1.jai).  
 Now write a polymorphic version that has types $Ta for a and $Tb for b, returning a value of type Ta. Observe that it works like the previous version. Now change the type of a to float32. Explain what happens when you compile (see do_math_things2.jai)  
 (5) Write a polymorphic proc display_xy that shows the x and y coordinates of a Vector2, Vector3 and Vector4 instances; take the Vector definitions from module _Math_ (see display_xy.jai).  
-(6) Try to understand the error you get when compiling polymorph_err.jai  
+(6) Try to understand the error you get when compiling polymorph_err.jai
+(7) Write a polymorphic `repeat` proc, that takes an item of type T and a count. It adds the item count times. Test it out for several types (see repeat.jai)
 
 The following two § are not specific about polymorphism, but they do prepare the way for the `map` polymorphic example in § 22.6
 

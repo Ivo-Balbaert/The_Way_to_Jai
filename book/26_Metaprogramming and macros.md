@@ -159,6 +159,51 @@ or sometimes called:	_"Bake the data into the program binary"_
 - Download the OpenGL spec and build the most recent gl.h header file
 …
 
+If you have still some trouble seeing the difference between compile-time and run-time, the following program will make it clear.
+See *26.15_comprun.jai*:
+```c++
+#import "Basic";
+
+comprun :: (x: $T) {  
+    #run print("Compiling 'comprun' for T == %.\n", T);  // (1) 
+    print("The value of x is %, of type %.\n", x, T);    // (2) 
+}
+ 
+main :: () {
+    a: u8 = 5;
+    b: u8 = 11;    
+    comprun(a);   // (3)
+    comprun(b);
+    comprun(a * 3 + b);
+
+    comprun(1.1);  // (4)
+    comprun(3.33); // (5)
+    comprun("Hello, Sailor!"); // (6)
+
+    comprun(b - a);  // (7) 
+}
+
+/*
+Compiling 'comprun' for T == u8.
+Compiling 'comprun' for T == string.
+Compiling 'comprun' for T == float32.
+Linker ...
+After compilation...
+The value of x is 5, of type u8.
+The value of x is 11, of type u8.
+The value of x is 26, of type u8.
+The value of x is 1.1, of type float32.
+The value of x is 3.33, of type float32.
+The value of x is Hello, Sailor!, of type string.
+The value of x is 6, of type u8.
+*/
+```
+
+Here we have a proc `comprun` in which line (1) will run at compile-time (because of #run), and where line (2) will work at run-time.  
+The three lines following (3) only activate the #run 1 time, because all expressions with which it is called are of the same type u8. It only needs to build once. But at runtime the procedure is called and prints out 3 times.In line (4), comprun is called with a new type 'float', so it compiles again, which we can see because #run executes for the 2nd time. Line (5) doesn't trigger a re-compilation, because the parameter is also of type float. But line (6) recompiles, because now a string is passed. (7) doesn't recompile, because there is already a compiled form for comprun with T == u8.
+Note that the order of the #run's can vary, because compilation works multi-threaded.
+
+
 ### 26.2.1 The #compile_time directive
 With all these meta-programming functionalities, it can be important to know when you are running in compile-time and when you are really running. Luckily there is a **#compile_time** directive, that is true at compile-time, and false at run-time. However it cannot be used as a constant.
 
