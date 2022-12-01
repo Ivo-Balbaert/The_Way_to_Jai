@@ -96,6 +96,7 @@ In line (1) we declare the Linux C standard library `libc`, lines (2) and follow
 ### 29.6.1 Calling system library functions
 See *29.2_call_c_windows.jai*:
 ```c++
+// This program only works on Windows!
 #import "Basic";
 
 // C library:
@@ -123,8 +124,8 @@ In line (1) we declare the Windows C standard library `crt`, lines (2) and follo
 ### 29.6.2 Calling user-defined library functions
 (The source code for this example is in _examples/29/mylib_)
 
-**STEPS**
-_1) Write your C source code_ 
+**STEPS**  
+_1) Write your C source code_   
 Suppose we have some useful C functions (here they are not useful but deliberately kept simple) gathered in a file called *my.c*:
 
 ```c++
@@ -137,7 +138,7 @@ double add_double(double a, double b) {     // (2)
 }
 ```
 
-We want to call these functions from within Jai code.
+We want to call these functions from within Jai code.  
 _2) Write your Jai source code_ 
 See *29.5_callc.jai*:
 ```c++
@@ -159,12 +160,12 @@ tell Jai that the real library name is `libmy`. Then we can call these C functio
 At this stage, this of course doesn't work. Compiling this program with `jai 29.5_callc.jai` gives: Error: D:/Jai/The_Way_to_Jai/examples/29/mylib/libmy.dll: Dynamic library load failed. Error code 126, message: The specified module could not be found, on line (4).  
 We see that Jai looks for a dynamic library file _libmy.dll_ , which isn't produced yet!
 
-_3) Compile your C source code_
+_3) Compile your C source code_  
 Run the following command in a terminal window (we use [gcc](https://winlibs.com/) here):  
 `gcc -c my.c`  
 This creates an object file `my.o`, containing machine code.
 
-_4) Make a C dynamic library (.dll)_
+_4) Make a C dynamic library (.dll)_  
 This is done with the -shared option, setting the output file with -o to `libmy.dll`:  
 `gcc -shared -o libmy.dll my.c`
 This creates a dynamic library `libmy.dll` (size: 89.650 bytes)
@@ -176,16 +177,16 @@ LINK : fatal error LNK1181: cannot open input file 'D:\Jai\The_Way_to_Jai\exampl
 
 It seems the linker wants a static library `libmy.lib`, indeed we cut out mentioning this filename in the giant linker command between ...
 
-_5) Make a C static library (.lib)_
+_5) Make a C static library (.lib)_  
 This can be done with the `ar` tool from the gcc toolchain and we need the result from step 3 here. Issue the command:  
 `ar rcs libmy.lib my.o`
 This creates a static library `libmy.lib` (size: 976 bytes)
 
-_6) Compile the Jai code from step 2_
+_6) Compile the Jai code from step 2_  
 Run the command: `jai 29.5_callc.jai`  
 Compiling and linking works perfect now. An executable (here 29.exe) is produced.
 
-_7) Run the executable from the preceding step_
+_7) Run the executable from the preceding step_  
 `29`
 This outputs:
 ```
@@ -228,6 +229,7 @@ In line (1) we define a proc called `IL_Logger_Callback` as having the signature
 In line (2B) we see that `print` cannot be called inside a #c_call routine, but it can be called inside the `push_context` section.
 
 ## 29.8 Getting the computer name: using #if, OS and C interaction
+(Example taken from /how_to/095_static_if.jai)
 
 See *29.4_get_computer_name.jai*:
 ```c++
