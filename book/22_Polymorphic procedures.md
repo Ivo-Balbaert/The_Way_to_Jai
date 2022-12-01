@@ -308,6 +308,7 @@ main :: () {
 Procedures can have multiple polymorphic variables, like:
 `proc :: (a: $A, b: $B, c: $C) -> B, C {...}`
 whereby some of A, B and C can be the same type.
+Jai guarantees that it will only compile a particular procedure once, for any given combination of type variables.
 
 For an example, see § 22.4.
 
@@ -499,13 +500,14 @@ main :: () {
 In line (1) we have a lambda `add`, in line (2) we 'bake in' the value 10 for argument a, so that we get a new proc called `add10`, which only needs one parameter for b.
 This function is called in line (4); it effectively adds 10 to a given number, so it has specialized the original proc by baking in some arguments.
 Similarly, in line (3) a new proc `mult1` is constructed by supplying a value for argument b in proc `mult`, and `mult1` is called in line (5).
-A `$` in front of an argument 'bakes' that argument into that function, which is illustrated in line (6). If the argument is a variable, you get an error.
+A `$` in front of an argument is an **auto-bake**: it 'bakes' that argument into that function automatically when called, which is illustrated in line (6). If the argument is a variable, you get an error.
 A `$$` in front of an argument will 'bake' the value into the function when it is a constant; if not, it will behave like an ordinary function (see line (7)).
+Auto-bakes can be used together with $T type variables.
 
 `#bake_arguments` procedures are pre-compiled functions, they are not closures.
 This is different from default values (see § 17.4), because a proc made with #bake_arguments is a different proc than the original one, whereas with default values there is only one procedure.
 
-> So Jai has function currying through #bake_arguments, except that it only happens at compile time. There is no runtime function currying in Jai. 
+> So Jai has function currying through #bake_arguments, except that this only happens at compile time. There is no runtime function currying in Jai. 
 
 ## 22.7 A map function
 Using polymorphic arguments, we can construct functional-programming like map functions, that take for example an array and a function as arguments.

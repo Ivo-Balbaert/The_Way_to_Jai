@@ -12,6 +12,8 @@ clock :: () -> s64                               #foreign crt;
 
 main :: () {
     print("%\n", rand());  // => 41                 // (3)
+    print("%\n", rand());  // => 18467
+    print("%\n", rand());  // => 6334 
     print("%\n", clock()); // => 4 
     
     str :: "hello";

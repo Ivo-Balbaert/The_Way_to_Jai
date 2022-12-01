@@ -32,6 +32,9 @@ Functions from a dynamic library (.dll/.so file) also need 2 #foreign directives
 The **#foreign_library** directive specifies a file (library) for foreign functions. For example, if you want to use the `lz4` fast-compression C library in your Jai code, you specify it as:
 `lz4 :: #foreign_library "liblz4";`
 
+The path to the foreign library is best expressed as relative to the program file, for example: FMOD :: `#foreign_library "../../lib/fmod";`
+Also make sure to copy the dll next to the program's exe file.
+
 > Remark: Inside the "" you can write the full path to the library
 > The .dll must be copied next to the Jai .exe 
 
@@ -90,6 +93,7 @@ main :: () {
 In line (1) we declare the Linux C standard library `libc`, lines (2) and following declare some C function from that library. In lines (3) and following, we call some of these C functions from Jai.
 
 ## 29.6 Examples on Windows 
+### 29.6.1 Calling system library functions
 See *29.2_call_c_windows.jai*:
 ```c++
 #import "Basic";
@@ -105,6 +109,8 @@ clock :: () -> s64                               #foreign crt;
 
 main :: () {
     print("%\n", rand());  // => 41                 // (3)
+    print("%\n", rand());  // => 18467
+    print("%\n", rand());  // => 6334 
     print("%\n", clock()); // => 4 
     
     str :: "hello";
@@ -113,6 +119,80 @@ main :: () {
 ```
 
 In line (1) we declare the Windows C standard library `crt`, lines (2) and following declare some C function from that library. In lines (3) and following, we call some of these C functions from Jai.
+
+### 29.6.2 Calling user-defined library functions
+(The source code for this example is in _examples/29/mylib_)
+
+**STEPS**
+_1) Write your C source code_ 
+Suppose we have some useful C functions (here they are not useful but deliberately kept simple) gathered in a file called *my.c*:
+
+```c++
+int add_int(int a, int b) {                 // (1)
+    return a + b;
+}
+
+double add_double(double a, double b) {     // (2)
+    return a + b;
+}
+```
+
+We want to call these functions from within Jai code.
+_2) Write your Jai source code_ 
+See *29.5_callc.jai*:
+```c++
+#import "Basic";
+
+add_int :: (a: s32, b: s32) -> s32                   #foreign my;   // (3A)
+add_double :: (a: float64, b: float64) -> float64    #foreign my;   // (3B)
+my :: #foreign_library "libmy";                                     // (4)
+
+main :: () {
+    print("%\n", add_int(3,8));            // (5A) => 11
+    print("%\n", add_double(38.3,83.5));   // (5B )=> 121.8
+}
+```
+
+In lines (3A-B), we have translated the C headers of the functions in Jai, and we say that they are defined in a #foreign library called `my`. In line (4), we
+tell Jai that the real library name is `libmy`. Then we can call these C functions as in lines (5A-B).
+
+At this stage, this of course doesn't work. Compiling this program with `jai 29.5_callc.jai` gives: Error: D:/Jai/The_Way_to_Jai/examples/29/mylib/libmy.dll: Dynamic library load failed. Error code 126, message: The specified module could not be found, on line (4).  
+We see that Jai looks for a dynamic library file _libmy.dll_ , which isn't produced yet!
+
+_3) Compile your C source code_
+Run the following command in a terminal window (we use [gcc](https://winlibs.com/) here):  
+`gcc -c my.c`  
+This creates an object file `my.o`, containing machine code.
+
+_4) Make a C dynamic library (.dll)_
+This is done with the -shared option, setting the output file with -o to `libmy.dll`:  
+`gcc -shared -o libmy.dll my.c`
+This creates a dynamic library `libmy.dll` (size: 89.650 bytes)
+
+If we now compile our Jai program, we don't get a compiler error anymore!  
+But we do get a linker error:
+`Running linker: ... D:/Jai/The_Way_to_Jai/examples/29/mylib/libmy.lib ...
+LINK : fatal error LNK1181: cannot open input file 'D:\Jai\The_Way_to_Jai\examples\29\mylib\libmy.lib'`
+
+It seems the linker wants a static library `libmy.lib`, indeed we cut out mentioning this filename in the giant linker command between ...
+
+_5) Make a C static library (.lib)_
+This can be done with the `ar` tool from the gcc toolchain and we need the result from step 3 here. Issue the command:  
+`ar rcs libmy.lib my.o`
+This creates a static library `libmy.lib` (size: 976 bytes)
+
+_6) Compile the Jai code from step 2_
+Run the command: `jai 29.5_callc.jai`  
+Compiling and linking works perfect now. An executable (here 29.exe) is produced.
+
+_7) Run the executable from the preceding step_
+`29`
+This outputs:
+```
+11
+121.8
+```
+Splendid!
 
 ## 29.7 Callbacks and the #c_call directive 
 The **#c_call** directive is used to indicate that a procedure follows C ABI conventions: it makes the procedure use the C calling convention. It is used for interacting with libraries written in C. All C / C++ functions need some decorators like #c_call.  

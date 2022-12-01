@@ -49,7 +49,6 @@ main :: () {
 
 This way we get the size passed as a generic parameter. If the applied lambda doesn't change the type T of the items, we can replace R by T as well.
 
-
 ## 23.3 Polymorphic structs
 We can also use generic parameters to pass to a struct, in this case to define a 2D array as a struct field:
 
@@ -75,7 +74,7 @@ main :: () {
 
 The struct is defined in line (1). In line (2) we use #bake_arguments to bake in one of the dimensions. In line (3) the other dimension is passed when declaring a struct twod.
 Line (4) shows the initial struct. Line (5) shows that we can access the passed parameters on the struct variable's name.
-The polymorph arguments M and N have to be compile-time constants.
+The polymorph arguments M and N have to be compile-time constants. They can have default values: `TwoD :: struct (M: int = 3, N: int = 3)`
 
 ## 23.4 Restricting the type of polymorphic proc arguments
 In the following struct definition (see line (1)):
@@ -110,7 +109,6 @@ If `PolyStruct` is a struct type with generic type T, you can tell the compiler 
 `proc1(x : PolyStruct($T))`
 
 ## 23.5 The $T/Object syntax
-
 However, often this is too restrictive. We can also indicate that x has to have the fields of PolyStruct. This you can do via the **/** notation:
 `proc1(x : $T/PolyStruct)`  
 This is similar to **traits** or **interfaces** in other languages 
@@ -174,7 +172,10 @@ main :: () {
 }
 ```
 
-We already discussed #this in § 17.9. In § 22.5 we discovered #bake_arguments, where you can bake in the value of a parameter at compile time. There also exists a **#bake_constants** directive, where you can bake in a polymorphic type with a concrete type.  
+We already discussed #this in § 17.9. In § 22.5 we discovered #bake_arguments, where you can bake in the value of a parameter at compile time. There is also  a **#bake_constants** directive, where you can bake in a polymorphic type with a concrete type.  
 Line (1) presents a very simple polymorphic function `printer`. Line (2) defines a polymorphic struct with generic T and N. Field `pointer` points to itself with #this. WHat is new is that this struct contains a proc, which bakes in the #this (which is Polymorphic_Struct) into printer.  
-In line (4), we declare an instance of Polymorphic_Struct, with T == float and N == 3; we do the same in (5) for T==string and N == 2. We print these out in line (6).  
+In line (4), we declare an instance of Polymorphic_Struct, with T == float and N == 3; we do the same in (5) for T == string and N == 2. We print these out in line (6).  
 In line (7), we call proc on p0 with p0.proc, and give it p0 as parameter; this means T becomes the type of #this, which is here p0. This call to printer prints out p0. The same goes for `p1.proc(p1);`
+
+**Some wise words of Jon Blow about polymorphism:**
+" If lots of procedures in your program are polymorphic, you pay for this in compile time, and possibly also in understandability of the program. Polymorphism is powerful, but historically, when people start writing code that is over-generic, it becomes hard to understand and modify. In general, don't get carried away making things polymorphic if they do not need to be. "
