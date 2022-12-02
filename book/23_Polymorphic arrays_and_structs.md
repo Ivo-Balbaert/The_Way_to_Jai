@@ -108,8 +108,10 @@ When comparing types in line (3) and following, you have to specify the complete
 If `PolyStruct` is a struct type with generic type T, you can tell the compiler that `proc1` can only accept PolyStruct instances by declaring it as:  
 `proc1(x : PolyStruct($T))`
 
-## 23.5 The $T/Object syntax
-However, often this is too restrictive. We can also indicate that x has to have the fields of PolyStruct. This you can do via the **/** notation:
+## 23.5 The $T/Base syntax
+However, often this is too restrictive. We can also indicate that x has to have the fields of Base, or in OO-speak: it has to be a subclass of Base. 
+
+This you can do via the **/** notation:
 `proc1(x : $T/PolyStruct)`  
 This is similar to **traits** or **interfaces** in other languages 
 Important is that x doesn't have to be of the PolyStruct type!

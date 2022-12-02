@@ -152,7 +152,7 @@ struct {
      z: int;
 }
 ```
-( example of use ??)
+( see an example of using this in § 12.13.1)
 
 Declaring a struct doesn't allocate memory, it just defines a kind of template or blue-print for a data structure to be defined in imperative scope. An **instance** or object of a struct is created with for example:  
 `bob: Person;`
@@ -630,6 +630,34 @@ main :: () {
 As you can see in line (1), a struct can take one or more parameters, even with default values. They are used to set some member fields.
 Line (2) shows that we can give another value for the parameter(s) when a struct is instantiated.
 Also a struct can use outer constant values.
+
+What if we pass Type as a parameter?
+### 12.13.1 Type as a struct parameter
+See *12.10_struct_parameters_type.jai*
+```c++
+#import "Basic";
+
+Entity :: struct (Payload: Type) {           // (1)
+        payload: Payload;
+}
+
+proc :: (x: Entity) {                        // (3) 
+    print("type_of(x) is %\n", type_of(x));  // (4)
+    // => type_of(x) is Entity(Payload=(anonymous struct))
+    print("x is %\n", x);
+    // => x is {{"Volodimir", false}}
+}
+    
+main :: () {
+    thing: Entity(struct {name := "Volodimir"; typos := false;});  // (2) 
+    proc(thing);
+}
+```
+
+In line (1) we define a struct with a Type parameter:  
+`Entity :: struct (Payload: Type)`
+In line (2), we make an Entity instance with an anonymous struct as Payload. This is confirmed in `proc`, when printing out the type of x in line (4).  
+`proc` is also very flexible as to which type it can take as parameter. It is an early example of polymorphism, which we will explore much deeper in § 22.
 
 ## 12.14 Structs with relative pointers
 Relative pointers (first discussed in § 10.6) are particularly suited when they point to an object in the memory vicinity, as is the case between member fields of a struct instance.
