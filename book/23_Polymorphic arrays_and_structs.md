@@ -109,11 +109,10 @@ If `PolyStruct` is a struct type with generic type T, you can tell the compiler 
 `proc1(x : PolyStruct($T))`
 
 ## 23.5 The $T/Base syntax
-However, often this is too restrictive. We can also indicate that x has to have the fields of Base, or in OO-speak: it has to be a subclass of Base. 
-
+However, often this is too restrictive. We can also indicate that x has to be a subclass of PolyStruct. 
 This you can do via the **/** notation:
 `proc1(x : $T/PolyStruct)`  
-This is similar to **traits** or **interfaces** in other languages 
+Matching for $T will not work unless the target type matches PolyStruct, involving strongly-typed typechecking.
 Important is that x doesn't have to be of the PolyStruct type!
 It can simply incorporate a PolyStruct via e.g. `using ps: PolyStruct;` This enables also component based systems where each struct links via `using _c: SomeComponent;`
 
@@ -138,9 +137,55 @@ proc4 is called `implicit polymorphism`
 
 
 ## 23.6 The $T/interface Object syntax
-`$T/interface Object` indicates that the $T must have the fields that struct Object has.
-See this applied in module _Math/module.jai_ and _Math/matrix.jai_.
+`$T/interface Object` indicates that the $T must have the fields that struct Object has. This is similar to **traits**, **interfaces** or **concepts** in other languages. 
+This allows you to do duck typing.
 
+See *23.6_interface.jai*:
+(Example from howto/160_type_restrictions)
+```c++
+#import "Basic";
+
+Color :: enum u8 { RED; YELLOW; GREEN; ORANGE; MAUVE; };  
+    
+Matchable :: struct {
+    name:   string;
+    color:  Color;
+}
+
+Thing :: struct {
+    duration: float64;
+    tag:      string;
+    name:     string;
+    type:     Type;
+    color:    Color;
+}
+
+discuss :: (x: $T/interface Matchable) {
+    print("type_of(x) is %\n", type_of(x));
+    print("x has a name '%' and has color %.\n", x.name, x.color);
+    print("The entirety of x is %\n", x);
+}
+    
+main :: () {
+    match := Matchable.{"Nice", .ORANGE};
+    discuss(match);
+    // => type_of(x) is Matchable
+    // => x has a name 'Nice' and has color ORANGE.
+
+    thing: Thing;
+    thing.name  = "Kurt Russell";
+    thing.tag   = "Hello";
+    thing.type  = void;
+    thing.color = .RED;
+    discuss(thing);
+    // => type_of(x) is Thing
+    // => x has a name 'Kurt Russell' and is the color RED.
+    // => The entirety of x is {0, "Hello", "Kurt Russell", void, RED}
+}
+```
+In the example above, we see that the procedure `discuss` Match structs, but also Thing structs, in general any struct that has a name and a type field.
+
+See this applied in module _Math/module.jai_ and _Math/matrix.jai_.
 See also the use of a polymorphic struct when constructing an SOA data design in § 26.9.2
 
 ## 23.7 Polymorphic struct using #this and #bake_constants

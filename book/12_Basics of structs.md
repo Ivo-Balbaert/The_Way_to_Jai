@@ -633,6 +633,7 @@ Also a struct can use outer constant values.
 
 What if we pass Type as a parameter?
 ### 12.13.1 Type as a struct parameter
+(Example taken from how_to/160_type_restrictions)
 See *12.10_struct_parameters_type.jai*
 ```c++
 #import "Basic";
