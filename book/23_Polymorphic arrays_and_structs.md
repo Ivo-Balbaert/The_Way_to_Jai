@@ -188,8 +188,69 @@ In the example above, we see that the procedure `discuss` Match structs, but als
 See this applied in module _Math/module.jai_ and _Math/matrix.jai_.
 See also the use of a polymorphic struct when constructing an SOA data design in § 26.9.2
 
-## 23.7 Polymorphic struct using #this and #bake_constants
-See *23.5_bake_constants.jai*:
+## 23.7 The #bake_constants directive
+We already discussed #this in § 17.9. In § 22.5 we talked about #bake_arguments, where you can bake in the value of a parameter at compile time. There is also  a **#bake_constants** directive, where you can bake in a polymorphic type with a concrete type.  
+
+See *23.7_bake_constants.jai*:
+```c++
+#import "Basic";
+#import "Math";
+
+// Example 1:
+display_xy :: (v: $T) {                             // (1)
+   print("x coordinate is %\n", v.x); 
+   print("y coordinate is %\n", v.y); 
+}
+
+baked1 :: #bake_constants display_xy(T = Vector2);  // (2)
+
+// Example 2:
+random :: () -> $T { 
+    value := 0xcafe;  
+    return cast(T) value;
+}
+
+random_s32 :: #bake_constants random(T = s32);   // (5)
+random_u8  :: #bake_constants random(T = u8);    // (6)
+
+// Example 3:
+named_bake_test :: (a1: $A, a2: A, b1: $B, b2: B) -> A, B { // (9)
+    a_sum := a1 + a2;
+    b_product := b1 * b2;
+    return a_sum, b_product;
+}
+
+nbt :: #bake_constants named_bake_test(A = float, B = int);  // (10)
+
+main :: () {
+    v2 := Vector2.{1, 2};
+    baked1(v2); // (3)
+    // => x coordinate is 1
+    // => y coordinate is 2
+    v3 := Vector3.{1, 2, 3};
+    // baked1(v3); // Error: Type mismatch: incompatible structs (wanted 'Vector2', given 'Vector3').
+
+    // random();  // (4) Error: Compile-time variable 'T' is needed but was not specified.
+    print("%\n", random_s32() ); // (7) => 51966
+    // print("%\n", random_u8() ); // (8) Cast bounds check failed.  Number must be in [0, 255]; it was 51966.
+
+    sum, product := nbt(1, 2, 3, 4);  // (11)
+    print("Sum is %, product is %\n", sum, product);
+    // => Sum is 3, product is 12
+}
+```
+
+In the example 1 above we have a polymorphic proc `display_xy` in line (1). Suppose we decide to restrict calls to `display_xy` to the argument type Vector2. We can do this by using the #bake_constants directive as in line (2).  
+`baked1` is called a **baked method**: we have effectively created a proc with the signature like (using T: Vector2). Now the call baked1(v2) works fine (see (3)), but baked1(v3) won't compile because v3 is of a different type Vector3.
+In example 2, we have a proc `random` that specifies a polymorphic return type $T. A call to it like random() as in line (4) doesn't specify T and gives an error. But baking in a type like in (5-6) works, as shown in line (7); (8) crashes because the value doesn't fit in a u8.  
+In example 3 in lines (9-10), we bake in multiple types as named arguments, and call this baked proc in line (11).
+ 
+#bake_constants makes the argument type fixed at compile-time, in other words: it bakes in the generic type(s) into a pre-compiled procedure, eliminating branches and optimizing the code path. It converts the polymorphic function into a non-polymorphic one.
+
+## 23.8 Polymorphic struct using #this and #bake_constants
+(Example taken from howto/050_this)
+
+See *23.5_bake_constants_struct.jai*:
 ```c++
 #import "Basic";
 
@@ -219,8 +280,7 @@ main :: () {
 }
 ```
 
-We already discussed #this in § 17.9. In § 22.5 we discovered #bake_arguments, where you can bake in the value of a parameter at compile time. There is also  a **#bake_constants** directive, where you can bake in a polymorphic type with a concrete type.  
-Line (1) presents a very simple polymorphic function `printer`. Line (2) defines a polymorphic struct with generic T and N. Field `pointer` points to itself with #this. WHat is new is that this struct contains a proc, which bakes in the #this (which is Polymorphic_Struct) into printer.  
+Line (1) presents a very simple polymorphic function `printer`. Line (2) defines a polymorphic struct with generic T and N. Field `pointer` points to itself with #this. What is new is that this struct contains a proc, which bakes in the #this (which is Polymorphic_Struct) into printer.  
 In line (4), we declare an instance of Polymorphic_Struct, with T == float and N == 3; we do the same in (5) for T == string and N == 2. We print these out in line (6).  
 In line (7), we call proc on p0 with p0.proc, and give it p0 as parameter; this means T becomes the type of #this, which is here p0. This call to printer prints out p0. The same goes for `p1.proc(p1);`
 
