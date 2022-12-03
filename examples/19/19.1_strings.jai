@@ -82,13 +82,33 @@ main :: ()  {
     print("%\n", newstr); // => Resounding 世界!
     free(newstr);  // (12)
 
-    chg_str := sprint("%", str);
+    // Changing string data:
+    // with sprint:
+    chg_str := sprint("%", str);      // (12B)
     print("chg_str is %\n", chg_str); // => chg_str is Hello.
     for i: 0..chg_str.count - 1 {
        if chg_str[i] == #char "."  chg_str[i] = #char "?";
     }
     print("chg_str after for is %\n", chg_str); // => chg_str is Hello?
     free(chg_str);
+    // in stack memory:
+    SIZE :: "Hello.".count;
+    mem : [SIZE]u8;
+    memcpy (mem.data, str.data, str.count);  // (12C)
+    chg_str2 := to_string (mem.data, mem.count);
+    print("chg_str2 is %\n", chg_str2); // => chg_str2 is Hello.
+    for i: 0..chg_str2.count - 1 {
+       if chg_str2[i] == #char "."  chg_str2[i] = #char "?";
+    }
+    print("chg_str2 after for is %\n", chg_str2); // => chg_str2 is Hello?
+    // allocate on the heap:
+    chg_str3 := copy_string (str);          // (12D)
+    defer(free(chg_str3));
+    print("chg_str3 is %\n", chg_str3); // => chg_str3 is Hello.
+    for i: 0..chg_str3.count - 1 {
+       if chg_str3[i] == #char "."  chg_str3[i] = #char "?";
+    }
+    print("chg_str3 after for is %\n", chg_str3); // => chg_str3 is Hello?
 
     // strings are array views:
     x := "Sailor";  // (13)

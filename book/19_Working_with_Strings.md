@@ -94,13 +94,33 @@ main :: ()  {
     print("%\n", newstr); // => Resounding 世界!
     free(newstr);  // (12)
 
-    chg_str := sprint("%", str);
+    // Changing string data:
+    // with sprint:
+    chg_str := sprint("%", str);      // (12B)
     print("chg_str is %\n", chg_str); // => chg_str is Hello.
-    for i: 0..chg_str.count - 1 {     // (12B)
+    for i: 0..chg_str.count - 1 {
        if chg_str[i] == #char "."  chg_str[i] = #char "?";
     }
     print("chg_str after for is %\n", chg_str); // => chg_str is Hello?
     free(chg_str);
+    // in stack memory:
+    SIZE :: "Hello.".count;
+    mem : [SIZE]u8;
+    memcpy (mem.data, str.data, str.count);  // (12C)
+    chg_str2 := to_string (mem.data, mem.count);
+    print("chg_str2 is %\n", chg_str2); // => chg_str2 is Hello.
+    for i: 0..chg_str2.count - 1 {
+       if chg_str2[i] == #char "."  chg_str2[i] = #char "?";
+    }
+    print("chg_str2 after for is %\n", chg_str2); // => chg_str2 is Hello?
+    // allocate on the heap:
+    chg_str3 := copy_string (str);          // (12D)
+    defer(free(chg_str3));
+    print("chg_str3 is %\n", chg_str3); // => chg_str3 is Hello.
+    for i: 0..chg_str3.count - 1 {
+       if chg_str3[i] == #char "."  chg_str3[i] = #char "?";
+    }
+    print("chg_str3 after for is %\n", chg_str3); // => chg_str3 is Hello?
 
     // strings are array views:
     x := "Sailor";  // (13)
@@ -201,9 +221,13 @@ Using backslashes gets unreadable very quickly.
 
 ### 19.4.1 String literals are immutable and bounds-checked
 String literals like str, a or ch can (because they are array views) also be accessed via index, like in line (5): `str[5]` (46 is the ASCII value for '.')
-But string literals are **immutable** (read-only): you can access a string byte via indexing [], but not change it. For example line (6) crashes the program, see output within code snippet.
-(Also try out str[5] = "!" or str[5] = '!' and explain the compiler error messages)
-You can however make that change as in line (12B): make an `sprint` string out of the original string. Because this resides in memory, you can change it like in the for-loop shown here.
+But string literals are **immutable** (they are stored in read-only memory): you can access a string byte via indexing [], but not change it. For example line (6) crashes the program, see output within code snippet.
+(Also try out str[5] = "!" or str[5] = '!' and explain the compiler error messages)  
+**Ways to change the data from string literals**
+To be able to modify the string, you must copy its data into allocated memory on the stack or the heap.
+You can use sprint to make that change as in line (12B): make an `sprint` string out of the original string. Because this resides in memory, you can change it like in the for-loop shown here.  
+(12C) shows how to copy the string to a stack memory array, making a new string out of it with to_string.  
+(12D) shows how to use copy_string to make a copy on the heap, which you can then change.   
 
 String literals are also **bounds-checked** at run-time, see line (7) and the output in the code snippet. We get a clear indication of the cause with **array_bounds_check_fail**
 
