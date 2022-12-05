@@ -71,10 +71,7 @@ See *16.1_types_in_depth.jai*:
 
 ```c++
 #import "Basic";
-
-Vector3 :: struct {
-   x, y, z: float;
-}
+#import "Math";
 
 Complex :: struct { real, imag: float; }
 
@@ -90,6 +87,32 @@ Direction :: enum {
     SOUTH;      
     EAST;      
     WEST;         
+}
+
+Thing1 :: struct {
+    #as using v: Vector3;
+    name: string;
+}
+
+Other :: struct {
+    y:           float;
+    temperature: float64;
+    time:        Apollo_Time;
+    x:           float;
+}
+
+uses_vector3_with_as :: (T: Type) -> bool {    // (6)
+    ti := cast(*Type_Info) T;
+    if ti.type != .STRUCT return false;
+
+    tis := cast(*Type_Info_Struct) ti;
+    for tis.members {
+        if !(it.flags & .AS)             continue;
+        if it.type != type_info(Vector3) continue;
+        // We found a relevant member!
+        return true;
+    }
+    return false;
 }
 
 main :: () {
@@ -158,7 +181,11 @@ main :: () {
     info = type_info(Operating_Systems); 
     print("enum '%' is ", info.name); // => enum 'Operating_Systems' is .
     if info.enum_type_flags & .SPECIFIED    print("specified.\n"); // => specified
-    else print("*NOT* specified.\n");   
+    else print("*NOT* specified.\n");  
+
+    // (7) Checking whether a struct uses Vector3 with #as
+    print("Thing1 uses #as with Vector3: %\n", uses_vector3_with_as(Thing1)); // => true
+    print("Other uses #as with Vector3: %\n", uses_vector3_with_as(Other));   // => false 
 }
 ```
 
@@ -186,7 +213,8 @@ Also:   `type_info(Any).type is .ANY`
 ## 16.3.3 Checking whether an enum is #specified
 A field `enum_type_flags` in Type_Info_Enum can give you more info on the enum, for example: a flag SPECIFIED tells you whether an enum has been specified, see line (5) and following.
 
-
+## 16.3.4 Checking whether a struct uses Vector3 with #as
+Proc `uses_vector3_with_as` starting in line (6) shows how you can detect this with reflection info. We test it in line (7) on a struct type Thing1 that fulfills the requirement, and a struct Other which does not. 
 
 
 

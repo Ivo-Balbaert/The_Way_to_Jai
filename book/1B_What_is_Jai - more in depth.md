@@ -148,7 +148,9 @@ Reddit discussions on the language happen on:  [Jai Reddit](https://www.reddit.c
 There is a Jai Community wiki at:    
 [Home · Jai-Community/Jai-Community-Library Wiki (github.com)](https://github.com/Jai-Community/Jai-Community-Library/wiki)   and [Jai Community - A place to learn about Jai programming language](https://jai.community/)
 
-A Discord channel called SB (Secret Beta): [https://discord.gg/wB52e2ND](https://discord.gg/wB52e2ND)
+A Discord channel called [SB (Secret Beta)](https://discord.gg/wB52e2ND)
+and a Discord channel for the [Twitch streams](https://discord.com/invite/vVfYxhU).
+
 
 **1.7 Jai's popularity**
 

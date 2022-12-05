@@ -135,7 +135,7 @@ main                        d:\Jai\The_Way_to_Jai\examples\6\6.3_numbers.jai:18
     // Size of integers:
     // This number won't fit into 16 bits
     // i: s16 = 80000;  // => Error: Loss of information   
-    // (trying to fit 64 bits into 16 bits). Can't do this without   an explicit cast. Type wanted: s16; type given: s64.  
+    // (trying to fit 64 bits into 16 bits). Can't do this without  an explicit cast. Type wanted: s16; type given: s64.  
     // -1 is signed, so it is out of range of what a u32 can store. 
     // j: u32 = -1; // => Error: Number signed-ness mismatch. Type wanted: u32; type given: s64.    
     // b = c; // Error: Loss of information (trying to fit 16 bits   into 8 bits). Can't do this without an explicit cast. Type   wanted: u8; type given: u16.
@@ -217,6 +217,8 @@ This gives an added performance bonus.
 
 If there is information loss, you can _truncate_ the bits you don't care about, when you are very sure nothing wrong will happen with:
 **cast, trunc(type)** 
+
+!! At this time (?? Dec 2022), math bounds checks are not yet implemented: casting checks for overflow, when the compiler can check it with constant values.  For an example of overflow, see 26.19_modify4. One way of taking care of this with polymorph procedures is to write an #modify that checks the type, see § 26.8 !!
 
 ### 6.2.5 - Autocasting with xx
 Automatic casting can be used when the compiler can infer what casting has to take place at a certain moment, this is indicated with **xx**:  

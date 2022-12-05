@@ -247,6 +247,12 @@ Also remember to free the memory as in lines (6A) and (6B), Jai doesn't warn you
 Why would you use structs on the heap?  
 The stack is limited in size. If your program needs a lot of structs, better use the heap.
 
+Remark: Module _Basic_ also contains a proc `Dynamic_New`, which is like New, but can be used when you don't know the type at compile-time: 
+```
+z := Dynamic_New(T);  
+defer free(z);
+```
+
 ## 12.6 Recursive structs
 A recursive struct is a struct that has as one (or more) of its fields a struct of its own type (in most cases it will be a pointer to that type). They can be used to build more complex data structures like linked-lists and trees.
 
