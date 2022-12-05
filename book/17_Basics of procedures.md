@@ -709,10 +709,64 @@ main :: () {
 }
 ```
 
-## 17.15 #deprecated
+## 17.15 The #deprecated directive
 You can mark a function as deprecated with the **#deprecated** directive. Calling a deprecated function leads to a compiler warning.  
 You can add string messages after deprecated procedures as warnings to tell someone to use a different procedure or different set of instructions to accomplish what you want.
 
 The purpose is to indicate to a developer using your code(or yourself):  
 Look, this is an older version of this function, and in a short time this function will no longer exist. You can continue to use this function for now, but you should replace it with this new_function.
 
+## 17.16 Anonymous procs
+All procedures that we have encountered until now had a name, they were named procs. But in certain cases it can be useful to work with unnamed procs, so-called **anonymous functions** or **lambdas**. 
+
+See *17.17_anonymous_procs.jai*:
+```c++
+#import "Basic";
+
+main :: () {
+    () {                            // (1)
+      if 2 == {
+         case 2;    print("one\n");
+         case 3;    print("two");
+         case 4;    print("four");
+      }
+    }();                            // (1B) => one
+
+    anproc := () {                  // (1C)
+      if 2 == {
+         case 2;    print("one in anproc\n");
+         case 3;    print("two");
+         case 4;    print("four");
+      }
+    };  
+    anproc();                       // (1D) => one in anproc
+
+    a := () -> int {                // (2)
+      if 2 == {
+         case 2; return 1;
+         case 3; return 2;
+         case 4; {
+            // do some stuff
+         }
+      }
+    }();                            // (2B)
+    print("a is %\n", a);  // => a is 1
+
+    s := 3; 
+    b := (s : int) -> int {         // (3)
+       if s == {
+            case 2; return 1;
+            case 3; return 2;
+            case 4; {
+                // do some stuff
+            }
+        }
+   }(s);                            // (3B)
+   print("b is %\n", b);  // => b is 2
+}
+```
+
+In line (1) an anonymous proc is defined that takes no parameters and has no return value. Because it has no name, it can be called like in (1B), with () immediately after the definition. Alternatively, we can sort of give it a name like in (1C), and call it with that 'name' as in (1D).  
+We can also assign the return value to a variable, like in (2) which is an anonymous proc with a return value, again called as in (2B). Line (3) works the same way, but takes in an int parameter s.
+
+The lambda notation ( => ) discussed in § 22.3 is especially elegant for writing anonymous functions.

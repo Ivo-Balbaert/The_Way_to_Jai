@@ -345,8 +345,6 @@ main :: () {
 }
 ```
 
-All procedures that we have encountered until now had a name, they were named procs. But in certain cases it can be useful to work with unnamed procs, so-called **anonymous functions** or **lambdas**. 
-
 In line (3) we see that the proc add100 is called with the following expression as 2nd parameter:  
 `(x) => x + 100`  
 This is a lambda: for each x it works on, it returns x + 100.  
