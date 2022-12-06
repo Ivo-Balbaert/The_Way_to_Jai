@@ -152,7 +152,7 @@ struct {
      z: int;
 }
 ```
-( see an example of using this in § 12.13.1)
+(see an example of using this in § 12.13.1)
 
 Declaring a struct doesn't allocate memory, it just defines a kind of template or blue-print for a data structure to be defined in imperative scope. An **instance** or object of a struct is created with for example:  
 `bob: Person;`
@@ -163,7 +163,7 @@ Here the instance is `bob`, and the struct is `Person`. When this code executes,
 ## 12.2 Making struct variables
 When defining a struct no variable is defined, so no memory is allocated yet.  
 You have to define a struct variable, like this:  `v: Vector2;`
-This variable v is defined on the stack, in § ?? we'll see how to make a struct on the heap.  
+This variable v is defined on the stack, in § 12.5 we'll see how to make a struct on the heap.  
 All data values are contiguous in memory, that is: they are packed together successively in the order in which they are defined.
 
 How can we access the data in a field?  
@@ -245,7 +245,7 @@ You can use a struct literal as in line (5), but note: it's now a Pointer type.
 Also remember to free the memory as in lines (6A) and (6B), Jai doesn't warn you when you forget it!
 
 Why would you use structs on the heap?  
-The stack is limited in size. If your program needs a lot of structs, better use the heap.
+The stack is limited in size. If your program needs a whole lot of structs, better use the heap. But for faster memory management: keep things on structs by value where possible.
 
 Remark: Module _Basic_ also contains a proc `Dynamic_New`, which is like New, but can be used when you don't know the type at compile-time: 
 ```

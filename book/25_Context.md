@@ -179,7 +179,9 @@ x is 0
 
 _25.2_stack_trace.jai* is an example of an example of a recursive procedure `proc1` (see line (2)), that calls itself 3 times, starting in line (3). When x gets the value 0, the proc `my_print_stack_trace` from line (1) is called, with the active `context.stack_trace` as argument. This iterates through the nodes of the stack trace, until node becomes `null`. When there is info, we print the procedure's name, the source file and line number where it is called, and the call depth, that is: how 'deep' the recursion is.  
 
-This info is so useful that there is in fact a proc `print_stack_trace` in module _Basic_, which is almost identical and which we call in line (2C). 
+This info is so useful that there is in fact a proc `print_stack_trace` in module _Basic_, which is almost identical and which we call in line (2C).
+
+You can also get the address of the current proc through: `context.stack_trace.info.procedure_address`.
 
 In § 30.4.5 we'll see that there is also a compile option called `build_options.stack_trace`, which is by default true to examine stack traces on program errors/crashes. With this option enabled, every time a procedure is called, code is generated to output a Stack_Trace_Node on the stack and link it up, and unlink it when the procedure returns. Use it as an aid in debugging if necessary.
 

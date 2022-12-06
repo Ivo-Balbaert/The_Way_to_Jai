@@ -196,6 +196,11 @@ Passing a pointer to n in (2) allows the proc `passing_pointer` to change the va
 
 > To change a variable inside a proc, you need to pass a pointer to that variable as parameter to the proc.
 
+**What happens if you don't pass by pointer explicitly?**
+Arguments of size <= 8 bytes (basic types such as s64, u8, Type, any pointer, or any enum) are always passed by value (copy).  
+Bigger sized values which is any type > 8 bytes, including Any, string, struct, and so on, are most probably passed by reference (pointer), but anyhow they cannot be changed. To change their data, make a local copy and change that. 
+To ensure you get a pointer for some reason (to modify the contents of the struct) you can explicitly pass a pointer.
+
 ## 17.4 Default values for arguments
 See *17.4_default_args.jai*:
 
@@ -269,7 +274,8 @@ main :: () {
 
 As we see in line (1), a procedure can also have two or more return values (like in Go). They are listed after the -> and separated by a `,` If it enhances readability, they may be enclosed between (), like -> (int, int)  
 (These are needed when a proc with multiple return values is used as an argument in another proc).  
-The returned values are assigned to an equal number of variables in the left-hand side (see line (3)); if necessary these variables could have been declared earlier. It is not necessary to assign all return values, unless #must is specified (see § 17.6.1)
+The returned values are assigned to an equal number of variables in the left-hand side (see line (3)); if necessary these variables could have been declared earlier. It is not necessary to assign all return values, unless #must is specified (see § 17.6.1)  
+It is better to return things by value; this avoid having extra stack copies like in C.
 
 **The _ token**
 If you would like to discard one or more of the return values, use `_` instead of a variable, like this:

@@ -52,6 +52,11 @@ main :: ()  {
     print("s is '%'\n", s); // => s is 'foo, bar, puf'
     s2 := "Hello, Sailor! How are you?";
     print("s2 splitted: %\n", split(s2, " ")); // => s2 splitted: ["Hello,", "Sailor!", "How", "are", "you?"]
+    for split(s2, " ") {  // (4B)
+	    print("% / ", it);
+    }
+    print("\n");
+
 
     // search:
     print("'on' is found at position % in %\n",find_index_from_left(str1, "on"), str1); // (5)

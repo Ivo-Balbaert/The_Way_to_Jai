@@ -9,6 +9,9 @@ Previously (see § 11) we saw how to use alloc / New and free for using heap mem
 - free_buffers for a String Builder (see § 19.5)
 - to_c_string() and free for C strings (see § 19.7)
 
+**User defer when possible**
+Whenever you allocate on the heap (alloc, New, NewArray, [..]Type, and so on), use `defer free(object)` immediately after creating it. But this works only when you use that object right now in your current procedure and then don't need it anymore, because defer calls the free at the end of the current proc.
+
 For these methods, the heap is just a giant storage facility.
 The compiler does not check whether memory is freed, so this is your responsibility as a developer.
 Doing a free for every object allocated on the heap can be cumbersome and forgotten.
@@ -39,7 +42,8 @@ For example module _Basic_ defines a proc `alloc_string`, which can take a speci
 `alloc_string :: (count: int, allocator: Allocator = .{}) -> string`
 
 (The default allocator is .{}, which is ??)
-Also a dynamic array arrdyn could store its data in an allocator Alloc1:                                                      `arrdyn.allocator = Alloc1;`
+Also a dynamic array arrdyn could store its data in an allocator Alloc1:  
+`arrdyn.allocator = Alloc1;`
 
 A struct Node could be allocated like:  
 `New(Node, allocator = Alloc1);`
@@ -139,7 +143,7 @@ It is used in line (2).
 >  Use tprint to create a string, but without having to think about freeing the memory. 
 
 ## 21.3.2 Storing arrays in temp
-Line (1) shows how to use the temporary allocator for creating a dynamic array. If you need this frequently, you can write your own `make_array` proc.
+Line (1) shows how to use the temporary allocator for creating a dynamic array. When this array resizes, it will use Temporary_Storage to get its memory. If you need this frequently, you can write your own `make_array` proc.
 
 ## 21.3.3 Using New with temp
 As we saw in § 21.1, New can take any defined Allocator, so also `temp`! This can be done with the following code:
@@ -205,4 +209,4 @@ If we do free them, we get the 2nd output.
 **Exercise**
 Try this out on program 18.5_array_for.jai, without and with free (see leak_array_for.jai).
 
-See also: § 25.2, `push_allocator` can be used with temp.
+`push_allocator` can be used with temp, see § 25.2.

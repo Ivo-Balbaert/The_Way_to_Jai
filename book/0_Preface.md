@@ -36,8 +36,30 @@ If we absolutely need to mention something which has not been explained yet, we'
 
 Also for those of you who are beginning their programming journey, do speak out code internally when reading a program, explain to yourself all that happens in the code. 
 Later on this becomes more automatic, but in the beginning stages it is very helpful to not be overwhelmed by code which seems more complex at first.
- 
-I would like to express my sincere admiration to **Jonathan Blow** for creating this superb language. Welcome to the wonderful world of developing in Jai!
+
+Nobody else than Jonathan Blow himself can express it in a better way, so here is an excerpt from howto/200_memory_management (a must-read, together with 999_temperance):
+```
+This language is designed for you, the individual. We expect you to enjoy
+that magical part of programming where the computer is made to do new and
+interesting functionality; we don't make you fill out income tax forms
+all day. Many software products are made by teams, but we see these teams
+as collections of individuals, each of whom has their own strengths and
+weaknesses, each of whom has their own personal style; we don't view
+a software project as a statistical combination of generic code typed
+by gray stone people who do not differ from each other.
+
+We have designed this language so that its basic functionality is 
+fast by default and simple by default. This leaves a lot of room
+for you to build your own personal style on what is here. If you do it the
+C++ way, where things start out slow because you have smart-pointered
+std::string all over the place calling copy constructors that then
+get maybe elided because you use std::move all the time, this is something
+that is slow by default and has to get very complicated in the pursuit
+of eventually being fast. We don't have to do that! Let's just make
+better choices to begin with!
+```
+
+I want to express my sincere admiration to **Jonathan Blow** for creating this superb language. Welcome to the wonderful world of developing in Jai!
 
 
 

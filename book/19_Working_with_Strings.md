@@ -424,6 +424,10 @@ split_from_left  :: (s: string, byte: u8) -> (found: bool, left: string, right:
 `join` takes a variable number of strings and joins them in one string, separated by a token if needed.
 `split` does the inverse: it takes a string and a separator and splits the 'words' into an array of strings. 
 See some of them in action in lines (4) and following.
+
+#### 19.6.3.1 Looping over the result of a split
+Because split always returns an [] string, you can always loop over it with for, and process each result of the split, as in line (4B). Just splitting/looping/printing would be a one-liner!
+
 A number of path routines also exist (like path_decomp, path_filename, path_extension, and so on) which come in handy when working with filenames.
 
 ### 19.6.4 Searching
