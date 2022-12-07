@@ -92,11 +92,17 @@ compute_pi :: () -> float {
   return pi*4.0;
 }
 
+globvar := 0;
+#run { globvar = 108; } // (7A)
+
 main :: () {
     proc1();        // => This is proc1 :: () - proc1 is called at run-time
 
     print("result is %\n", result); // => result is 42   
     print("PIA is %\n", PI); // => PIA is 3.141699
+
+    print("globvar at runtime is: %\n", globvar); 
+    // (7B) => globvar at runtime is: 0
 
     f1 :: ()  => 1000;
     f2 :: (c) => c + 1;
@@ -135,6 +141,8 @@ In line (1) we see how to run a procedure: `#run proc1();`
 Line (2) runs a proc and assigns its return value to a variable `result`, so that when the program really starts to run, `result` starts off with the assigned value. This way we can run an expensive proc at compile-time, so that its result can be used in run-time. A more concrete example of this is presented in line (3), where the value of the constant PI is being calculated at compile-time.  
 In lines (4)-(5) two lambdas are called at compile-time. Line (6) shows the same for a simple code block. Make sure you understand the difference between the two outputs.
 
+#run can access and modify globals and by default, global variables will be reset back to the original default values when outputting the executable (see lines 7A-B).  If you don't want that, use `#no_reset` (see § 26.2.2).
+
 > Summary: difference between running at compile-time and at runtime:
 ```c++
 proc1 :: () { ... }
@@ -159,7 +167,7 @@ or sometimes called:	_"Bake the data into the program binary"_
 - Download the OpenGL spec and build the most recent gl.h header file
 …
 
-If you have still some trouble seeing the difference between compile-time and run-time, the following program will make it clear.
+The following program will make the difference between compile-time and run-time even clearer.
 See *26.15_comprun.jai*:
 ```c++
 #import "Basic";
@@ -203,9 +211,10 @@ Here we have a proc `comprun` in which line (1) will run at compile-time (becaus
 The three lines following (3) only activate the #run 1 time, because all expressions with which it is called are of the same type u8. It only needs to build once. But at runtime the procedure is called and prints out 3 times.In line (4), comprun is called with a new type 'float', so it compiles again, which we can see because #run executes for the 2nd time. Line (5) doesn't trigger a re-compilation, because the parameter is also of type float. But line (6) recompiles, because now a string is passed. (7) doesn't recompile, because there is already a compiled form for comprun with T == u8.
 Note that the order of the #run's can vary, because compilation works multi-threaded.
 
+#run can also return basic struct values or multidimensional arrays. Complications can arise because of pointers inside structs, and values that are not retained between compile-time and run-time. In order to modify more complex data structures with #run,the #no_reset directive can be useful (see § 26.2.2).
 
 ### 26.2.1 The #compile_time directive
-With all these meta-programming functionalities, it can be important to know when you are running in compile-time and when you are really running. Luckily there is a **#compile_time** directive, that is true at compile-time, and false at run-time. However it cannot be used as a constant.
+With all these meta-programming functionalities, it can be important to know when you are running in compile-time and when you are 'really' running. Luckily there is a **#compile_time** directive, that is true at compile-time, and false at run-time. However it cannot be used as a constant.
 
 See *26.3_ct.jai*:
 ```c++
@@ -227,17 +236,21 @@ main :: () {
 Use this for example when you want a procedure to do something different at compile_time, as opposed to run-time.
 
 ### 26.2.2 The #no_reset directive
-Arrays are an exception to what we have seen in this section: when they get values at compile-time, these values are reset (initialized to zeros) before running the program.
+When variables get values at compile-time, these values are reset (initialized to zeros) before running the program. 
+The `#no_reset` directive tells the compiler that the value of a variable can be retained from compile-time to run-time.
 This is shown in the following program:
 
 See *26.4_no_reset.jai*:
 ```c++
 #import "Basic";
 
-array: [4] int;
-#no_reset arraynr: [4] int;  // (1)
+#no_reset globvar := 0;
+#run { globvar = 108; } // (1A)
 
-#run {                       // (2)
+array: [4] int;
+#no_reset arraynr: [4] int;  // (2)
+
+#run {                       // (3)
   array[0] = 1;
   array[1] = 2;
   array[2] = 3;
@@ -249,12 +262,14 @@ array: [4] int;
 }
 
 main :: () {
-  print("%\n", array);   // (3) => [0, 0, 0, 0] 
-  print("%\n", arraynr); // (4) => [1, 2, 3, 4]
+    print("globvar at runtime is: %\n", globvar); // (1B) => globvar at runtime is: 108
+
+    print("%\n", array);   // (4) => [0, 0, 0, 0] 
+    print("%\n", arraynr); // (5) => [1, 2, 3, 4]
 }
 ```
-
-Although both arrays `array` and `arraynr` get values at compile-time in line (2), array has 0 values at runtime (see line (3)). To counter this behavior (see line (4)), prefix the array when defined with the **#no_reset** directive, as we did for `arraynr` in line (1).
+In contrast to what happened in program 26.2_run.jai, because `globvar` is preceded by #no_reset, it retains its value at runtime (see lines 1A-B).
+As a 2nd example, although both arrays `array` and `arraynr` get values at compile-time in line (3), array has 0 values at runtime (see line (4)). To counter this behavior (see line (5)), prefix the array when defined with the **#no_reset** directive, as we did for `arraynr` in line (2).
 
 ## 26.3 Compiling conditionally with #if
 if and all its run-time variants where discussed in § 14. The code following an if is always compiled into the executable, and that is what we want: in most cases the condition depends on a variable(s), so one time it is true, the other time it is false.
@@ -358,7 +373,7 @@ There is a nice illustration of this in example § 29.8.
 
 
 ## 26.4 Inserting code with #insert
-The **#insert** directive inserts a piece of compile-time generated code into a procedure or a struct.
+The **#insert** directive inserts a piece of compile-time generated code represented as a string into a procedure or a struct.
 
 See *26.6_insert.jai*:
 ```c++
@@ -393,15 +408,19 @@ A_Type :: struct( ... ) {
 The `#insert -> string` is in fact a short (lambda) form for:  
 `#insert #run () -> string {  ...  }();`
 `() -> string` is the declaration of the lambda, { ... } is its code, and it is called with the last () pair like this: `{  ...  }()`
-(This is applied in the unroll for loop in § 26.5.2, and in construction of a SOA struct, see § 26.9.2).
-In the same way, you can make a `#insert -> Code {  return #code  ...   }`.
+(This is applied in the unroll for loop in § 26.5.2, and in the construction of an SOA struct, see § 26.9.2).
 
 ### 26.4.1 Type Code and #code
 A variable of type Code can be constructed by using the **#code** directive:  
 `#code { // a code block }`, like `#code { x += 7 }`. 
 This can also be one line, like this:  
-`code :: #code a := Vector3.{1,2,3};`
+`code :: #code a := Vector3.{1,2,3};`  
+or:  
+`#code (a < b)`  
 All these expressions have type Code.
+See an example of use in § 26.5.2
+
+In the same way as you can do a #insert -> string (see previous §), you can make a `#insert -> Code {  return #code  ...   }`.
 
 
 ## 26.5 Basics of macros
@@ -625,6 +644,38 @@ main :: () {
 Jai does not support closures. The technique demonstrated here is a way to emulate a closure.  
 In § 15.1.3 we showed code that iterated over a linked list with a while loop.
 Wouldn't it be nice if we could do this with a for loop?
+
+### 26.5.4 Using a macro with #insert,scope()
+See *26.22_insert_scope.jai*:
+```c++
+#import "Basic";
+
+bubble_sort :: (arr: [] $T, compare_code: Code) #expand { // (1)
+  for 0..arr.count-1 {
+    for i: 1..arr.count-1 {
+      a := arr[i-1];
+      b := arr[i];
+      if !(#insert,scope() compare_code) { // (2) arr[i-1] > arr[i], so swap them
+        t := arr[i];
+        arr[i] = arr[i-1];
+        arr[i-1] = t;
+      }
+    }
+  }
+}
+
+main :: () {
+    arr: [10] int;
+    arr = .[23, -89, 54, 108, 42, 7, -2500, 1024, 666, 0];
+
+    bubble_sort(arr, #code (a <= b));
+    print("sorted array: %\n", arr);
+    // => sorted array: [-2500, -89, 0, 7, 23, 42, 54, 108, 666, 1024]
+}
+```
+
+The macro `bubble_sort` defined in line (1) takes an array and a piece of code to compare subsequent item-pairs of the array. If they are not in order, they are swapped. The `#insert,scope()` in (2) makes it possible to use the outer macro-variables a and b in compare_code.
+This example also shows that a macro can be polymorphic.
 
 ## 26.6 Using a for-expansion macro to define a for loop
 As easy as it is to for-loop over an array, this is not defined for other composite data-structures, such as the linked list we discussed in § 12.6. But this can be done with a macro, by defining a so-called _for_expansion_:
@@ -1188,13 +1239,13 @@ The piece of source code that gets generated from a #insert can be retrieved fro
 Line (10) mentioned here is this line: #insert -> string.
 
 ## 26.11 How to get info on the nodes tree of a piece of code?
-In § 26.4.1 we saw how #code can make something of type Code out of a piece of code. The procedure `compiler_get_nodes` can take something of type Code and get the AST nodes out of it:
+In § 26.4.1 we saw how #code can make something of type Code out of a piece of code. The helper procedure `compiler_get_nodes` can take something of type Code and get the AST nodes out of it:
 ```
 compiler_get_nodes :: (code: Code) -> (root: *Code_Node, expressions: [] *Code_Node) #compiler;
 ```
 
 (`Code_Node` is a struct defined in module _Compiler_)
-In the program below we analyse the nodes of the statement: `code :: #code a := Vector3.{1,2,3};`
+In the program below we analyze the nodes of the statement: `code :: #code a := Vector3.{1,2,3};`
 
 See *26.11_code_nodes.jai*:
 ```c++

@@ -5,7 +5,14 @@ In Jai, all you would ever need to compile your code is the Jai language and com
 
 > JAI provides an integrated build process. Essentially, your source code is the project file, and the compile options are specified in your code. You communicate with the compiler using the same language you’re writing the program in.
 
-We learned about compiling a program with the `jai` command in § 3, while all command-line options were reviewed in § 2B. This chapter talks about building (compiling/linking while setting options) a Jai project through running another Jai program: the **meta-program**, which is usually called `build.jai` (it used to be called `first.jai`).  
+We learned about compiling a program with the `jai` command in § 3, while all command-line options were reviewed in § 2B.  
+
+Behind the scenes, the compiler internally runs another meta-program at startup to compile the first workspace. This **default meta-program** does things such as setting up the working directory for the compiler, setting the default name of the output executable based on command-line arguments, and changing between debug and release build based on command-line arguments. The source for this metaprogram is in _modules/Default_Metaprogram.jai_.
+
+
+
+
+This chapter talks about building (compiling/linking while setting options) a Jai project through running another Jai program: the **meta-program**, which is usually called `build.jai` (it used to be called `first.jai`).  
 Most of the procedures we will need are define in module _Compiler_, so we'll import this module in the programs in this chapter. Most of these programs will also be run at compile-time with #run.  
 By convention a procedure called `build()` is run:  `#run build()`  
 Any procedure that has the **#compiler** directive is a proc that interfaces with the compiler as a library; it works with compiler internals.

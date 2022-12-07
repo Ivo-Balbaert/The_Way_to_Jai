@@ -1,9 +1,12 @@
 #import "Basic";
 
-array: [4] int;
-#no_reset arraynr: [4] int;  // (1)
+#no_reset globvar := 0;
+#run { globvar = 108; } // (1A)
 
-#run {                       // (2)
+array: [4] int;
+#no_reset arraynr: [4] int;  // (2)
+
+#run {                       // (3)
   array[0] = 1;
   array[1] = 2;
   array[2] = 3;
@@ -15,6 +18,8 @@ array: [4] int;
 }
 
 main :: () {
-  print("%\n", array);   // (3) => [0, 0, 0, 0] 
-  print("%\n", arraynr); // (4) => [1, 2, 3, 4]
+    print("globvar at runtime is: %\n", globvar); // (1B) => globvar at runtime is: 108
+
+    print("%\n", array);   // (4) => [0, 0, 0, 0] 
+    print("%\n", arraynr); // (5) => [1, 2, 3, 4]
 }

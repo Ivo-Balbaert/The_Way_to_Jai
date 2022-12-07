@@ -5,7 +5,9 @@ The structure of a typical jai command is as follows:
 
 Every argument after `-- ` is ignored by the compiler itself (the space after -- is mandatory!), and is passed to the metaprogram for its own use. Any argument not starting with a -, and before --, is the name of a file to compile.
 
-Example:     `jai -x64 program.jai -- info for the compile_time execution` 
+Example:     `jai -x64 program.jai -- info for the compile_time execution`
+It is also allowed to add the options after the source-file name, like this:  
+ `jai program.jai -x64`
 
 `jai -help` shows you all the command-line flags that exist:
 
@@ -54,10 +56,11 @@ Example:     `jai -x64 program.jai -- info for the compile_time execution`
  `-plug name`        Import module 'name' into the metaprogram and use it as a plugin.  
  `-version`          Print the version of the compiler.  
 
-There are also a few very _tweaky compiler-front-end options_ that are rarely used. To see these, do:  
-           ` jai --- help`
+Other _compiler-front-end options_:
+To see these, type:  
+           `jai --- help`
 
-which outputs:
-_Developer options: import_dir name, meta metaprogram_name, no_jobs, randomize, seed some_number, extra, chaos._
+which outputs the following additional options:
+_Developer options: -meta metaprogram_name, -no_jobs, -randomize, -seed some_number, -extra, -chaos_
 
 These options are deliberately minimal compared to other programming languages. As we'll see later Jai provides a very sophisticated system to build your application and setting these options from Jai code itself (see ??). It favors _configuration from code_ which is the same and all platforms and lets you use the Jai programming language you know. This is in sharp contrast to many other programming language environments, where you have separate complicated build systems often using a separate language, that also often changes depending on which platform you are on.

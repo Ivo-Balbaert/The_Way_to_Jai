@@ -25,11 +25,16 @@ compute_pi :: () -> float {
   return pi*4.0;
 }
 
+globvar := 0;
+#run { globvar = 108; } // (7A)
+
 main :: () {
     proc1();        // => This is proc1 :: () - proc1 is called at run-time
 
     print("result is %\n", result); // => result is 42   
     print("PIA is %\n", PIA); // => PIA is 3.141699
+
+    print("globvar at runtime is: %\n", globvar); // (7B) => globvar at runtime is: 0
 
     f1 :: ()  => 1000;
     f2 :: (c) => c + 1;
