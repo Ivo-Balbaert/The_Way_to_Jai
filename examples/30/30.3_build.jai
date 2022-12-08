@@ -17,6 +17,7 @@ build :: () {
     set_build_options_dc(.{do_output=false});             // (6)
 }
 
-main :: () {}
+main :: () {
+}
 
 #run build();

@@ -7,14 +7,12 @@ In Jai, all you would ever need to compile your code is the Jai language and com
 
 We learned about compiling a program with the `jai` command in § 3, while all command-line options were reviewed in § 2B.  
 
-Behind the scenes, the compiler internally runs another meta-program at startup to compile the first workspace. This **default meta-program** does things such as setting up the working directory for the compiler, setting the default name of the output executable based on command-line arguments, and changing between debug and release build based on command-line arguments. The source for this metaprogram is in _modules/Default_Metaprogram.jai_.
-
-
-
-
 This chapter talks about building (compiling/linking while setting options) a Jai project through running another Jai program: the **meta-program**, which is usually called `build.jai` (it used to be called `first.jai`).  
 Most of the procedures we will need are define in module _Compiler_, so we'll import this module in the programs in this chapter. Most of these programs will also be run at compile-time with #run.  
-By convention a procedure called `build()` is run:  `#run build()`  
+By convention a procedure called `build()` is run with `#run build()`  
+
+Behind the scenes when you do a: `jai program.jai`, the compiler internally runs another meta-program at startup to compile the first workspace. This **default meta-program** does things such as setting up the working directory for the compiler, setting the default name of the output executable based on command-line arguments, and changing between debug and release build based on command-line arguments. The source for this metaprogram is in _modules/Default_Metaprogram.jai_. 
+
 Any procedure that has the **#compiler** directive is a proc that interfaces with the compiler as a library; it works with compiler internals.
 
 ## 30.1 Workspaces
@@ -114,9 +112,9 @@ build :: () {
     #run build();
 ```
 
-The building process is done at compile-time when `#run build();` is executed.  
+The building process started with `jai build.jai` is done at compile-time when `#run build();` is executed.  
 
-The first step in the building process is always to create a new workspace w (see line (1)), which will be Workspace 3. So when doing `jai build.jai`:
+The first step in the building process is always to create a new workspace w (see line (1)), which will be Workspace 3. Sothe following workspaces are created:
 * Workspace 1: reserved for inner compiler workings;
 * Workspace 2: reserved for the target program, here `build.jai`;
 * Workspace 3: reserved for the building script (we could call it a script, although it's completely written in Jai);
@@ -238,7 +236,15 @@ main :: () {}
 For suitable debug / release options, see § 30.8
 To build for production (release), you would do only `#run build_release();`, or use the command-line option `-run build_release()` while doing `jai build_debug_release.jai`
 
-## 30.5 Intercepting the compiler message loop
+## 30.5 Changing the default metaprogram
+Here is how to substitute the default metaprogram with your own:  
+Your own metaprogram should be a module (let's call it Build, but any name is ok). This Build module must be in a folder Build (either in the default `jai/modules` folder or in a dedicated `modules_folder`) containing a file module.jai. This file has to contain a `build()` proc and a `#run build()` (it should not contain a `main` proc. You can start from 30.3_build.jai or  _modules/Minimal_Metaprogram.jai_. You can then use your metaprogram as follows: 
+`jai main.jai --- meta Build`  
+if Build is in the default jai/modules folder, or  
+`jai main.jai --- import_dir "d:/Jai/my_modules" meta Build`  
+if Build is in a dedicated _d:/Jai/my_modules_.
+
+## 30.6 Intercepting the compiler message loop
 As developer you can access the workings of the compiler through the compiler message loop.
 
 See *30.5_compiler_intercept.jai*:
@@ -393,7 +399,7 @@ You can also run any other program after successful completion.
 
 Another use-case would be to run the program after successful completion of the compilation, or any other program for that matter. 
 
-## 30.6 Building and running on successful compilation
+## 30.7 Building and running on successful compilation
 What if we want to build our project, and on successfull completion, run it?
 
 See *30.6_build_and_run.jai*:
@@ -460,7 +466,7 @@ This program was built with metaprogram 30.8_build_and_run.jai
 ...
 ```
 
-## 30.7 Building and running with a compiler command-line argument 
+## 30.8 Building and running with a compiler command-line argument 
 In § 2B we told you that arguments given at the end of a `jai` command with `-- ` are arguments for the meta-program. These arguments are called _arguments for the metaprogram_ or _compiler command-line arguments_.
 Now we will show you how to use them, enhancing our previous program.
 
@@ -526,7 +532,7 @@ In line (1) we get these argument(s) from the property `Build_Options.compile_ti
 To get the same output as in the previous section, you now have to call the compiler with:  
 `jai 30.7_build_and_run2.jai -- run`.
 
-## 30.8 Choosing a debug / release build with compiler command-line arguments
+## 30.9 Choosing a debug / release build with compiler command-line arguments
 In the same way as in the previous section, we can decide to either do a debug build or a release build based on the given command-line argument. This is shown in the following code, which is a further development of the code in § 30.4.8:
 
 See *30.8_debug_release_build.jai*:
@@ -587,7 +593,7 @@ Calling `main3` now shows: main3
 `This program was built with metaprogram 30.8_debug_release_build.jai`
 
 
-## 30.9 Enforcing coding standards
+## 30.10 Enforcing coding standards
 Another use-case would be enforcing coding house rules, an example is shown in 30.9_house_rules.jai: 
 
 ```c++
@@ -667,7 +673,7 @@ misra_checks :: (message: *Message) {
 
 During the compiler message loop in line (1), we inject a proc `misra_checks()`, which tests every message on a specific code rule, here the `check_pointer_level_misra_17_5` rule which forbids more than 2 levels of pointer indirection. Line (2) ensures that this metaprogram does not generate any output executable.
 
-## 30.10 Generating LLVM bitcode
+## 30.11 Generating LLVM bitcode
 See *30.10_generate_llvm_bitcode.jai*:
 ```c++
 #import "Basic";
