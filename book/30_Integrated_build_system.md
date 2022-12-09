@@ -182,11 +182,14 @@ This setting puts the output executable in the current folder; which is the defa
 
 A few of the most important build options are shown in the program above and discussed below.  
 ### 30.4.1 The optimization level
-This can be either `.DEBUG` or `.RELEASE`.  
+This can be either `.DEBUG` or `.RELEASE`, for example:   
+`target_options.optimization_level = .RELEASE;`
+
 For a highly optimized build, having the same effect as `clang -O2`, you would use:
 ```c++
 set_optimization_level(*target_options, 2, 0); 
 ```
+Optimized builds take much longer (??) time than debug builds, but are around 2x as fast as an unoptimized build.
 
 This automatically turns OFF all runtime checks, and specifies a number of optimizations for LLVM code production.
 

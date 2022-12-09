@@ -175,12 +175,14 @@ But we do get a linker error:
 `Running linker: ... D:/Jai/The_Way_to_Jai/examples/29/mylib/libmy.lib ...
 LINK : fatal error LNK1181: cannot open input file 'D:\Jai\The_Way_to_Jai\examples\29\mylib\libmy.lib'`
 
-It seems the linker wants a static library `libmy.lib`, indeed we cut out mentioning this filename in the giant linker command between ...
+It seems the linker needs an import library `libmy.lib`, indeed we cut out mentioning this filename in the giant linker command between ...
 
-_5) Make a C static library (.lib)_  
+_5) Make a C import library (.lib)_  
 This can be done with the `ar` tool from the gcc toolchain and we need the result from step 3 here. Issue the command:  
 `ar rcs libmy.lib my.o`
-This creates a static library `libmy.lib` (size: 976 bytes)
+This creates an import library `libmy.lib` (size: 976 bytes)
+
+A dll on Windows needs an import library (a .lib) to link it in. This import library contains only the things used during linking; it’s a lighter .lib 	because it does not contain actual code. The normal static library (also .lib) containing the full library code is much bigger and is not needed for linking. 
 
 _6) Compile the Jai code from step 2_  
 Run the command: `jai 29.5_callc.jai`  

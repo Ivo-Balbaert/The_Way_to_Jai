@@ -9,7 +9,8 @@ build :: () {
   }
   target_options := get_build_options(w);
 
-  target_options.optimization_level = .DEBUG;    
+  target_options.optimization_level = .DEBUG;   
+
   target_options.backend = .LLVM;               
 
   target_options.output_type = .EXECUTABLE;      
