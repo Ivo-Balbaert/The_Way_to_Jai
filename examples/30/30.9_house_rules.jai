@@ -15,7 +15,7 @@ build :: () {
     set_build_options(target_options, w);
 
     compiler_begin_intercept(w);
-    add_build_file("main.jai", w);
+    add_build_file("main5.jai", w);
 
     while true {
         message := compiler_wait_for_message();
