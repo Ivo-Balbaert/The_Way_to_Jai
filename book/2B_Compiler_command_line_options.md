@@ -50,6 +50,9 @@ It is also allowed to add the options after the source-file name, like this:
 
  `-no_check_bindings`  	Disable checking of module bindings when running modules/Check. If modules/Check is not run due to -no_check, this does nothing.
 
+**MetaProgram**
+`--- meta MetaProgram`  To replace the default metaprogram by MetaProgram.
+
 **Miscellaneous**:  
  `-no_cwd`           Turn off the compiler's initial change of working directory. This is a temporary option, provided because the policy around working directories is new and is still being worked out.
 
@@ -61,6 +64,6 @@ To see these, type:
            `jai --- help`
 
 which outputs the following additional options:
-_Developer options: -meta metaprogram_name, -no_jobs, -randomize, -seed some_number, -extra, -chaos_
+_Developer options: -no_jobs, -randomize, -seed some_number, -extra, -chaos_
 
 These options are deliberately minimal compared to other programming languages. As we'll see later Jai provides a very sophisticated system to build your application and setting these options from Jai code itself (see ??). It favors _configuration from code_ which is the same and all platforms and lets you use the Jai programming language you know. This is in sharp contrast to many other programming language environments, where you have separate complicated build systems often using a separate language, that also often changes depending on which platform you are on.

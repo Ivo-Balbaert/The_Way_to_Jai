@@ -9,7 +9,7 @@ We learned about compiling a program with the `jai` command in § 3, while all c
 
 This chapter talks about building (compiling/linking while setting options) a Jai project through running another Jai program: the **meta-program**, which is usually called `build.jai` (it used to be called `first.jai`).  
 Most of the procedures we will need are define in module _Compiler_, so we'll import this module in the programs in this chapter. Most of these programs will also be run at compile-time with #run.  
-By convention a procedure called `build()` is run with `#run build()`  
+By convention a procedure called `build()` is run with `#run build()`, but you can also just run a code block with `#run {...}` (see 30.11_using_notes.jai).  
 
 Behind the scenes when you do a: `jai program.jai`, the compiler internally runs another meta-program at startup to compile the first workspace. This **default meta-program** does things such as setting up the working directory for the compiler, setting the default name of the output executable based on command-line arguments, and changing between debug and release build based on command-line arguments. The source for this metaprogram is in _modules/Default_Metaprogram.jai_. 
 
@@ -157,9 +157,9 @@ build :: () {
   target_options.stack_trace = false;
   target_options.backtrace_on_crash = .OFF;
 
-  target_options.array_bounds_check = .OFF;
-  target_options.cast_bounds_check  = .OFF; 
-  target_options.null_pointer_check = .OFF; 
+  target_options.array_bounds_check = .ON; // values: .OFF / .ON / .ALWAYS
+  target_options.cast_bounds_check  = .ON; 
+  target_options.null_pointer_check = .ON; 
   
   target_options.runtime_storageless_type_info = true;
 
@@ -194,7 +194,7 @@ Optimized builds take much longer (??) time than debug builds, but are around 2x
 This automatically turns OFF all runtime checks, and specifies a number of optimizations for LLVM code production.
 
 ### 30.4.2 The output type
-Possible values are: .NO_OUTPUT; .DYNAMIC_LIBRARY; .STATIC_LIBRARY; .OBJECT_FILE; with default .EXECUTABLE;
+Possible values are: .NO_OUTPUT; .DYNAMIC_LIBRARY; .STATIC_LIBRARY; .OBJECT_FILE; with as default .EXECUTABLE;
 
 ### 30.4.3 The output executable name
 This is only the filename of the executable, it includes no extension.
@@ -204,10 +204,10 @@ Current options are .LLVM and .X64; X64 is the fastest backend.
 
 ### 30.4.5 Info about runtime errors and crashes
 The `stack_trace` option is by default true. For a release build, set `target_options.stack_trace = false;`  
-`backtrace_on_crash` is by default .ON
+The `backtrace_on_crash` option is by default .ON
 
 ### 30.4.6 Checks at runtime
-Array bounds operations, castings and null pointer checks can be turned ON at runtime to increase robustness of your program, they are so by default. If you are very sure, you can turn them off (which is done in this program) to increase performance
+Array bounds operations, castings and null pointer checks can be turned ON at runtime to increase robustness of your program, they are so by default. If you are very sure, you can turn them OFF to increase performance
 
 ### 30.4.7 runtime_storageless_type_info
 With this option, you can specify whether type_table info is available at runtime (see § 26.1). If you set its value to _true_, type table info is not available at runtime, which reduces the executable's size somewhat. However even when true, the `type_info` function still works.
@@ -215,9 +215,32 @@ With this option, you can specify whether type_table info is available at runtim
 ### 30.4.8 Optimizing LLVM or X64 build
 Llvm_options or X64_Options exist for this purpose, but to work with these you have to have a deeper knowledge of the backends.
 
+The LLVM backend options contains many compiler options for optimizing code, turning features of LLVM on or off. Here is a list of some of the flags for the LLVM Options given the `target_options.llvm_options` struct:
+
+```
+.enable_tail_calls = false; 
+.enable_loop_unrolling = false;
+.enable_slp_vectorization = false; 
+.enable_loop_vectorization = false; 
+.reroll_loop = false; 
+.verify_input = false; 
+.verify_output = false;
+.merge_functions = false;
+.disable_inlining = true;
+.disable_mem2reg = false;
+```
+
+The -O3, -O2, -O1 optimization levels for LLVM can be changed by setting the code_gen_optimization_level field to 3, 2, 1 respectively. For example:  
+`target_options.llvm_options.code_gen_optimization_level = 2`  
+will set the LLVM options to -O2.
+
+All possible options can be found in module _Compiler_.
 You can set additional module import paths with the option `.import_path`, which is an array of strings.
 
+### 30.4.9 Debug- and Release builds
 You could make one build file which contains both the debug- and the release-options, like this:
+
+See *build_debug_release.jai*:
 ```c++
 #import "Basic";
 #import "Compiler";
@@ -277,6 +300,7 @@ build :: () {
         if !message break;
         if message.kind == {
             case .COMPLETE;          // (5)
+            print(" >> %\n", <<message);
             break;
             }
             case .FILE; {            
@@ -338,7 +362,7 @@ Firstly, we can examine what is exactly happening during code compilation:
 (Comment out line (4) to focus on a specific message.)
 For other useful examples, see § 30.6 - 30.8.
 
-1) `.FILE` is signalled whenever a new file is loaded. You can see which files are loaded: see lines (6)-(7).  
+1) `.FILE` triggers once for each source code file loaded during compilation. You can see which files are loaded: see lines (6)-(7).  
 This gives as output:  
 ```
 Loading file 'c:/jai/modules/Preload.jai'.
@@ -358,7 +382,7 @@ Loading file 'c:/jai/modules/Runtime_Support_Crash_Handler.jai'.
 Loading file 'c:/jai/modules/stb_sprintf/module.jai'. 
 ```
 
-2) `.IMPORTED` is signalled whenever a new module is loaded. You can see which modules are imported: see lines (8)-(9).  
+2) `.IMPORT` is signalled whenever a new module is loaded. Every module is important only once; even when you have for example several #import "Basic", importing happens only one time. You can see which modules are imported: see lines (8)-(9).  
 
 ```
 Import module 'Preload'
@@ -372,7 +396,7 @@ Import module 'Runtime_Support_Crash_Handler'
 Import module 'stb_sprintf'
 ```
 
-3) `.PHASE` every time when entering a new phase in the compilation. You can see the successive compilation phases : see lines (10)-(11).  
+3) `.PHASE` every time when entering a new phase in the compilation (defined in the enum Message_Phase). You can see the successive compilation phases : see lines (10)-(11).  
 ```
 Entering phase ALL_SOURCE_CODE_PARSED
 Entering phase ALL_SOURCE_CODE_PARSED
@@ -383,7 +407,19 @@ Entering phase ALL_TARGET_CODE_BUILT
 Entering phase PRE_WRITE_EXECUTABLE
 ```
 
-4) `.TYPECHECKED` every time a code declaration is typechecked, this gives an huge amount of output : see lines (12)-(13).  
+Here are all possible compilation phases:  
+```c++
+phase: enum u32 {
+  ALL_SOURCE_CODE_PARSED        :: 0;
+  TYPECHECKED_ALL_WE_CAN        :: 1;
+  ALL_TARGET_CODE_BUILT         :: 2;
+  PRE_WRITE_EXECUTABLE          :: 3;
+  POST_WRITE_EXECUTABLE         :: 4;
+  READY_FOR_CUSTOM_LINK_COMMAND :: 5;
+}
+```
+
+4) `.TYPECHECKED` every time code has passed typechecking, this gives an huge amount of output : see lines (12)-(13).  
 
 ```
 Code declaration: {adb_1168, [adb_11f0, adb_1168]}
@@ -395,7 +431,9 @@ Code declaration: {adb_24a8, [adb_2530, adb_24a8]}
 
 5) `.DEBUG_DUMP` when a crash occurs during compilation, the dump info can be viewed like in lines (14)-(15).
 
-6) `.ERROR`: when an error occurs in the compilation process itself, you can handle it here..
+6) `.ERROR`: when an error occurs in the compilation process itself, you can handle it here.  
+   
+7) `.COMPLETE`: triggers when compilation is finished. Here you will `break` out of the `while true` compiler message loop.
 
 All these enum options contain a lot more useful info (see module _Compile_).
 You can also run any other program after successful completion.
@@ -712,3 +750,122 @@ See *30.10_generate_llvm_bitcode.jai*:
 ```
 
 The program above shows how to build an optimized LLVM executable; the instructions for optimization are in lines (1) and (2). You might notice that compiling now takes a bit longer. If you don't use the compiler loop, you can just remove it or comment it out.
+
+## 30.12 Using notes to do special metaprogramming
+Notes on a struct or function were described in § 15.7, and code was shown to display them in § 15.5. The note tags will also show up in a metaprogram, and you can use them to do special metaprogramming such as custom program typechecking and modifying the executable based on the metaprogram.
+
+In _main4.jai_ we have tagged a number of procs with the note `@fruit`.
+
+See *main4.jai*:
+```c++
+#import "Basic";
+
+dog :: () {
+  print("dog\n");
+} @fruit
+
+banana :: () {
+  print("banana\n");
+} @fruit
+
+apple :: () {
+  print("apple\n");
+} @fruit
+
+cherry :: () {
+  print("cherry\n");
+} @fruit
+
+elephant :: () {
+  print("elephant\n");
+} @fruit
+```
+
+The program contains no `main` proc; this will be created by the metaprogram!
+
+The metaprogram finds all the procs tagged @note and adds them to an array of strings called `procs` declared in line (1). It then sorts procs alphabetically, and generates a main proc that calls all procs tagged @fruit in alphabetical order.
+
+See *30.11_using_notes.jai*:
+```c++
+#import "Compiler";
+#import "String";
+#import "Basic";
+#import "Sort";
+
+#run {
+  w := compiler_create_workspace();
+
+  options := get_build_options(w);
+  options.output_executable_name = "notes";
+  set_build_options(options, w);
+
+  compiler_begin_intercept(w);
+  add_build_file("main4.jai", w);  
+
+  procs: [..] string;                           // (1)
+  gen_code := false;
+  while true {
+    message := compiler_wait_for_message();
+    if !message break;
+    if message.kind == {
+    case .TYPECHECKED;
+      typechecked := cast(*Message_Typechecked) message;
+      for decl: typechecked.declarations {
+        if equal(decl.expression.name , "main") {
+          continue;
+        }
+        for note: decl.expression.notes {       // (2)
+          if equal(note.text, "fruit") {
+            array_add(*procs, copy_string(decl.expression.name));
+          }
+        }
+    }
+    case .PHASE;                                // (3)
+      phase := cast(*Message_Phase) message;
+      if gen_code == false && phase.phase == .TYPECHECKED_ALL_WE_CAN {
+        code := generate_code();                // (4)
+        add_build_string(code, w);              // (5)
+        gen_code = true;
+    }
+    case .COMPLETE;
+      break;
+    }
+  }
+  compiler_end_intercept(w);
+  set_build_options_dc(.{do_output=false});
+
+  generate_code :: () -> string #expand {       // (6)
+    bubble_sort(procs, compare);                // (7)
+    builder: String_Builder;
+    append(*builder, "main :: () {\n");
+    for proc: procs {
+      print_to_builder(*builder, "  %1();\n", proc);
+    }
+    append(*builder, "}\n");
+    return builder_to_string(*builder);
+  }
+}
+```
+
+In line (2), all possible notes are checked after each TYPECHECKING phase:  
+`for note: decl.expression.notes { }`  
+If the note contains "fruit", the proc's name is added to the array `procs`.  
+The code starting in line (3) shows how to generate new code (in this case a `main` proc) after the TYPECHECKED_ALL_WE_CAN phase. `generate_code()` (called in line (4) and defined in line (6)) is a macro that produces a string which contains the code for a `main` proc, printing out the names of all procs with the note @fruit alphabetically. The sorting is done by first calling `bubblesort` from module _Sort_, which also calls a `compare` proc from module _String_.
+A bool flag variable gen_code is used so that this generation is done only once.  
+Let's see the results. First run the metaprogram:  
+`jai 30.11_using_notes.jai`  
+Then run the generated executable `notes.exe`:  
+notes  
+which produces as output:  
+```
+apple
+banana
+cherry
+dog
+elephant
+```
+
+
+
+
+

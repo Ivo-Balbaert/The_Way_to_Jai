@@ -19,10 +19,10 @@ build :: () {
   target_options.stack_trace = false;
   target_options.backtrace_on_crash = .OFF;
 
-  target_options.array_bounds_check = .OFF;
-  target_options.cast_bounds_check  = .OFF; 
-  target_options.null_pointer_check = .OFF; 
-  
+  target_options.array_bounds_check = .ON; // values: .OFF / .ON / .ALWAYS
+  target_options.cast_bounds_check  = .ON; 
+  target_options.null_pointer_check = .ON; 
+   
   target_options.runtime_storageless_type_info = true;
 
   set_build_options(target_options, w);
