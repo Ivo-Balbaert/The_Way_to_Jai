@@ -1,7 +1,7 @@
 # 25 Context
 
 A central concept in Jai is the **context**.  
-The context is specifically made to guide different parts of your program to use whatever services you desire.
+The context is specifically made to guide different parts of your program to use whatever services you desire. It helps programs and modules to coordinate, by establishing conventions they can use to perform various tasks.
 
 The `context` struct is defined in module _Preload_ as:  
 ```c++
@@ -37,7 +37,7 @@ See *25.1_context.jai*:
 #import "Basic";
 
 #add_context this_is_the_way := true;   // (1)
-                                                                   my_allocator_proc :: (mode: Allocator_Mode, size: s64, old_size: s64, old_memory_pointer: *void, proc_data: *void) -> *void {
+    my_allocator_proc :: (mode: Allocator_Mode, size: s64, old_size: s64, old_memory_pointer: *void, proc_data: *void) -> *void {
     // allocator specific code
     result := context.default_allocator.proc(mode, size, old_size, old_memory_pointer, proc_data);
     return result;
@@ -114,6 +114,9 @@ The `log()` proc from module _Basic_ used in line (5) formats a message, then se
 You can pass flags, a source_identifier and data gets copied from context.
 Here is its signature:  
 `log :: (format_string: string, args: .. Any, loc := #caller_location, flags := Log_Flags.NONE, user_flags : u32 = 0)`
+Log_Flags is an enum defined in module _Preload_
+
+A full example of defining and using a custom logger can be found in howto/350_logging.
 
 ## 25.5 Temporary storage
 Back in § 21.3.3 we saw that Temporary storage characteristics are stored in the context, namely in `context.temporary_storage`  

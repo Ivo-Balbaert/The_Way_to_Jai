@@ -24,6 +24,10 @@ main :: () {
     write_entire_file(TESTFILE, BLOCK_OF_TEXT);     // (4)
 
     data1 :=  read_entire_file(TESTFILE);            // (5)
+    // data1, success :=  read_entire_file(TESTFILE);            
+    // if !success {
+    //     return;
+    // }
     print("Contents of TESTFILE:\n\"%\"\n", data1);
 
     file, success :=  file_open(TESTFILE, for_writing=true, keep_existing_content=true); // (6)

@@ -293,6 +293,16 @@ main :: () {
     free(a); free(b); free(c); free(lst);
 }
 ```
+
+A more memory-efficient linked list could be defined with relative pointers (see § 10.6 and 12.14):
+
+```
+LinkedList :: struct {
+    data: s64; 
+    next:  *~s32 LinkedList;
+}
+```
+
 ### 12.6.2 Double Linked List
 This can be defined as:
 

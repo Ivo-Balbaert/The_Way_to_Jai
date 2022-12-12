@@ -115,3 +115,39 @@ In line (4) we overload `*=` for an Object and a integer, to mean that every ite
 1) Define a struct type Complex for complex numbers, together with two operators for + and *. Test out (see complex_overload.jai).
 2) Define a polymorphic `square` proc that works for all number types. Then define a Vector3 type as a struct with x, y, z: float. Verify that square doesn't work for Vector3. Now define an operator * for Vector3 so that it does!
 (see poly_square.jai).
+
+## 24.3 The #poke_name directive
+This directive isn't exclusively used for operators, but the examples we'll show use operators, so that's why it is discussed here.
+Here is a 1st example of its use:
+```
+using Hash_Table :: #import "Hash_Table";
+#poke_name Hash_Table operator==;
+```
+The **#poke_name** directive here effectively injects a reference to your operator== into the Hash_Table module.
+
+Here is a complete working example. See 24.3_poke_name.jai_:
+```c++
+#import "Basic";
+Math :: #import "Math";
+
+Vector4 :: struct { x, y, z, w : float; };
+
+dot_product :: (a: Vector4, b: Vector4) -> float { 
+    return a.x*b.x+a.y*b.y+a.z*b.z+a.w*b.w; 
+}
+
+#poke_name Math dot_product;        // (1)
+
+main :: () {
+    v1 := Vector4.{1, 2, 3, 4};
+    v2 := Vector4.{6, 7, 8, 9};
+    print("dot_product is: %", Math.dot(v1, v2));  // (2)
+    // => dot_product is: 80
+}
+```
+
+Module _Math_ is imported, and we define a new type Vector4 and a dot_product proc for this type (we could have used the Quaternion type from Math, Vector4 is used here to make an example). In line (1) we use the directive to inject our `dot_product` into _Math_.  
+In line (2), we call Math.dot for two Vector4 instances. 
+Module _Math_ defines dot as dot_product:
+`dot :: dot_product;`  
+_Math_ already had three overloads for `dot_product`, namely for types Vector2, Vector3 and Quaternion. Using #poke_name, we have supplied a 4th alternative, which can be used for Vector4 in our program.

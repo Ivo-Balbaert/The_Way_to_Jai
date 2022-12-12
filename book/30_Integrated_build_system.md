@@ -592,10 +592,10 @@ See *30.8_debug_release_build.jai*:
     args := target_options.compile_time_command_line;
     for arg: args {       // (1)
         if arg == {
-        case "debug";
-        build_debug(w);
-        case "release";
-        build_release(w);
+            case "debug";
+                build_debug(w);
+            case "release";
+                build_release(w);
         }
     }
     add_build_file("main3.jai", w);
@@ -625,18 +625,35 @@ main :: () {}
 ```
 
 Again we loop over the meta-program arguments starting in line (1).
-Calling the program as `jai 30.8_debug_release_build.jai -- debug` supplies the meta-program argument  
-`-- debug`, which branches to `case "debug";`, which calls `build_debug(w);` 
-It print out `Choosing debug options...` during compilation.
+Calling the program as `jai 30.8_debug_release_build.jai -- debug` supplies the meta-program argument `-- debug`, which branches to `case "debug";`, which calls `build_debug(w);` 
+It prints out `Choosing debug options...` during compilation.
 (The same logic goes for `-- release.`)    
 
 Calling `main3` now shows: main3
 `This program was built with metaprogram 30.8_debug_release_build.jai`
 
+`build_debug` shows the recommended debug options:  
+- backend = .X64  
+// it is faster than the LLVM backend, but for most programs the difference is negligible
+- optimization_level = .DEBUG
+- array_bounds_check = .ON
+
+This build compiles faster with as much debugging information as possible, but has some overhead in order to help debug. An executable built in debug mode will, for example, tell the programmer on which line of code the program crashed on, and check for array out of bounds errors. As expected from debug builds, the code is not as optimized as a release build.
+
+`build_release` shows the recommended release options:  
+- backend = .LLVM 
+// it is slower than the X64 backend, but it does a lot more optimizations. 
+- optimization_level = .RELEASE
+- set_optimization_level(target_options, 2, 0); // same as clang -O2
+
+This build makes the compiler produce the best possible optimized code. An optimized build does not have debug information built into it, and takes longer to compile.
 
 ## 30.10 Enforcing coding standards
-Another use-case would be enforcing coding house rules, an example is shown in 30.9_house_rules.jai: 
+Another use-case would be enforcing coding house rules, an example is shown in 30.9_house_rules.jai , which shows how to enforce compile-time code checking, for example the MISRA standards (in this case: Check for Multiple Levels of Pointer Indirection, so that you cannot do you cannot do `a: ***int = b;` for example).  
 
+MISRA coding standards are a set of C and C++ coding standards, developed by the Motor Industry Software Reliability Association (MISRA). These are standards specific to the automotive industry,.
+
+See _30.9_house_rules.jai:
 ```c++
 #import "Basic";
 #import "Compiler";
@@ -666,8 +683,6 @@ build :: () {
     }
 
     compiler_end_intercept(w);
-
-    // This metaprogram should not generate any output executable:
     set_build_options_dc(.{do_output=false});   // (2)
 }
 
@@ -714,7 +729,18 @@ misra_checks :: (message: *Message) {
 
 During the compiler message loop in line (1), we inject a proc `misra_checks()`, which tests every message on a specific code rule, here the `check_pointer_level_misra_17_5` rule which forbids more than 2 levels of pointer indirection. Line (2) ensures that this metaprogram does not generate any output executable.
 
-## 30.11 Generating LLVM bitcode
+Run the check with: `jai 30.9_house_rules.jai`. If the program obeys the rule(s), nothing is shown, but if you substitute main5.jai (which has too many levels of indirection) for main.jai, you get the output:
+```
+In Workspace 2 ("Target Program"):
+D:/Jai/The_Way_to_Jai/examples/30/main5.jai:4,3: Error: Too many levels of pointer indirection.
+
+
+    a: *int;
+    b := *a;
+    c := *b; // Too many levels of pointer indirection! c is of Type (***int)
+```
+
+## 30.11 Generating optimized LLVM bitcode
 See *30.10_generate_llvm_bitcode.jai*:
 ```c++
 #import "Basic";
@@ -749,7 +775,19 @@ See *30.10_generate_llvm_bitcode.jai*:
 }
 ```
 
-The program above shows how to build an optimized LLVM executable; the instructions for optimization are in lines (1) and (2). You might notice that compiling now takes a bit longer. If you don't use the compiler loop, you can just remove it or comment it out.
+The program above shows how to build an optimized LLVM executable; the instructions for optimization are in lines (1) and (2). 
+By default, the bitcode is outputted to the `.build` folder. However, you can change where the bitcode is written by changing the intermediate path of the compiler as follows:
+`target_options.intermediate_path = #filepath;`  
+to write it next to the source file, or giving another folder path in the right-hand side.
+
+Type and ENTER: `jai 30.10_generate_llvm_bitcode.jai`  
+Now no .build folder is generated, and an exec.exe, exec.exp, exec.pdb, exec.lib, exec_0_w3.bc and exec_0_w3.obj are now written in the same folder as the source file. The `.bc` file contains the LLVM bitcode. exec runs the Jai code in main.jai
+You might notice that compiling now takes a bit longer. If you don't use the compiler loop, you can just remove it or comment it out.
+
+If you have LLVM installed on your system, you can use `llc` to transform the bitcode into assembler:  
+`llc < your_bitcode.bc > output.asm`  
+and then run the assembly code with:
+`as output.asm`
 
 ## 30.12 Using notes to do special metaprogramming
 Notes on a struct or function were described in § 15.7, and code was shown to display them in § 15.5. The note tags will also show up in a metaprogram, and you can use them to do special metaprogramming such as custom program typechecking and modifying the executable based on the metaprogram.

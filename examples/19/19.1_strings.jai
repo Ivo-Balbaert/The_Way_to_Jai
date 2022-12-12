@@ -1,5 +1,10 @@
 #import "Basic";
 
+Package :: struct {             
+    strings: [3] string~s8;   // (15) 
+    string_data: [100] u8;
+}
+
 main :: ()  {
     str: string = "Hello."; // (0) same as: str := "Hello.";
     a := "Happy";

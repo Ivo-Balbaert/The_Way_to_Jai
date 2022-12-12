@@ -12,6 +12,11 @@ But you can be assured that strings in Jai are simple and performant, unlike in 
 ```c++
 #import "Basic";
 
+Package :: struct {             
+    strings: [3] string~s8;   // (15) 
+    string_data: [100] u8;
+}
+
 main :: ()  {
     str: string = "Hello."; // (0) same as: str := "Hello.";
     a := "Happy";
@@ -218,7 +223,7 @@ To write a backslash, use "\\"
 Using backslashes gets unreadable very quickly.
 
 ## 19.4 Some string characteristics
-
+(see _19.1_strings.jai_)
 ### 19.4.1 String literals are immutable and bounds-checked
 String literals like str, a or ch can (because they are array views) also be accessed via index, like in line (5): `str[5]` (46 is the ASCII value for '.')
 But string literals are **immutable** (they are stored in read-only memory): you can access a string byte via indexing [], but not change it. For example line (6) crashes the program, see output within code snippet.
@@ -260,6 +265,8 @@ A better solution is to store code as a constant string (::) or for many code li
 ### 19.4.8 Strings as array views
 Because strings are essentially array views, you can manipulate .count and .data just as with array views, like in line (13) and following.
 
+### 19.4.9 Relative strings
+Just like relative pointers (see § 10.6), we can define strings in an array field of a struct relative to each other, see line (15). The options are: string~s8, string~s16, string~s32, string~s64. For a complete example, see howto 300_relative pointers.
 
 ## 19.5 String builder
 See *19.3_string_builder.jai*:

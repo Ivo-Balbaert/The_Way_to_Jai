@@ -355,6 +355,15 @@ For one-liners, there is #ifx (see line (7)).
 
 Using this feature, code can be conditionally compiled and included in the resulting executable, depending on the target environment (development, test, release) or target platform (different OS's).
 
+Here is a way to use it in debugging to print out info you want to inspect;in production this code will not be compiled, only the else branch:
+```
+// define a constant DEBUG :: TRUE; // change to false for production
+#if DEBUG {
+    print(debug_info);
+} else {
+    // do normal processing
+}
+```
 This technique is used in the _Basic_ module to load specific code depending on the OS:
 ```c++
 #if OS == .WINDOWS {
@@ -674,7 +683,7 @@ main :: () {
 }
 ```
 
-The macro `bubble_sort` defined in line (1) takes an array and a piece of code to compare subsequent item-pairs of the array. If they are not in order, they are swapped. The `#insert,scope()` in (2) makes it possible to use the outer macro-variables a and b in compare_code.
+The macro `bubble_sort` defined in line (1) takes an array and a piece of code to compare subsequent item-pairs of the array. The `#insert,scope()` in (2) (formerly #insert_internal) makes it possible to use the outer macro-variables a and b in compare_code. It lets you specify the scope into which to insert the target Code or string, by saying #insert,scope(target). 'target' is a Code that must be constant at compile-time. The scope where the Code lives is used as the enclosing scope for the #insert (which determines how identifiers inside the inserted code are resolved). If they are not in order, they are swapped.
 This example also shows that a macro can be polymorphic.
 
 ## 26.6 Using a for-expansion macro to define a for loop

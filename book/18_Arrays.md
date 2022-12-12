@@ -353,7 +353,15 @@ Array_View_64 :: struct {
     data      : *u8;
 } // takes up 16 bytes
 ```
-(There are also smaller array_views that use relative pointers.)
+There are also smaller array views that use relative pointers (see § 10.6), mostly used inside structs like this: 
+``` 
+Package :: struct {
+    window: []~s16 float;
+    floats: [10] float;
+}
+```
+(see howto 300_relative pointers).
+
 Array views are also bounds-checked, but at run-time: see line (5). The program crashes and a stack trace is printed.
 
 ### 18.5.1 Changing the view and the base array
