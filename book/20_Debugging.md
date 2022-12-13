@@ -47,7 +47,7 @@ A somewhat better solution is to use assert statements to test conditions (see �
 `assert(var == val);`  
 at appropriate places.
 When an assert fails, you know something went wrong in the proc in which it executed.  
-A big advantage compared to `print` is that you can leave the `assert` statements in your code by using `ENABLE_ASSERT=false`, as explained in § 6.1.3. That way the asserts will not be executed (so there will be no performance penalty), but you can suickly enable them in production code to hunt for a problem!  
+A big advantage compared to `print` is that you can leave the `assert` statements in your code by using `ENABLE_ASSERT=false`, as explained in § 6.1.3. That way the asserts will not be compiled(??)/executed (so there will be no performance penalty), but you can suickly enable them in production code to hunt for a problem!  
 We already showed you the use of assert to catch dereferencing null pointer errors (see § 10.3). Also have a look at the very close relative `#assert` in § 20.2.1
 
 ## 20.2 Debugging compile-time execution

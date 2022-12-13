@@ -41,9 +41,31 @@ Apollo_Time :: struct {
 
 In line (2), we ask for the current time again, and subtract it from the previous time.This gives us a very accurate way to measure time-spans.
 
-## 6B.2 - Getting a random number from time
+## 6B.2 - Measuring performance using get_time
+The `get_time` proc from module _Basic_ returns a time in seconds. It is useful for calculating time differences (as in line (1) below), so it can give a measure of performance of a certain proc or part of the program.  
+
+See *6B.2_get_time.jai*:
+```c++
+#import "Basic";
+
+factorial :: (n: int) -> int {
+    if n <= 1  return 1;
+    return n * factorial(n-1);
+}
+
+main :: () {
+    secs := get_time();
+    print("Factorial 20 is %\n", factorial(20)); 
+    // => Factorial 20 is 2432902008176640000
+    secs = get_time() - secs;   // (1)
+    print("Factorial 20 took % seconds\n", secs);
+    // => Factorial 20 took 0.000207 seconds
+}
+```
+## 6B.3 - Getting a random number from time
 In § 6.2.9 we saw a few routines to get random numbers, however they do repeat the same series of numbers when the program starts again. A better way is to work with a random seed, and what else could be better than a number in femtoseconds like the Apollo time? So this is a good way to get a random number:  
 
 `random_seed(current_time_monotonic().low);`
 
 This proc simply stores the value in `context.random_state` for further use (see § 25 for Context).
+

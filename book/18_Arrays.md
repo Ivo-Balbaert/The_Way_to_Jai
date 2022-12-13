@@ -95,6 +95,8 @@ Vector3 :: struct {
     x, y, z : float;
 }
 
+Object :: struct { member: int; }
+
 main :: () {
     a : [4] u32;      // (1) A static array of 4 u32 integers.
     b : [30] float64; // An array of 30 float64's.
@@ -169,8 +171,13 @@ main :: () {
     arr_heap := NewArray(4, float); // (9) will heap-allocate an array of 4 floats; from module _Basic_
     defer array_free(arr_heap);   // (10)
     print("%\n", arr_heap); // => [0, 0, 0, 0]
-    // ...
-
+    arr_align := NewArray(500, int, alignment=64); // (10B)
+    A :: 100;
+    object_array := NewArray(A, Object, alignment=64);  // (10C)
+    assert(cast(int)(*object_array[0]) % 64 == 0);      // (10D)
+    assert(cast(int)(*object_array[1]) % 64 == 0);
+    assert(cast(int)(*object_array[10]) % 64 == 0);
+ 
     // Allocation with New:
     arr_heap2 := New([3] int);    // (11)
     print("% \n", arr_heap2);     // => 202_bdf0_8d50
@@ -216,6 +223,8 @@ Line (8) shows that we can use an array as a bool (condition): an array that is 
 ### 18.3.4 Allocating an array on the heap
 We can force the compiler to allocate an array on the heap with the **NewArray** procedure from module _Basic_: `arr_heap := NewArray(4, float);` (see line (9))
 This proc also has some default vales for arguments like initialized, allocator, and memory alignment; for example: `. The types of these arrays are `[] int`.
+In line (10B) we see how we can cache-align an array with the 3rd argument `alignment=64`, which is especially useful for larger arrays. This is proven for the aligned array `object_array` by the assertions in line (10D) and following.
+
 Releasing the memory when the array is no longer in use must be done by the developer with defer **array_free** (see line (10)).  
 A more familiar and consistent syntax using **New** and **free** is shown in line (11):  
 `arr_heap2 := New([3] int);`

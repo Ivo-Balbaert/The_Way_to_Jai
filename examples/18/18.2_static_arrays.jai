@@ -4,6 +4,8 @@ Vector3 :: struct {
     x, y, z : float;
 }
 
+Object :: struct { member: int; }
+
 main :: () {
     a : [4] u32;      // (1) A static array of 4 u32 integers.
     b : [30] float64; // An array of 30 float64's.
@@ -82,6 +84,12 @@ main :: () {
     print("%\n", arr_heap); // => [0, 0, 0, 0]
     // ...
     defer array_free(arr_heap);   // (10)
+    arr_align := NewArray(500, int, alignment=64);  // (10B)
+    A :: 100;
+    object_array := NewArray(A, Object, alignment=64);  // (10C)
+    assert(cast(int)(*object_array[0]) % 64 == 0);      // (10D)
+    assert(cast(int)(*object_array[1]) % 64 == 0);
+    assert(cast(int)(*object_array[10]) % 64 == 0);
 
     // Allocation with New:
 	arr_heap2 := New([3] int);    // (11)

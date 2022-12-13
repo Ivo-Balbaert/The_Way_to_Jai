@@ -40,7 +40,7 @@ You create a new thread by calling the `thread_create` procedure (see line (1)).
 `thread_proc :: (thread: *Thread) -> s64`  
 A thread had to be shut down when it is no longer useful, we do this with defer and the `thread_destroy` procedure in line (2).  
 Then we have to start up the new thread with the `thread_start` procedure in line (3).  
-Line (4) uses the proc `sleep_milliseconds()` to suspend the main thread for 1s. This is needed here to see the output of both main and thread1, without it main() closes off before thread1 has had the chance to print its own output.  
+Line (4) uses the proc `sleep_milliseconds(1000)` to suspend the main thread for 1s. This is needed here to see the output of both main and thread1, without it main() closes off before thread1 has had the chance to print its own output.  
 Line (5) shows that we can test whether a thread is still running with the `thread_is_done` procedure.  
 
 From the output we see that the `main()` thread and the new thread `thread1` have a different `context`. Their contexts are using the same procedures, but they have a different thread_index and their temporary storage location is different.

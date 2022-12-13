@@ -568,16 +568,10 @@ main :: () {
     object := New(Object);                       // (5)
     // assert(cast(int)(*object) % 64 == 0); // => Assertion failed
     free(object);
-    N :: 100;
-    object_array := NewArray(N, Object, alignment=64);  // (6)
-    assert(cast(int)(*object_array[0]) % 64 == 0);      // (7)
-    assert(cast(int)(*object_array[1]) % 64 == 0);
-    assert(cast(int)(*object_array[10]) % 64 == 0);
 }
 ```
 
 The `Accumulator.accumulation` field and `global_var` in lines (1) and (3) are 64 bit cache-aligned. Line (4) shows that indeed the address of `global_var` is divisible by 64. In line (5) the heap allocation is NOT 64-bit aligned. (Line (1B) doesn't have any effect.)
-However, in line (6), the array is 64 bit aligned, as proven by the assertions in line (7) and following.
 (2) #align 1 ??
 
 ## 12.12 Making definitions in an inner module visible with using

@@ -1,8 +1,8 @@
 # 21 – Memory Allocators and Temporary Storage
 
 Previously (see § 11) we saw how to use alloc / New and free for using heap memory:  
-- alloc(n) is used to allocate n bytes of memory
-- New and free is used for structs (see § 12.5)
+- alloc(n) is used to allocate n bytes of by default heap memory (like malloc in C) 
+- New and free is used for structs (see § 12.5) (same as new in C++)
 - NewArray or New and free for static arrays (see § 18.3)
 - array_reserve and array_free or free for dynamic arrays (see § 18.4)
 - sprint and free for dynamically build strings (see § 19.1)
