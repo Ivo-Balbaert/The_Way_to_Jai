@@ -319,7 +319,7 @@ To build for production (release), you would do only `#run build_release();`, or
 
 ## 30.5 Changing the default metaprogram
 Here is how to substitute the default metaprogram with your own:  
-Your own metaprogram should be a module (let's call it Build, but any name is ok). This Build module must be in a folder Build (either in the default `jai/modules` folder or in a dedicated `modules_folder`) containing a file module.jai. This file has to contain a `build()` proc and a `#run build()` (it should not contain a `main` proc. You can start from 30.3_build.jai or  _modules/Minimal_Metaprogram.jai_. You can then use your metaprogram as follows: 
+Your own metaprogram should be a module (let's call it Build, but any name is ok). This Build module must be in a folder Build (either in the default `jai/modules` folder or in a dedicated `modules_folder`) containing a file module.jai. This file has to contain a `build()` proc and a `#run build()` (it should not contain a `main` proc. You can start from 30.3_build.jai or  _modules/Minimal_Metaprogram.jai_ to make your Build() module. You can then use your metaprogram as follows: 
 `jai main.jai --- meta Build`  
 if Build is in the default jai/modules folder, or  
 `jai main.jai --- import_dir "d:/Jai/my_modules" meta Build`  
@@ -474,6 +474,8 @@ phase: enum u32 {
 }
 ```
 
+If you want Jai to do just the typechecking and not to compile anything, the metaprogram (build.jai) should exit after compiler message TYPECHECKED_ALL_WE_CAN (see lines 11B and following).
+
 4) `.TYPECHECKED` every time code has passed typechecking, this gives an huge amount of output : see lines (12)-(13).  
 
 ```
@@ -493,7 +495,7 @@ Code declaration: {adb_24a8, [adb_2530, adb_24a8]}
 All these enum options contain a lot more useful info (see module _Compile_).
 You can also run any other program after successful completion.
 
-Another use-case would be to run the program after successful completion of the compilation, or any other program for that matter. 
+Another use-case would be to run the program after successful completion of the compilation, or any other program for that matter.  
 
 ## 30.7 Building and running on successful compilation
 What if we want to build our project, and on successfull completion, run it?

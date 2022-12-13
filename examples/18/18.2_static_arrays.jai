@@ -4,7 +4,7 @@ Vector3 :: struct {
     x, y, z : float;
 }
 
-Object :: struct { member: int; }
+Object :: struct { member: int #align 64; }
 
 main :: () {
     a : [4] u32;      // (1) A static array of 4 u32 integers.

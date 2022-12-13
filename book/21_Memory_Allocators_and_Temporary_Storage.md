@@ -121,7 +121,12 @@ main :: () {
     arrdyn := make_array(5);
     print("%\n", arrdyn); // => [1, 2, 3, 4, 5]
     
+
+    
     s := talloc_string(256); // (6)
+
+    builder: String_Builder;
+    builder.allocator = temp;   // (6B)
     
     print("Temporary_Storage uses % bytes\n", context.temporary_storage.occupied); // (3)
     // => Temporary_Storage uses 344 bytes
@@ -142,8 +147,9 @@ It is used in line (2).
 
 >  Use tprint to create a string, but without having to think about freeing the memory. 
 
-## 21.3.2 Storing arrays in temp
+## 21.3.2 Storing arrays and string builders in temp
 Line (1) shows how to use the temporary allocator for creating a dynamic array. When this array resizes, it will use Temporary_Storage to get its memory. If you need this frequently, you can write your own `make_array` proc.
+Line (6B) shows how to store a string builder in temporary storage; this makes calling `free_buffers` unnecessary.
 
 ## 21.3.3 Using New with temp
 As we saw in § 21.1, New can take any defined Allocator, so also `temp`! This can be done with the following code:

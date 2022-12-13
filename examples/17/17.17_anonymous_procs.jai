@@ -26,6 +26,7 @@ main :: () {
             // do some stuff
          }
       }
+      return 0;
     }();                            // (2B)
     print("a is %\n", a);  // => a is 1
 
@@ -37,7 +38,9 @@ main :: () {
             case 4; {
                 // do some stuff
             }
+            case;
         }
+        return 0;
    }(s);                            // (3B)
    print("b is %\n", b);  // => b is 2
 }

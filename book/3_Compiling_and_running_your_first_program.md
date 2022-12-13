@@ -246,7 +246,7 @@ main :: () {
 }
 ```
 Statements coming after `exit` will never be executed.
-`exit` can pass an integer to the OS, so that a script which invoked our Jai program could act upon the returned value.  
+`exit` must pass an integer to the OS, so that a script which invoked our Jai program could act upon the returned value.  
 Typical is:
    0: everything is OK
    < 0: the program encountered an error-condition.

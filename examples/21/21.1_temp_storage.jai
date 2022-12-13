@@ -7,7 +7,6 @@ make_array :: (x: int) -> [..] int {
     return result;
 }
 
-
 main :: () {
     b := "Resounding ";
     ch := "世界";
@@ -18,6 +17,9 @@ main :: () {
     print("%\n", arrdyn); // => [1, 2, 3, 4, 5]
 
     s := talloc_string(256); // (6)
+
+    builder: String_Builder;
+    builder.allocator = temp;   // (6B)
     
     print("Temporary_Storage uses % bytes\n", context.temporary_storage.occupied); // (3)
     // => Temporary_Storage uses 344 bytes

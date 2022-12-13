@@ -10,7 +10,7 @@ build :: () {
     print("The current workspace is %\n", w); // => The current workspace is 3
 
     target_options := get_build_options(w);               
-    target_options.output_executable_name = "program";    
+    target_options.output_executable_name = "program"; 
     set_build_options(target_options, w);                 
 
     compiler_begin_intercept(w);     // (1)
@@ -36,6 +36,10 @@ build :: () {
             case .PHASE; {            
                 message_phase := cast(*Message_Phase) message;     // (10)
 //              print("Entering phase %\n", message_phase.phase);  // (11)
+                if message_phase.phase == .TYPECHECKED_ALL_WE_CAN  {  // (11B)
+                    print("Typechecking done - stop compilation");
+                    exit(0);
+                }
             }
             case .TYPECHECKED; {            
                 message_typechecked := cast(*Message_Typechecked) message; // (12)

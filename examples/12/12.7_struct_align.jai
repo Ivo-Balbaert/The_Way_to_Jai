@@ -19,9 +19,4 @@ main :: () {
     object := New(Object);         // (5)
     // assert(cast(int)(*object) % 64 == 0); // => Assertion failed
     free(object);
-    N :: 100;
-    object_array := NewArray(N, Object, alignment=64);  // (6)
-    assert(cast(int)(*object_array[0]) % 64 == 0);      // (7)
-    assert(cast(int)(*object_array[1]) % 64 == 0);
-    assert(cast(int)(*object_array[10]) % 64 == 0);
 }

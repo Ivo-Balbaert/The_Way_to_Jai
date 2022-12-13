@@ -306,6 +306,12 @@ It has the following signature:
 
 `print_to_builder :: (builder : *String_Builder, format_string : string, args: .. Any) -> bool;`
 
+Other available `append` procs are:
+```
+append(*builder, s: *u8, length: s64)
+append(*builder, byte: u8)
+```
+
 You can check the builder's length at any time with `builder_string_length(*builder)` (see line (6)).  
 
 When the builder is complete, use `builder_to_string(*builder)` as in line (7) to convert the buffer to a normal string. This proc has the following signature:
