@@ -109,6 +109,7 @@ main :: () {
             pxor v1:, v1, v1;
         }
     } else {
+         print("AVX2 is not available on this processor, we have to run our fallback path...");
     // AVX2 is not available on this processor, we have to run our fallback path...
     }   
 }
@@ -205,3 +206,10 @@ block_1 :: #asm { pxor x:, x; }
 block_2 :: #asm { movdqu y:, block_1.x; }
 ```
 
+## 28.5 The Machine_X64 module
+This module contains useful routines for 64-bit Intel/AMD x86 computer architecture machines, for example:
+
+* `prefetch` : a method for speeding up by beginning a fetch operation before the memory is needed; an example:  `prefetch(array.data, Prefetch_Hint.T0);`
+* `mfence` : Memory Fence - performs a serializing operation on all load-from-memory and store-to-memory instructions that were issued prior the mfence instruction
+* `pause`
+* `get_cpu_info` : gets the CPU info and checks whether a particular assembly instruction is available, example:

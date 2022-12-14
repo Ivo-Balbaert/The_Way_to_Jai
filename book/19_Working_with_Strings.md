@@ -417,8 +417,10 @@ To accomplish this use `sprint` or `tprint` (see line 2B), or work with a String
 ### 19.6.2 String comparisons
 Here are the signatures of the most important ones:
 ```c++
-equal :: (a: string, b: string) -> bool #must;
-compare :: (a: string, b: string) -> int #must;   // works like strcmp in C 
+equal :: (a: string, b: string) -> bool #must; // comparison is case sensitive
+equal_nocase :: (a: string, b: string) -> bool #must;
+compare :: (a: string, b: string) -> int #must;   // works like strcmp in C
+compare_nocase :: (a: string, b: string) -> int #must;
 contains :: (str: string, substring: string) -> bool #must;
 contains :: (s: string, char: u8) -> bool;
 begins_with :: (str: string, prefix: string) -> bool #must;

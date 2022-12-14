@@ -21,17 +21,25 @@ main :: () {
     //     return;
     // }
 
-    write_entire_file(TESTFILE, BLOCK_OF_TEXT);     // (4)
+    if write_entire_file(TESTFILE, BLOCK_OF_TEXT)   print("Filewrite success!\n");
+    else print("Error while writing file!\n");  // (4)
+    // => Filewrite success!
 
-    data1 :=  read_entire_file(TESTFILE);            // (5)
+    // data1 :=  read_entire_file(TESTFILE);            // (5)
     // data1, success :=  read_entire_file(TESTFILE);            
     // if !success {
     //     return;
     // }
-    print("Contents of TESTFILE:\n\"%\"\n", data1);
+    text, success := read_entire_file(TESTFILE);
+    if success {
+        print("File successfully read.\n");
+    } else {
+        print("Error. Cannot open file.\n");
+    }
+    print("Contents of TESTFILE:\n\"%\"\n", text);
 
-    file, success :=  file_open(TESTFILE, for_writing=true, keep_existing_content=true); // (6)
-    if !success {
+    file, success2 :=  file_open(TESTFILE, for_writing=true, keep_existing_content=true); // (6)
+    if !success2 {
         print("Could not open file % for writing.\n", TESTFILE);
         return;
     }

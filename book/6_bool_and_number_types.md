@@ -371,11 +371,27 @@ A random float between 0 and 100: 75.796494
 */
 ```
 
-The following procedures are defined in the _Random_ module, which is just a file *Random.jai* in the _modules_ folder.  
+The following procedures are defined in the _Random_ module which deals with random number generation (it is just a file *Random.jai* in the _modules_ folder).  
 ```c++
+// sets the global random seed to the value passed as argument
+random_seed :: (new_seed: u32) 
+
+// returns a 32 bit unsigned integer, a random number between 0 and 4,294,967,295
 random_get :: () -> u64
+
+// returns a 32 bit floating point number within the range of 0.0 and 1.0, like .1358701
 random_get_zero_to_one :: () -> float
+// returns a 32 bit floating point number within the range of min and max
 random_get_within_range :: (min: float, max: float) -> float
 ```
 
 If you want more sophistication, use the _PCG_ module which contains the same procs.
+
+### 6.2.10 The Math module
+The _Math_ module deals with mathematical operations with an emphasis on game programming related math, such as multiplying 2x2, 3x3, and 4x4 matrices.
+
+It contains amongst others:
+* a list of constants like PI, TAU, FLOAT64_MIN, FLOAT64_MAX, FLOAT64_INFINITY, FLOAT64_NAN
+* a set of common mathematical functions, like abs,log2
+* color utility procedures
+* a set of common mathematical objects, such as Vector2, Vector3, Vector4, Quaternion, Matrix2, Matrix3 and Matrix4, Plane, which are all structs

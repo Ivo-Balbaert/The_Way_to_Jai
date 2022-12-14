@@ -31,16 +31,22 @@ main :: () {
     //     return;
     // }
 
-    write_entire_file(TESTFILE, BLOCK_OF_TEXT);     // (4)
+    if write_entire_file(TESTFILE, BLOCK_OF_TEXT)   print("Filewrite success!\n"); // (4)
+    else print("Error while writing file!\n");  
+    // => Filewrite success!
 
-    data1 :=  read_entire_file(TESTFILE);            // (5)
-    print("Contents of TESTFILE:\n\"%\"\n", data1);
-
-    file, success :=  file_open(TESTFILE, for_writing=true, keep_existing_content=true); // (6)
-    if !success {
-        print("Could not open file % for writing.\n", TESTFILE);
-        return;
+    // data1 :=  read_entire_file(TESTFILE);            // (5)
+    // data1, success :=  read_entire_file(TESTFILE);            
+    // if !success {
+    //     return;
+    // }
+    text, success := read_entire_file(TESTFILE);
+    if success {
+        print("File successfully read.\n");
+    } else {
+        print("Error. Cannot open file.\n");
     }
+    print("Contents of TESTFILE:\n\"%\"\n", text);
 
     advance :=  file_length(file);    // (7)
     print("Length file is %\n", file_length(file));  // => Length file is 50
@@ -96,7 +102,7 @@ Sailor!
 
 If you need to create a folder from code, do it as in line (2). Similarly, you have delete_directory.  
 To test whether a file already exists, use `file_exists` as in line (3).
-Use `write_entire_file` to write a string to a file (creating the file when it does not exist). This proc can also take a `*builder`, where `builder` is a String Builder. `read_entire_file` (line (5)) reads the contents of a file and returns it as a string.
+Use `write_entire_file` (see line (4)) to write a string to a file (creating the file when it does not exist). This proc can also take a `*builder`, where `builder` is a String Builder. `read_entire_file` (line (5)) reads the contents of a file and returns it as a string.
 
 The `file_open` operation (line (6)) has the following signature:
 `file_open :: (name: string, for_writing := false, keep_existing_content := false, log_errors := true) -> File, bool`
@@ -115,3 +121,4 @@ so first we define a `buffer` to read into.
 In line (12) we construct a string with the buffer data and then print it out. 
 
 To rename a file, use `file_move`, to remove a file `file_delete`.
+Search in module _File_ for other variants of the above procedures.

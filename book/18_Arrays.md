@@ -246,12 +246,14 @@ See *18.3_dynamic_arrays.jai*:
 
 main :: () {
     arrdyn : [..]int;          // (1) dynamic array of integers.
-    another_array : [..]int;      
+    another_array : [..]int;
+    another_array2 : []int;        
     b : [..]string;            // (2) dynamic array of strings.
 
     // clean up memory
     defer array_free(arrdyn);     // (3)
     defer free(*another_array);   // (4)
+    defer free(*another_array2);  
     defer free(*b);   // 
     
     array_add(*arrdyn, 5);  // (5) Add 5 to the end of arrdyn
@@ -269,6 +271,9 @@ main :: () {
     print("another_array is: %\n", another_array); // => another_array is: []
     array_copy(*another_array, arrdyn); // (8) copy arrdyn into another_array
     print("another_array is: %\n", another_array); // => another_array is: [13, 9]
+    another_array2 = array_copy(arrdyn); // (8B)
+    print("another_array2 is: %\n", another_array2); // => another_array2 is: [13, 9]
+ 
 
     array_reset(*arrdyn);  // (9) Reset (empties) arrdyn
     print("arrdyn is: %\n", arrdyn); // => arrdyn is: []
@@ -288,7 +293,8 @@ main :: () {
 In the code above lines (1)-(2) declare to dynamic arrays, with the typical syntax:  
 `[..]type`  
 To release memory, you can either use the **array_free** proc (line (3)), or the **free** proc which needs a pointer to the memory (line (4)).
-To add one or several item(s) (see § 18B) at a time, use the **array_add** proc with a pointer to the array, and the item(s) as arguments (see lines (5) and following).
+To add one or several item(s) (see § 18B) at a time, use the **array_add** proc with a pointer to the array, and the item(s) as arguments (see lines (5) and following).  
+You can get the last item of an array with `peek` without changing the array (5B), `pop` in (5C) is the same but effectively removes the last item.
 
 ### 18.4.1 Useful procs for dynamic arrays
 
@@ -299,7 +305,7 @@ Notes:
 - This proc does an unordered remove, the removed item is replaced with the last item (in fact: a swap with the last item, and then a remove of the last element). The remove happens in constant time O(1).
 (For an ordered remove, see § 18B.) 
 
-To copy an array into another array, use **array_copy**, as in line (8).
+To copy an array into another array, use **array_copy**, as in lines (8) or (8B).
 To empty a dynamic array completely, use the **array_reset** proc, as in line (9).
 
 Notice that whenever you need to change an array in a proc, you need to give it a pointer to the array. A proc like array_find doesn't need that, because it only reads through the array.  
