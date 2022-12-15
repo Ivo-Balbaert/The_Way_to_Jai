@@ -402,12 +402,12 @@ Also the `get_field` method (line (5) gives you detailed information.
 The methods discussed in the previous sections provide type info which can be used to _serialize_ structs into strings, and vice-versa _deserialize_ strings into structs. They enable us to write serialization procedures, commonly used e.g. in network replication of entities and save game data, see § 26.9.2
 
 ## 15.7 Annotations or notes
-It's also possible to add an annotation to a struct, a struct field or a function. For example: to not serialize a certain field with **@NoSerialize**, see line (2).
+It's also possible to add an annotation to a struct, a struct field or a procedure. For example: to not serialize a certain field with **@NoSerialize**, see line (2).
 The note tag is represented as a string, and unlike in Java or C#, is not structured. Its info is stored in the notes field of the Type_Info_Struct_Member struct. This field is an array of strings, meaning each field can have several notes (see line (4)).
 This can be picked up with introspection, and appropriate actions can be taken accordingly.  
 You can also add annotations to a struct itself, for example: to indicate which version of the struct definition is used (see line (1)).
 
 Notes are also abundantly used within code comments to add useful info for refactoring.
-For example: @TestProcedure, @Incomplete, @Refactor, @Cleanup, @Simplify, @Temporary, @pure ...
+For example: @TestProcedure, @test, @Incomplete, @Refactor, @Cleanup, @Simplify, @Temporary, @pure ...
 Example of use: Look up in your code editor all occurrences of @Cleanup when you want to further improve your code.
 You can invent your own sorts of notes, they are not limited.

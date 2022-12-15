@@ -1366,3 +1366,22 @@ The type of Handle is Type (see (4)), but if we dig deeper in line (5) we see th
 Another variant of the isa type is shown in lines (2A-B). These types will implicitly cast to their isa type, but variants with the same isa type will not implicitly cast to each other.
 Taking type_info(), and dereferencing the `variant_of` field shows the underlying type and size (lines 5B, 6 and 7).
 
+## 26.14 Getting the name of a variable at compile time
+See *26.23_get_variable_name.jai*:
+```c++
+#import "Compiler";
+#import "Program_Print";
+#import "Basic";
+
+get_variable_name :: (thing: int, call := #caller_code) -> string #expand {
+    node := cast(*Code_Procedure_Call) compiler_get_nodes(call);
+    builder: String_Builder;
+    print_expression(*builder, node.arguments_unsorted[0].expression);
+    return builder_to_string(*builder);
+}
+
+main :: () {
+    a_variable :: 10;
+    #run print("%", get_variable_name(a_variable)); // => a_variable
+}
+```

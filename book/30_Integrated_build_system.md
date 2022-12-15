@@ -320,11 +320,11 @@ To build for production (release), you would do only `#run build_release();`, or
 ## 30.5 Changing the default metaprogram
 Here is how to substitute the default metaprogram with your own:  
 Your own metaprogram should be a module (let's call it Build, but any name is ok). This Build module must be in a folder Build (either in the default `jai/modules` folder or in a dedicated `modules_folder`) containing a file module.jai. This file has to contain a `build()` proc and a `#run build()` (it should not contain a `main` proc. You can start from 30.3_build.jai or  _modules/Minimal_Metaprogram.jai_ to make your Build() module. You can then use your metaprogram as follows: 
-`jai main.jai --- meta Build`  
+`jai main.jai -- meta Build`  
 if Build is in the default jai/modules folder, or  
-`jai main.jai --- import_dir "d:/Jai/my_modules" meta Build`  
+`jai main.jai -- import_dir "d:/Jai/my_modules" meta Build`  
 if Build is in a dedicated _d:/Jai/my_modules_.
-
+(--- instead of -- are also allowed)
 ## 30.6 Intercepting the compiler message loop
 As developer you can access the workings of the compiler through the compiler message loop.
 
@@ -565,7 +565,7 @@ This program was built with metaprogram 30.8_build_and_run.jai
 ```
 
 ## 30.8 Building and running with a compiler command-line argument 
-In § 2B we told you that arguments given at the end of a `jai` command with `-- ` are arguments for the meta-program. These arguments are called _arguments for the metaprogram_ or _compiler command-line arguments_.
+In § 2B we told you that arguments given at the end of a `jai` command with `- ` are arguments for the meta-program. These arguments are called  _compiler command-line arguments_.
 Now we will show you how to use them, enhancing our previous program.
 
 See *30.7_build_and_run2.jai*:
@@ -625,10 +625,10 @@ main :: () {}
 #run build();
 ```
 
-We define a new global variable `run_on_success` which will become true when we give a metaprogram argument `-- run`.
-In line (1) we get these argument(s) from the property `Build_Options.compile_time_command_line`. Starting in line (2), we loop over them and set `run_on_success` when finding `-- run`. In line (3) we now test both success parameters before running the executable.  
+We define a new global variable `run_on_success` which will become true when we give a metaprogram argument `- run`.
+In line (1) we get these argument(s) from the property `Build_Options.compile_time_command_line`. Starting in line (2), we loop over them and set `run_on_success` when finding `- run`. In line (3) we now test both success parameters before running the executable.  
 To get the same output as in the previous section, you now have to call the compiler with:  
-`jai 30.7_build_and_run2.jai -- run`.
+`jai 30.7_build_and_run2.jai - run`.
 
 ## 30.9 Choosing a debug / release build with compiler command-line arguments
 In the same way as in the previous section, we can decide to either do a debug build or a release build based on the given command-line argument. This is shown in the following code, which is a further development of the code in § 30.4.8:
@@ -682,9 +682,9 @@ main :: () {}
 ```
 
 Again we loop over the meta-program arguments starting in line (1).
-Calling the program as `jai 30.8_debug_release_build.jai -- debug` supplies the meta-program argument `-- debug`, which branches to `case "debug";`, which calls `build_debug(w);` 
+Calling the program as `jai 30.8_debug_release_build.jai - debug` supplies the meta-program argument `- debug`, which branches to `case "debug";`, which calls `build_debug(w);` 
 It prints out `Choosing debug options...` during compilation.
-(The same logic goes for `-- release.`)    
+(The same logic goes for `- release.`)    
 
 Calling `main3` now shows: main3
 `This program was built with metaprogram 30.8_debug_release_build.jai`

@@ -1,9 +1,13 @@
 # 2B - Compiler command-line options
 
 The structure of a typical jai command is as follows:  
-`jai -option1 -option2 file_to_compile.jai -- arguments for metaprogram`
+`jai -option1 -option2 file_to_compile.jai - arguments for metaprogram`
 
-Every argument after `-- ` is ignored by the compiler itself (the space after -- is mandatory!), and is passed to the metaprogram for its own use. Any argument not starting with a -, and before --, is the name of a file to compile.
+Every argument after `-` is ignored by the compiler itself, and is passed to the user-level metaprogram for its own use.
+Any argument not starting with a -, and before --, is the name of a file to compile.
+The -- command line arguments are not for the compiler itself; 
+they are passed from the default metaprogram to your compile-time execution environment. 
+The --- arguments are the actual command-line arguments for the compiler itself (see § 30.5).
 
 Example:     `jai -x64 program.jai -- info for the compile_time execution`
 It is also allowed to add the options after the source-file name, like this:  

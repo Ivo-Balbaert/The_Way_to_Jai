@@ -20,9 +20,9 @@ main :: () {
     }
 }
 
-/* Start program as: '19B 42 "hello" 3.14'
+/* Start program as: '19B.exe 42 "hello" 3.14'
 The command-line arguments are:
-Position: 0 - Value: 19B
+Position: 0 - Value: 19B.exe
 Position: 1 - Value: 42
 Position: 2 - Value: hello
 Position: 3 - Value: 3.14
