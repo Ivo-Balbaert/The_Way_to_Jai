@@ -1,7 +1,8 @@
 # 31 Working with Threads
 
 Threads are a facility provided by the operating system. A different process can run in each thread. Jai exposes this facility: programs can launch multiple threads so that several processes can run in parallel, that is: simultaneously. To use this you need the _Thread_ module.                                        
-Jai provides platform-independent thread routines, as well as a Thread_Group functionality.  
+Jai provides platform-independent thread routines, as well as Mutexes, Threading primitives, Semaphores and a ThreadGroup functionality.
+Thread is a struct, defined   in the module _Thread_.
 Each thread has its own Context. Because Temporary_Storage is in the Context, there's a separate storage space per thread, so you don't have to synchronize between threads, and it is fast.
 
 ## 31.1 Basics of threads
@@ -36,16 +37,28 @@ log_level = NORMAL; temporary_storage = 21e_caf8_9b90; dynamic_entries = [{(null
 */
 ```
 
-You create a new thread by calling the `thread_create` procedure (see line (1)). The new thread has to do something, so `thread_create` is called with a proc as its parameter: this always has to have the signature as in line (5):
+You create a new thread by calling the `thread_create` procedure (see line (1)), which internally calls `thread_init`, and creates a thread using heap allocation.
+`thread_create` has this signature:  
+`thread_create :: (proc: Thread_Proc, temporary_storage_size : s32 = 16384, starting_storage: *Temporary_Storage = null) -> *Thread;`
+
+The `thread_init` proc has this signature:  
+`thread_init :: (thread: *Thread, proc: Thread_Proc, temporary_storage_size : s32 = 16384, starting_storage: *Temporary_Storage = null) -> bool`
+This proc does not start a thread, it just initializes the thread's data.
+
+The new thread has to do something, so `thread_create` is called with a proc as its 1st parameter: this always has to have the signature as in line (5):
 `thread_proc :: (thread: *Thread) -> s64`  
 A thread had to be shut down when it is no longer useful, we do this with defer and the `thread_destroy` procedure in line (2).  
-Then we have to start up the new thread with the `thread_start` procedure in line (3).  
-Line (4) uses the proc `sleep_milliseconds(1000)` to suspend the main thread for 1s. This is needed here to see the output of both main and thread1, without it main() closes off before thread1 has had the chance to print its own output.  
+
+Then we have to start up the new thread with the `thread_start` procedure in line (3); this proc has the signature: `thread_start :: (thread: *Thread);`.  
+Line (4) uses the proc `sleep_milliseconds(1000)` to suspend the main thread for 1s. This is needed here to see the output of both main and thread1, without it main closes off before thread1 has had the chance to print its own output.  
 Line (5) shows that we can test whether a thread is still running with the `thread_is_done` procedure.  
 
-From the output we see that the `main()` thread and the new thread `thread1` have a different `context`. Their contexts are using the same procedures, but they have a different thread_index and their temporary storage location is different.
+From the output we see that the `main` thread and the new thread `thread1` have a different `context`. Their contexts are using the same procedures, but they have a different thread_index and their temporary storage location is different.
 
-## 31.2 Building a program using OpenGL, macros and threads
+## 31.2 Thread Groups
+
+
+## 31.3 Building a program using OpenGL, macros and threads
 > Remark: This example was made by Nuno Afonso, and discussed in his YouTube video series 'The Joy of Programming in Jai", part 11: Advanced Compilation.
 
 In this example, we start from 30.6_build_and_run.jai, to which we have only added 4 lines. While compiling, we are showing an SDL window with title "Compiling..." and a grey background. When the compiler emits the COMPLETE message, we change the window title to "Success!" and the background to green. To accomplish this, OpenGL is used to show the windows in a separate (GUI) thread from the main thread, using macros as well. See it in action: `jai 31.2_build_threads.jai`  
@@ -169,7 +182,7 @@ render :: () {
 }
 ```
 
-Line (1) and following imports the necessary modules_SDL_ ([Simple DirectMedia Layer](https://www.libsdl.org/)) and _GL_ ([OpenGL - Open Graphics Library](https://en.wikipedia.org/wiki/OpenGL)) and _Thread_.  
+Line (1) and following imports the necessary modules_SDL_, _GL_  and _Thread_.  
 In line (2), we see a macro `show_gui`, which first activates OpenGL. Then in the parent (because of the `) scope where it is being called, a `show_gui` thread is created and started. Care is taken to shut down the threat at the end in the parent scope with `defer. At compilation, this macro becomes a proc `show_gui()`, which is the one which is called in line (2) in the main program 31.2_build_threads.jai
 (Both versions of show_gui() don't form a problem, they are overloading procs.)
 In the `show_gui` proc that is executed in the separate GUI thread, an SDL window is created in line (6), with a grey color (line (7)).  
