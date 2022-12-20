@@ -92,7 +92,7 @@ In Workspace 1 ("First Workspace"):
 /etc/jai/modules/POSIX/libc_bindings.jai:243,20: Error: /lib/i386-linux-gnu/libdl.so.2: Dynamic library load failed. Error code 2, message: No such file or directory
 
     // @header dlfcn.h
-    dynamic_linker :: #foreign_system_library "libdl";
+    dynamic_linker :: #system_library "libdl";
 
 /etc/jai/modules/Basic/posix.jai:1,2: Info: This occurred inside a module that was imported here.
 

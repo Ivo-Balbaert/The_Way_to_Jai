@@ -1,7 +1,7 @@
 // This program only works on Linux!
 #import "Basic";
 
-libc :: #foreign_system_library "libc"; 
+libc :: #system_library "libc"; 
 
 // C-functions:
 strlen :: (s: string) -> int                     #foreign libc;

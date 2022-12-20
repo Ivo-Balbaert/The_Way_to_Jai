@@ -1,4 +1,4 @@
-
+// Error: Build_Options.output_type is set to EXECUTABLE, but Build_Options.output_executable_name is empty.
 #import "Basic";
 #import "Compiler";
 
@@ -9,7 +9,9 @@
         return;
     }
     target_options := get_build_options(w);
+    target_options.output_executable_name = "main3";   
     args := target_options.compile_time_command_line;
+    set_build_options(target_options, w);
     for arg: args {       // (1)
         if arg == {
         case "debug";
@@ -27,7 +29,6 @@ build_debug :: (w: Workspace) {
     target_options.backend =.X64; 
     target_options.optimization_level = .DEBUG;
     target_options.array_bounds_check = .ON;
-    target_options.output_executable_name = "main3";   
     set_build_options(target_options, w);
 }
 
@@ -37,7 +38,6 @@ build_release :: (w: Workspace) {
     target_options.backend = .LLVM;
     target_options.optimization_level = .RELEASE;
     set_optimization_level(*target_options, 2, 0);
-    target_options.output_executable_name = "main3";   
     set_build_options(target_options, w);
 }
 

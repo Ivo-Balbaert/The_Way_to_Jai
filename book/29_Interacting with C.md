@@ -10,7 +10,7 @@ Also it can ease the migration of an existing C project to Jzi: project parts ca
 ## 29.2 How to call C? The #foreign directives
 To access a C function, use the **#foreign**  directive after the Jai declaration of the C function. After `#foreign` you must specify the name of the library where the function is located in. The compiler will then import the C function with the specified name in the code. You can also specify an alternative name for the function as shown in the lz4 examples below.
 
-> #foreign	library	specifies a foreign (C) procedure 
+> #foreign specifies a foreign (C) procedure 
 
 Some examples:	
 This statement looks for a C function with the name `strlen` and with the same signature and imports it from the C standard library `libc` (on Linux).  
@@ -21,18 +21,18 @@ This statement looks for a C function with the name `strlen` and with the same s
 `clock :: () -> s64                            #foreign libc;`  	
 
 The C library is here libc.  
-Use the **#foreign_system_library** directive to specify as a constant an OS system file (library) for foreign functions.  
-For example, declare `libc` as: `libc :: #foreign_system_library "libc";`  
-To use the Windows version of the C run time, specify:  `crt :: #foreign_system_library "msvcrt";`  
-To use the Windows `kernel32` library, specify:         `kernel32 :: #foreign_system_library "kernel32";`  
+Use the **#system_library** directive to specify as a constant an OS system file (library) for foreign functions.  
+For example, declare `libc` as: `libc :: #system_library "libc";`  
+To use the Windows version of the C run time, specify:  `crt :: #system_library "msvcrt";`  
+To use the Windows `kernel32` library, specify:         `kernel32 :: #system_library "kernel32";`  
 
 ## 29.3 Mapping a dynamic library
-Functions from a dynamic library (.dll/.so file) also need 2 #foreign directives to be specified.
+Functions from a dynamic library (.dll/.so file) also need two directives to be specified.
 
-The **#foreign_library** directive specifies a file (library) for foreign functions. For example, if you want to use the `lz4` fast-compression C library in your Jai code, you specify it as:
-`lz4 :: #foreign_library "liblz4";`
+The **#library** directive specifies a file (library) for foreign functions. For example, if you want to use the `lz4` fast-compression C library in your Jai code, you specify it as:
+`lz4 :: #library "liblz4";`
 
-The path to the foreign library is best expressed as relative to the program file, for example: FMOD :: `#foreign_library "../../lib/fmod";`
+The path to the foreign library is best expressed as relative to the program file, for example: FMOD :: `#library "../../lib/fmod";`
 Also make sure to copy the dll next to the program's exe file.
 
 > Remark: Inside the "" you can write the full path to the library
@@ -52,7 +52,7 @@ size_of_state :: () -> s32 #foreign lz4 "LZ4_sizeofState";
 ```
 
 Linking to a system-library is also done with:
-`#foreign_system_library "d3d11";`
+`#system_library "d3d11";`
 
 ## 29.4 Converting a C header (.h) file
 The steps are:  
@@ -76,7 +76,7 @@ See *29.1_call_c_linux.jai*:
 // This program only works on Linux!
 #import "Basic";
 
-libc :: #foreign_system_library "libc";         // (1)
+libc :: #system_library "libc";         // (1)
 
 // C-functions:                                 // (2)
 strlen :: (s: string) -> int                     #foreign libc;
@@ -100,8 +100,8 @@ See *29.2_call_c_windows.jai*:
 #import "Basic";
 
 // C library:
-crt :: #foreign_system_library "msvcrt";            // (1)
-kernel32 :: #foreign_system_library "kernel32";
+crt :: #system_library "msvcrt";            // (1)
+kernel32 :: #system_library "kernel32";
 
 // C-functions:                                     // (2)
 strlen :: (s: string) -> int                     #foreign crt;
@@ -146,7 +146,7 @@ See *29.5_callc.jai*:
 
 add_int :: (a: s32, b: s32) -> s32                   #foreign my;   // (3A)
 add_double :: (a: float64, b: float64) -> float64    #foreign my;   // (3B)
-my :: #foreign_library "libmy";                                     // (4)
+my :: #library "libmy";                                     // (4)
 
 main :: () {
     print("%\n", add_int(3,8));            // (5A) => 11
@@ -250,7 +250,7 @@ alloc_string :: (data: *u8, bytes_excluding_zero: s64) -> string {
 }
 
 #if OS == .WINDOWS {                    // (1)
-    kernel32 :: #foreign_system_library "kernel32";
+    kernel32 :: #system_library "kernel32";
     GetComputerNameA :: (lpBuffer: *u8, nSize: *u32) -> s32 #foreign kernel32; // (1B)
 
     get_computer_name :: () -> string {
@@ -262,7 +262,7 @@ alloc_string :: (data: *u8, bytes_excluding_zero: s64) -> string {
         return copy_string("unknown");
     }
 } else #if OS == .LINUX {               // (2)
-    libc   :: #foreign_system_library "libc";
+    libc   :: #system_library "libc";
     size_t :: u64;
     gethostname :: (name: *s8, namelen: size_t) -> s32 #foreign libc; // (2B)
 

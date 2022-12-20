@@ -13,7 +13,7 @@ alloc_string :: (data: *u8, bytes_excluding_zero: s64) -> string {
 }
 
 #if OS == .WINDOWS {                    // (1)
-    kernel32 :: #foreign_system_library "kernel32";
+    kernel32 :: #system_library "kernel32";
     GetComputerNameA :: (lpBuffer: *u8, nSize: *u32) -> s32 #foreign kernel32; // (1B)
 
     get_computer_name :: () -> string {
@@ -25,7 +25,7 @@ alloc_string :: (data: *u8, bytes_excluding_zero: s64) -> string {
         return copy_string("unknown");
     }
 } else #if OS == .LINUX {               // (2)
-    libc   :: #foreign_system_library "libc";
+    libc   :: #system_library "libc";
     size_t :: u64;
     gethostname :: (name: *s8, namelen: size_t) -> s32 #foreign libc; // (2B)
 

@@ -2,8 +2,8 @@
 #import "Basic";
 
 // C library:
-crt :: #foreign_system_library "msvcrt";            // (1)
-kernel32 :: #foreign_system_library "kernel32";
+crt :: #system_library "msvcrt";            // (1)
+kernel32 :: #system_library "kernel32";
 
 // C-functions:                                     // (2)
 strlen :: (s: string) -> int                     #foreign crt;
