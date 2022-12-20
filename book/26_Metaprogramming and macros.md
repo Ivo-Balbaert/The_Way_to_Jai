@@ -1385,3 +1385,8 @@ main :: () {
     #run print("%", get_variable_name(a_variable)); // => a_variable
 }
 ```
+
+The directive **#caller_code** when used as the default
+value of a macro argument, will be set to the Code of the procedure call
+that invoked the macro.  
+compiler_get_nodes() can then be called on this to inspect and manipulate it, and so forth. With these kinds of techniques you manipulate code from a macro within the program itself (see howto/497).

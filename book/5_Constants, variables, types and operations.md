@@ -489,3 +489,12 @@ Hallo Wereld!
 ```
 As we see from line (4) onward, we can print any Unicode string.
 In general, print out any Unicode character like this: `print("\u03C0");`
+
+## 5.8 - General naming conventions
+The following naming conventions are more or less standard:
+- snake_case for identifiers (procedures, variables, ...)
+- Capitalized_Snake_Case for types
+- PascalCase for macros and imports
+- full caps for constants
+
+Note that these conventions are not enforced in the language, and you'll see exceptions to these rules in the standard library distribution. 

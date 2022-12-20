@@ -1,8 +1,8 @@
-#import "Window_Creation";
-#import "System";
 #import "Basic";
-Simp :: #import "Simp";
 #import "Input";
+Simp :: #import "Simp";
+#import "System";
+#import "Window_Creation";
 
 main :: () {
   window_width  : s32 = 1920;

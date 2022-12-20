@@ -11,7 +11,7 @@ This chapter talks about building (compiling/linking while setting options) a Ja
 Most of the procedures we will need are define in module _Compiler_, so we'll import this module in the programs in this chapter. Most of these programs will also be run at compile-time with #run.  
 By convention a procedure called `build()` is run with `#run build()`, but you can also just run a code block with `#run {...}` (see 30.11_using_notes.jai).  
 
-Behind the scenes when you do a: `jai program.jai`, the compiler internally runs another meta-program at startup to compile the first workspace. This **default meta-program** does things such as setting up the working directory for the compiler, setting the default name of the output executable based on command-line arguments, and changing between debug and release build based on command-line arguments. The source for this metaprogram is in _modules/Default_Metaprogram.jai_. 
+Behind the scenes when you do a: `jai program.jai`, the compiler internally runs another meta-program at startup to compile the first workspace. This **default meta-program** does things such as setting up the working directory for the compiler, setting the default name of the output executable based on command-line arguments, and changing between debug and release build based on command-line arguments. It only accepts arguments preceded by a `-`. The source for this metaprogram is in _modules/Default_Metaprogram.jai_. 
 
 Any procedure that has the **#compiler** directive is a proc that interfaces with the compiler as a library; it works with compiler internals.
 
@@ -324,7 +324,7 @@ Your own metaprogram should be a module (let's call it Build, but any name is ok
 if Build is in the default jai/modules folder, or  
 `jai main.jai -- import_dir "d:/Jai/my_modules" meta Build`  
 if Build is in a dedicated _d:/Jai/my_modules_.
-(--- instead of -- are also allowed)
+(--- instead of -- are also allowed. The compiler now accepts either -- or --- as the delimiter of hardcoded compiler arguments.)
 ## 30.6 Intercepting the compiler message loop
 As developer you can access the workings of the compiler through the compiler message loop.
 
@@ -575,7 +575,7 @@ See *30.7_build_and_run2.jai*:
 #import "Process";
 
 success := false;           // compile is successful
-run_on_success := false;    // compiler command line argument --run
+run_on_success := false;    // compiler command line argument - run
 
 build :: () {
     w := compiler_create_workspace();                     

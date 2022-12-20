@@ -56,7 +56,221 @@ Line (5) shows that we can test whether a thread is still running with the `thre
 From the output we see that the `main` thread and the new thread `thread1` have a different `context`. Their contexts are using the same procedures, but they have a different thread_index and their temporary storage location is different.
 
 ## 31.2 Thread Groups
+## 31.2.1 Concept and basic example
+When you need a bunch of threads to asynchronously respond to requests simultaneously, you can launch a so-called Thread_Group.  
+The following proc's are at your disposal:  
+* `init :: ()`  initializes a thread group
+  Here is its signature:
+  `init :: (group: *Thread_Group, num_threads: s32, group_proc: Thread_Group_Proc, enable_work_stealing := false);`
 
+   The thread group can only execute one procedure, namely the one indicated by `group_proc`.  
+   The `Thread_Group_Proc` procedure pointer is defined as:   
+   `Thread_Group_Proc :: #type (group: *Thread_Group, thread: *Thread, work: *void) -> Thread_Continue_Status;`
+
+   work is passed into the Thread_Group through the add_work :: () function, but the actual work is specified in `Thread_Group_Proc`. 
+   The `Thread_Continue_Status` can have the following values: 
+    .STOP       causes the thread to terminate 
+    .CONTINUE   causes the thread to continue to run
+
+* `start :: ()` starts the running of the threads; it has the signature:  `start :: (group: *Thread_Group);`
+  
+* `shutdown :: ()` stops the running of the threads; call shutdown before your program exits.
+
+* `add_work :: ()` adds a unit of work, which will be given to one of the threads; here is its signature:  
+  `add_work :: (group: *Thread_Group, work: *void, logging_name := "");`
+
+Let's see this in action in the following example:
+
+See _31.3_thread_groups.jai_:
+(Example taken from the Jai Community Library wiki)
+```c++
+#import "Basic";
+#import "Thread";
+
+thread_test :: (group: *Thread_Group, thread: *Thread, work: *void) -> Thread_Continue_Status {
+  print("thread_test :: () from thread.index = %\n", thread.index);
+  return .CONTINUE;
+}
+
+main :: () {
+  thread_group: Thread_Group;
+  init(*thread_group, 4, thread_test, true);     // (1)
+  thread_group.logging = false;                  // (2) 
+
+  start(*thread_group);                          // (3)
+  for i: 0..10                                   // (4)
+    add_work(*thread_group, null);
+
+  sleep_milliseconds(5000);                      // (5)
+
+  shutdown(*thread_group);                       // (6)
+  print("exit program\n");
+}
+
+/*
+thread_test :: () from thread.index = 2
+thread_test :: () from thread.index = 2
+thread_test :: () from thread.index = 3
+thread_test :: () from thread.index = 3
+thread_test :: () from thread.index = 3
+thread_test :: () from thread.index = 3
+thread_test :: () from thread.index = 3
+thread_test :: () from thread.index = 2
+thread_test :: () from thread.index = 4
+thread_test :: () from thread.index = 1
+thread_test :: () from thread.index = 3
+exit program
+
+// other run:
+thread_test :: () from thread.index = 2
+thread_test :: () from thread.index = 2
+thread_test :: () from thread.index = 2
+thread_test :: () from thread.index = 2
+thread_test :: () from thread.index = 2
+thread_test :: () from thread.index = 2
+thread_test :: () from thread.index = 1
+thread_test :: () from thread.index = 1
+thread_test :: () from thread.index = 3
+thread_test :: () from thread.index = 2
+thread_test :: () from thread.index = 4
+exit program
+*/
+```
+
+In line (1) the thread group is initialized with 4 threads, the proc `thread_test` is the work the group is going to execute. Here it only prints out the index of the currently active thread. Line (2) turns off the thread logging; set logging to true to turn on debugging.  
+The group is started in line (3), and in the loop in line (4) work is added. The thread group is stopped in line (6). Without the pause of the `main` thread in (5), main would exit and stop the program before the thread group could start its work.    
+From the added output of two runs, we see that the order in which threads are activated is totally random.  
+With logging set to true, the output is much more verbose:
+```
+'' added     work '' to the available list at time 0.
+'' added     work '' to the available list at time 0.000207.
+'' added     work '' to the available list at time 0.00033.
+'' added     work '' to the available list at time 0.000496.
+'' added     work '' to the available list at time 0.000631.
+'' added     work '' to the available list at time 0.000728.
+'' added     work '' to the available list at time 0.000829.
+'' assigned  work ''   to thread 2 at time 0.000733.
+'' assigned  work ''   to thread 4 at time 0.000721.
+thread_test :: () from thread.index = 4
+'' added     work '' to the available list at time 0.000968.
+'' added     work '' to the available list at time 0.001455.
+'' added     work '' to the available list at time 0.001547.
+'' assigned  work ''   to thread 3 at time 0.000848.
+thread_test :: () from thread.index = 3
+'' assigned  work ''   to thread 1 at time 0.000993.
+thread_test :: () from thread.index = 1
+'' added     work '' to the available list at time 0.001644.
+'' assigned  work ''   to thread 4 at time 0.001338.
+thread_test :: () from thread.index = 4
+'' stole     work ''  for thread 4 (worker 3) at time 0.002513 from worker 0.       
+'' assigned  work ''   to thread 4 at time 0.00266.
+thread_test :: () from thread.index = 4
+thread_test :: () from thread.index = 2
+'' assigned  work ''   to thread 1 at time 0.002228.
+thread_test :: () from thread.index = 1
+'' stole     work ''  for thread 4 (worker 3) at time 0.002824 from worker 1.       
+'' assigned  work ''   to thread 2 at time 0.002904.
+thread_test :: () from thread.index = 2
+'' stole     work ''  for thread 1 (worker 0) at time 0.003141 from worker 2.       
+'' assigned  work ''   to thread 1 at time 0.003531.
+thread_test :: () from thread.index = 1
+'' assigned  work ''   to thread 4 at time 0.003262.
+thread_test :: () from thread.index = 4
+'' assigned  work ''   to thread 3 at time 0.001953.
+thread_test :: () from thread.index = 3
+exit program
+```  
+
+## 31.2.2 Getting results from the thread group
+The basic example above didn't do any useful work. Let's see a more practical example:
+
+See _31.4_thread_group_response.jai_:
+(Example taken from the Jai Community Library wiki)
+```c++
+
+#import "Basic";
+#import "Thread";
+
+Work :: struct {
+  count: int;
+  result: int;
+}
+
+thread_test :: (group: *Thread_Group, thread: *Thread, work: *void) -> Thread_Continue_Status {
+  w := cast(*Work) work;
+  print("thread_test :: () from thread.index = %, work.count = %\n", thread.index, w.count);
+
+  sum := 0;
+  for i: 0..w.count {
+    sum += i;
+  }
+
+  w.result = sum;               // (1)
+  return .CONTINUE;
+}
+
+
+main :: () {
+  secs := get_time();
+  thread_group: Thread_Group;
+  init(*thread_group, 4, thread_test, true);
+  thread_group.logging = false;
+
+  start(*thread_group);
+  arr: [10] Work;                      // (2)
+  for i: 0..9 {
+    arr[i].count = 10000;       
+    add_work(*thread_group, *arr[i]);  // (2B)
+  }
+
+  sleep_milliseconds(1);               // (2C) 
+
+  work_list := get_completed_work(*thread_group);  // (3)
+  total := 0;                          // (4)
+  for work: work_list {
+    val := cast(*Work) work;
+    print("%\n", val.result);
+    total += val.result;
+  }
+  print("Total = %\n", total);
+  secs = get_time() - secs;   // (1)
+  print("The thread group took % seconds\n", secs);
+  shutdown(*thread_group);
+  print("exit program\n");
+}
+
+/*
+thread_test :: () from thread.index = 1, work.count = 10000
+thread_test :: () from thread.index = 3, work.count = 10000
+thread_test :: () from thread.index = 1, work.count = 10000
+thread_test :: () from thread.index = 4, work.count = 10000
+thread_test :: () from thread.index = 4, work.count = 10000
+thread_test :: () from thread.index = 2, work.count = 10000
+thread_test :: () from thread.index = 1, work.count = 10000
+thread_test :: () from thread.index = 3, work.count = 10000
+thread_test :: () from thread.index = 4, work.count = 10000
+thread_test :: () from thread.index = 2, work.count = 10000
+50005000
+50005000
+50005000
+50005000
+50005000
+50005000
+50005000
+50005000
+50005000
+50005000
+Total = 500050000
+The thread group took 0.015675 seconds
+exit program
+*/
+
+```
+
+This example follows the same pattern as in the previous one. 
+But now `thread_test` does some more work: it calculates a sum, which is returned in line (1), by setting the result field of the Work struct. The work is set up in lines (2) and following (it is defined through 10 Work structs), and send to the thread group in line (2B).  
+In line (3), the `get_completed_work` proc gets the results back. 
+In the main thread, these results are totalized and printed out. We also see that pausing the main thread by 1 ms is enough to let the thread group do its work! Measuring the time it took with the technique from § 6B.2 gives: `The thread group took 0.015675 seconds`.
 
 ## 31.3 Building a program using OpenGL, macros and threads
 > Remark: This example was made by Nuno Afonso, and discussed in his YouTube video series 'The Joy of Programming in Jai", part 11: Advanced Compilation.

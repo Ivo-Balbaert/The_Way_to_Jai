@@ -8,8 +8,8 @@ We start with the basic setup code to open up a window:
 
 See *33.1_glfw_window.jai*:
 ```c++
-#import "glfw";
 #import "GL";
+#import "glfw";
 
 main :: () {
   if !glfwInit() then return;
@@ -41,11 +41,12 @@ Here is Simp's minimum code to open and close a window:
 
 See *33.2_simp_window.jai*:
 ```c++
-#import "Window_Creation";
-#import "System";
 #import "Basic";
-Simp :: #import "Simp";
 #import "Input";
+Simp :: #import "Simp";
+#import "System";
+#import "Window_Creation";
+
 
 main :: () {
   window_width  : s32 = 1920;
@@ -96,10 +97,10 @@ When render2 is called, a dropdown list is shown.
 See _33.3_getrect_buttons.jai_:
 ```c++
 #import "Basic";
-#import "Simp";
-#import "Window_Creation";
 #import "GetRect";
 Input :: #import "Input";
+#import "Simp";
+#import "Window_Creation";
 
 main :: () {
   win := create_window(800, 600, "Window");
@@ -247,9 +248,9 @@ The Jai distribution contains a simple example of opening a window with the titl
 See _33.5_gl_sdl.jai_:
 ```c++
 #import "Basic";
-#import "String";
-#import "SDL";
 #import "GL";
+#import "SDL";
+#import "String";
 
 main :: () {
 

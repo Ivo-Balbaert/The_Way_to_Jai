@@ -1,5 +1,5 @@
-#import "glfw";
 #import "GL";
+#import "glfw";
 
 main :: () {
   if !glfwInit() then return;

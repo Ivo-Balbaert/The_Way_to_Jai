@@ -1,7 +1,7 @@
 #import "Basic";
-#import "String";
-#import "SDL";
 #import "GL";
+#import "SDL";
+#import "String";
 
 main :: () {
 

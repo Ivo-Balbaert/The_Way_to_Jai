@@ -78,6 +78,15 @@ If the condition is false, the compilation stops and shows:
 	message
 This can be used to check that critical conditions are met before compiling and running.
 
+Compile and runtime asserts can be combined as follows (here we want to check that y is different from 0):
+```c++
+#if is_constant(y) {  
+    #assert(y != 0);      // Compile-time assertion
+} else {
+    assert(y != 0);   // Run-time assertion
+}
+```
+
 ### 20.2.2 The compile-time interactive Jai debugger
 How can we debug when running at compile-time? Simply add `#run main();` at the start or end of the source code of program 20.1. When you now compile, you get the following output:
 ```

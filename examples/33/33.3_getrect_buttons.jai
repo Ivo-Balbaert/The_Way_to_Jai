@@ -1,8 +1,8 @@
 #import "Basic";
-#import "Simp";
-#import "Window_Creation";
 #import "GetRect";
 Input :: #import "Input";
+#import "Simp";
+#import "Window_Creation";
 
 val: s32 = 0;
 
