@@ -380,11 +380,10 @@ This technique is used in the _Basic_ module to load specific code depending on 
 ```
 There is a nice illustration of this in example § 29.8.
 
-
 ## 26.4 Inserting code with #insert
-The **#insert** directive inserts a piece of compile-time generated code represented as a string into a procedure or a struct.
+The **#insert** directive inserts a piece of compile-time generated code represented as a string (or code that has been represented as data in some other way) into a procedure or a struct.
 
-See *26.6_insert.jai*:
+See _26.6_insert.jai_:
 ```c++
 #import "Basic";
 
@@ -393,10 +392,60 @@ main :: () {
     b := 2;
     #insert "c := a + b;";   // (1)
     print("c is %\n", c); // => c is 3
+
+    d :: "add(42, 8);";      // (2)
+    x := 1 - #insert d;
+    print("x = %\n", x);     // => x = -49
+
+    add :: (n: int, m: int) -> int { return n + m; };
 }
 ```
 
-The 1st way #insert can be used is illustrated in line (1): there `#insert` takes a string containing a line of code, and inserts it as code at that location in the source.  
+The 1st way #insert can be used is illustrated in line (1): there `#insert` takes a string containing a line of code, and inserts it as code at that location in the source. Line (2) shows that it also can be used at an expression level.  
+
+Here is a more useful example, where #insert is used with multi-line strings:
+See _26.24_insert_multi.jai_:
+```c++
+#import "Basic";
+
+report :: ($header: string, $body: string, $footer: string, n: int) {
+    #insert header;
+    for 1..n {
+        #insert body;
+    }
+    #insert footer;
+}
+
+header :: #string DONE
+    count := 0;
+    print("Start of the report:\n");
+DONE
+
+body :: #string DONE
+    print("    ... one iteration! Incrementing!\n");
+    count += 1;
+DONE
+
+footer :: #string DONE
+    print("End of the report - count is: %.\n", count);
+DONE
+
+main :: () {
+    report(header, body, footer, 5);
+}
+
+/*
+Start of the report:
+    ... one iteration! Incrementing!
+    ... one iteration! Incrementing!
+    ... one iteration! Incrementing!
+    ... one iteration! Incrementing!
+    ... one iteration! Incrementing!
+End of the report - count is: 5.
+*/
+```
+
+You can see that it is real code, because variable `count` is incremented. Header, body, and footer are known at compile-time because of the $'s, so we can #insert them. This gives you some flexibility for constructing code.
 
 2nd way: `#insert` can also take a variable c of type Code, e.g.: `#insert(c: Code);`. It is also often used in the body of a macro like this:  
 ```c++ 
@@ -406,6 +455,25 @@ some_macro :: (body: Code) #expand {
     ...
 }
 ```
+
+Here is a simple example (see line (1)):
+See _26.26_insert_code.jai_:
+```c++
+#import "Basic";
+
+main :: () {
+    x := 3;
+    x *= x; 
+    x *= x; 
+    x *= x; 
+    #insert -> Code {                       // (1)
+        return #code x = (x * 10) + 3495;
+    }
+    print("x is %\n", x); // => x is 69105
+    assert(x == 69105);
+}
+```
+
 (See § 26.5 Macros, specifically `macroi` in the first example.)
 
 3rd way: Even the entire contents of a struct can be made through a `#insert -> string` construction. This takes the form:
@@ -417,7 +485,50 @@ A_Type :: struct( ... ) {
 The `#insert -> string` is in fact a short (lambda) form for:  
 `#insert #run () -> string {  ...  }();`
 `() -> string` is the declaration of the lambda, { ... } is its code, and it is called with the last () pair like this: `{  ...  }()`
-(This is applied in the unroll for loop in § 26.5.2, and in the construction of an SOA struct, see § 26.9.2).
+Instead of an anonymous proc, this form can also take a named procedure, like:  `#insert #run set_diagonals_to_1(N)`.  
+Here is an example where this is used to make an identity matrix (example taken from how_to/600):
+
+See _26.25_insert_ident_matrix.jai_:
+```c++
+#import "Basic";
+
+Matrix :: struct (N: int) {
+    items: [N*N] float;                  // (1)
+    #insert #run set_diagonals_to_1(N);  // (2) 
+}
+
+set_diagonals_to_1 :: (N: int) -> string {
+    builder: String_Builder;
+    for 0..N-1 {
+        print_to_builder(*builder, "items[%] = 1;\n", it*N + it);
+    }
+    return builder_to_string(*builder);
+}
+
+main :: () {
+    m: Matrix(5);
+    print("The matrix contains:\n");
+    for j: 0..4 {
+        for i: 0..4 {
+            print("%  ", m.items[j*5 + i]);
+        }
+        print("\n");
+    }
+}
+
+/*
+The matrix contains:
+1  0  0  0  0
+0  1  0  0  0
+0  0  1  0  0  
+0  0  0  1  0
+0  0  0  0  1
+*/
+```
+
+`Matrix` is a struct with parameter N, which defines the size of the `items` array, which is initialized to all zeros (0) in line (1). In line (2) the matrix is transformed to an identity matrix, using `#insert #run proc()`, where the concrete proc here returns a string. Remember you can view the generated string in the .build/.added_strings_w2.jai file.
+
+(This mechanism is also applied in the unroll for loop in § 26.5.2, and in the construction of an SOA struct, see § 26.9.2).
 
 ### 26.4.1 Type Code and #code
 A variable of type Code can be constructed by using the **#code** directive:  

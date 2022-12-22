@@ -265,7 +265,7 @@ The `backtrace_on_crash` option is by default .ON
 Array bounds operations, castings and null pointer checks can be turned ON or FATAL/NONFATAL (for cast checks) at runtime to increase robustness of your program, they are so by default. If you are very sure, you can turn them OFF to increase performance
 
 ### 30.4.7 runtime_storageless_type_info
-With this option, you can specify whether type_table info is available at runtime (see § 26.1). If you set its value to _true_, type table info is not available at runtime, which reduces the executable's size somewhat. However even when true, the `type_info` function still works.
+With this option, you can specify whether type_table info is available at runtime (see § 26.1). If you set its value to _true_, type table info is not available at runtime, which reduces the executable's size somewhat. This could be useful when writing for an embedded system. However even when true, the `type_info` function still works.
 
 ### 30.4.8 Optimizing LLVM or X64 build
 Llvm_options or X64_Options exist for this purpose, but to work with these you have to have a deeper knowledge of the backends.

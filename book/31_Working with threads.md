@@ -270,7 +270,7 @@ exit program
 This example follows the same pattern as in the previous one. 
 But now `thread_test` does some more work: it calculates a sum, which is returned in line (1), by setting the result field of the Work struct. The work is set up in lines (2) and following (it is defined through 10 Work structs), and send to the thread group in line (2B).  
 In line (3), the `get_completed_work` proc gets the results back. 
-In the main thread, these results are totalized and printed out. We also see that pausing the main thread by 1 ms is enough to let the thread group do its work! Measuring the time it took with the technique from § 6B.2 gives: `The thread group took 0.015675 seconds`.
+In the main thread, these results are totalized and printed out. We also see that pausing the main thread by 1 ms is enough to give the thread group the opportunity to do its work. Measuring the time it took with the technique from § 6B.2 gives: `The thread group took 0.015675 seconds`.
 
 ## 31.3 Building a program using OpenGL, macros and threads
 > Remark: This example was made by Nuno Afonso, and discussed in his YouTube video series 'The Joy of Programming in Jai", part 11: Advanced Compilation.

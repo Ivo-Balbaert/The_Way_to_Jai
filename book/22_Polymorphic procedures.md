@@ -498,8 +498,8 @@ main :: () {
 In line (1) we have a lambda `add`, in line (2) we 'bake in' the value 10 for argument a, so that we get a new proc called `add10`, which only needs one parameter for b.
 This function is called in line (4); it effectively adds 10 to a given number, so it has specialized the original proc by baking in some arguments.
 Similarly, in line (3) a new proc `mult1` is constructed by supplying a value for argument b in proc `mult`, and `mult1` is called in line (5).
-A `$` in front of an argument is an **auto-bake**: it 'bakes' that argument into that function automatically when called, which is illustrated in line (6). If the argument is a variable, you get an error.
-A `$$` in front of an argument will 'bake' the value into the function when it is a constant; if not, it will behave like an ordinary function (see line (7)).
+A `$` in front of an argument is an **auto-bake**: it 'bakes' that argument into that function automatically when called, which is illustrated in line (6). It means that the $argument is known at compile-time. If the argument is a variable, you get an error.
+A `$$` in front of an argument will 'bake' the value into the function when it is a constant; if not, it will behave like an ordinary function (see line (7)). So you could say that $$ before an argument means that the argument is optionally constant.
 Auto-bakes can be used together with $T type variables.
 
 `#bake_arguments` procedures are pre-compiled functions, they are not closures.

@@ -4,6 +4,8 @@ This allows the inclusion of assembly code through the **#asm** directive. You w
 Assembly language is mainly used to generate custom CPU instructions, support SIMD (Single Instruction, Multiple Data see: [Wikipedia SIMD](https://en.wikipedia.org/wiki/Single_instruction,_multiple_datainstructions)) for parallelizing data transformations, or take explicit control over the code generation to get the most optimized code.
 At this stage only the x64 platform is supported. Inline assembly does not support jumping, branching, NOP (No Operation instruction), or calling functions; use Jai for that.  
 
+The **#bytes** directive is used like this: put the bytes that follow me into the machine code.
+
 The inner workings of Apollo Time in _Basic_ use inline assembly and operator overloading. Other inline assembly examples can be found in: _modules/Atomics_, *modules/Bit_Operations*, *modules/Runtime_Support*. 
 Module *Machine_X64.jai* contains useful routines for 64-bit Intel x86 machines.
 

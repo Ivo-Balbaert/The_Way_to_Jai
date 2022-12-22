@@ -92,7 +92,7 @@ While developing, you’ll work with normal _debug builds_ which is the default,
 
 When, after a thorough test process, you decide that your application is production-ready, you will want to deploy a _release version_, optimized for speed. Here you don’t want any debugging or stack-trace info, and you require all optimizations turned on. At this stage you’ll want to use the llvm backend and the -release option, as in:	`jai -release program.jai`
 
-Alternatively and advisably (because you can fine-tune the process much more), you can define this in the Jai build-system itself (see ??).
+Alternatively and advisably (because you can fine-tune the process much more), you can define this in the Jai build-system itself (see § 30.4).
 
 ## 4.8 Options for giving code at the command-line
 With `-run arg`, you can start a #run directive that parses and runs 'arg' as code.  
