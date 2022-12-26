@@ -10,6 +10,6 @@ get_variable_name :: (thing: int, call := #caller_code) -> string #expand {
 }
 
 main :: () {
-    a_variable :: 10;
-    #run print("%", get_variable_name(a_variable)); // => a_variable
+    a_constant :: 10;
+    #run print("%\n", get_variable_name(a_constant)); // => a_constant
 }

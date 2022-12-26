@@ -124,7 +124,7 @@ In line (6) we print out a number of its properties: its size = 32 Kb,
 
 ## 25.6 The stack trace
 In line (4) of the code of `Context_Base`, we see a field called `stack_trace`. What is its purpose?  
-The stack trace is also called the program's **function call stack**, which is a much better description, namely: it is a report of the active stack frames at a certain point in time during the execution of a program. It works cross-platform and contains a logging of all function calls, and where they occurred in the program. You'll often see stack traces in the output of program crashes, and they are used for debugging purposes.
+The stack trace is also called the program's **function call stack**, which is a better description, namely: it is a report of the active stack frames at a certain point in time during the execution of a program. It works cross-platform and contains a logging of all function calls, and where they occurred in the program. You'll often see stack traces in the output of program crashes, and they are used for debugging purposes.
 
 See *25.2_stack_trace.jai*:
 ```c++
@@ -133,11 +133,12 @@ See *25.2_stack_trace.jai*:
 my_print_stack_trace :: (node: *Stack_Trace_Node) {     // (1)
     while node {
         if node.info {
-        print("[%] at %:%. call depth %\n", 
+        print("[%] at %:%. call depth %  hash 0x%\n", 
                         node.info.name, 
                         node.info.location.fully_pathed_filename, 
                         node.line_number, 
-                        node.call_depth);
+                        node.call_depth,
+                        formatInt(node.hash, base=16));
         }
         node = node.next;
     }
@@ -146,8 +147,8 @@ my_print_stack_trace :: (node: *Stack_Trace_Node) {     // (1)
 proc1 :: (x: int) {         // (2)
     print("x is %\n", x);
     if x < 1 { 
-        // my_print_stack_trace(context.stack_trace);   // (2B)  
-        print_stack_trace(context.stack_trace);         // (2C)  
+        my_print_stack_trace(context.stack_trace);   // (2B)  
+        // print_stack_trace(context.stack_trace);         // (2C)  
     }  
     else     {  proc1(x - 1); }
 }
@@ -156,9 +157,8 @@ main :: () {
     proc1(3);               // (3)
 }
 
-
 /*
-// Calling line 2B: //
+/* Calling line 2B: */
 x is 3
 x is 2
 x is 1
@@ -168,7 +168,7 @@ x is 0
 [proc1] at d:/Jai/The_Way_to_Jai/examples/25/25.2_stack_trace.jai:21. call depth 2
 [main] at d:/Jai/The_Way_to_Jai/examples/25/25.2_stack_trace.jai:25. call depth 1
 
-// Calling line 2C: //
+/* Calling line 2C: */
 x is 3
 x is 2
 x is 1
@@ -177,6 +177,16 @@ x is 0
 'proc1' at d:/Jai/The_Way_to_Jai/examples/25/25.2_stack_trace.jai:22
 'proc1' at d:/Jai/The_Way_to_Jai/examples/25/25.2_stack_trace.jai:22
 'main' at d:/Jai/The_Way_to_Jai/examples/25/25.2_stack_trace.jai:26
+
+/* with my_print_stack_trace: */
+x is 3
+x is 2
+x is 1
+x is 0
+[proc1] at d:/Jai/The_Way_to_Jai/examples/25/25.2_stack_trace.jai:23. call depth 4  hash 0xb15659a3b1256905
+[proc1] at d:/Jai/The_Way_to_Jai/examples/25/25.2_stack_trace.jai:23. call depth 3  hash 0x7f4c4427a7efb165
+[proc1] at d:/Jai/The_Way_to_Jai/examples/25/25.2_stack_trace.jai:23. call depth 2  hash 0xda2a148d41461045
+[main] at d:/Jai/The_Way_to_Jai/examples/25/25.2_stack_trace.jai:27. call depth 1  hash 0xc1d0f3c6d9994ba5
 */
 ```
 
@@ -184,7 +194,8 @@ _25.2_stack_trace.jai* is an example of an example of a recursive procedure `pro
 
 This info is so useful that there is in fact a proc `print_stack_trace` in module _Basic_, which is almost identical and which we call in line (2C).
 
-You can also get the address of the current proc through: `context.stack_trace.info.procedure_address`.
+You can also get the address of the current proc through: `context.stack_trace.info.procedure_address`.  
+There is also a proc called `pack_stack_trace()`, which makes a copy of the stack trace that you can store on a data structure for further examination/processing.
 
 In § 30.4.5 we'll see that there is also a compile option called `build_options.stack_trace`, which is by default true to examine stack traces on program errors/crashes. With this option enabled, every time a procedure is called, code is generated to output a Stack_Trace_Node on the stack and link it up, and unlink it when the procedure returns. Use it as an aid in debugging if necessary.
 

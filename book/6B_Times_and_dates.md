@@ -62,6 +62,9 @@ main :: () {
     // => Factorial 20 took 0.000207 seconds
 }
 ```
+
+See an example of use in § 31.2.2
+
 ## 6B.3 - Getting a random number from time
 In § 6.2.9 we saw a few routines to get random numbers, however they do repeat the same series of numbers when the program starts again. A better way is to work with a random seed, and what else could be better than a number in femtoseconds like the Apollo time? So this is a good way to get a random number:  
 

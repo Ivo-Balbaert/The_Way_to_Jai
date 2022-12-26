@@ -88,23 +88,23 @@ See _31.3_thread_groups.jai_:
 #import "Thread";
 
 thread_test :: (group: *Thread_Group, thread: *Thread, work: *void) -> Thread_Continue_Status {
-  print("thread_test :: () from thread.index = %\n", thread.index);
-  return .CONTINUE;
+    print("thread_test :: () from thread.index = %\n", thread.index);
+    return .CONTINUE;
 }
 
 main :: () {
-  thread_group: Thread_Group;
-  init(*thread_group, 4, thread_test, true);     // (1)
-  thread_group.logging = false;                  // (2) 
+    thread_group: Thread_Group;
+    init(*thread_group, 4, thread_test, true);     // (1)
+    thread_group.logging = false;                  // (2) 
 
-  start(*thread_group);                          // (3)
-  for i: 0..10                                   // (4)
-    add_work(*thread_group, null);
+    start(*thread_group);                          // (3)
+    for i: 0..10                                   // (4)
+        add_work(*thread_group, null);
 
-  sleep_milliseconds(5000);                      // (5)
+    sleep_milliseconds(5000);                      // (5)
 
-  shutdown(*thread_group);                       // (6)
-  print("exit program\n");
+    shutdown(*thread_group);                       // (6)
+    print("exit program\n");
 }
 
 /*
@@ -272,7 +272,152 @@ But now `thread_test` does some more work: it calculates a sum, which is returne
 In line (3), the `get_completed_work` proc gets the results back. 
 In the main thread, these results are totalized and printed out. We also see that pausing the main thread by 1 ms is enough to give the thread group the opportunity to do its work. Measuring the time it took with the technique from § 6B.2 gives: `The thread group took 0.015675 seconds`.
 
-## 31.3 Building a program using OpenGL, macros and threads
+## 31.2.3 Determining the number of threads to use
+What is a suitable number of threads?**
+The number of threads `num_threads`should be <= to the number of CPUs. More than that will make our computer do much context-switching work, which is wasted. You could use the following routine to determine `num_threads` before launching init:  
+See _31.5_num_threads.jai_:
+```c++
+#import "Basic";
+#import "System";
+
+main :: () {
+    num_cpus := get_number_of_processors();   // (1)
+    assert(num_cpus >= 1);
+    if num_cpus > 200  num_cpus = 200;
+    #if (OS == .WINDOWS) || (OS == .LINUX) {  // (2) 
+        num_cpus /= 2;
+    }
+    num_threads := max(num_cpus - 1, 2);      // (3)
+    log("This machine reports % CPUs; starting % threads.\n", num_cpus, num_threads);
+    // => This machine reports 6 CPUs; starting 5 threads.
+    // init(*thread_group, num_threads, work_proc);
+}
+```
+`get_number_of_processors()` from module _System_ reports the number of processors, but in fact these are hyperthreads, so we have to divide by 2 in line (2). Further we reserve one thread for the main processor (see (3)), and we start a minimum of 2 threads.
+
+## 31.2.4 Periodically checking which portion of the work is completed
+In the _thread_group_ example in module _Thread_  we also find a way to do this. Schematically, it runs as follows:
+```c++
+   work_remaining := NUM_WORK_ITEMS;
+   while work_remaining > 0 {
+      sleep_milliseconds(10);
+      results := get_completed_work(*thread_group);
+      for results {
+            // process results
+      }
+      work_remaining -= results.count;
+      reset_temporary_storage();
+    }
+```
+
+## 31.3 Mutexes
+A **mutex** (mutual exclusion object) is a program object that is created so that multiple program threads can take turns sharing the same resource, such as access to a file. They typically operate by _lock_ ing a critical code section, so that only the thread that has the lock can access the code in that section. After doing its work, the critical section is _unlock_ ed, so that other threads (that were queued in the meantime) can have access to that section too.  
+Jai has a _Mutex_ struct built-in in module _Thread_. The following example shows how to work with a mutex:  
+See _31.6_mutex1.jai_:
+```c++
+#import "Basic";
+#import "Thread";
+
+mutex1: Mutex;
+
+main :: () {
+    init(*mutex1, "Critical");
+    { // (1) start critical section
+        lock(*mutex1);             //  (2)
+        defer unlock(*mutex1);     //  (3)
+        print("Doing critical stuff!\n");  //  (4)
+        // => Doing critical stuff!
+        print("Mutex1 is %\n", mutex1);
+        // Further critical code
+    } // end critical section
+}
+
+/*
+Mutex1 is {{DebugInfo = ffff_ffff_ffff_ffff; LockCount = 4294967294; RecursionCount = 1; OwningThread = 797c; LockSemaphore = null; SpinCount = 33556432; }}
+*/
+```
+Line (1) marks the start of the critical section. First in line (2), a lock is set. To not forget the unlock at the end of the section, use a defer like in (3). After that, start executing the atomic code of the section. 
+
+In Jai a mutex can also be given an order number when it is defined, like: `init(*mutex1, "Critical", 1);`  
+Now several mutexes can be  defined having an order like 1, 2, 3. If the DEBUG module parameter of _Thread_ is set to true, Jai will check at runtime to ensure they are only locked consistently with that descending order, so like 3, 2, 1. If a mutex has no order defined as its 3rd parameter, its value is -1 and it will not be checked. Out of order unlocking is also detected.
+This is illustrated in the following program:  
+See _31.7_mutex_order.jai_:
+```c++
+#import "Basic";
+#import "Thread"()(DEBUG=true);   // (1)
+
+mutex_A: Mutex;
+mutex_B: Mutex;
+mutex_C: Mutex;
+
+main :: () {
+    init(*mutex_A, "A", 1);      // (2)
+    init(*mutex_B, "B", 2);
+    init(*mutex_C, "C", 3);
+
+    // correct locking order:
+    {
+        lock(*mutex_C);
+        defer unlock(*mutex_C);
+        print("Doing C stuff!\n");
+        {
+            lock(*mutex_B);
+            defer unlock(*mutex_B);
+            print("Doing B stuff!\n");
+            {
+                lock(*mutex_A);
+                defer unlock(*mutex_A);
+                print("Doing A stuff!\n");
+            }
+        }
+    }
+    
+    // error in locking order:
+    { // (4)
+        lock(*mutex_B);
+        defer unlock(*mutex_B);
+        print("Doing B stuff!\n");
+        {
+            lock(*mutex_C);
+            defer unlock(*mutex_C);
+            print("Doing C stuff!\n");
+        }
+    }
+}
+
+/*
+Doing C stuff!
+Doing B stuff!
+Doing A stuff!
+
+// If section // (4) is uncommented: 
+Doing B stuff!
+Attempt to lock mutexes out of order.
+While we had already locked 'B' at order 2 (d:/Jai/The_Way_to_Jai/examples/31/31.7_mutex_order.jai:32)...
+We tried to lock 'C' at order 3 (d:/Jai/The_Way_to_Jai/examples/31/31.7_mutex_order.jai:36).
+Lock order must strictly decrease, so this is invalid.
+c:/jai/modules/Thread/primitives.jai:552,21: Assertion failed!
+
+Stack trace:
+c:/jai/modules/Preload.jai:341: default_assertion_failed
+c:/jai/modules/Basic/module.jai:75: assert
+c:/jai/modules/Thread/primitives.jai:552: lock
+d:/Jai/The_Way_to_Jai/examples/31/31.7_mutex_order.jai:36: main
+*/
+```
+
+In line (1) we define the DEBUG module parameter to be true. Line (2) and following initializes three mutexes with their order defined through their 3rd argument.In the following section, they are correctly locked and unlocked. In the section starting after line (4), the mutex order is incorrect. When uncomment, this section gives the following error:  
+```
+Attempt to lock mutexes out of order.
+While we had already locked 'B' at order 2 (d:/Jai/The_Way_to_Jai/examples/31/31.7_mutex_order.jai:32)...
+We tried to lock 'C' at order 3 (d:/Jai/The_Way_to_Jai/examples/31/31.7_mutex_order.jai:36).
+Lock order must strictly decrease, so this is invalid.
+c:/jai/modules/Thread/primitives.jai:552,21: Assertion failed! 
+```
+
+This also means that you **cannot have deadlocks** in your program! The reason is that deadlocks can only happen when two mutexes are acquired in opposite order, which is not possible if you only allow one order. 
+
+## 31.4 Building a program using OpenGL, macros and threads
 > Remark: This example was made by Nuno Afonso, and discussed in his YouTube video series 'The Joy of Programming in Jai", part 11: Advanced Compilation.
 
 In this example, we start from 30.6_build_and_run.jai, to which we have only added 4 lines. While compiling, we are showing an SDL window with title "Compiling..." and a grey background. When the compiler emits the COMPLETE message, we change the window title to "Success!" and the background to green. To accomplish this, OpenGL is used to show the windows in a separate (GUI) thread from the main thread, using macros as well. See it in action: `jai 31.2_build_threads.jai`  

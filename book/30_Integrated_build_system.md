@@ -244,9 +244,12 @@ For a highly optimized build, having the same effect as `clang -O2`, you would u
 ```c++
 set_optimization_level(*target_options, 2, 0); 
 ```
-Optimized builds take much longer (??) time than debug builds, but are around 2x as fast as an unoptimized build.
+Optimized builds take much longer (??) time than debug builds, but are around 2x as fast as an un-optimized build.
 
 This automatically turns OFF all runtime checks, and specifies a number of optimizations for LLVM code production.
+
+To stop making a .pdb file, use:
+`target_options.emit_debug_info=.NONE;`
 
 ### 30.4.2 The output type
 Possible values are: .NO_OUTPUT; .DYNAMIC_LIBRARY; .STATIC_LIBRARY; .OBJECT_FILE; with as default .EXECUTABLE;

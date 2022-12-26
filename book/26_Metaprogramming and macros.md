@@ -165,6 +165,7 @@ or sometimes called:	_"Bake the data into the program binary"_
 - Dynamically generate code and insert it to be compiled: this is what meta-programming is all about;
 - Contact a build server and retrieve/send build data
 - Download the OpenGL spec and build the most recent gl.h header file
+But: you can't run FFI (see § 29) during a #run.
 …
 
 The following program will make the difference between compile-time and run-time even clearer.
@@ -447,36 +448,7 @@ End of the report - count is: 5.
 
 You can see that it is real code, because variable `count` is incremented. Header, body, and footer are known at compile-time because of the $'s, so we can #insert them. This gives you some flexibility for constructing code.
 
-2nd way: `#insert` can also take a variable c of type Code, e.g.: `#insert(c: Code);`. It is also often used in the body of a macro like this:  
-```c++ 
-some_macro :: (body: Code) #expand {
-    ...
-    #insert body;
-    ...
-}
-```
-
-Here is a simple example (see line (1)):
-See _26.26_insert_code.jai_:
-```c++
-#import "Basic";
-
-main :: () {
-    x := 3;
-    x *= x; 
-    x *= x; 
-    x *= x; 
-    #insert -> Code {                       // (1)
-        return #code x = (x * 10) + 3495;
-    }
-    print("x is %\n", x); // => x is 69105
-    assert(x == 69105);
-}
-```
-
-(See § 26.5 Macros, specifically `macroi` in the first example.)
-
-3rd way: Even the entire contents of a struct can be made through a `#insert -> string` construction. This takes the form:
+2nd way: Even the entire contents of a struct can be made through a `#insert -> string` construction. This takes the form:
 ```c++
 A_Type :: struct( ... ) {
     #insert -> string { ... }
@@ -540,7 +512,38 @@ or:
 All these expressions have type Code.
 See an example of use in § 26.5.2
 
-In the same way as you can do a #insert -> string (see previous §), you can make a `#insert -> Code {  return #code  ...   }`.
+You can convert a #code during compile-time execution back-and-forth to the syntax tree structures (AST) defined in Compiler. Also you can take a Code, convert it to the tree, manipulate around with the tree, and resubmit the changed tree.
+
+In the same way as you can do a #insert -> string (see previous §), you can make a `#insert -> Code {  return #code  ...   }`:
+`#insert` can also take a variable c of type Code, e.g.: `#insert(c: Code);`. It is also often used in the body of a macro like this:  
+```c++ 
+some_macro :: (body: Code) #expand {
+    ...
+    #insert body;
+    ...
+}
+```
+
+Here is a simple example (see line (1)):
+See _26.26_insert_code.jai_:
+```c++
+#import "Basic";
+
+main :: () {
+    x := 3;
+    x *= x; 
+    x *= x; 
+    x *= x; 
+    #insert -> Code {                       // (1)
+        return #code x = (x * 10) + 3495;
+    }
+    print("x is %\n", x); // => x is 69105
+    assert(x == 69105);
+}
+```
+
+(See § 26.5 Macros, specifically `macroi` in the first example.)
+
 
 
 ## 26.5 Basics of macros
@@ -895,14 +898,14 @@ For_Flags :: enum_flags u32 {
 Line (8) simply increments our counter variable `i`.  
 Now we can print out the data from a linked list in a for-loop like any other array (see line (9))!
 
-But we can do better! (see for_expansion macro Version 2). Just leave out the temporary variables `iter` and `i` and work only with it and it_index. Also note you only have to backtick the variables the first time you use these. Note that in our actual for call, we have to print `it.data`.
+But we can do better! (see for_expansion macro Version 2). Just leave out the temporary variables `iter` and `i` and work only with it and it_index. Also note you only have to backtick the variables the first time you use these. Note that in our actual `for call, we have to print `it.data`.
 
 > Remark: iterating over data-structures with for seems to have been the primary reason for introducing macros in Jai.
 
 Now let's make the same for-loop for a double linked-list:
 
 ## 26.7 A for-expansion macro for a double linked-list
-Let's now define a more general linked list as having a first and a last Node (see line (1)), whereby Node is recursively defined(see line (2)) as having a value, a previous and a next Node. Another advantage is that the type of the value (and Node) is polymorf written as T.
+Let's now define a more general linked list as having a first and a last Node (see line (1)), whereby Node is recursively defined(see line (2)) as having a value, a previous and a next Node. Another advantage is that the type of the value (and Node) is polymorph written as T.
 
 See *26.9_doubly_linked_list.jai*:
 ```c++
@@ -1404,6 +1407,24 @@ Here are the types of all expressions in this syntax tree:
 
 To print out the nodes, we need to import the module _Program_Print_ (line (1)). We call `compiler_get_nodes` on our code statement in line (2), to get the root node and the exprs. `print_expression` 'prints' the code to a String Builder (line (3)). In line (4) we can now iterate over `exprs` to show the `kind` of each sub-expression and their `node_flags` if any.
 
+`compiler_get_nodes` converts the Code to a syntax tree. As we see in line (2), it returns two values:  
+- the first is the root expression of the Code, which you can navigate recursively.   
+- the second is a flattened array of all expressions at all levels, just like you would get in a metaprogram inside a Code_Typechecked message. This makes it easy to iterate over all the expressions looking for what you want, without having to do some kind of recursive tree navigation.  
+- Here is a snippet of code that searches for string literals in code, (possibly) changing them, and writing the changes back with the proc `compiler_get_code`:
+```c++
+root, expressions := compiler_get_nodes(code);
+for expressions {
+    if it.kind != .LITERAL continue;  
+    literal := cast(*Code_Literal) it;
+    if literal.value_type != .STRING continue;  
+    // do something with literal._string
+    // literal._string = ...
+}
+modified := compiler_get_code(root);
+```
+(for a complete working example, see how_to/630, 2nd example)
+
+
 ## 26.12 The #placeholder directive
 See *26.12_placeholder.jai*:
 ```c++
@@ -1492,12 +1513,39 @@ get_variable_name :: (thing: int, call := #caller_code) -> string #expand {
 }
 
 main :: () {
-    a_variable :: 10;
-    #run print("%", get_variable_name(a_variable)); // => a_variable
+    a_constant :: 10;
+    #run print("%", get_variable_name(a_constant)); // => a_constant
 }
 ```
 
 The directive **#caller_code** when used as the default
 value of a macro argument, will be set to the Code of the procedure call
 that invoked the macro.  
-compiler_get_nodes() can then be called on this to inspect and manipulate it, and so forth. With these kinds of techniques you manipulate code from a macro within the program itself (see howto/497).
+`compiler_get_nodes()` from module _Compiler_ can then be called on this code to inspect and manipulate it. `print_expression` from module _Program_Print_ `prints` the 2nd argument in a string-format to the string builder.
+With these kinds of techniques you manipulate code from a macro within the program itself (see howto/497).
+
+## 26.15 Converting code to string
+See _26.23_get_variable_name.jai_:
+```c++
+#import "Basic";
+
+code_to_string :: (code: Code) -> string #expand {
+  PP       :: #import "Program_Print";
+  Compiler :: #import "Compiler";
+  code_node := Compiler.compiler_get_nodes(code);
+  builder: String_Builder;
+  PP.print_expression(*builder, code_node);
+  return builder_to_string(*builder, allocator=temp);
+}
+
+#run {
+    code1 := #code a_constant :: 10;
+    str := code_to_string(code1);
+    print("This is the code: % of type: %\n", str, type_of(str) );
+    // => This is the code:  a_constant :: 10 of type: string
+}
+
+main ::() {}
+```
+
+We again use compiler_get_nodes to get the AST, which is then `printed` to a string builder, and then converted to a string.
