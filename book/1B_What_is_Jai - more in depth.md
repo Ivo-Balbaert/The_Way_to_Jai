@@ -1,8 +1,8 @@
 # **Chapter 1 – What is Jai?**
 
-**1.1 What type of language is Jai?**
+## 1.1 What type of language is Jai?
 
-**1.1.1 Priorities**
+### 1.1.1 Priorities
 
 Blow described his new language as a _better and modern day C_, and also as _C++ done right_. Its primary focus is high-performance **game programming** , but it is also suited for **general-purpose** and **low-level systems programming,** like C/C++, D or Rust. Jai is lower-level than Java or C#, and it is not an object-oriented language like these with classes and inheritance. Jai also allows programmers to get as low-level as they desire.
 
@@ -26,7 +26,6 @@ The goal is to compile 1M lines of code in \< 1s (from scratch, without delta bu
 
 3. Bounds checking (see ??), and initialization (see § 5.3.1).
 4. Putting _data at the center_ of the design (see ??).
-
 
 In order to increase performance, Jai has NO:
 
@@ -55,7 +54,7 @@ So Jai should be useable and able to replace C++ for projects on the AAA scale.
 
 Keep in mind that the language is _designed for good programmers; it_ has no training wheels for beginners. For example: developers have to take care of manual memory management, handling memory is all important.
 
-**1.1.2 Jai tries to be a better C/C++**
+### 1.1.2 Jai tries to be a better C/C++
 
 Jai is meant as a _C/C++ replacement_, providing a simpler and consistent syntax.
 
@@ -67,7 +66,7 @@ C code and Jai code can live side by side; C and Jai interoperate seamlessly. Ja
 
 Jai is like C, also an _imperative, statically and strongly typed_ language, but with a variety of modern language features that C lacks, and with another skin and techniques that are more suitable for game development, where performance, stability and productivity are of the utmost importance.
 
-**1.2 Comparisons with other languages**
+## 1.2 Comparisons with other languages
 
 Jai obviously belongs to the C-family of languages, together with C++, Objective C, Java, C#, and so on. For example: it uses semicolons ; to mark the end of a code-line, and encloses a block of code lines within curly braces { }. However, it clearly attempts to provide a simpler and more enjoyable syntax than C/C++.
 
@@ -75,7 +74,12 @@ See also: [Overview · Jai-Community/Jai-Community-Library Wiki (github.com)](ht
 for comparisons with C, C++, Java, Go, Rust, Functional Languages (Lisp, Haskell, Scheme,), Scripting Languages (PHP, JavaScript, Ruby, Python, etc.)  
 With C3: [Comparisons with other languages - C3 Documentation (c3-lang.org)](http://www.c3-lang.org/compare/)
 
-**1.3 Some steps in Jai's history**
+## 1.3 Jai's performance
+Jai is build with concepts that guarantee high performance, but not a lot of effort has gone yet into optimizing the resulting binary code.
+
+On Dec 28 2022, Daniel Tan published a first benchmark, comparing his pure Jai state-of-the-art chess engine Ceij with the C++ engine Stockfish (https://github.com/Jai-Community/Jai-Community-Library/wiki/Snippets-and--Benchmarks#benchmarks). He found that the Jai version was some 20% slower than C++.
+
+## 1.4 Some steps in Jai's history
 
 The video talk that started Jai development was called: _Ideas about a new programming language for games_ and was posted on Sep 17 2014 **(**[https://www.youtube.com/watch?v=TH9VCN6UkyQ&index=1&list=PLmV5I2fxaiCKfxMBrNsU1kgKJXD3PkyxO](https://www.youtube.com/watch?v=TH9VCN6UkyQ&index=1&list=PLmV5I2fxaiCKfxMBrNsU1kgKJXD3PkyxO)).  
 In Apr 2017, Blow showed a small demo of the language at Reboot Development 2017, ["Making Game Programming Less Terrible"](https://www.youtube.com/watch?v=gWv_vUgbmug)(https://www.youtube.com/watch?v=gWv\_vUgbmug).  
@@ -111,7 +115,7 @@ The Sokoban game will be commercially released.
 
 The name "Jai" means victory in Hindi, Indian languages, or also "Just Another Idea". The Jai language is also often called The Language by Jon Blow, indicating that the name could be changed.
 
-**1.4 Specific Jai features**
+## 1.5 Specific Jai features
 
 These are some unique, essential, killer features of Jai:
 
@@ -121,7 +125,7 @@ These are some unique, essential, killer features of Jai:
 - Full compile-time code execution
 - Integrated build process
 
-**1.5 Some wrong ideas in software development**
+## 1.6 Some wrong ideas in software development
 
 1- Implementation details don't matter, like managing memory, how data structures look like, …
 
@@ -138,7 +142,7 @@ They have more badly-fitting couplings, take longer to compile, etc.
 Programs are 100x slower, harder to understand, …
 
 
-**1.6 Jai community and communication channels**
+**1.7 Jai community and communication channels**
 
 Jonathan Blow is CEO of a game-developing company called Thekla ([The Witness](www.thekla.com)](http://www.thekla.com/)).  
 Blow receives and sometimes answers discussions and issues about Jai on [_language@thekla.com_](mailto:language@thekla.com).  
@@ -152,7 +156,7 @@ A Discord channel called [SB (Secret Beta)](https://discord.gg/wB52e2ND)
 and a Discord channel for the [Twitch streams](https://discord.com/invite/vVfYxhU).
 
 
-**1.7 Jai's popularity**
+## 1.8 Jai's popularity
 
 Blow's videos about the design and making of Jai are very popular: They get viewing numbers ranging from a few K to 55 K, even 229 K for the very first video.
 
