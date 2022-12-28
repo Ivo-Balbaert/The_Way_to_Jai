@@ -22,8 +22,9 @@ When a module (for example TestScope) is not found, the compiler gives the error
     #import "TestScope";
 
 Info: ... Searched path 'c:/jai/modules/'.`
+Jai has searched in this search path for a file named TestScope.jai, and if it doesn't find this, for a subfolder TestScope containing a module.jai source file.
 
-A module can be one file, for example `Random.jai`, imported if needed with `#import "Random";`.  
+A module can be one file, for example `Random.jai`, if needed import it with `#import "Random";`.  
 
 When a module contains several files, you need to give the module its own folder with the same name, and in it a file `module.jai` is required.
 For example, the _Basic_ module has its own folder _/modules/Basic_. In it you'll find a file *Print.jai*, which contains the definition of `print`. But it also contains other source files.
@@ -104,6 +105,7 @@ or be used to differentiate between two modules with the same name.
 ## 8.4 Import a file, a dir or a string
 If you only want to import a specific file from a module, you can do it with `#import, file` like this:  
 `module :: #import, file "module1/module.jai";`
+This can be useful to avoid name-conflicts.
 
 To load a directory from a module, use `#import, dir`:  
 `module :: #import, dir "files/directory";`  

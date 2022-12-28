@@ -11,6 +11,7 @@ Patient :: struct {
 
 main :: () {
     pat1 : Patient;        // (1B)
+    // pat1.pe.name = "Johnson";
     pat1.name = "Johnson"; // (2)
     pat1.disease = "Bronchitis";
     print("Patient is: %\n", pat1); // => Patient is: {{"Johnson"}, "Bronchitis"}

@@ -115,4 +115,6 @@ main :: () {
     // => Thing1 uses #as with Vector3: true
     print("Other uses #as with Vector3: %\n", uses_vector3_with_as(Other));   
     // => false 
+    print("The type of main is %\n", type_of(main));  // (8)
+    // => The type of main is procedure ()
 }

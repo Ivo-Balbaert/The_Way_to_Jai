@@ -193,7 +193,9 @@ If there is no name for the loop variable, Jai has its own implicit iteration va
 In that case `it` is no longer defined. 
 
 (1) and (2) are one-line for-loops. (3) shows that we need { } to write a for with a code block; end here is a variable.  
-In line (4) we see a reversed for-loop indicated with **<**. Note that you still have to write the range as end..start, or put it in another way, as : `for < i: max..0 { ... }`.
+In line (4) we see a reversed for-loop indicated with **<**. Note that you still have to write the range as end..start, or put it in another way, as : `for < i: max..0 { ... }`.  
+You can also add a boolean to indicate whether the looping should be reversed or not: `for <= bool_var arr print("%\n", it);`  
+When bool_var is false, the looping is not reversed.
 
 Like with while we can nest for-loops, as shown in line (5). Line (6) shows that we can cast the index (normally type s64) to a smaller integer type (but the cast bounds are checked!) .
 A for-loop over a string does not work.

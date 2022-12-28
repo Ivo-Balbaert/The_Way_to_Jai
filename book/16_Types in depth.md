@@ -3,6 +3,7 @@
 We previously talked about types in § 9. 
 At compile time Jai deduces all there is to know about the types of all variables and objects.
 This info is heavily used in meta-programming at compile-time (see § 26).
+
 In this chapter we'll see which data-structures from built-in modules are used for this processing. Most of these are defined in module _Preload_.
 
 >To see how type inference works in depth, read the masterfully written 090_how_typechecking_works article in the how_to/ folder of the compiler.)
@@ -185,7 +186,10 @@ main :: () {
 
     // (7) Checking whether a struct uses Vector3 with #as
     print("Thing1 uses #as with Vector3: %\n", uses_vector3_with_as(Thing1)); // => true
-    print("Other uses #as with Vector3: %\n", uses_vector3_with_as(Other));   // => false 
+    print("Other uses #as with Vector3: %\n", uses_vector3_with_as(Other));   // => false
+
+    print("The type of main is %\n", type_of(main));  // (8)
+    // => The type of main is procedure ()
 }
 ```
 
@@ -210,11 +214,26 @@ cast(*Type_Info_Struct), as shown from line (4).
 
 Also:   `type_info(Any).type is .ANY`
 
+In line (8) we see that the type of main is `procedure()`.
+
 ## 16.3.3 Checking whether an enum is #specified
 A field `enum_type_flags` in Type_Info_Enum can give you more info on the enum, for example: a flag SPECIFIED tells you whether an enum has been specified, see line (5) and following.
 
 ## 16.3.4 Checking whether a struct uses Vector3 with #as
 Proc `uses_vector3_with_as` starting in line (6) shows how you can detect this with reflection info. We test it in line (7) on a struct type Thing1 that fulfills the requirement, and a struct Other which does not. 
 
+## 16.3.5 Type info available at runtime
+Much of the Type_Info provided by the compiler is also available at runtime, because the compiler bakes that data into your executable. Specifically this includes types for which your program calls type_info(), or any type referenced by those, recursively.  For example, the `print` procedure uses this runtime type info to do its job. 
 
+In certain cases you might not need all this type info, and/or you want to reduce the size of the executable. There are some directives available that help you do just that:  
+* **#type_info_none** : a struct with that directive will have no runtime type info, example: `NoThing :: struct #type_info_none { ... }`  
+* **#type_info_procedures_are_void_pointers** : in structs that have this directive, procedures do not retain their info at runtime.
+
+The same can also be done with compiler flags like this:
+```
+#run compiler_set_type_info_flags(NoThing, .NO_TYPE_INFO);
+#run compiler_set_type_info_flags(Bundle_B, .PROCEDURES_ARE_VOID_POINTERS);
+```
+
+This way you don't have to modify the code for the structs itself.
 

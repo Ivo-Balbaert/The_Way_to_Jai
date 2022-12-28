@@ -1,12 +1,12 @@
 # 28 Inline assembly
-This allows the inclusion of assembly code through the **#asm** directive. You would only do this for portions of the code where you need ultimate performance. That said, inline assembly is being used inside some of the more critical performance standard modules (see below).  
+This feature allows the inclusion of assembly code through the **#asm** directive. You would only do this for portions of the code where you need ultimate performance. That said, inline assembly is being used inside some of the more critical performance standard modules (see below).  
 
 Assembly language is mainly used to generate custom CPU instructions, support SIMD (Single Instruction, Multiple Data see: [Wikipedia SIMD](https://en.wikipedia.org/wiki/Single_instruction,_multiple_datainstructions)) for parallelizing data transformations, or take explicit control over the code generation to get the most optimized code.
-At this stage only the x64 platform is supported. Inline assembly does not support jumping, branching, NOP (No Operation instruction), or calling functions; use Jai for that.  
+At this stage only the x86-64 platform is supported. Inline assembly does not support jumping, branching, NOP (No Operation instruction), or calling functions; use Jai for that.  
 
-The **#bytes** directive is used like this: put the bytes that follow me into the machine code.
+The **#bytes** directive is used like this: put the bytes that follow #bytes into machine code.
 
-The inner workings of Apollo Time in _Basic_ use inline assembly and operator overloading. Other inline assembly examples can be found in: _modules/Atomics_, *modules/Bit_Operations*, *modules/Runtime_Support*. 
+The inner workings of Apollo Time in _Basic_ use inline assembly. Other inline assembly examples can be found in: _modules/Atomics_, *modules/Bit_Operations*, *modules/Runtime_Support*. 
 Module *Machine_X64.jai* contains useful routines for 64-bit Intel x86 machines.
 
 ## 28.1 Examples of using AVX and AVX2 SIMD operations
@@ -85,7 +85,7 @@ Line (3) uses basic SIMD Vector Code for adding 8-bit integers together at the s
 
 ### 28.1.1 Assembly Feature Flags
 `#asm AVX, AVX2 { }` are called Assembly Feature Flags.
-x86 does not have a single set of instructions. Rather, there are feature flags that tell someone whether or not a particular set of instructions is present or not.
+x86 does not have a single set of instructions. Rather, there are feature flags that indicate whether or not a particular set of instructions is present or not.
 
 Some instruction sets include:
 * AVX (Advanced Vector Extensions)
@@ -151,14 +151,15 @@ Here you can find the [list](https://www.felixcloutier.com/x86/index.html).
 ## 28.4 Assembly Language Data Types
 The types are: `gpr`, `str`, `vec`, and `omr`.
 * gpr stands for general purpose register.
-    gpr.a means that the gpr must be pinned to the register a (e.g. EAX: gpr === a)
+    gpr.a means that the gpr must be pinned to the register a (e.g. EAX: gpr === a),
+    pool: 8 in 32-bit mode, 16 in 64-bit mode
 * imm8 is an 8 bit immediate
 * mem means the operation must be a memory operand (e.g. lea.q [EAX], rax)
-* str stands for stack register, this is used by the fpu and mmx instructions.
-* vec stands for a vector type. This is used for manipulating SIMD instructions
+* str stands for stack register, pool: 8 (mostly legacy, used by fpu and mmx instructions).
+* vec stands for a vector type. This is used for manipulating SIMD instructions, pool: 8 in 32-bit mode, 16 in 64-bit mode pre AVX512, 32 in 64-bit mode post AVX512
 * omr stands for op-mask register, only available with AVX512
 
-### 28.4.1 Declaration of variables
+  ### 28.4.1 Declaration of variables
 See *28.3_declarations.jai*:
 ```c++
 main :: () {
@@ -182,10 +183,10 @@ main :: () {
 ### 28.4.2 List of different operations
 These specify the assignment-size:
 
-* .q is quad-word (64-bit integer).
-* .d is double-word (32-bit integer).
-* .w is a regular word (16-bit integer).
 * .b is a byte (8-bit integer).
+* .w is a regular word (16-bit integer).
+* .d is double-word (32-bit integer).
+* .q is quad-word (64-bit integer).
 * .x is the SSE is in the feature set, xmmword (128-bit)
 * .y is the AVX is in the feature set, ymmword (256-bit)
 * .z is the AVX512F is in the feature set, zmmword (512-bit)
@@ -200,6 +201,51 @@ The `===` operator is used to put values in registers, for example:
 
 See the following examples: *28.4_other_examples.jai*
 ```c++
+#import "Basic";
+
+global_variable: int;
+
+main :: () {
+    // Multiply x and y to z
+    x: u64 = 197589578578;
+    y: u64 = 895173299817;
+    z: u64 = ---;
+    #asm {
+        x === a; // We pin the high level var 'x' to gpr 'a' as required by mul.
+        z === d; // We pin the high level var 'z' to gpr 'd' as required by mul.
+        mul z, x, y;
+    }
+    print(" z is %\n", z); // => z is 9588  (??)
+
+    // loading memory into registers
+    array: [32] u8;
+    pointer := array.data;
+    #asm {
+        mov a:, [pointer];      // a := array.data
+        mov i:, 10;             // declare i:=10
+        mov a,  [pointer + 8];
+        mov a,  [pointer + i*1];
+    }
+
+    // Load Effective Address (LEA) Load and Read Instruction Example
+    rax := 5;
+    rdx := 7;
+    #asm {lea.q rax, [rdx];}
+    #asm {lea.q rax, [rdx + rax*4];}
+    // NOTE: This does not work, 4*rax is wrong, must be rax*4
+    // #asm {lea.q rax, [rdx + 4*rax];} 
+    // => Error: Bad memory operand, syntax is [base + index * 1/2/4/8 +/- disp].
+
+    // Fetch and add:
+    // fetch and add.
+    fetch_and_add :: (val: *int) #expand {
+        #asm {
+            mov incr: gpr, 1;
+            xadd.q [val], incr;
+        }
+    }
+    fetch_and_add(*global_variable);
+}
 ```
 
 #asm blocks can be named, so that variables can be cross-referenced:  

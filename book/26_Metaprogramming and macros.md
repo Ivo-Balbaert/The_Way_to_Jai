@@ -900,7 +900,8 @@ Now we can print out the data from a linked list in a for-loop like any other ar
 
 But we can do better! (see for_expansion macro Version 2). Just leave out the temporary variables `iter` and `i` and work only with it and it_index. Also note you only have to backtick the variables the first time you use these. Note that in our actual `for call, we have to print `it.data`.
 
-> Remark: iterating over data-structures with for seems to have been the primary reason for introducing macros in Jai.
+> Remark: the `for_expansion` may have any other name like `looping`, so that you can define different for_expansions. Also it and it_index can be renamed, like this: `for :looping v, n: data_structure  print("[%] %\n", n, v);`
+> Remark: iterating over data-structures with for was the primary reason for introducing macros in Jai.
 
 Now let's make the same for-loop for a double linked-list:
 
@@ -1523,6 +1524,7 @@ value of a macro argument, will be set to the Code of the procedure call
 that invoked the macro.  
 `compiler_get_nodes()` from module _Compiler_ can then be called on this code to inspect and manipulate it. `print_expression` from module _Program_Print_ `prints` the 2nd argument in a string-format to the string builder.
 With these kinds of techniques you manipulate code from a macro within the program itself (see howto/497).
+There is also a `print_type_to_builder` proc for printing type info to a string builder (see how_to/935).
 
 ## 26.15 Converting code to string
 See _26.23_get_variable_name.jai_:

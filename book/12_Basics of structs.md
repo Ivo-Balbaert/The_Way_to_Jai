@@ -378,7 +378,9 @@ Patient :: struct {
 
 main :: () {
     pat1 : Patient;        // (1B)
+    // pat1.pe.name = "Johnson"; // can be shortened as:
     pat1.name = "Johnson"; // (2)
+    pat1.disease = "Bronchitis";
     print("Patient is: %\n", pat1); // => Patient is: {{"Johnson"}, "Bronchitis"}
 
     using pat1;            // (3)
@@ -386,7 +388,7 @@ main :: () {
     print("Patient has name: %\n", name); // => Patient has name: Johnson
 }
 ```
-Line (1) tells us Patient can use the namespace of Person. That's why in line (2) we don't need to use Person in order to access the `name` field. Line (3) shows us that we can even use pat1 as a namespace.  
+Line (1) tells us Patient can use the namespace of Person. That's why in line (2) (where we normally would write pat1.pe.name) we don't need to use Person in order to access the `name` field. Line (3) shows us that we can even use pat1 as a namespace.  
 The keyword using lets you import namespaces, as we did with enums. `pe` is not a keyword here, it can be replaced by any other word, for example `using person: Person`.
 Instead of declaration (1B), we could have written line (4), so that we could use the fields of pat1 without writing pat1.field, just write field.
 **using** allows us to refer to a contained struct's members without referencing that struct. It allows you to bring the member variables of a struct into the scope of another struct (like sub-classing but no methods/overriding) or a proc (like a method but more flexible, see ??).   
@@ -395,6 +397,12 @@ We use _composition_ instead of a subclass and can reference the fields of the â
 (see ?? for a more complete example).
 
 > The `using` keyword allows you to bring the member variables of a struct into the scope of a function (like a method but more flexible) or another struct (like subclassing but no methods/overriding).
+
+> In a large program with many structs, `using` can give rise to field-name collisions. To avoid this, use the `except` modifier to avoid these field name(s):
+> `using,except(length) position: Vector3_With_Length;` 
+> As the exact opposite, the `only` modifier imports only the names that are in its list: `using,only(w, y) orientation: Quaternion;`
+> `using,map(proc) can be used to map duplicate names to other names.
+> (see how_to/044)
 
 > Favor composition over inheritance.
 
