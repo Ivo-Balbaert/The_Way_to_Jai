@@ -31,6 +31,7 @@ main :: () {
     //     return;
     // }
     text, success := read_entire_file(TESTFILE);
+    assert(success, "Error. Cannot read file.\n" );
     if success {
         print("File successfully read.\n");
     } else {

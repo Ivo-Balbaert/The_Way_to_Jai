@@ -14,9 +14,12 @@ build :: () {
     set_build_options(target_options, w);                 
 
     compiler_begin_intercept(w);     // (1)
+    add_build_file(tprint("%/main.jai", #filepath), w);
+    message_loop();  
+    compiler_end_intercept(w);       // (1B)
+}
 
-    add_build_file(tprint("%/main.jai", #filepath), w);   
-    
+message_loop :: () {
     while true {                     // (2)          
         message := compiler_wait_for_message();  // (3)
 //        print(" >> %\n", <<message); // (4) => see output below
@@ -37,15 +40,29 @@ build :: () {
                 message_phase := cast(*Message_Phase) message;     // (10)
 //              print("Entering phase %\n", message_phase.phase);  // (11)
                 if message_phase.phase == .TYPECHECKED_ALL_WE_CAN  {  // (11B)
-                    print("Typechecking done - stop compilation");
-                    exit(0);
+//                    print("Typechecking done - stop compilation");
+//                    exit(0);
+                }
+                if message_phase.phase == .POST_WRITE_EXECUTABLE {
+                    print("\n");
+                    if message_phase.executable_write_failed {
+                    print("FAILED writing '%'! Linker exit code was %.\n", message_phase.executable_name, message_phase.linker_exit_code);
+                    } else {
+                        print("Success writing '%'! Linker exit code was %.\n", message_phase.executable_name, message_phase.linker_exit_code);
+                    }
                 }
             }
             case .TYPECHECKED; {            
-                message_typechecked := cast(*Message_Typechecked) message; // (12)
-                for message_typechecked.declarations {  // (13)
+                 message_typechecked := cast(*Message_Typechecked) message; // (12)
+                 for message_typechecked.declarations {  // (13)
 //                    print("Code declaration: %\n", it);
-               }
+                }
+                n := message_typechecked.all.count;
+                if n == 1 {
+                    print("  1 thing has been typechecked.\n");
+                } else {
+                    print("  % things have been typechecked.\n", n);
+                }
             }
             case .DEBUG_DUMP; {            
                 dump_message := cast(*Message_Debug_Dump) message;   // (14)
@@ -54,12 +71,11 @@ build :: () {
             case .ERROR; {            
                 // handle error
             }
+            case;
+                compiler_report(tprint("Unhandled message type %!\n", message.kind));
         }
     }
-    compiler_end_intercept(w);       // (1B)
 }
-
-
 
 main :: () {}
 

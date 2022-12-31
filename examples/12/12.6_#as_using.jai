@@ -10,7 +10,7 @@ Patient :: struct {     // (1)
 }
 
 Employee :: struct {    // (2)
-    #as using p: Person;
+    using #as p: Person;
     profession: string;
 }
 

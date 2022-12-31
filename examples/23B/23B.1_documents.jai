@@ -6,7 +6,7 @@ Document :: struct {      // (1)
 }
 
 Video_File :: struct {    // (2)
-    #as using base: Document;  // (3)
+    using #as base: Document;  // (3)
     
     duration:           float;
     width, height:      int;
@@ -15,14 +15,14 @@ Video_File :: struct {    // (2)
 }
 
 Audio_File :: struct {      // (4)
-    #as using base: Document;  
+    using #as base: Document;  
     
     duration:      float;
     sampling_rate: u32;
 }
 
 Executable_File :: struct {     // (5)
-        #as using base: Document;
+        using #as base: Document;
 
         base.type = Executable_File;  // (5B)
         is_a_rootkit := false;

@@ -426,7 +426,7 @@ Patient :: struct {     // (1)
 }
 
 Employee :: struct {    // (2)
-    #as using p: Person;
+    using #as p: Person;
     profession: string;
 }
 
@@ -462,15 +462,14 @@ main :: () {
 ```
 
 In this example we have our Patient subtype from before, but in line (1) an Employee subtype is defined with #as: 
-`#as using p: Person;`  
+`using #as p: Person;`  
 We see the difference when comparing lines (3) and (4):
 - in (3) we attempt to assign a Patient to a Person variable, this errors out!
 - in (4) we assign an Employee to a Person variable, this works, but of course only retains the name in p1.
 
 So #as means we can implicitly cast from the subtype to the supertype!  
-#as using p: Person;
-   can also be written as:  
-using #as p: Person;
+This means that Employee is effectively a **subclass** of Person, whereas Patient is not!
+(`using #as p: Person;`  can also be written as:  `#as using p: Person;` )
 
 A slightly different way of using #as is demonstrated in Example 2. Here, #as indicates that a struct can implicitly cast to one of its members `i`, and in line (6) 'num' is passed to the function as an int.
 More than one field can be prefixed with #as.

@@ -18,7 +18,7 @@ Direction :: enum {
 }
 
 Thing1 :: struct {
-    #as using v: Vector3;
+    using #as v: Vector3;
     name: string;
 }
 

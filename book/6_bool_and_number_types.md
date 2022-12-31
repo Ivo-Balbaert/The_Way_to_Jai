@@ -87,7 +87,7 @@ When the expression is true, nothing happens. When the expression is false, an a
 assert also works with complex expressions, procedure calls, and so on. It is a very useful tool to make sure your program is always in a correct state. It is also very handy during debugging.
 Also you can leave important assert statements in production code and disable them as described below. That way, when a problem occurs you can quickly enable them in development/test to try to find the cause.
 
-> Basic has a module parameter defined for it: ENABLE_ASSERT := true
+> Basic has a program parameter defined for it: ENABLE_ASSERT := true
 >To increase performance for a release build, you can disable asserts by changing the import to:
 >	`#import "Basic"()(ENABLE_ASSERT=false);`
 > That way you can leave the asserts in your code, without incurring a performance penalty.

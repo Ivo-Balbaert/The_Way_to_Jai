@@ -68,6 +68,17 @@ main :: ()  {
     string.
     */
 
+    // (9B):
+    INSERTION_STRING  :: #string DONE
+    NUM_ENTITY_TYPES :: %1;
+    entity_types : [%1] Type : .[ %2 ];
+    DONE
+
+    build_string := sprint(INSERTION_STRING, 3, "Person");
+    print("build_string is %\n", build_string);
+    // => build_string is     NUM_ENTITY_TYPES :: 3;
+    //                        entity_types : [3] Type : .[ Person ];
+
     // Looping over the characters in a string:
     for i: 0..str.count-1 {             // (10)
             print("% -", str[i]);

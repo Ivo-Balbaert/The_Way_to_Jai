@@ -37,14 +37,13 @@ main :: () {
 
     // data1 :=  read_entire_file(TESTFILE);            // (5)
     // data1, success :=  read_entire_file(TESTFILE);            
-    // if !success {
-    //     return;
-    // }
+    // if !success   return; 
     text, success := read_entire_file(TESTFILE);
+    // assert(success, "Error. Cannot read file.\n" );   // (5B)
     if success {
         print("File successfully read.\n");
     } else {
-        print("Error. Cannot open file.\n");
+        print("Error. Cannot read file.\n");
     }
     print("Contents of TESTFILE:\n\"%\"\n", text);
 
@@ -102,7 +101,12 @@ Sailor!
 
 If you need to create a folder from code, do it as in line (2). Similarly, you have delete_directory.  
 To test whether a file already exists, use `file_exists` as in line (3).
-Use `write_entire_file` (see line (4)) to write a string to a file (creating the file when it does not exist). This proc can also take a `*builder`, where `builder` is a String Builder. `read_entire_file` (line (5)) reads the contents of a file and returns it as a string.
+Use `write_entire_file` (see line (4)) to write a string to a file (creating the file when it does not exist). This proc can also take a `*builder`, where `builder` is a String Builder. `read_entire_file` (line (5)) reads the contents of a file and returns it as a string.  
+Whenever a proc returns a bool variable indicating the success of the operation, you can test on it like this:
+* if success {  }
+  else {  }
+* if !success return;
+* assert(success);
 
 The `file_open` operation (line (6)) has the following signature:
 `file_open :: (name: string, for_writing := false, keep_existing_content := false, log_errors := true) -> File, bool`

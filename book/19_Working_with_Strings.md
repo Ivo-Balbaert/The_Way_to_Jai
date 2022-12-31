@@ -240,7 +240,8 @@ String literals are also **bounds-checked** at run-time, see line (7) and the ou
 All non-empty strings are implicitly converted to true when used in a condition (see line (8)); the empty string converts to false.
 
 ### 19.4.3 Multi-line strings
-A multi-line string (also called here or doc string) is defined as in line (9) with the **#string** directive preceding the token that delineates the string (start-end). In our case this is `END` which is a freely chosen token. There may be no characters between the start token END and the string itself, except for a new-line. Notice how all space characters (tabs, newlines, and so on) are also preserved in the string.
+A multi-line string (also called here or doc string) is defined as in line (9) with the **#string** directive preceding the token that delineates the string (start-end). In our case this is `END` which is a freely chosen token. There may be no characters between the start token END and the string itself, except for a new-line. Notice how all space characters (tabs, newlines, and so on) are also preserved in the string.  
+The lines following (9B) show how a multi-line string can contain % markers, which can later be substituted with values using sprint or a string builder.
 
 ### 19.4.4 Looping over the characters in a string str with for
 Line (10) shows this is done as follows:  ` for i: 0..str.count-1`  

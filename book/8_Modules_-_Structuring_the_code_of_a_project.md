@@ -140,13 +140,15 @@ Examples:
 
 For an example of its use, see § 12.12
 
-## 8.7 Module parameters
+## 8.7 Module and program parameters
 ### 8.7.1 Definition and use
-In § 6.1.3 we already encountered the ENABLE_ASSERT module parameter from _Basic_, which by default enables assert debugging (see § 20.1.2). 
-A **module parameter** is a parameter defined in and set by a module, like `ENABLE_ASSERT := true` in _Basic_. Here is its definition at the start of _Basic/module.jai_: 
+In § 6.1.3 we already encountered the ENABLE_ASSERT program parameter from _Basic_, which by default enables assert debugging (see § 20.1.2). 
+A **module or program parameter** is a parameter defined in and set by a module, like `ENABLE_ASSERT := true` in _Basic_. Here is its definition at the start of _Basic/module.jai_: 
 `#module_parameters () (ENABLE_ASSERT := true);`  
 Code that imports this parameter can decide to change its value. This is done in the import line:
 `#import "Basic"()(ENABLE_ASSERT=false);`  
+The 1st list contains the module parameters: they only have module scope, so they are only active within the imported module. Basic has no module parameters, that's why the 1st list is empty: ()
+The 2nd list (to which for example ENABLE_ASSERT belongs) is a program parameter valid in the whole program: all submodules use those values for the parameters.
 
 In fact, module _Basic_ has several module parameters:  
 `#module_parameters () (MEMORY_DEBUGGER := false, ENABLE_ASSERT := true, REPLACEMENT_INTERFACE: $I/interface Memory_Debugger_Interface = Memory_Debugger_Interface, VISUALIZE_MEMORY_DEBUGGER := true);`  
@@ -181,7 +183,7 @@ main :: () {}
 
 This block executes as module `TestModule_Params` is imported in line (1).
 To test this, compile the main file with the command:  
-`jai 8.2_main.jai -import_dir "d:\jai\The_Way_To_Jai\my_modules"`  
+`jai 8.2_main.jai -import_dir "d:\jai\The_Way_To_Jai\my_modules"` or something similar on your system. 
 The following message is printed out:
 `The module is in VERBOSE mode`  
 Verify that the other message appears when you set VERBOSE to false in `8.2_main.jai`.

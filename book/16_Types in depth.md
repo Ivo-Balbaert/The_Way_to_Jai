@@ -91,7 +91,7 @@ Direction :: enum {
 }
 
 Thing1 :: struct {
-    #as using v: Vector3;
+    using #as v: Vector3;
     name: string;
 }
 
@@ -219,7 +219,7 @@ In line (8) we see that the type of main is `procedure()`.
 ## 16.3.3 Checking whether an enum is #specified
 A field `enum_type_flags` in Type_Info_Enum can give you more info on the enum, for example: a flag SPECIFIED tells you whether an enum has been specified, see line (5) and following.
 
-## 16.3.4 Checking whether a struct uses Vector3 with #as
+## 16.3.4 Checking whether a struct uses another struct with #as
 Proc `uses_vector3_with_as` starting in line (6) shows how you can detect this with reflection info. We test it in line (7) on a struct type Thing1 that fulfills the requirement, and a struct Other which does not. 
 
 ## 16.3.5 Type info available at runtime
@@ -237,3 +237,64 @@ The same can also be done with compiler flags like this:
 
 This way you don't have to modify the code for the structs itself.
 
+## 16.3.6 Checking whether a struct is a subclass of another struct
+In § 12.8 we introduced the `using #as` clause, which allows to define a struct as a subclass of another struct, so in program _12.6_#using_as.jai_ Employee was a subclass of Person. Module _Compiler_ has a proc called `is_subclass_of` which tests just that. Let's use it with the structs from the 12.6 example:
+See *16.2_is_subclass_of*:
+
+```c++
+#import "Basic";
+#import "Compiler";
+
+Person :: struct {
+    name: string;
+}
+
+Patient :: struct {     // (1)
+    using as: Person;
+    disease: string;   
+}
+
+Employee :: struct {    // (2)
+    using #as p: Person;
+    profession: string;
+}
+
+main :: () {
+    pat1: Patient;  
+    pat1.name = "Johnson"; 
+   
+    emp1: Employee;
+    emp1.name = "Gates";
+    emp1.profession = "software engineer";
+    print("%\n", emp1); // => {{"Gates"}, "software engineer"}
+
+    p1: Person;
+    p1 = emp1;
+    print("%\n", p1); // => {"Gates"}
+
+    // Test if Employee is a subclass of Person:
+    tie := cast(*Type_Info) type_info(Employee);  // (3)
+    if is_subclass_of(tie, "Person") {
+        print("Employee is a subclass of Person\n");
+    } else {
+         print("Employee is NOT a subclass of Person\n"); 
+    }
+
+    // Test if Patient is a subclass of Person:
+    tip := cast(*Type_Info) type_info(Patient);
+    if is_subclass_of(tip, "Person") {
+        print("Patient is a subclass of Person\n");
+    } else {
+        print("Patient is NOT a subclass of Person\n");  
+    }
+}
+
+/*
+Employee is a subclass of Person
+Patient is NOT a subclass of Person
+*/
+```
+
+If we do a `tis := cast(*Type_Info) type_info(Subclass);`  
+then we can check this with: `is_subclass_of(tis, "Person")`.
+This could also be done for the struct hierarchy defined in § 23B.

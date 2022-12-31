@@ -1,5 +1,5 @@
 # 23B Document types: a showcase of inheritance using structs, as and polymorphism
-(Example taken from howto\008_types.jai)
+(Example taken from how_to\008_types.jai)
 
 We'll now combine all our previous knowledge to construct an OO-like type-inheritance system.
 
@@ -17,7 +17,7 @@ Document :: struct {      // (1)
 }
 
 Video_File :: struct {    // (2)
-    #as using base: Document;  // (3)
+    using #as base: Document;  // (3)
     
     duration:           float;
     width, height:      int;
@@ -26,14 +26,14 @@ Video_File :: struct {    // (2)
 }
 
 Audio_File :: struct {      // (4)
-    #as using base: Document;  
+    using #as base: Document;  
     
     duration:      float;
     sampling_rate: u32;
 }
 
 Executable_File :: struct {     // (5)
-        #as using base: Document;
+        using #as base: Document;
 
         base.type = Executable_File;  // (5B)
         is_a_rootkit := false;
@@ -125,7 +125,7 @@ main :: () {
 
 In line (1), we declare the `Document` struct. It is the base type: other things will be kinds of documents. The `type` field lets us know what kind of Document we are dealing with. The `filename` field is common to all Documents.
 
-`Video_File` is the first specialized document. It starts with  line (3):  `#as using base: Document;`  
+`Video_File` is the first specialized document. It starts with  line (3):  `using #as base: Document;`  
 
 The base type Document is stated at the start of our struct, which makes it easy to find. `using` (see § 12.7) pulls in the names from Document so they can be used as if they were members of Video_File. #as (see § 12.8) means we can implicitly cast from Video_File to Document.  
 Line (4) shows another Document tye struct called `Audio_File`.

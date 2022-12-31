@@ -225,8 +225,8 @@ We can force the compiler to allocate an array on the heap with the **NewArray**
 This proc also has some default vales for arguments like initialized, allocator, and memory alignment; for example: `. The types of these arrays are `[] int`.
 In line (10B) we see how we can cache-align an array with the 3rd argument `alignment=64`, which is especially useful for larger arrays. This is proven for the aligned array `object_array` by the assertions in line (10D) and following.
 
-Releasing the memory when the array is no longer in use must be done by the developer with defer **array_free** (see line (10)).  
-A more familiar and consistent syntax using **New** and **free** is shown in line (11):  
+Releasing the memory when the array is no longer in use must be done by the developer with defer `array_free` (see line (10)).  
+A more familiar and consistent syntax using `New` and `free` is shown in line (11):  
 `arr_heap2 := New([3] int);`
 For releasing the memory, simply use `defer free(arr_heap2);`.
 The difference with NewArray is that New returns a pointer. To print the array, you must now dereference the pointer, as in line (14).  
@@ -292,24 +292,24 @@ main :: () {
 
 In the code above lines (1)-(2) declare to dynamic arrays, with the typical syntax:  
 `[..]type`  
-To release memory, you can either use the **array_free** proc (line (3)), or the **free** proc which needs a pointer to the memory (line (4)).
-To add one or several item(s) (see § 18B) at a time, use the **array_add** proc with a pointer to the array, and the item(s) as arguments (see lines (5) and following).  
+To release memory, you can either use the `array_free` proc (line (3)), or the `free` proc which needs a pointer to the memory (line (4)).
+To add one or several item(s) (see § 18B) at a time, use the `array_add` proc with a pointer to the array, and the item(s) as arguments (see lines (5) and following). If you want your array to only contain unique items, use `array_add_if_unique` instead. 
 You can get the last item of an array with `peek` without changing the array (5B), `pop` in (5C) is the same but effectively removes the last item.
 
 ### 18.4.1 Useful procs for dynamic arrays
 
-We check if an item is present in the array in line (6), use **array_find**, which returns true if the item is found, false otherwise.
-Removal of items within a dynamic array is done with the **remove** proc, as in line (7): we want to remove the item with value 5, so we loop over the array, if-test with it == value, and if true, remove it. This proc is used to safely remove elements while iterating through an array, which is often a problem in other languages. 
+We check if an item is present in the array in line (6), use `array_find`, which returns true if the item is found, false otherwise.
+Removal of items within a dynamic array is done with the `remove` proc, as in line (7): we want to remove the item with value 5, so we loop over the array, if-test with it == value, and if true, remove it. This proc is used to safely remove elements while iterating through an array, which is often a problem in other languages. 
 Notes:
 - This proc does not work for fixed-size arrays!  
 - This proc does an unordered remove, the removed item is replaced with the last item (in fact: a swap with the last item, and then a remove of the last element). The remove happens in constant time O(1).
 (For an ordered remove, see § 18B.) 
 
-To copy an array into another array, use **array_copy**, as in lines (8) or (8B).
-To empty a dynamic array completely, use the **array_reset** proc, as in line (9).
+To copy an array into another array, use `array_copy`, as in lines (8) or (8B).
+To empty a dynamic array completely, use the `array_reset` proc, as in line (9).
 
 Notice that whenever you need to change an array in a proc, you need to give it a pointer to the array. A proc like array_find doesn't need that, because it only reads through the array.  
-In line (10) we fill up a dynamic array in a simple for loop, but not in an efficient way: at each array_add call, a memory location must be acquired for the new item. It is far better to use **array_reserve** as in line (11). Here you estimate how many items your array will need,giving this as a parameter to the proc, so that this initial memory can be pre-allocated in its entirety from the start.  
+In line (10) we fill up a dynamic array in a simple for loop, but not in an efficient way: at each array_add call, a memory location must be acquired for the new item. It is far better to use `array_reserve` as in line (11). Here you estimate how many items your array will need,giving this as a parameter to the proc, so that this initial memory can be pre-allocated in its entirety from the start.  
 
 ### 18.4.2 Internal definition of a dynamic array
 This is found in module _Preload_; again it is a struct, which takes up 40 bytes:
