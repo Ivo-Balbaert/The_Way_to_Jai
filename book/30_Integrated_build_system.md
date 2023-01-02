@@ -11,6 +11,12 @@ This chapter talks about building (compiling/linking while setting options) a Ja
 Most of the procedures we will need are define in module _Compiler_, so we'll import this module in the programs in this chapter. Most of these programs will also be run at compile-time with #run.  
 By convention a procedure called `build()` is run with `#run build()`, but you can also just run a code block with `#run {...}` (see 30.11_using_notes.jai).  
 
+Your metaprogram gets a lot of very useful information about the target program, including:  
+* syntax trees representing every procedure
+* the types of all variables and all expressions
+* information about which declaration each identifier binds to
+You can do a whole lot of stuff with this information and perform analyses that would not be possible in most programming languages.
+
 Behind the scenes when you do a: `jai program.jai`, the compiler internally runs another meta-program at startup to compile the first workspace. This **default meta-program** does things such as setting up the working directory for the compiler, setting the default name of the output executable based on command-line arguments, and changing between debug and release build based on command-line arguments. It only accepts arguments preceded by a `-`. The source for this metaprogram is in _modules/Default_Metaprogram.jai_. 
 
 Any procedure that has the **#compiler** directive is a proc that interfaces with the compiler as a library; it works with compiler internals.
@@ -229,8 +235,6 @@ build :: () {
     print("Build_Options for Workspace % are: %\n", w, target_options);
 
     set_build_options(target_options, w);
-    set_build_file_path("./");
-
     add_build_file("main.jai", w);
 }
 
@@ -453,7 +457,8 @@ Stats for Workspace 3 (unnamed):
  */
  ```
 
-You do that by getting a hook into the compiler loop with `compiler_begin_intercept(w);` (line (1)), which is removed after the compiler access with `compiler_end_intercept(w);` (line (1B)).
+You do that by getting a hook into the compiler loop with `compiler_begin_intercept(w);` (line (1)); it causes us to get compiler messages from this workspace.
+The hook is removed after the compiler access with `compiler_end_intercept(w);` (line (1B)).
 We process all compiler messages in the `message_loop();` procedure. This is a while true loop. In line (3), we do: `message := compiler_wait_for_message();` and print out the message. Because this is an infinite loop, we need to stop when the compiler signals the end of its work with the COMPLETE message; this is done in line (5).
 In the output, the same kind of messages appear over and over (like IMPORT, FILE, PHASE, TYPECHECKED, ... which is the `kind` of the message), and at the end we get {COMPLETE, 3} (The 3 always refers to workspace 3).
 
@@ -482,7 +487,7 @@ Loading file 'c:/jai/modules/Runtime_Support_Crash_Handler.jai'.
 Loading file 'c:/jai/modules/stb_sprintf/module.jai'. 
 ```
 
-2) `.IMPORT` is signalled whenever a new module is loaded. Every module is important only once; even when you have for example several #import "Basic", importing happens only one time. You can see which modules are imported: see lines (8)-(9).  
+2) `.IMPORT` is signalled whenever a new module is loaded. Every module is imported only once; even when you have for example several `#import "Basic"`, importing of _Basic_ happens only one time. You can see which modules are imported: see lines (8)-(9).  
 
 ```
 Import module 'Preload'
@@ -519,7 +524,9 @@ phase: enum u32 {
 }
 ```
 
-If you want Jai to do just the typechecking and not to compile anything, the metaprogram (build.jai) should exit after compiler message TYPECHECKED_ALL_WE_CAN (see lines 11B and following). On the other hand, if you want to generate code, you can do this after this message (see 30.11_using_notes.jai and how_to 460).
+If you want Jai to do just the typechecking and not to compile anything, the metaprogram (build.jai) should exit after compiler message `TYPECHECKED_ALL_WE_CAN` (see lines 11B and following). On the other hand, if you want to generate code, you can do this after this message (see 30.11_using_notes.jai and how_to 460).
+
+If you want to output info gathered during compilation, use the phase `PRE_WRITE_EXECUTABLE, which occurs after we have received all the typecheck data, but before COMPLETE (otherwise it would overlap with any diagnostic output printed by the compiler itself, see how_to 490).
 
 4) `.TYPECHECKED` every time code has passed typechecking, this gives an huge amount of output : see lines (12)-(13).  
 
@@ -846,6 +853,9 @@ D:/Jai/The_Way_to_Jai/examples/30/main5.jai:4,3: Error: Too many levels of point
     c := *b; // Too many levels of pointer indirection! c is of Type (***int)
 ```
 
+(See other MISRA checks implemented in how_to/480.)
+Howto_490 shows how to get info on loaded files and imported modules at compile-time.
+
 ## 30.11 Generating optimized LLVM bitcode
 See *30.10_generate_llvm_bitcode.jai*:
 ```c++
@@ -1008,7 +1018,7 @@ cherry
 dog
 elephant
 ```
-
+(See also how_to/470, first.jai for code to check if a procedure has a certain note)
 
 
 

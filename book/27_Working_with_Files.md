@@ -1,7 +1,7 @@
 # 27 Working with Files
 
 Manipulation of files is a common requirement for every type of program. Jai has a _File_ module which takes care of that, so we have to import it in code that needs this functionality (see line (1) in code below). There are also the following modules: _File_Utilities_, _File_Async_  and _File_Watcher_  
-Because of the OS differences, there is often a Windows variant and a Unix variant of the file procedures.
+Because of the OS differences, there is often a Windows variant and a Unix variant of the File procedures.
 
 Here are some examples of the most common operations:
 
@@ -46,6 +46,12 @@ main :: () {
         print("Error. Cannot read file.\n");
     }
     print("Contents of TESTFILE:\n\"%\"\n", text);
+
+    file, success2 :=  file_open(TESTFILE, for_writing=true, keep_existing_content=true); // (6)
+    if !success2 {
+        print("Could not open file % for writing.\n", TESTFILE);
+        return;
+    }
 
     advance :=  file_length(file);    // (7)
     print("Length file is %\n", file_length(file));  // => Length file is 50
@@ -115,7 +121,7 @@ If we want to add data to the file, we must first know its length, and then adva
 
 In line (8), we add another string to the file; make sure in line (9) to close the file after this to write to disk.
 
-** use defer to close a file**
+**use defer to close a file**
 If you open a file read-only, you can use `defer file_close(*file);` as in line (11B) immediately after the success check. 
 
 We then read the entire contents back in line (11).
@@ -126,3 +132,69 @@ In line (12) we construct a string with the buffer data and then print it out.
 
 To rename a file, use `file_move`, to remove a file `file_delete`.
 Search in module _File_ for other variants of the above procedures.
+
+## 27.2 Deleting sub-folders
+The following program provides a way to recursively delete directories with a specific name.
+
+See *27.2_del_dirs.jai*:
+```c++
+#import "Basic";
+#import "File";
+#import "File_Utilities";
+
+HELP :: "Usage: % [to-be-deleted_directory] [start_directory]\nStart directory will be working directory if not set.\n";
+
+main :: () {
+    context.allocator = temp;
+    args := get_command_line_arguments(); 
+    if args.count <= 1 || args.count > 3 {
+        print(HELP, args[0]);
+        exit(1);
+    }
+    if args.count == 3 {
+        set_working_directory(args[2]);
+        print("Setting working directory to %\n",args[2]);
+    }
+    
+    you_are_here := get_working_directory();   /// (1)
+    redacted := args[1];
+    print("Working directory: %\nRemoving directories named '%'...\n", you_are_here, redacted);
+    
+    delete_proc :: (using info: *File_Visit_Info, redacted : string) {
+        if short_name == redacted {
+            success := delete_directory(full_name);
+            if !success {
+                print("We failed to delete directory %!\nIt was simply too powerful... ;____;\n", full_name);
+                exit(-1);
+            }
+            descend_into_directory = false;
+        }
+    }
+    complete := visit_files(you_are_here, true, redacted, delete_proc, visit_files = false, visit_directories = true);
+    
+    if !complete {
+        print("There was an error while traversing the directory tree! Oh no!\n");
+        exit(-2);
+    } else {
+        print("Removed all directories named '%' from %!\n", redacted, you_are_here);
+    }
+}
+```
+
+The `File_Visit_Info` struct as well as the `visit_files` proc are defined in module *File_Utilities*. In line (1) we get the current folder we are in with `get_working_directory()`.
+`delete_proc` is the procedure that effectively does the delete, `visit_files` takes this proc as 4th argument.  
+
+Here are some invocations of the program and their output:  
+```
+D:\Jai\testing>deldirs
+Usage: deldirs [to-be-deleted_directory] [start_directory]
+Start directory will be working directory if not set.
+
+D:\Jai\testing>deldirs .build
+Working directory: D:\Jai\testing
+Removing directories named '.build'...
+Removed all directories named '.build' from D:\Jai\testing!
+```
+
+
+

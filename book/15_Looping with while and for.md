@@ -408,6 +408,8 @@ It's also possible to add an annotation to a struct, a struct field or a procedu
 The note tag is represented as a string, and unlike in Java or C#, is not structured. Its info is stored in the notes field of the Type_Info_Struct_Member struct. This field is an array of strings, meaning each field can have several notes (see line (4)).
 This can be picked up with introspection, and appropriate actions can be taken accordingly.  
 You can also add annotations to a struct itself, for example: to indicate which version of the struct definition is used (see line (1)).
+Here is an example of a procedure with a note:  
+`generate_code :: () { ... } @RunWhenReady`
 
 Notes are also abundantly used within code comments to add useful info for refactoring.
 For example: @TestProcedure, @test, @Incomplete, @Refactor, @Cleanup, @Simplify, @Temporary, @pure ...

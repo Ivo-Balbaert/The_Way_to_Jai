@@ -31,8 +31,6 @@ build :: () {
     print("Build_Options for Workspace % are: %\n", w, target_options);
 
     set_build_options(target_options, w);
-    set_build_file_path("./");  // output executable in current folder (= default)
-    
     add_build_file("main.jai", w);
 }
 

@@ -495,6 +495,6 @@ The following naming conventions are more or less standard:
 - snake_case for identifiers (procedures, variables, ...)
 - Capitalized_Snake_Case for types
 - PascalCase for macros and imports
-- full caps for constants
+- full caps for constants and enum members
 
 Note that these conventions are not enforced in the language, and you'll see exceptions to these rules in the standard library distribution. 

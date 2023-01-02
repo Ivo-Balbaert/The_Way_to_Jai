@@ -143,6 +143,7 @@ main                        d:\Jai\The_Way_to_Jai\examples\6\6.3_numbers.jai:18
     // (5) Casting:
     b = cast(u8) c;
     b = xx c;
+    foo: u8 = xx ifx true then #char "." else #char "#";
     // cast u8 to float works:
     f: float;
     g: u8 = 74;

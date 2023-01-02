@@ -161,7 +161,7 @@ The empty string `""` is the default value, it has count 0 and data 0x0.
 When we declare a Unicode string such as ch in line (3), we see that the number of bytes is 6, which does not correspond to the number of characters (2).Looking up the first character ['世'](https://www.compart.com/en/unicode/U+4E16#:~:text=Unicode%20Character%20%E2%80%9C,%E4%B8%96%20%E2%80%9D%20%28U%2B4E16%29) tells us that in **UTF-8 Encoding** it consists of 3 bytes, in order: 	0xE4 0xB8 0x96. The first byte 0xE4 is hexadecimal for 228, the dereferenced data of the first pointer (see line (4)). So Jai strings are UTF-8 encoded.
 
 Also notice that `Newstring` is the exact same definition as `Array_View_64`. 
-A variable of type string is in fact an _array view_, where the data is an array of u8  (written as []u8), which is NOT '0'-terminated.
+A variable of type string is in fact an _array view_, where the data is an array of u8  (written as []u8), which is NOT '0'-terminated. A string can always be casted to [] u8 (see (10B)).
 
 Another way to create a string strdata when you have a buffer with length bytes in it is shown in line (14) and following:
 ```

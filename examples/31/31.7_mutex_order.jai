@@ -28,16 +28,16 @@ main :: () {
     }
     
     // error in locking order:
-    { // (4)
-        lock(*mutex_B);
-        defer unlock(*mutex_B);
-        print("Doing B stuff!\n");
-        {
-            lock(*mutex_C);
-            defer unlock(*mutex_C);
-            print("Doing C stuff!\n");
-        }
-    }
+    // { // (4)31.7_mutex_order.jai
+    //     lock(*mutex_B);
+    //     defer unlock(*mutex_B);
+    //     print("Doing B stuff!\n");
+    //     {
+    //         lock(*mutex_C);
+    //         defer unlock(*mutex_C);
+    //         print("Doing C stuff!\n");
+    //     }
+    // }
 }
 
 /*
