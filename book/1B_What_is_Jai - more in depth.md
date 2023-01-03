@@ -62,7 +62,9 @@ C++ is from the 1980's, and it has accumulated so much concepts which complicate
 
 Jai also has macros, these are not preprocessor macros like C/C++, but they are more like Lisp macros.
 
-C code and Jai code can live side by side; C and Jai interoperate seamlessly. Jai code can be built on top of existing C libraries. This makes it possible to gradually migrate a C project or application to Jai.
+C code and Jai code can live side by side; C and Jai interoperate seamlessly. Jai code can be built on top of existing C libraries. This makes it possible to gradually migrate a C project or application to Jai.  
+Quoted from BSVino - JaiPrimer:
+" A compelling argument for not writing an entirely new language for games is that the momentum and volume of C and C++ code in current game engines is too high, and switching to a new language is too much work for the amount of benefit. Blow argues that engines periodically rewrite their codebase anyway, and since Jai and C are so closely related, C code and Jai code can live side by side while the rewrites that would normally happen anyway take place. Since C and Jai interoperate seamlessly, Jai code can be built on top of existing C libraries. In fact, Jonathan Blow uses the C interfaces to the OpenGL and stb_image libraries for his Jai test code. So, replacing C and C++ can be done with no added cost to development. Meanwhile, the benefits of replacing C with a language that has all of C’s benefits but fewer drawbacks means that programmers will be happier, and thus more productive. "
 
 Jai is like C, also an _imperative, statically and strongly typed_ language, but with a variety of modern language features that C lacks, and with another skin and techniques that are more suitable for game development, where performance, stability and productivity are of the utmost importance.
 
