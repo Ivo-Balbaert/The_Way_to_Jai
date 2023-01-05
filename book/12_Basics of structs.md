@@ -550,7 +550,8 @@ can be divided into:
 By aligning certain member fields of structs to 64 bit, we can make memory allocation cache-aligned on 64 bit systems. This can also be done for global variables.  
 The **#align** directive takes care of aligning struct member fields relative to the start of the struct. If the start is 64 bit aligned, and a member field has #align 64, then this fields will also be 64 bit aligned. The same goes for `#align 32` and `#align 16`.
 The start or base of the struct must be #align-ed correctly, otherwise it won't work. You can't do this on the structs definition, like in (1B), this has no effect. You must use the 2nd parameter `alignment` of New when creating a new struct instance (see line (5))  
-This enhances memory efficiency and reduces cache misses for cache-sensitive data-structures. This is shown in the following example:
+This enhances memory efficiency and reduces cache misses for cache-sensitive data-structures. Use it when you want to do SIMD or you need something with a bigger alignment. 
+It is used in the following example:
 
 See *12.7_struct_align.jai*:
 ```c++

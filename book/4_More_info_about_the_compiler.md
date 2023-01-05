@@ -10,6 +10,10 @@ Its growing size:
 	- it is now some 87,000 LOC.  
 The compiler source is proprietary at this time (Aug 2022), and will not be self-hosting (meaning: written in Jai) in the near future. The compiler is _very fast_: all typical debug-builds even up to 250,000 LOC are processed fully in under 1 s.
 
+> To reduce build-time further:
+> * remove the .pdb file before compiling
+> * compile for the x64 backend
+
 The compiler does not process code in a single-pass, lexically ordered way like C++ does. Instead the compiler does multiple passes to find all definitions if it needs to. This means _forward declarations are not needed_, and the _ordering of definitions and declarations is irrelevant_.
 
 The compiler uses a hand-written _recursive descent top-down parser_. It runs _multi-threaded_ as a kind of job system.  

@@ -59,7 +59,7 @@ You can ask the compiler to create one or several different new workspaces with 
 Different workspaces run completely separate from each other, one workspace does not affect another workspace.
 
 _Why is the workspace for the target program at the command-line called 'Workspace 2'?_  
-When launching the compiler, a default hidden workspace (number 1) is started.
+When launching the compiler, the Default_Metaprogram that builds your program is started in workspace #1.  
 
 ## 30.2 The source file location directives
 See *30.2_location.jai*:
