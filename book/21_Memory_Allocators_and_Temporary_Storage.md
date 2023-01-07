@@ -50,6 +50,10 @@ A struct Node could be allocated like:
 
 You can also write your own allocators.
 
+**Global data**  
+This data is needed until the end of the program. It's no use freeing it, because after the program exits, the memory is automatically reclaimed by the OS. You can make the memory debugger (see § 21.4) not count global data as a leak by using the following proc:  
+` this_allocation_is_not_a_leak(some_global_data);`  
+
 ## 21.2 Temporary storage
 Temporary storage is a special kind of Allocator. It is defined as a struct in the _Preload_ module, and module _Basic_ contains support routines to make working with temporary storage very easy. Its memory resides in the Context (see § 25).
 
@@ -160,7 +164,7 @@ Node :: struct {
   name: string;
 }
 
-node  := New(Node, allocator=temp);
+node  := New(Node, allocator = temp);
 array := NewArray(10, int, temp);
 
 arrdyn: [..] int;
@@ -177,7 +181,8 @@ We see in line (5) that it goes back to 0 after the temp memory has been reset i
 
 ## 21.4 Memory-leak detector
 To cope with a possible problem of memory-leakage, Jai has a built-in memory-leak detector. It can be activated by importing _Basic_ like this:
-`#import "Basic"()(MEMORY_DEBUGGER=true);`
+`#import "Basic"()(MEMORY_DEBUGGER=true);`  
+This hooks alloc(), free(), and realloc() with routines that record allocations and frees. Enabling the MEMORY_DEBUGGER will slow down your program, so use it only when solving memory-issues.
 
 See *21.2_leak_detect.jai*:
 ```c++
@@ -188,11 +193,16 @@ main :: () {
     // ....
     free(x);                        // (2)
 
-    report := make_leak_report();   // (2)
-    log_leak_report(report);        // (3)
+    report := make_leak_report();   // (3)
+    for report.sorted_summaries print("** Summary %: **\n%\n", it_index, <<it); // (3B)
+
+    log_leak_report(report);        // (4)
 }
 
-/* When not freed:
+/* When memory is not freed:
+** Summary 0: **
+{count = 1; bytes = 100; allocations_since_last_visualizer_update = 1; bytes_allocated_since_last_visualizer_update = 100; alloc_site_trace = 1ca_ada2_85e8; allocator_proc = procedure 0x7ff6_5518_14f0; group_info = null; }
+
 ----- 100 bytes in 1 allocation -----
 alloc  c:/jai/modules/Basic/module.jai:87
 main   d:/Jai/The_Way_to_Jai/examples/21/21.2_leak_detect.jai:4
@@ -209,8 +219,10 @@ Marked as non-leaks: 0 bytes in 0 allocations.
 */
 ```
 
-In line (1) we allocate 100 bytes which is never freed. Starting the leak detector in line (2), and showing its log report through line (3) shows that these 100 bytes, allocated in line number 4, were never freed.
-If we do free them, we get the 2nd output.
+In line (1) we allocate 100 bytes which is never freed. Starting the leak detector in line (3), and showing its log report through line (4) shows that these 100 bytes, allocated in line (1) were never freed. Line (3B) also gives raw data about the non-freed allocations, to be used/filtered in a report or graphic.
+If we do free them, we get the 2nd output.  
+You can ask for a memory leak report at any time in the program.
+If the output is too verbose, there are ways to alleviate that (see modules/Basic/examples/memory_debugger.jai)
 
 **Exercise**
 Try this out on program 18.5_array_for.jai, without and with free (see leak_array_for.jai).

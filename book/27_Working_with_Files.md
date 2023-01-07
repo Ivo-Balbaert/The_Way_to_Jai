@@ -156,7 +156,7 @@ main :: () {
         print("Setting working directory to %\n",args[2]);
     }
     
-    you_are_here := get_working_directory();   /// (1)
+    you_are_here := get_working_directory();   // (1)
     redacted := args[1];
     print("Working directory: %\nRemoving directories named '%'...\n", you_are_here, redacted);
     

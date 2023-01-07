@@ -26,7 +26,7 @@ Context_Base :: struct {
 ```
 
 The context is available at runtime and is globally known in the code. In most cases it will be contained completely in cache memory.
-It contains memory allocation ((5)) (so it is also a common shared piece of memory), logging functionality (2), assertion handler (what procedure you will call), thread index, maintains the indexes in dynamic arrays, hashes, and so on.   
+It contains memory allocation ((5)) (so it is also a common shared piece of memory), logging functionality (2), assertion handler (what procedure you will call on a failed assert), thread index, maintains the indexes in dynamic arrays, hashes, and so on.   
 It also contains temporary storage (3), so you can add things yourself to it.
 
 In Jai, each procedure takes a context-based allocation scheme in which the memory allocator is implicitly passed to all procs (unless otherwise specified with **#c_call**). The basic `alloc` procedure calls `context.allocator` to get its memory. The context can be overloaded with a custom allocator: this allows memory management to be coordinated between the compiler and the developer.
@@ -37,7 +37,8 @@ See *25.1_context.jai*:
 #import "Basic";
 
 #add_context this_is_the_way := true;   // (1)
-    my_allocator_proc :: (mode: Allocator_Mode, size: s64, old_size: s64, old_memory_pointer: *void, proc_data: *void) -> *void {
+
+my_allocator_proc :: (mode: Allocator_Mode, size: s64, old_size: s64, old_memory_pointer: *void, proc_data: *void) -> *void {
     // allocator specific code
     result := context.default_allocator.proc(mode, size, old_size, old_memory_pointer, proc_data);
     return result;
@@ -91,6 +92,8 @@ base = 16; minimum_digits = 1; padding = 48; digits_per_comma = 4; comma_string 
 indentation_depth = 2; log_runtime_errors = true; }, true}
 */
 ```
+
+In the same way, you can plug in your own assertion_handler and logger (see modules/Basic/examples/basic.jai)
 
 The directive **#add_context** adds a declaration to a context.
 

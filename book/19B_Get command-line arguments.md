@@ -14,6 +14,9 @@ See *19B.1_command_line_args.jai)
 
 main :: () {
     args := get_command_line_arguments(); 
+    defer  array_reset(*args);
+
+    print("Number of command line arguments: %\n", args.count);
     print("The command-line arguments are:\n");
     for args {  // (1)
         print("Position: % - Value: %\n", it_index, it);
@@ -21,6 +24,7 @@ main :: () {
 }
 
 /* Start program as: '19B.exe 42 "hello" 3.14'
+Number of command line arguments: 4
 The command-line arguments are:
 Position: 0 - Value: 19B.exe
 Position: 1 - Value: 42

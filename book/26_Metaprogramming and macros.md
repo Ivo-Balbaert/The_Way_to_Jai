@@ -158,6 +158,8 @@ main :: () {
 The code pieces that should run at compile-time are first converted to byte-code, which is then run in an interpreter. It also loads dll's dynamically and looks up in them what is needed. That's why compile-time execution runs a little slower than normal run-time.
 
 **These are some useful applications:**  
+- Test conditions before compiling:  
+  `#run assert(condition)` will not compile if condition is false.
 -  Insert build-time data, for example results of calculations that can be done at compile-time instead of at runtime: 		`srgb_table: [] float = #run generate_linear_srgb();`
 or sometimes called:	_"Bake the data into the program binary"_
 - Run test cases;
@@ -799,6 +801,32 @@ main :: () {
 
 The macro `bubble_sort` defined in line (1) takes an array and a piece of code to compare subsequent item-pairs of the array. The `#insert,scope()` in (2) (formerly #insert_internal) makes it possible to use the outer macro-variables a and b in compare_code. It lets you specify the scope into which to insert the target Code or string, by saying #insert,scope(target). 'target' is a Code that must be constant at compile-time. The scope where the Code lives is used as the enclosing scope for the #insert (which determines how identifiers inside the inserted code are resolved). If they are not in order, they are swapped.
 This example also shows that a macro can be polymorphic.
+
+### 26.5.5 Using a macro for swapping values
+See *26.28_swap_macro.jai*:
+```c++
+#import "Basic";
+
+swap :: (a: Code, b: Code) #expand {
+  t := (#insert a);
+  (#insert a) = (#insert b);
+  (#insert b) = t;
+}
+
+main :: () {
+    a, b := 3, 5;
+    print("Pre-swap:  a is %, b is %\n", a, b);
+    swap(a, b);    // (2)
+    print("Post-swap: a is %, b is %\n", a, b);
+}
+
+/*
+Pre-swap:  a is 3, b is 5
+Post-swap: a is 5, b is 3
+*/
+```
+
+This macro uses Code arguments and #insert to insert the values. It also provides type-checking: a and b must be of the same type. 
 
 ## 26.6 Using a for-expansion macro to define a for loop
 As easy as it is to for-loop over an array, this is not defined for other composite data-structures, such as the linked list we discussed in § 12.6. But this can be done with a macro, by defining a so-called _for_expansion_:

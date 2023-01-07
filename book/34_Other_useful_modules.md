@@ -38,6 +38,7 @@ main :: () {
 
 Both sorting procedures need a 2nd argument. This is a procedure which specifies how to compare 2 values of the given type. The `compare` proc comes from the _String_ module
 quick_sort is also used in how_to/460.
+There is also the *Intro_Sort* module, which uses the insertion sort algorithm.
 
 ## 34.2 The Hash_Table module
 This is a really useful data structure, which most languages implement, Jai included. A hash table (sometimes called hash map) is a data structure that implements an associative array abstract data type. It's a structure that can map keys to values.

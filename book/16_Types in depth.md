@@ -136,6 +136,10 @@ main :: () {
 
     infor := type_info(Vector3);
     print("Type of infor is: %\n", type_of(infor)); // => Type of infor is: *Type_Info_Struct
+    z_info :=  get_field(type_info(Vector3), "z");
+    print("Type_Info_Struct_Member for z: %\n", <<z_info);
+    // => Type_Info_Struct_Member for z: {name = "z"; type = 7ff6_99f1_4870; offset_in_bytes = 8; 
+
     for member: infor.members {   // (2B)
         print("%\n", member.name); // => x, y, z
     }
@@ -204,6 +208,7 @@ We can test on a.type.type with if/else or if/case as in line (2).
 
 ## 16.3.2 The type_info() proc
 There is also a `type_info()` proc: its argument must be a type and it returns a *Type_Info. Through it you can access all specific info from the specific Type_Info_ struct.
+The `get_field` proc gives you detailed info on a specified field.
 It is particularly handy when used on structs: see line 2B, where we iterate over the struct fields `members` with a for-loop (we can do that because members is an array. It was first introduced in § 15.5.
 
 It is commonly used in polymorphic procedures (see § 22 =) to test the type of a $T argument.  

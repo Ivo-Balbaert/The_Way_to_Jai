@@ -333,6 +333,8 @@ main :: () {
     print("% \n", formatFloat(f1, width=LEADING_WIDTH, trailing_width=3, zero_removal=.NO)); // => 2.252
     print("% \n", formatFloat(f2, width=1, trailing_width=3, zero_removal=.NO)); // => 3.140
     print("% \n", formatFloat(f2, width=1, trailing_width=3, zero_removal=.YES)); // => 3.14
+    print("Scientific-notation-formatted float: %, Decimal value: %\n",  
+        formatFloat(12342345234.0, mode=.SCIENTIFIC), 12342345234.0);
 }
 
 /*
@@ -340,6 +342,7 @@ main :: () {
 07 2.252
 3.140
 3.14
+Scientific-notation-formatted float: 1.234235e+10, Decimal value: 12342345234
 */
 ```
 
@@ -363,6 +366,8 @@ main :: () {
     print("A random integer: %\n", random_get()); // => 1137526400306752306
     print("A random float between 0 and 1: %\n", random_get_zero_to_one()); // => 0.709799
     print("A random float between 0 and 100: %\n", random_get_within_range(0, 100)); // => 75.796494
+
+    r := random_seed(current_time_monotonic().low); 
 }
 
 /*
@@ -376,6 +381,8 @@ The following procedures are defined in the _Random_ module which deals with ran
 ```c++
 // sets the global random seed to the value passed as argument
 random_seed :: (new_seed: u32) 
+This is often used with an Apollo time-value (discussed inb § 6B) like this:     `r := random_seed(current_time_monotonic().low);` 
+(see § 6B.3)
 
 // returns a 32 bit unsigned integer, a random number between 0 and 4,294,967,295
 random_get :: () -> u64

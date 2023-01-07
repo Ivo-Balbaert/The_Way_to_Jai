@@ -63,6 +63,9 @@ main :: () {
 
     infor := type_info(Vector3);
     print("Type of infor is: %\n", type_of(infor)); // => Type of infor is: *Type_Info_Struct
+    z_info :=  get_field(type_info(Vector3), "z");
+    print("Type_Info_Struct_Member for z: %\n", <<z_info);
+    // => Type_Info_Struct_Member for z: {name = "z"; type = 7ff6_99f1_4870; offset_in_bytes = 8; 
     for member: infor.members {   // (2B)
         print("%\n", member.name); // => x, y, z
     }

@@ -63,7 +63,7 @@ The size of the union T is 8
 ```
 
 A **union* is defined like a struct, but replacing `struct` by `union`, see line (1). The possible fields are then enumerated, but remember: only one can be active at any time.
-(An alternative definition is to write it as a kind of struct with a **#place** directive.) A union field can be of type void (see line (2B), usage ??). 
+(An alternative definition is to write it as a kind of struct with a **#place** directive; read it as: "in place of a, you can have the following field".) A union field can be of type void (see line (2B), usage ??). 
 
 A variable of the union type is declared in line (3), and one field is given a value in line (4). When another field gets assigned, the value from the previous field is lost and becomes undefined: see line (6).
 
@@ -245,7 +245,7 @@ In the program above, | is the bitwise or operation. In line (1) you see how we 
 Lines (1) and following show ways to assign enum flags to variables.
 
 ## 13.6 Some useful enum methods
-_13.4_enum_methods.jai* shows some useful methods to use with enums:
+_13.4_enum_methods.jai* shows some useful methods on enums:
 
 ```c++
 #import "Basic";
@@ -261,15 +261,22 @@ main :: () {
     low, high := enum_range(Direction);
     print("The values range from % to %\n", low, high); // 0 to 3
 
+    print("Values:\n");
+    values :=  enum_values_as_s64(Direction);
+    for values  print("% - ", it); // => 0 - 1 - 2 - 3 -
+
     names := enum_names(Direction);
     print("\nThe values as strings are: %\n", names);
 
 }
 /*
 The values range from 0 to 3
+Values:
+0 - 1 - 2 - 3 -
 The values as strings are: ["EAST", "NORTH", "WEST", "SOUTH"]
 */
 ```
 
-**enum_range** gives you the range in integer values from low to high.  
-**enum_names** gives you the member names.
+**enum_range** gives you the range in integer values from low to high.
+**enum_values_as_s64** gives you the values as an array
+**enum_names** gives you the member names as an array.
