@@ -220,6 +220,11 @@ build :: () {
     target_options.output_type = .EXECUTABLE;      
     target_options.output_executable_name = "my_program";
     target_options.output_path = "./.build";
+
+    import_path: [..] string;
+    array_add(*import_path, ..target_options.import_path);
+    array_add(*import_path, "d:\\jai\\my_modules");
+    target_options.import_path = import_path;
     
     target_options.stack_trace = false;
     target_options.backtrace_on_crash = .OFF;
@@ -287,6 +292,8 @@ This is only the filename of the executable, it includes no extension.
 ### 30.4.3B The output path
 This is the path where the executable (and the other compiler artefacts, such as the .pdb) will be written.
 
+### 30.4.3C The import path
+If you need to import modules from another folder than the standard jai\modules, use options.import_path as shown here.
 ### 30.4.4 The backend options
 Current options are .LLVM and .X64; X64 is the fastest backend.
 

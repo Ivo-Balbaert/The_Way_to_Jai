@@ -16,6 +16,11 @@ build :: () {
     target_options.output_type = .EXECUTABLE;      
     target_options.output_executable_name = "my_program";
     target_options.output_path = "./.build";
+
+    import_path: [..] string;
+    array_add(*import_path, ..target_options.import_path);
+    array_add(*import_path, "d:\\jai\\my_modules");
+    target_options.import_path = import_path;
     
     target_options.stack_trace = false;
     target_options.backtrace_on_crash = .OFF;
@@ -42,6 +47,7 @@ main :: () {}
 /*
 Build_Options for Workspace 3 are: {
     output_type = EXECUTABLE;
+    output_flags = 0;
     Commonly_Propagated = {
         optimization_level = DEBUG;
         write_added_strings = true;
@@ -58,6 +64,7 @@ Build_Options for Workspace 3 are: {
         enable_auto_dereference = true;
         use_ansi_color = true;
         interactive_bytecode_debugger = false;
+        debug_for_expansions = false;
         enable_frame_pointers = true;
         array_bounds_check = ON;
         cast_bounds_check = FATAL;
@@ -69,8 +76,8 @@ Build_Options for Workspace 3 are: {
         text_output_flags = OUTPUT_LINK_LINE | OUTPUT_TIMING_INFO;
         os_target = WINDOWS;
         backend = LLVM;
-        machine_type = (enum out of range: 95);
-        machine_options = [108, 105, 98, 16, 129, 136, 6, 1, 34, 216, 66, 0, 0, 0, 0, 0, 0, 0, 40, 33, 1, 0, 0, 0, 0, 0, 0, 8, 1, 12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0...];
+        machine_type = (enum out of range: 97);
+        machine_options = [110, 103, 101, 16, 129, 136, 6, 1, 34, 216, 66, 0, 0, 0, 0, 0, 0, 0, 40, 33, 1, 0, 0, 0, 0, 0, 0, 8, 1, 12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0...];
         emit_debug_info = DEFAULT;
         maximum_polymorph_depth = 100;
         maximum_array_count_before_compile_time_returns_are_not_reflected_in_ast = 5000;
@@ -95,6 +102,7 @@ Build_Options for Workspace 3 are: {
             target_system_triple = "";
             target_system_cpu = "";
             target_system_features = "";
+            command_line = [];
             code_gen_optimization_level = 0;
             code_gen_size_level = 0;
         };
@@ -105,11 +113,10 @@ Build_Options for Workspace 3 are: {
     entry_point_name = "";
     compile_time_command_line = ["30.4_build_options.jai"];
     temporary_storage_size = 32768;
-    import_path = ["c:/jai/modules/"];
+    import_path = ["c:/jai/modules/", "d:\jai\my_modules"];
     additional_linker_arguments = [];
     user_data_u64 = 0;
     user_data_string = "";
     user_data_pointer = null;
     user_data_pointer_size = 0;
-}
-*/
+}*/
