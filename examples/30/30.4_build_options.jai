@@ -15,6 +15,7 @@ build :: () {
 
     target_options.output_type = .EXECUTABLE;      
     target_options.output_executable_name = "my_program";
+    target_options.output_path = "./.build";
     
     target_options.stack_trace = false;
     target_options.backtrace_on_crash = .OFF;
@@ -29,7 +30,7 @@ build :: () {
     format.use_newlines_if_long_form = true;
     format.indentation_width = 4;  
     print("Build_Options for Workspace % are: %\n", w, target_options);
-
+    set_build_options_dc(.{do_output=false});              // (1B)
     set_build_options(target_options, w);
     add_build_file("main.jai", w);
 }
@@ -99,7 +100,7 @@ Build_Options for Workspace 3 are: {
         };
     };
     output_executable_name = "my_program";
-    output_path = "";
+    output_path = "./.build";
     intermediate_path = ".build/";
     entry_point_name = "";
     compile_time_command_line = ["30.4_build_options.jai"];

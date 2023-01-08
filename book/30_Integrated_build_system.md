@@ -219,6 +219,7 @@ build :: () {
 
     target_options.output_type = .EXECUTABLE;      
     target_options.output_executable_name = "my_program";
+    target_options.output_path = "./.build";
     
     target_options.stack_trace = false;
     target_options.backtrace_on_crash = .OFF;
@@ -233,6 +234,7 @@ build :: () {
     format.use_newlines_if_long_form = true;
     format.indentation_width = 4;  
     print("Build_Options for Workspace % are: %\n", w, target_options);
+    set_build_options_dc(.{do_output=false});              
 
     set_build_options(target_options, w);
     add_build_file("main.jai", w);
@@ -281,6 +283,9 @@ Possible values are: .NO_OUTPUT; .DYNAMIC_LIBRARY; .STATIC_LIBRARY; .OBJECT_FILE
 
 ### 30.4.3 The output executable name
 This is only the filename of the executable, it includes no extension.
+
+### 30.4.3B The output path
+This is the path where the executable (and the other compiler artefacts, such as the .pdb) will be written.
 
 ### 30.4.4 The backend options
 Current options are .LLVM and .X64; X64 is the fastest backend.

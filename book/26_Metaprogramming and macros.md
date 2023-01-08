@@ -715,6 +715,8 @@ Write a macro changer that takes 2 integer arguments and can access an outer var
 `macroi` in line (9) illustrates that we can use #insert (see § 26.4) inside a macro: it takes a code argument and inserts it 3 times in the main code.
 
 ### 26.5.2 Using a macro with #insert to unroll a for loop
+Sometimes you might want to unroll loops to optimize a program's execution speed so that the program does less branching. Loops can be unrolled through a mixture of #insert directives and macros. In the example below, we unroll a basic for loop that counts from 0 to 10.
+
 See *26.14_insert_for_loop.jai*:
 ```c++
 #import "Basic";
@@ -741,7 +743,7 @@ main ::() {
 }
 ```
 
-In the example above `unroll_for_loop` is a macro that receives a Code parameter. It uses the `#insert -> string` shortcut (see § 26.4). In fact, it uses multiple inserts, #insert can be run recursively inside another #insert as seen in line (1).  
+In this example `unroll_for_loop` is a macro that receives a Code parameter. It uses the `#insert -> string` shortcut (see § 26.4). In fact, it uses multiple inserts, #insert can be run recursively inside another #insert as seen in line (1).  
 When compiling, you can see what is inserted in `.\build\.added_strings_w2`.
 
 ### 26.5.3 Using a macro for an inner proc
@@ -1556,3 +1558,85 @@ main ::() {}
 ```
 
 We again use compiler_get_nodes to get the AST, which is then `printed` to a string builder, and then converted to a string.
+
+## 26.15 Creating code for each member in a structure
+The following example is a quick (non recursive) helper to create some code for each member in a structure (it is derived and slightly changed from a Snippets example in the Jai Community Wiki): 
+
+See *26.29_code_struct_member.jai*:
+```c++
+#import "Basic";
+
+for_each_member :: ($T: Type, format: string) -> string
+{
+    builder: String_Builder;
+    defer free_buffers(*builder);
+
+    struct_info := cast(*Type_Info_Struct) T;
+    assert(struct_info.type == Type_Info_Tag.STRUCT);
+
+    for struct_info.members 
+    {
+        if it.flags & .CONSTANT continue;
+        print_to_builder(*builder, format, it.name);
+    }
+
+    return builder_to_string(*builder);
+}
+
+serialize_structure :: (s: $T, builder: *String_Builder) -> success: bool
+{
+    #insert #run for_each_member(T, "if !serialize(s.%1, builder) return false;\n" );  // (1)
+    // %1          = member name;  type_of(%1) = member type
+    // The following code will be inserted before compiling (see .build/.added_strings_w2.jai)
+    // if !serialize(s.status, builder) return false;
+    // if !serialize(s.health, builder) return false;
+    return true;
+}
+
+serialize  :: (to_serialize: $T, builder: *String_Builder) -> success: bool { 
+    print_to_builder(builder, "%-", to_serialize);
+    return true; 
+} 
+
+main :: ()
+{
+    Player :: struct
+    {
+        status: u16;
+        health: int;
+    }
+    p := Player.{7, 75};
+    
+    builder: String_Builder;
+    defer free_buffers(*builder);
+
+    success := serialize_structure(p, *builder);
+    if !success { 
+        print("Serializing error");
+        exit(-1);
+    }
+    str := builder_to_string(*builder);
+    print("The result of serializing is: '%'.\n", str);
+    // => The result of serializing is: '7-75-'.
+}
+
+// .build/.added_strings_w2.jai contains:
+// Workspace: Target Program
+//
+// #insert text. Generated from d:/Jai/testing/test2.jai:25.
+//
+/*
+if !serialize(s.status, builder) return false;
+if !serialize(s.health, builder) return false;
+*/
+```
+
+We want to store the field values of a (Player) struct in a string, possibly writing them to a file later on. 
+All procedures in this example are polymorphic. In `serialize_structure` T becomes Player. In line (1) `for_each_member` is called before compiling and this inserts 2 lines of code (shown in .build/.added_strings_w2.jai):
+```
+if !serialize(s.status, builder) return false;
+if !serialize(s.health, builder) return false;
+```
+
+`for_each_member` checks whether we have a struct, and then substitutes the field name into our format string, which goes into the string builder.
+To compile this, a proc `serialize` has to exist, which is also polymorphic in our example and which writes the field's values in the string builder.
