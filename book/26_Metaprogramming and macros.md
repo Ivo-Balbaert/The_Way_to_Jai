@@ -274,6 +274,52 @@ main :: () {
 In contrast to what happened in program 26.2_run.jai, because `globvar` is preceded by #no_reset, it retains its value at runtime (see lines 1A-B).
 As a 2nd example, although both arrays `array` and `arraynr` get values at compile-time in line (3), array has 0 values at runtime (see line (4)). To counter this behavior (see line (5)), prefix the array when defined with the **#no_reset** directive, as we did for `arraynr` in line (2).
 
+### 26.2.3 Computing a struct at compile-time and retrieving at run-time
+The following code shows how to compute a struct at compile-time, then stash its memory representation (into an []u8), and then retrieve it at runtime:
+(example from Jai Community - Wiki)
+
+See *26.30_stash_struct.jai*:
+```c++
+#import "Basic";
+ 
+Stock :: struct {
+    x : int;
+}
+ 
+st : Stock;
+st_data :: #run store_as_u8(make_struct());   // (1) 
+ 
+make_struct :: () -> Stock {
+    // compute a struct
+    return Stock.{12};
+}
+
+store_as_u8 :: (value : $T) -> [] u8 {
+    array : [size_of(T)] u8;
+    memcpy(*array, *value, size_of(T));
+    return array;
+}
+ 
+restore_from_u8 :: (dest: *$T, data: [] u8) {
+    value : T;
+    memcpy(dest, data.data, size_of(T));
+}
+ 
+init :: () {
+    restore_from_u8(*st, st_data);
+}
+ 
+main :: () {
+    print("% % % - % % \n", st, st.x, type_of(st), st_data, type_of(st_data)); 
+    // (2) => {0} 0 Stock - [12, 0, 0, 0, 0, 0, 0, 0] [8] u8
+    init();  // (3) 
+    print("% % %\n", st, st.x, type_of(st)); // => {12} 12 Stock
+}
+```
+
+In line (1), the struct's data are computed and stored as a []u8 with #run at compile time. At run-time, we see in line (2) that the struct is zeroed. But we can restore its data from the []u8 st_data, as shown in line (3). This process is sometimes called "baking a struct".
+
+
 ## 26.3 Compiling conditionally with #if
 if and all its run-time variants where discussed in § 14. The code following an if is always compiled into the executable, and that is what we want: in most cases the condition depends on a variable(s), so one time it is true, the other time it is false.
 But it could be useful to compile a piece of code only when a certain condition is true. This is a bit similar to #assert (see 20.2.1).  

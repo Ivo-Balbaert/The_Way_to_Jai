@@ -1,10 +1,10 @@
 # The Way to Jai
 A lightweight way to discover and learn the Jai programming language. All programs work with the latest version of the Jai compiler.
 
-This is a work in progress.
+This is a work in progress. It grew out of my personal Jai notes from the Jai videos and other Jai primers that emerged over time.
 If you find mistakes, ambiguities, things that are not clear, please create an issue.
 
-The text is backed by some 200 complete working Jai examples and growing. They are all automatically tested at each new version of the Jai compiler, so this text and code will never get outdated.
+The text is backed by more than 200 complete working Jai examples and growing. They are all automatically tested at each new version of the Jai compiler, so this text and code will never get outdated.
 
 [Code tested to compile/run with Jai version beta 0.1.050]
 

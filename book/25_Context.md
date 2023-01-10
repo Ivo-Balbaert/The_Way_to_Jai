@@ -233,3 +233,42 @@ main :: () {
 Context also contains a member called `print_style`, which contains default Formatters (see § 6.2.8) that are used in combination with `print`. Print_Style is a struct defined in _Basic/Print.jai_ and, and a variable `print_style` pointing to it is added to the Context.  
 In line (1) we take the `default_format_int` from the Context. In lines (2) and following we change the number base, and print some numbers out with that base in the new context working in a `push_context` block. As we see in line (3), once we leave that block we return to the normal defaults.
 Analogous things can be done for formatting floats, structs and arrays in a specific context.
+
+## 25.8 Check if a variable is on the stack
+(Example taken from Jai Community Wiki)
+
+This is a nice trick to determine whether a variable is allocated on the stack or on a heap, using the fact that subsequent variables in the stack get addresses that decrement.
+
+See *25.4_check_stack.jai*:
+```c++
+#import "Basic";
+
+#add_context stack_base: *void;     // (1)
+
+init_stack_checker :: () #expand {
+    stack_value: u8;
+    context.stack_base = *stack_value;
+}
+
+is_in_stack :: (pointer: *void) -> bool {
+    assert(context.stack_base != null);
+    stack_value: u8;
+    return pointer > *stack_value && pointer < context.stack_base;
+}
+
+main :: () {
+    init_stack_checker();       // (2)
+
+    value: int;
+    print("value: %\n", is_in_stack(*value));      // => value: true
+
+    external := New(int);       // (3)
+    defer free(external);
+    print("external: %\n", is_in_stack(external)); // => external: false
+}
+```
+
+We first add a pointer variable `stack_base` to the context. We initialize this in line (2) by creating a `stack_value` variable, and storing this in `context.stack_base`: this serves as the lower bound for comparing addresses.  
+Then we declare `value`. We compare its address (which is *value) to a local variable `stack_value` and `context.stack_base`. If it is in the interval of these values, we conclude that the variable `value` is allocated on the stack. 
+The variable `external` on line (3) is declared with New, so is allocated on the heap. Indeed, the `is_in_stack` proc returns false.  
+If you start a new thread you need to call `init_stack_checker()` on that thread, because each thread has its own stack.

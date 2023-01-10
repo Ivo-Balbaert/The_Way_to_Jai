@@ -28,6 +28,7 @@ build :: () {
     target_options.array_bounds_check = .ON; // values: .OFF / .ON / .ALWAYS
     target_options.cast_bounds_check  = .FATAL; 
     target_options.null_pointer_check = .ON; 
+    target_options.enable_bytecode_inliner = true;
     
     target_options.runtime_storageless_type_info = true;
 

@@ -29,7 +29,7 @@ To use the Windows `kernel32` library, specify:         `kernel32 :: #system_lib
 ## 29.3 Mapping a dynamic library
 Functions from a dynamic library (.dll/.so file) also need two directives to be specified.
 
-The **#library** directive specifies a file (library) for foreign functions. For example, if you want to use the `lz4` fast-compression C library in your Jai code, you specify it as:
+The **#library** directive specifies a file (library) for foreign functions written in C, Jai or another language. For example, if you want to use the `lz4` fast-compression C library in your Jai code, you specify it as:
 `lz4 :: #library "liblz4";`
 
 The path to the foreign library is best expressed as relative to the program file, for example: FMOD :: `#library "../../lib/fmod";`
@@ -51,8 +51,10 @@ compress_fast :: (source: *u8, dest: *u8, sourceSize: s32, maxDestSize: s32, acc
 size_of_state :: () -> s32 #foreign lz4 "LZ4_sizeofState";
 ```
 
-Linking to a system-library is also done with:
+Linking to a system-library is done with:
 `#system_library "d3d11";`
+
+For an example of how to build a dynamic library from Jai source code and call it from another Jai file, see § 30.13.
 
 ## 29.4 Converting a C header (.h) file
 The steps are:  

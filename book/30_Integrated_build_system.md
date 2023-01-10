@@ -231,7 +231,8 @@ build :: () {
 
     target_options.array_bounds_check = .ON; // values: .OFF / .ON / .ALWAYS
     target_options.cast_bounds_check  = .FATAL; 
-    target_options.null_pointer_check = .ON; 
+    target_options.null_pointer_check = .ON;
+    target_options.enable_bytecode_inliner = true; 
     
     target_options.runtime_storageless_type_info = true;
 
@@ -280,8 +281,8 @@ Optimized builds take much longer (??) time than debug builds, but are around 2x
 
 This automatically turns OFF all runtime checks, and specifies a number of optimizations for LLVM code production.
 
-To stop making a .pdb file, use:
-`target_options.emit_debug_info=.NONE;`
+To enable bytecode inlining, use: `target_options.enable_bytecode_inliner = true;` 
+To stop making a .pdb file, use:  `target_options.emit_debug_info=.NONE;`
 
 ### 30.4.2 The output type
 Possible values are: .NO_OUTPUT; .DYNAMIC_LIBRARY; .STATIC_LIBRARY; .OBJECT_FILE; with as default .EXECUTABLE;
@@ -632,7 +633,76 @@ This program was built with metaprogram 30.8_build_and_run.jai
 ...
 ```
 
-## 30.8 Building and running with a compiler command-line argument 
+## 30.8 Getting the file to compile from the command-line and inlining
+(Example from Jai Community Wiki)
+
+Sometimes it is easier to specify the file to compile at the command-line, instead of hardcoded within the build program. The following example shows how to do this:
+
+See *30.14_build_inlining.jai*:
+```c++
+#import "Basic";
+#import "Compiler";
+
+#run build();
+
+build :: () {
+    w := compiler_create_workspace("Target Program");
+    if !w {
+        print("Workspace creation failed.\n");
+        return;
+    }
+    
+    options := get_build_options(w);
+
+    args := options.compile_time_command_line;    // (1)
+    print("\nargs: %\n", args);
+    filename := args[2];
+
+    options.output_executable_name = filename;
+    options.enable_bytecode_inliner = true;        // (2)
+    
+    set_build_options(options, w);
+
+    compiler_begin_intercept(w);
+    add_build_file(sprint("%.jai", filename), w);   // (3)
+    message_loop();
+    compiler_end_intercept(w);
+
+    set_build_options_dc(.{do_output=false});
+}
+
+message_loop :: () {
+    while true {
+        message := compiler_wait_for_message();
+
+        if message.kind == {
+            case .COMPLETE;
+                break;
+        }
+    }
+}
+```
+
+Inlining is activated in line (2).
+
+In line (1) we read in the compile-time command-line arguments in an []string args. In our case this will be like: `jai 30.14_build_inlining.jai - main8`. 
+args is printed as:  `args: ["30.14_build_inlining.jai", "-", "main8"]`
+args[0] is the program name (30.14_...jai), args[1] the separator '-' and main8 will be args[2], stored in the variable `filename`. This file is then added to be compiled in line (3) with `add_build_file`.
+
+> Remark: The space between - and run is needed! Otherwise you get an error like:
+> Command line: Missing argument to -run.
+
+Here is the contents of main8.jai:
+```c++
+#import "Basic";
+
+main :: () {
+  print("This program was built with a metaprogram 30.14_build_inlining.jai\n");
+}
+
+When we run `main8`, we get the output: `This program was built with a metaprogram 30.14_build_inlining.jai`.
+
+## 30.9 Building and running with a compiler command-line argument 
 In § 2B we told you that arguments given at the end of a `jai` command with `- ` are arguments for the meta-program. These arguments are called  _compiler command-line arguments_.
 Now we will show you how to use them, enhancing our previous program.
 
@@ -692,13 +762,13 @@ main :: () {}
 
 #run build();
 ```
+```
 
 We define a new global variable `run_on_success` which will become true when we give a metaprogram argument `- run`.
 In line (1) we get these argument(s) from the property `Build_Options.compile_time_command_line`. Starting in line (2), we loop over them and set `run_on_success` when finding `- run`. In line (3) we now test both success parameters before running the executable.  
-To get the same output as in the previous section, you now have to call the compiler with:  
-`jai 30.7_build_and_run2.jai - run`.
+To get the same output as in the previous section, you now have to call the compiler with:  `jai 30.7_build_and_run2.jai - run` 
 
-## 30.9 Choosing a debug / release build with compiler command-line arguments
+## 30.10 Choosing a debug / release build with a compiler command-line argument
 In the same way as in the previous section, we can decide to either do a debug build or a release build based on the given command-line argument. This is shown in the following code, which is a further development of the code in § 30.4.8:
 
 See *30.8_debug_release_build.jai*:
@@ -773,7 +843,7 @@ This build compiles faster with as much debugging information as possible, but h
 
 This build makes the compiler produce the best possible optimized code. An optimized build does not have debug information built into it, and takes longer to compile.
 
-## 30.10 Enforcing coding standards
+## 30.11 Enforcing coding standards
 Another use-case would be enforcing coding house rules, an example is shown in 30.9_house_rules.jai , which shows how to enforce compile-time code checking, for example the MISRA standards (in this case: Check for Multiple Levels of Pointer Indirection, so that you cannot do you cannot do `a: ***int = b;` for example).  
 
 MISRA coding standards are a set of C and C++ coding standards, developed by the Motor Industry Software Reliability Association (MISRA). These are standards specific to the automotive industry,.
@@ -868,7 +938,7 @@ D:/Jai/The_Way_to_Jai/examples/30/main5.jai:4,3: Error: Too many levels of point
 (See other MISRA checks implemented in how_to/480.)
 Howto_490 shows how to get info on loaded files and imported modules at compile-time.
 
-## 30.11 Generating optimized LLVM bitcode
+## 30.12 Generating optimized LLVM bitcode
 See *30.10_generate_llvm_bitcode.jai*:
 ```c++
 #import "Basic";
@@ -917,7 +987,7 @@ If you have LLVM installed on your system, you can use `llc` to transform the bi
 and then run the assembly code with:
 `as output.asm`
 
-## 30.12 Using notes to do special metaprogramming
+## 30.13 Using notes to do special metaprogramming
 Notes on a struct or function were described in § 15.7, and code was shown to display them in § 15.5. The note tags will also show up in a metaprogram, and you can use them to do special metaprogramming such as custom program typechecking and modifying the executable based on the metaprogram.
 
 In _main4.jai_ we have tagged a number of procs with the note `@fruit`.
@@ -1033,5 +1103,80 @@ elephant
 (See also how_to/470, first.jai for code to check if a procedure has a certain note)
 
 
+## 30.14 Writing and loading dynamic libraries and #program_export
+(Example from Jai Community Wiki)
 
+The following code builds a dynamic library *dynlib.dll* on Windows and *dynlib.so* on Linux. 
 
+See *30.13_dynamic_libraries.jai*:
+```c++
+#import "Basic";
+#import "Compiler";
+
+build :: ()
+{
+    // Build the dll
+    {
+        w := compiler_create_workspace();
+        options := get_build_options(w);
+        options.output_type = .DYNAMIC_LIBRARY;   // (1)
+        options.output_executable_name = "dynlib";
+        set_build_options(options, w);
+
+        compiler_begin_intercept(w);
+        add_build_file("dynlib.jai", w);
+        while true {                // is needed!
+             message := compiler_wait_for_message();
+             if !message || message.kind == .COMPLETE  break;
+        }
+        compiler_end_intercept(w);
+    }
+
+    // Build the exe after 
+    {
+        w := compiler_create_workspace();
+        options := get_build_options(w);
+        options.output_executable_name = "main7";
+        set_build_options(options, w);
+        add_build_file("main7.jai", w);
+    }
+
+    set_build_options_dc(.{do_output=false});
+}
+
+#run build();
+```
+
+Line (1) is needed for building a dynamic library, which uses the following code: 
+
+See *dynlib.jai*:
+```c++
+#import "Basic";
+
+#program_export dll_func :: ()
+{
+    print("Hello Sailor");
+}
+```
+
+Notice the **#program_export** directive to indicate that a function is exported to a dynamic library.
+(Add #c_call and push a fresh context here if you plan on calling this from another language.)
+
+After the dynamic library and in a separate workspace, 30.13_dynamic_libraries.jai builds an executable *main7* from the following code:
+
+See *main7.jai*:
+```c++
+#import "Basic";
+
+dll_func :: () #foreign dynlib;
+dynlib :: #library "dynlib";
+
+main :: () {
+    dll_func();
+}
+```
+
+The executable calls the proc `dll_func` from the dynamic library.
+Build both with:        ` jai 30.13_dynamic_libraries.jai`
+and see the result of:  `main7`
+which outputs:  `Hello Sailor`
