@@ -84,6 +84,7 @@ The value at the address ptr points to is changed, but the address ptr points to
 What is the value of an uninitialized pointer (in other words:a pointer that doesn't yet have a memory address assigned to it)? Let's find out.  
 In line (5) we see that the value of the uninitialized pointer d with type *u32 is **null**.  null means: d has no address to point to.  
 So the default (zero) value of a pointer is null: after line (1A) b has value null. After line (1B) however b is no longer null, it now contains the address of the variable a.  
+
 null is a value, so what is the type of null? This is answered in line (6), it is `*void`, which indeed says it is a pointer to nothing (void).
 _The only thing you can assign null to is a pointer type_; you can't assign null to ints, structs, arrays, strings, or any other type.
 > Only a pointer can be null.

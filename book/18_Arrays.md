@@ -731,6 +731,11 @@ Vec2 :: struct {
     y: float = 4;
 }
 
+Subscription :: struct {
+    subscriber: string;
+    no_payments: u32;
+}
+
 main :: () {
     va: [10] Vec2;                      // (1)
     print("% %\n", va[7].x, va[7].y); // => 1 4
@@ -740,8 +745,19 @@ main :: () {
     print("\n"); 
     va2 : [10]Vec2 = ---;                // (3)
     print("% %\n", va2[7].x, va2[7].y);  // => 0 0 // undefined behavior prints mostly 0 0
+
+    subscriptions: [..]Subscription;
+    sub1 := array_add(*subscriptions);    // (4)
+    sub1.subscriber = "John";
+    sub1.no_payments = 15;
+    sub2 := array_add(*subscriptions);    
+    sub2.subscriber = "Vera";
+    sub2.no_payments = 8;
+    print("Subscriptions: %\n", subscriptions);
+    // => Subscriptions: [{"John", 15}, {"Vera", 8}]
 }
 ```
 
 In line (1) we declare an array of 10 Vec2 structs, a commonly used data-structure, sometimes abbreviated as _AOS_. In line (2) you can see that the it variable in a for-loop can access the struct's fields. Line (3) shows how to overrule the fields default values, making them uninitialized.
 
+In line (4), another version of `array_add` is used, which allows to add something to a dynamic array and returns a pointer to a that item, which must be assigned to a variable. This is most often used for structs, the data of the struct can then be filled in afterwards.

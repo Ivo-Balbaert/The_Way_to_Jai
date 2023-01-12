@@ -1194,6 +1194,31 @@ main :: () {
 }
 ```
 
+(3B) The next example shows how to require a polymorphic function to take parameters of a specific type. 
+
+See *26.32_modify_require.jai*:
+```c++
+#import "Basic";
+
+ModifyRequire :: (t: Type, kind: Type_Info_Tag) #expand {   // (1)
+    `return (cast(*Type_Info)t).type == kind, tprint("T must be %", kind);
+}
+
+poly_proc :: (t: $T) #modify ModifyRequire(T, .ENUM) {}     // (2)
+
+SomeEnum :: enum {
+    ASD;
+    DEF;
+}
+
+main :: () {
+    poly_proc(SomeEnum.ASD);  // (3)
+    // poly_proc(123); // (4)  Compile `Error: #modify returned false: T must be ENUM`
+}
+```
+
+`poly_proc` defined in line (2) calls in #modify the routine `ModifyRequire`. This is a macro, defined in line (1). The 1st parameter returned is the boolean condition, the 2nd is a message to be displayed when #modify returns false, as is the case in line (4). Line (3) passes an enum, which is ok.
+
 (4) In this example we define a struct `Holder` with parameters that holds an array of size N of items of type T. But we don't want the size N to be smaller than 8, we can control this in the #modify:
 
 See *26.18_modify3.jai*:

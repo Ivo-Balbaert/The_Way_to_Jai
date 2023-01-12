@@ -351,5 +351,81 @@ Now we can call the trait's procs on an ExSomeTrait instance f as `f.get()` or `
 
 Much more complete implementations of traits in Jai have already been made, but this needs full-blown meta-programming (see § 26).
 
+## 23.10 The broadcaster design pattern
+The `Broadcaster` is a typical design pattern and allows to send `Events` to it's subscribers by in turn calling their callbacks.
+
+See *23.9_broadcaster.jai*:
+```c++
+// The Broadcaster is a typical design pattern and allows to send Events 
+// to it's subscribers by in turn calling their callbacks
+#import "Basic";
+
+Event :: struct {
+    msg: string;
+}
+
+event :: (msg: string) -> *Event {
+    res := New(Event);
+    res.msg = msg;
+    return res;
+}
+
+Broadcaster :: struct {
+    subscriptions: [..]Subscription;
+    
+    Subscription :: struct {
+        subscriber: *void;
+        callback: (*void, *Event) -> ();
+    }
+}
+
+subscribe :: (bus: Broadcaster, sub: *$T, callback: (*T, *Event)) {
+    subscription := array_add(*bus.subscriptions);
+    subscription.subscriber = sub;
+    subscription.callback   = cast((*void, *Event)->())callback;
+}
+
+unsubscribe :: (bus: Broadcaster, sub: *$T) {
+    for bus.subscriptions {
+        if it.subscriber == sub {
+            remove it;
+        }
+    }
+}
+
+broadcast :: (bus: Broadcaster, event: *Event, consume_event: bool = true) {
+    for bus.subscriptions {
+        it.callback(it.subscriber, event);
+    }
+    if consume_event then free(event);
+}
+
+Subscriber :: struct {}
+
+subscr_hello :: (f: *Subscriber, e: *Event) {
+    print("Hello from a Subscriber: \"%\"\n", e.msg);
+}
+
+main :: () {
+    bus : Broadcaster;
+
+    f := New(Subscriber);
+    g := New(Subscriber);
+
+    subscribe(bus, f, subscr_hello);
+    subscribe(bus, g, subscr_hello);
+
+    broadcast(bus, event("what's up?"));
+    unsubscribe(bus, f);
+    broadcast(bus, event("nothing"));
+}
+
+/*
+Hello from a Subscriber: "what's up?"
+Hello from a Subscriber: "what's up?"
+Hello from a Subscriber: "nothing"
+*/
+```
+
 **Some wise words of Jon Blow about polymorphism:**
 " If lots of procedures in your program are polymorphic, you pay for this in compile time, and possibly also in understandability of the program. Polymorphism is powerful, but historically, when people start writing code that is over-generic, it becomes hard to understand and modify. In general, don't get carried away making things polymorphic if they do not need to be. "

@@ -184,7 +184,7 @@ What if you don't want default zero-values?
 The location field in Person is itself a Vector2 struct, that's why it is called a **nested struct**: a struct that contains another struct. Note how you can access and change the fields of a nested struct by 'drilling down' with the . notation, like:   `bob.location.x  
 (But also see § 12.7 for how to shorten this notation.)
 
-Here is another example of nested structs:
+Here are two examples of nested structs:
 
 ```c++
 Node :: struct {           
@@ -194,6 +194,15 @@ Node :: struct {
 Super_Node :: struct {      
     node_a: Node;
     node_b: Node;
+}
+
+Broadcaster :: struct {
+    subscriptions: [..]Subscription;
+    
+    Subscription :: struct {
+        subscriber: *void;
+        callback: (*void, *Event) -> ();
+    }
 }
 ```
 
