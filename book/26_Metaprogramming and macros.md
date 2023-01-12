@@ -1686,3 +1686,88 @@ if !serialize(s.health, builder) return false;
 
 `for_each_member` checks whether we have a struct, and then substitutes the field name into our format string, which goes into the string builder.
 To compile this, a proc `serialize` has to exist, which is also polymorphic in our example and which writes the field's values in the string builder.
+
+## 26.16 A type-tagged union
+We discussed unions in § 13.2, where we saw that a union has only one field, but can take values of different types. It could be useful to know at any time which type the union value has. This could be done by enclosing the union within a struct, with a field containing the type.
+
+See *26.31_tagged_union.jai*:
+```c++
+#import "Basic";
+
+Tag_Union :: struct(fields: [] string, types: []Type) {
+  tag: Type;
+  #insert -> string {
+    builder: String_Builder;
+    defer free_buffers(*builder);
+    count := fields.count - 1;
+    print_to_builder(*builder, "union {\n");
+    for i: 0..count {
+      print_to_builder(*builder, "  %1: %2;\n", fields[i], types[i]);
+ 
+    }
+    print_to_builder(*builder, "}\n");
+    result := builder_to_string(*builder);
+    return result;
+  }
+}
+
+set :: (u: *$Tag/Tag_Union, value: $T) {        
+  #insert -> string {
+    count := u.fields.count - 1;
+    for i: 0..count {
+      if T == Tag.types[i] {
+        code :: #string END
+           u.tag = type_of(value);
+           u.% = value;
+        END
+        return sprint(code, Tag.fields[i]);
+      }
+    }
+    assert(false, "Invalid value: %\n", T);
+  }
+}
+
+main :: () {
+    fields :: string.["int_a", "float_b", "string_c"];
+    types  :: Type.[int, float, string];
+
+    tag_union: Tag_Union(fields, types); // (1)
+    print("tag_union = %\n", tag_union); // => tag_union = {(null), (union)}
+    set(*tag_union, 10);                 // (2A)
+    print("tag_union = %\n", tag_union); // => tag_union = {s64, (union)}
+    print("tag_union.int_a = % tag_union.tag = %\n", tag_union.int_a, tag_union.tag);
+
+    set(*tag_union, 3.14);               // (2B)
+    print("tag_union = %\n", tag_union); // => tag_union = {float32, (union)}
+    print("tag_union.float_b = % tag_union.tag = %\n", tag_union.float_b, tag_union.tag);
+
+    set(*tag_union, "James Bond");       // (2C)
+    print("tag_union = %\n", tag_union); // => tag_union = {string, (union)}
+    print("tag_union.string_c = % tag_union.tag = %\n", tag_union.string_c, tag_union.tag);
+
+    // set(*tag_union, true);               // (2D)
+    // => Assertion failed: Invalid value: bool
+}
+
+/*
+tag_union = {s64, (union)}
+tag_union.int_a = 10 tag_union.tag = s64
+tag_union = {float32, (union)}
+tag_union.float_b = 3.14 tag_union.tag = float32
+tag_union = {string, (union)}
+tag_union.string_c = James Bond tag_union.tag = string
+*/
+```
+
+In the above code a struct `Tag_Union` has a field `tag` that contains the current type, and struct parameters fields of type [] string and types of type []Type. The `fields` are the names of the possible union fields, and `types` are their corresponding types.  
+The structs code is dynamically build with a `#insert -> string` using the structs parameters. You can find the code in .build/.added_strings_w2.jai:  
+```
+union {
+  int_a: s64;
+  float_b: float32;
+  string_c: string;
+}
+```
+`tag_union` is an instance of the struct. At its declaration in line (1), the parameters are passed and the structs definition is built. The `set :: (u: *$Tag/Tag_Union, value: $T)` proc changes the instance by supplying a value for the union. Its code also uses a `#insert -> string` which loops over the fields of the union. If the type of the supplied value matches one of the union types, that type is written to the `tag` field and the value is written to the union's field. The `/Tag_Union` in set's declaration checks that $Tag has the fields of Tag_Union (see § 23.6).
+In line (2A), the `set` function is called with value 10, so tag becomes s64 and the int_a field becomes 10; the same goes for lines (2B-C).
+If the type of the supplied value is not present in the types array, we get a compile-time error like: `Assertion failed: Invalid value: bool` (see line (2D)).

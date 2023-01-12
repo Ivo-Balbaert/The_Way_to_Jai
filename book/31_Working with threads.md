@@ -18,8 +18,12 @@ thread_proc :: (thread: *Thread) -> s64 {  // (5)
 
 main :: () {
     print("Main context: %\n", context);
-    thread1 := thread_create(thread_proc);  // (1)
-    defer thread_destroy(thread1);          // (2)
+    thread1 := New(Thread);             // (1)
+    thread_init(thread1, thread_proc);  
+    defer {                             // (2)
+        thread_deinit(thread1);
+        free(thread1);         
+    }
     thread_start(thread1);                  // (3)
     sleep_milliseconds(1000);               // (4)
     while !thread_is_done(thread1) { }      // (5)
@@ -37,17 +41,15 @@ log_level = NORMAL; temporary_storage = 21e_caf8_9b90; dynamic_entries = [{(null
 */
 ```
 
-You create a new thread by calling the `thread_create` procedure (see line (1)), which internally calls `thread_init`, and creates a thread using heap allocation.
-`thread_create` has this signature:  
-`thread_create :: (proc: Thread_Proc, temporary_storage_size : s32 = 16384, starting_storage: *Temporary_Storage = null) -> *Thread;`
+You create a new thread by doing New and calling the `thread_init` procedure (see line (1)), creates a thread using heap allocation.
 
 The `thread_init` proc has this signature:  
 `thread_init :: (thread: *Thread, proc: Thread_Proc, temporary_storage_size : s32 = 16384, starting_storage: *Temporary_Storage = null) -> bool`
 This proc does not start a thread, it just initializes the thread's data.
 
-The new thread has to do something, so `thread_create` is called with a proc as its 1st parameter: this always has to have the signature as in line (5):
+The new thread has to do something, so `thread_init` is called with a proc as its 2nd parameter: this proc always has to have the signature as in line (5):
 `thread_proc :: (thread: *Thread) -> s64`  
-A thread had to be shut down when it is no longer useful, we do this with defer and the `thread_destroy` procedure in line (2).  
+A thread has to be shut down when it is no longer useful, we do this with a defer block as in line (2), calling `thread_deinit` and `free`.  
 
 Then we have to start up the new thread with the `thread_start` procedure in line (3); this proc has the signature: `thread_start :: (thread: *Thread);`.  
 Line (4) uses the proc `sleep_milliseconds(1000)` to suspend the main thread for 1s. This is needed here to see the output of both main and thread1, without it main closes off before thread1 has had the chance to print its own output.  
@@ -493,9 +495,13 @@ See *build_gui.jai*:
 
 show_gui :: () #expand {        // (2)
     gl_load(*gl, SDL_GL_GetProcAddress);
-    `gui_thread := thread_create( show_gui );  // (3)
+    `gui_thread := New( Thread );  // (3)
+    thread_init(`gui_thread, show_gui);
     thread_start( gui_thread );
-    `defer thread_destroy( gui_thread );
+    `defer {
+        thread_deinit(`gui_thread);
+        free(`gui_thread);
+    }
 }
 
 wait_gui :: () #expand {        // (4)
@@ -546,3 +552,85 @@ In line (2), we see a macro `show_gui`, which first activates OpenGL. Then in th
 (Both versions of show_gui() don't form a problem, they are overloading procs.)
 In the `show_gui` proc that is executed in the separate GUI thread, an SDL window is created in line (6), with a grey color (line (7)).  
 In an unending loop in (8), we test until success, which is a global variable in parent scope, becomes true. This is the case when the compiler sends the COMPLETE message. In that case, the window title changes, its color becomes green (line (10)), and the loop is stopped. After 2 sec the window is then closed. 
+
+## 31.5 Minimal implementation of Go-style channels
+The following example presents a very simplistic single-threaded version of Go-style channels: 
+Pros:   the channels are bounded, synchronous, blocking, and optionally buffered.  
+        (To turn off buffering, set n=1).
+Cons:   locking (which is needed in a multithreaded situation) is not implemented.
+
+See *31.8_channels.jai*:
+```c++
+#import "Basic";
+
+Channel :: struct(T: Type, n: u64) {
+    buffer      : [n]T;
+    writeidx    : u64 = 0;
+    readidx     : u64 = 0;
+    unread      : u64 = 0;
+}
+
+channel_reset :: (c: *Channel($T, $n)) {
+    c.unread = 0;
+}
+
+channel_write :: (using c: *Channel($T, $n), data: T) {
+    while unread == buffer.count sleep_milliseconds(50);
+
+    buffer[writeidx] = data;
+    writeidx = (writeidx + 1) % buffer.count;
+    unread += 1;
+}
+
+channel_read :: (using c: *Channel($T, $n)) -> T {
+    while unread == 0 sleep_milliseconds(50);
+
+    val := buffer[readidx];
+    readidx = (readidx + 1) % buffer.count;
+    unread -= 1;
+    return val;
+}
+
+channel_write_array :: (c: *Channel($T, $n), data: []T) {
+    // Note: This will block if the channel buffer is full.
+    for data channel_write(c, it);
+}
+
+channel_read_all :: (c: *Channel($T, $n)) -> [..]T {
+    // Note: This will read everything there is currently in the channel.
+    out : [..]T;
+
+    while c.unread > 0 array_add(*out, channel_read(c));
+    return out;
+}
+
+main :: () {
+    d : Channel(int, 20);
+    print("channel d has buffer of %\n", d.buffer.count);
+
+    channel_write(*d, 1);
+    print("Read from d: %\n", channel_read(*d));
+    channel_write(*d, 2);
+    print("Read from d: %\n", channel_read(*d));
+    channel_write(*d, 3);
+    channel_write(*d, 4);
+    print("Read from d: %\n", channel_read(*d));
+    channel_write(*d, 5);
+    print("Read from d: %\n", channel_read_all(*d));
+
+    channel_write_array(*d, int.[10, 20, 30]);
+    print("Read from d: %\n", channel_read(*d));
+    channel_reset(*d);
+    print("Read from d: %\n", channel_read_all(*d));
+}
+
+/*
+channel d has buffer of 20
+Read from d: 1
+Read from d: 2
+Read from d: 3
+Read from d: [4, 5]
+Read from d: 10
+Read from d: []
+*/
+```

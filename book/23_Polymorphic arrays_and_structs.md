@@ -284,5 +284,72 @@ Line (1) presents a very simple polymorphic function `printer`. Line (2) defines
 In line (4), we declare an instance of Polymorphic_Struct, with T == float and N == 3; we do the same in (5) for T == string and N == 2. We print these out in line (6).  
 In line (7), we call proc on p0 with p0.proc, and give it p0 as parameter; this means T becomes the type of #this, which is here p0. This call to printer prints out p0. The same goes for `p1.proc(p1);`
 
+## 23.9 Implementing a simple interface
+(Example from Jai Community-Wiki Snippets: Interface/Trait)
+
+Most higher-level languages have a concept of interface (also called trait) which a class can implement. This means that the class provides implementations for the interface's functions, and then we can use an object of the class as if it where an interface object.  
+We can do something similar in Jai with the polymorphic concepts we have learned so far:
+
+See *23.8_impl_interface.jai*:
+```c++
+#import "Basic";
+
+SomeTrait :: struct(                                   // (1)
+    type: Type,
+    get: (a: type, int) -> int,
+    set: (a: *type, int, int) -> ()
+){}
+
+get :: inline (a: $A/SomeTrait, i: int) -> int {       // (2)
+    return a.get(a, i);
+}
+
+set :: inline (a: *$A/SomeTrait, i: int, val: int) {    // (3)
+    a.set(a, i, val);
+}
+
+ExSomeTrait :: struct {                                         // (4)
+    using #as _t: SomeTrait(#this, ex_get, ex_set);
+    data: [4]int;
+}
+
+ex_get :: (f: ExSomeTrait, i: int) -> int {
+    return f.data[i];
+}
+
+ex_set :: (f: *ExSomeTrait, i: int, val: int) {
+    f.data[i] = val;
+}
+
+do_sth :: (x: *$X/SomeTrait) {
+    set(x, 0, 12345);
+}
+
+main :: () {
+    f : ExSomeTrait;
+    f.set(*f, 1, 42);
+    print("%\n", f);
+    print("%\n", f.get(f, 1));
+    print("%\n", get(f, 3));
+
+    set(*f, 3, 2021);
+    print("%\n", f);
+    do_sth(*f);                     // (5)
+    print("%\n", f);
+}
+/*
+{[0, 42, 0, 0]}
+42
+0
+{[0, 42, 0, 2021]}
+{[12345, 42, 0, 2021]}
+*/
+```
+The code above defines a trait `SomeTrait` as a struct in line (1), with functions `get` and `set`, with starting implementations in lines (2) and (3).  
+A concrete struct ExSomeTrait can now implement the trait via ` using #as _t: SomeTrait(#this, ex_get, ex_set);` as shown in line (4). It must implement its own versions of get and set, namely: `ex_get` and `ex_set`.  
+Now we can call the trait's procs on an ExSomeTrait instance f as `f.get()` or `get(f, )`, and the same for set. Line (5) shows that we can pass an ExSomeTrait instance in a proc argument which only specifies `SomeTrait`. 
+
+Much more complete implementations of traits in Jai have already been made, but this needs full-blown meta-programming (see § 26).
+
 **Some wise words of Jon Blow about polymorphism:**
 " If lots of procedures in your program are polymorphic, you pay for this in compile time, and possibly also in understandability of the program. Polymorphism is powerful, but historically, when people start writing code that is over-generic, it becomes hard to understand and modify. In general, don't get carried away making things polymorphic if they do not need to be. "

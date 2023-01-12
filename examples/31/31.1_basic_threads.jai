@@ -8,8 +8,12 @@ thread_proc :: (thread: *Thread) -> s64 {  // (5)
 
 main :: () {
     print("Main context: %\n", context);
-    thread1 := thread_create(thread_proc);  // (1)
-    defer thread_destroy(thread1);          // (2)
+    thread1 := New(Thread);             // (1)
+    thread_init(thread1, thread_proc);  
+    defer {                             // (2)
+        thread_deinit(thread1);
+        free(thread1);          
+    }
     thread_start(thread1);                  // (3)
     sleep_milliseconds(1000);               // (4)
     while !thread_is_done(thread1) { }      // (5)

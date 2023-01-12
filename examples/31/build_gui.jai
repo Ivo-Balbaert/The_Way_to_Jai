@@ -3,11 +3,16 @@
 #import "GL";
 #import "Thread";
 
-show_gui :: () #expand {        // (2)
+show_gui :: () #expand {           // (2)
     gl_load(*gl, SDL_GL_GetProcAddress);
-    `gui_thread := thread_create( show_gui );  // (3)
+    `gui_thread := New( Thread );  // (3)
+    thread_init(`gui_thread, show_gui);
     thread_start( gui_thread );
-    `defer thread_destroy( gui_thread );
+    `defer {
+        thread_deinit(`gui_thread);
+        free(`gui_thread);
+    }
+    // `defer thread_destroy( gui_thread );
 }
 
 wait_gui :: () #expand {        // (4)
