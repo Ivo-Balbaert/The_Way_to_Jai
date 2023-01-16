@@ -36,10 +36,11 @@ build :: () {
   print("The current workspace is %\n", w2); // => The current workspace is 2
  
   w3 := compiler_create_workspace();    // (2)
-  if !w3 {
+  if !w3 {                              // (2B)
     print("Workspace creation failed.\n");
     return;
   }
+  assert(w3 != 0);                      // (2C)
   print("The workspace w3 is %\n", w3); // => The workspace w3 is 3
 
   ws4 := compiler_create_workspace("Workspace 4");
@@ -55,7 +56,7 @@ main :: () { }
 
 A Workspace is defined in module _Preload_ as just a constant: `Workspace :: s64;`  
 To know the current workspace the compiler is working at, use the procedure `get_current_workspace :: ()` (see line (1)). This returns 0 at run-time.   
-You can ask the compiler to create one or several different new workspaces with the procedure `compiler_create_workspace();` which returns a variable of type Workspace (see line (2)). It can only be run at compile-time.  
+You can ask the compiler to create one or several different new workspaces with the procedure `compiler_create_workspace();` which returns a variable of type Workspace (see line (2)). It can only be run at compile-time. Have a look at the ways to check (2B-C) whether your workspace is ready. 
 Different workspaces run completely separate from each other, one workspace does not affect another workspace.
 
 _Why is the workspace for the target program at the command-line called 'Workspace 2'?_  
@@ -306,7 +307,8 @@ The `backtrace_on_crash` option is by default .ON
 Array bounds operations, castings and null pointer checks can be turned ON or FATAL/NONFATAL (for cast checks) at runtime to increase robustness of your program, they are so by default. If you are very sure, you can turn them OFF to increase performance
 
 ### 30.4.7 runtime_storageless_type_info
-With this option, you can specify whether type_table info is available at runtime (see § 26.1). If you set its value to _true_, type table info is not available at runtime, which reduces the executable's size somewhat. This could be useful when writing for an embedded system. However even when true, the `type_info` function still works.
+With this option, you can specify whether type_table info is available at runtime (see § 26.1). By default its value is _false_, but if you set its value to _true_, the type table info is not available at runtime, which reduces the executable's size. You’re than basically saying "I don’t want all that data", but you still can use Type_Info and the `type_info` function
+This could be useful when writing for an embedded system.
 
 ### 30.4.8 Optimizing LLVM or X64 build
 Llvm_options or X64_Options exist for this purpose, but to work with these you have to have a deeper knowledge of the backends.

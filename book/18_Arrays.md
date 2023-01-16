@@ -1,10 +1,12 @@
 # Chapter 18 - Arrays
 
 Whenever you need a series of items of the same type that are packed together in memory for maximum performance, use an **array**.
-Arrays are the work horses of Jai.
-Because in almost all cases all items of an array are of the same type, an array is called a _homogeneous_ type. But if you really would want to, you can make an array with item type Any.  
+Arrays are the work horses of Jai. Another definition of an array could be: an indexed list of values.  
+Because in almost all cases all items of an array are of the same type, an array is called a _homogeneous_ type. But if you really would want to, you can make an array with item type Any (see § 9.4 and § 16.1).
+Arrays are a datatype built into the compiler, to improve performance and avoid some of the errors common in C (C’s biggest mistake is conflating pointers with arrays JB).   
 Jai supports both static (fixed) and dynamic arrays, and array views.
-Module _Preload_ defines an array type as:  
+Module _Preload_ defines an array type as:
+ 
 ```c++
 Array_Type :: enum u32 {
         FIXED     :: 0;
@@ -223,7 +225,7 @@ Line (8) shows that we can use an array as a bool (condition): an array that is 
 ### 18.3.4 Allocating an array on the heap
 We can force the compiler to allocate an array on the heap with the **NewArray** procedure from module _Basic_: `arr_heap := NewArray(4, float);` (see line (9))
 This proc also has some default vales for arguments like initialized, allocator, and memory alignment; for example: `. The types of these arrays are `[] int`.
-In line (10B) we see how we can cache-align an array with the 3rd argument `alignment=64`, which is especially useful for larger arrays. This is proven for the aligned array `object_array` by the assertions in line (10D) and following.
+In line (10B) we see how we can cache-align an array with the 3rd argument `alignment=64`, which makes the array 64-bit cache aligned and is especially useful for larger arrays. This is proven for the aligned array `object_array` by the assertions in line (10D) and following.
 
 Releasing the memory when the array is no longer in use must be done by the developer with defer `array_free` (see line (10)).  
 A more familiar and consistent syntax using `New` and `free` is shown in line (11):  
@@ -672,7 +674,7 @@ main :: () {
 }
 ```
 
-A variable number of arguments for a procedure can be specified  in the proc header's parameter-list with `..` like in line (1).  
+A variable number of arguments for a procedure can be specified in the proc header's parameter-list with `..` like in line (1).  
 In general:  `(arg1 = type1, arg2 = type2, ..., args: ..type )`  
 Use a normal parameter list to pass arguments to a variable arguments function, as in line (5).
 Printing out the args argument in line (1B), we see that it is in fact an array: all variable arguments are stored in an array, here with type [] s64.  

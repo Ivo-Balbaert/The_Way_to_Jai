@@ -1,11 +1,14 @@
 #import "Basic";
 
 main :: () {
+    init_time();
     print("System time: %\n",  get_system_time());      // (1)
     // => System time: {year = 2023; month = 1; day_of_week = 6; day = 7; hour = 10; minute = 11; second = 3; millisecond = 439; }
     print("System time local:  %\n",  get_system_time(true));
     // => System time local:  {year = 2023; month = 1; day_of_week = 6; day = 7; hour = 11; minute = 11; second = 3; millisecond = 439; }
     print("Hour: %\n",  get_system_time(true).hour);    // => 11
+
+    print("Get time: %\n",  get_time());      // (1B) => Get time: Get time: 0.000634
 
     // Apollo time:
     now := current_time_consensus();  // (2)

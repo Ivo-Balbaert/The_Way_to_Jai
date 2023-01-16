@@ -1,7 +1,7 @@
 # 22 Polymorphic Procedures
 
 In § 17.7 we discussed overloading procedures, which is a solution for using the same logic for several different types. But this gives rise to duplication of code (as we'll see in the next example), increasing code size and a source for bugs. But Jai offers a solution, many overloading procedures can be reduced to one **polymorphic procedure**, thereby solving the code duplication problem, while retaining the same advantages.  
-Polymorphic procedures are similar to C++ templates, Java/C# generics or parameterized functions in other languages.
+Polymorphic procedures are similar to C++ templates, Java/C# generics or parameterized functions in other languages. 
 
 ## 22.1 First example
 We want a procedure `convert` to convert a given argument to a bool.
@@ -85,7 +85,8 @@ main :: () {
     // => [true, false, true, false] of type [] bool, cast to bool is true
 }
 ```
-We only need one version of `convert`, and arg is now said to be **polymorphic**, of a **generic** type **$T**
+We only need one version of `convert`, and arg is now said to be **polymorphic**, of a **generic** type **$T**.
+The dollar sign ($) indicates a **type variable**, and it also identifies which parameter is authoritative over the error message.  
 This procedure can compile to different versions. Each time the compiler sees that the procedure is called with a different concrete type for T (like s32, float32, string or array in the example), it is compiled to a machine-code version for that type.
 The type T has to be derived by the compiler; it can be any type possible. Of course: the code of the procedure must make sense for that type, otherwise a compiler error is generated.  
 In Jai parlance this is called: **baking out** a copy of the procedure with the polymorphic type(s) fully known. For example, when called as `convert(0)`, a version will be compiled for type s32, in line (1) a new version will be compiled for type float32, in line (2) a new version will be compiled for type string, and so on.
@@ -322,7 +323,7 @@ Now write a polymorphic version that has types $Ta for a and $Tb for b, returnin
 (6) Try to understand the error you get when compiling polymorph_err.jai
 (7) Write a polymorphic `repeat` proc, that takes an item of type T and a count. It adds the item count times. Test it out for several types (see repeat.jai)
 
-The following two § are not specific about polymorphism, but they do prepare the way for the `map` polymorphic example in § 22.6
+The following two § are not specific about polymorphism, but they do prepare the way for the `map` polymorphic example in § 22.7
 
 ## 22.3 The lambda notation =>
 See *22.5_lambdas.jai*:
@@ -451,7 +452,7 @@ Is is then called in line (2) with 5 and a lambda `x => { ... #this(x-1); }` tha
 (1) Write a polymorphic proc that returns the count field of an input parameter. Then rewrite this proc as a lambda. Check it for static and dynamic arrays, and strings   (see poly_count.jai).
 
 ## 22.6 #bake_arguments, $ and $$
-The directive **#bake_arguments** lets us specify value(s) for argument(s) of a procedure, but leaving some arguments unspecified. The result is a proc with fewer arguments. Lets see an example:
+The directive **#bake_arguments** lets us specify value(s) for argument(s) of a procedure, but possibly leaving some arguments unspecified. The result is a precompiled proc with specific (fewer) parameter values. Lets see an example:
 
 See *22.6_baked_args.jai*:
 ```c++

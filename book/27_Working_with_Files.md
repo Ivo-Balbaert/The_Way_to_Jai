@@ -107,7 +107,7 @@ Sailor!
 
 If you need to create a folder from code, do it as in line (2). Similarly, you have delete_directory.  
 To test whether a file already exists, use `file_exists` as in line (3).
-Use `write_entire_file` (see line (4)) to write a string to a file (creating the file when it does not exist). This proc can also take a `*builder`, where `builder` is a String Builder. `read_entire_file` (line (5)) reads the contents of a file and returns it as a string.  
+Use `write_entire_file` (see line (4)) to write a string to a file, creating the file when it does not exist). This proc can also take a `*builder`, where `builder` is a String Builder. `read_entire_file` (line (5)) reads the contents of a file and returns it as a string.  
 Whenever a proc returns a bool variable indicating the success of the operation, you can test on it like this:
 * if success {  }
   else {  }
@@ -198,3 +198,4 @@ Removed all directories named '.build' from D:\Jai\testing!
 
 *File_Utilities* also contains all kinds of procs for working with paths.
 
+Look at jai/examples/beta_key_mailer for more examples on how to work with files.

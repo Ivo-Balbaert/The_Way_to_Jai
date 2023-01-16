@@ -404,9 +404,9 @@ Also the `get_field` method (line (5) gives you detailed information.
 The methods discussed in the previous sections provide type info which can be used to _serialize_ structs into strings, and vice-versa _deserialize_ strings into structs. They enable us to write serialization procedures, commonly used e.g. in network replication of entities and save game data, see § 26.9.2
 
 ## 15.7 Annotations or notes
-It's also possible to add an annotation to a struct, a struct field or a procedure. For example: to not serialize a certain field with **@NoSerialize**, see line (2).
-The note tag is represented as a string, and unlike in Java or C#, is not structured. Its info is stored in the notes field of the Type_Info_Struct_Member struct. This field is an array of strings, meaning each field can have several notes (see line (4)).
-This can be picked up with introspection, and appropriate actions can be taken accordingly.  
+It's also possible to add a declarative note (annotation) to a struct, a struct field or a procedure, adding an at-sign (@) after a declaration. For example: to indicate a certain field must not be serialized, add a note **@NoSerialize**, see line (2).
+The note tag is represented as a string, and unlike in Java or C#, is not structured. Its info is stored in the `notes` array of strings of the Type_Info_Struct_Member struct, making it available at compile-time and run-time. Each field can have several notes (see line (4)).
+This can be picked up with introspection, and appropriate actions can be taken accordingly (see § 30.13).  
 You can also add annotations to a struct itself, for example: to indicate which version of the struct definition is used (see line (1)).
 Here is an example of a procedure with a note:  
 `generate_code :: () { ... } @RunWhenReady`

@@ -8,5 +8,6 @@ main :: () {
     if (n & 1) == 0 print ("even\n"); // (2) => even
     n = 109;
     if n & 1  print ("odd\n"); // => odd
-    if n % 2  print("odd\n"); // (3) => odd
+    if n % 2  print("odd\n");    // (3) => odd
+    if !(n % 2) print("even\n"); 
 }

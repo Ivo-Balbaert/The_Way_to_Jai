@@ -1,5 +1,5 @@
 # 28 Inline assembly
-This feature allows the inclusion of assembly code through the **#asm** directive. You would only do this for portions of the code where you need ultimate performance. That said, inline assembly is being used inside some of the more critical performance standard modules (see below).  
+This feature allows the inclusion of assembly code through the **#asm** directive. You would only do this for portions of the code where you need ultimate performance. That said, inline assembly is being used inside some of the more critical performance standard modules (see below). It's great advantage is also the integration with the Jai language, versus using an not-integrated external assembler.
 
 Assembly language is mainly used to generate custom CPU instructions, support SIMD (Single Instruction, Multiple Data see: [Wikipedia SIMD](https://en.wikipedia.org/wiki/Single_instruction,_multiple_datainstructions)) for parallelizing data transformations, or take explicit control over the code generation to get the most optimized code.
 At this stage only the x86-64 platform is supported. Inline assembly does not support jumping, branching, NOP (No Operation instruction), or calling functions; use Jai for that.  
@@ -10,6 +10,8 @@ The inner workings of Apollo Time in _Basic_ use inline assembly. Other inline a
 Module *Machine_X64.jai* contains useful routines for 64-bit Intel x86 machines.
 
 ## 28.1 Examples of using AVX and AVX2 SIMD operations
+These are some basic SIMD Vector Code for a few 32-bit floats together at the same time. .x means to adding 4 floats at the same time, while .y indicates adding 8 floats together at the same time.
+
 See *28.1_assembly.jai*:
 ```c++
 #import "Basic";

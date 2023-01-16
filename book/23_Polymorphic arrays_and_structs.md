@@ -109,8 +109,7 @@ If `PolyStruct` is a struct type with generic type T, you can tell the compiler 
 `proc1(x : PolyStruct($T))`
 
 ## 23.5 The $T/Base syntax
-However, often this is too restrictive. We can also indicate that x has to be a subclass of PolyStruct. 
-This you can do via the **/** notation:
+However, often this is too restrictive. We can also indicate that x has to be a 'subclass' of PolyStruct. This you can do via the **/** notation:
 `proc1(x : $T/PolyStruct)`  
 Matching for $T will not work unless the target type matches PolyStruct, involving strongly-typed typechecking.
 Important is that x doesn't have to be of the PolyStruct type!
@@ -189,7 +188,7 @@ See this applied in module _Math/module.jai_ and _Math/matrix.jai_.
 See also the use of a polymorphic struct when constructing an SOA data design in § 26.9.2
 
 ## 23.7 The #bake_constants directive
-We already discussed #this in § 17.9. In § 22.5 we talked about #bake_arguments, where you can bake in the value of a parameter at compile time. There is also  a **#bake_constants** directive, where you can bake in a polymorphic type with a concrete type.  
+We already discussed #this in § 17.9. In § 22.5 we talked about #bake_arguments, where you can bake in the value of a parameter at compile time. There is also a **#bake_constants** directive, where you can bake in a polymorphic type with a concrete type. In other words: a polymorphic procedure is precompiled for a specific type.  
 
 See *23.7_bake_constants.jai*:
 ```c++

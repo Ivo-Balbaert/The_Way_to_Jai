@@ -1,4 +1,3 @@
-// 9,33: Error: Here we need a constant Type, but we got an expression of type '(int, int) -> (int)'.
 #import "Basic";
 #import "Random";
 

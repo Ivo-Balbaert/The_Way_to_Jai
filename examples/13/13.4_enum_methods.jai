@@ -11,9 +11,9 @@ main :: () {
     low, high := enum_range(Direction);
     print("The values range from % to %\n", low, high); // 0 to 3
 
-    print("Values:\n");
+    print("Values: ");
     values :=  enum_values_as_s64(Direction);
-    for values  print("% - ", it); // => 0 - 1 - 2 - 3 -
+    print("%\n", values); // => Values: [0, 1, 2, 3]
 
     names := enum_names(Direction);
     print("\nThe values as strings are: %\n", names);

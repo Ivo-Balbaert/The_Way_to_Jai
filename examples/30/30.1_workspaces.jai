@@ -6,10 +6,11 @@ build :: () {
   print("The current workspace is %\n", w2); // => The current workspace is 2
  
   w3 := compiler_create_workspace();    // (2)
-  if !w3 {
+  if !w3 {                              // (2B)
     print("Workspace creation failed.\n");
     return;
   }
+  assert(w3 != 0);                      // (2C)
   print("The workspace w3 is %\n", w3); // => The workspace w3 is 3
 
   ws4 := compiler_create_workspace("Workspace 4");

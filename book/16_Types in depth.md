@@ -12,16 +12,22 @@ In this chapter we'll see which data-structures from built-in modules are used f
 We encountered the Any type in § 9.4, it is defined as follows:   
 
 ```c++
-Any_Struct :: struct {  // This is what an Any looks like.
+Any_Struct :: struct {  
     type: *Type_Info;
     value_pointer: *void;
 }
 ```
 
-It is a struct of two values: the type info and the pointer to the value (a *void because we don't know the type of the value, that's why its Any!).  
-What is this Type_Info ?
+It is a struct of two values: 
+- the **type** info, which is a pointer to a Type_Info struct with specific details about the assigned value type;
+- and the **value_pointer** pointer to the value, which is a *void because we don't know the type of the value, that's why its Any!. 
+To extract the value, you first need to cast the value_pointer to a pointer of the right type, and then dereference this pointer.  
+Any is a type-safe version of a void pointer.  
+But what is this Type_Info ?
 
 ## 16.2 Type_Info and Type_Info_Tag
+Type_Info contains metadata for the types that appear in your program. It can be casted to more specific structs for additional info.
+(See for example 16.1_types_in_depth.jai, line (6B))
 This is its definition:
 
 ```c++
@@ -33,7 +39,7 @@ Type_Info :: struct {
 
 The `type` field is of type `Type_Info_Tag`, the 2nd field is the size in bytes.
 
-`Type_Info_Tag` itself is an enum:
+`Type_Info_Tag` itself is an enum, basically an enumeration of all supported type categories:
 
 ```c++
 Type_Info_Tag :: enum u32 {
@@ -103,10 +109,10 @@ Other :: struct {
 }
 
 uses_vector3_with_as :: (T: Type) -> bool {    // (6)
-    ti := cast(*Type_Info) T;
+    ti := cast(*Type_Info) T;                  
     if ti.type != .STRUCT return false;
 
-    tis := cast(*Type_Info_Struct) ti;
+    tis := cast(*Type_Info_Struct) ti;         // (6B)
     for tis.members {
         if !(it.flags & .AS)             continue;
         if it.type != type_info(Vector3) continue;
@@ -170,7 +176,7 @@ main :: () {
     TC := cast(*Type_Info) Complex;
     print("%\n", TC.type);  // => STRUCT
     if TC.type != .STRUCT then exit;
-    SC := cast(*Type_Info_Struct) TC;
+    SC := cast(*Type_Info_Struct) TC;       
     print("%\n", SC.name); // => Complex
     if SC.name == "Complex" then print("This is type COMPLEX\n"); // => This is type COMPLEX
     print("c1 is of type: ");

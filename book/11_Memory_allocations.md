@@ -144,7 +144,7 @@ The n1 variable is created on the heap in line (2) with the `alloc` proc, like t
 n1 := cast(*int) alloc(size_of(int));  // (2) - on heap
 defer free(n1);                        // (3)
 ```
-it returns a pointer to a series of contiguous bytes allocated on the heap. The cast is needed because `alloc` itself returns `*void`.
+it returns a pointer to a series of contiguous bytes allocated on the heap, which is uninitialized memory (`*void`). The cast is needed because `alloc` itself returns `*void`.
 
 `alloc` allocates memory by default on the _heap_, what is also called _dynamic allocation_. The 1st argument of `alloc` is the size in bytes of the amount of memory to allocate; here we allocate 8 bytes (which is the size of an int). `alloc` returns a (void) pointer to the first byte of the memory allocated, which forms a series of contiguous bytes (we'll discuss the 2nd Allocator argument later, see § 21), so it is a pointer to uninitialized memory. Because we know n1 will point to an int, we can already cast to it with `cast(*int)`, so the compiler knows it too. Because the allocation is on the heap, we must free this memory ourself. This is done in line (3) with `free(n1`.  
 Notice that we call it with the defer proc from the previous §. The result is that n1's 8 bytes memory will be freed at the closing } of the proc it is defined in, which marks the end of scope or lifetime for n1.  

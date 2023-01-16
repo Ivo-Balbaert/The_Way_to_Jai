@@ -115,7 +115,8 @@ The Sokoban game will be commercially released.
 - When the compiler source code is released, it will have a permissive software license (e.g. BSD or MIT license)
 - Licensing to prevent `embrace, extend, extinguish `tactics of larger companies will be added.
 
-The name "Jai" means victory in Hindi, Indian languages, or also "Just Another Idea". The Jai language is also often called The Language by Jon Blow, indicating that the name could be changed.
+Jai is pronounced /dʒɑɪ/ 1, rhyming with ‘chai’, like the tea.
+The name "Jai" means victory (जय) in Hindi, Indian languages, or also "Just Another Idea", or j.a.i. - Jonathan’s awesome idea. The Jai language is also often called The Language by Jon Blow, indicating that the name could be changed.
 
 ## 1.5 Specific Jai features
 

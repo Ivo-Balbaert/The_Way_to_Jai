@@ -53,6 +53,11 @@ main :: () {
 
     // the Any type:
     x: Any = 3.0;  // (9)
+    print("x contains this float: %\n", << cast(*float) x.value_pointer);
+    // => x contains this float: 3
+    x = "foo";
+    print("now x contains this string: %\n", << cast(*string) x.value_pointer);
+    // => now x contains this string: foo
     x = 3;         // (10)
     x = "Hello";
     x = 2.345;
@@ -87,8 +92,9 @@ We see that Type itself is 8 bytes in size.
 ## 9.4 The Any type
 (see line (9) and following)
 The **Any** type (defined in module _Preload_), is the most wide type. It encompasses and matches with all other types. Values of all types can be converted to Any.
-This allows you to assign one variable to values of different types (see lines 10-11, even a function type as in line (11)), as you might do in a dynamically-typed programming language. 
-The Any type has size 16 bytes.
+This allows you to assign one variable to values of different types (see lines 10-11, even a function type as in line (11)), as you might do in a dynamically-typed programming language.
+
+The Any type has size 16 bytes. It is in fact a more informative and type-safe version of the void pointer from C, including a type pointer for the type and a void pointer for the value (see § 16.1 for its definition).
 It is useful when working with heterogeneous arrays of pointers to different types.
 
 ## 9.5 Any and the print procedure

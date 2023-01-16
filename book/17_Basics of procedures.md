@@ -1,7 +1,7 @@
 # Chapter 17 - Basics of procedures
 
 Until now we've only used the main :: () proc.
-We know that we can create local code blocks (see 7.1.2), and that we can repeat a code block with in a or for loop. But it is also very useful to be able to call a code block by name, which is exactly what a **procedure** or **proc** (more often called **procs** in other languages) is.  
+We know that we can create local code blocks (see 7.1.2), and that we can repeat a code block with in a or for loop. But it is also very useful to be able to call a code block by name, which is exactly what a **procedure** or **proc** (more often called **functions** in other languages) is. Another definition could be: a proc is a callable set of instructions, with optional parameters and return value(s).
 
 ## 17.1 Declaring and calling a proc
 A block of code that is used several times is a good candidate to be wrapped up inside a proc. This reduces code duplication and can enhance code readability.
@@ -235,12 +235,23 @@ A default value must not be a literal value, it can be any symbol, like a variab
 
 ## 17.5 Named arguments
 We already saw an example of this in line (5) of *17.1_proc_definitions.jai*:  `a2 := square(x = c);`
-the argument which is named x gets the parameter value c in an explicit assignment.  
+the argument, which is named x, gets the parameter value c in an explicit assignment.  
 Named arguments are useful when you have procs which take many arguments, often of the same type.   
 When arguments are given default values, it can be even more complicated. In such a case it is possible that the compiler can’t distinguish between them if you pass parameters in the wrong order. Named arguments allow you to specify the parameter values in any order.  
 Here is another example to illustrate its usefulness:  
  `make_character(name = "Fred", catch_phrase = "Hot damn!", color = BLUE);`  
 Partially naming arguments is allowed, then you have to be very cautious, but Jai carefully checks the parameters. After using named arguments you cannot switch to unnamed ones.
+
+**Exercise**
+(See named_args.jai)
+Check the proc `hello`. Predict the outcome of the following calls: 
+    hello("fred", "booya"); 
+    hello("booya", "fred"); 
+    hello(phrase = "booya", name = "fred"); 
+    hello("fred", phrase = "booya"); 
+    hello(name = "fred", "booya");
+    hello("fred", 3.14); 
+Then test the program out to see if you were right.
 
 ## 17.6 #must and multiple return values
 See *17.5_multiple_return.jai*:
@@ -316,6 +327,11 @@ if !success {      // (1)
 ```
 
 By returning a bool which signals success of the file-opening action, we can test as in line (1) on success, and leave the current procedure when there was a problem.
+
+**Exercise**
+(See return_values.jai)
+Predict the outcome when the proc `fun` is respectively called with argument x equal to 0, 1, 2, 3 and 4. Then compile/run the program and check your answers.
+
 
 ## 17.7 Overloading procedures
 Procedures are said to _overload_ each other when they have the same name, but different argument list. The only things in which they differ are the types of their arguments. Here is an example with two procedures proc1:
@@ -665,7 +681,7 @@ Line (2) shows how an instance of B can pass seamlessly for an instance of A. In
 
 In the solution in line (1) you see that a simple . notation is enough to access the fields (unlike in C/C++), even when the variable is actually a pointer to the struct.
 
-(2) Wrap the code from   which decides whether a variable is of type Complex into a is_complex_number procedure (see is_complex_number.jai)
+(2) Wrap the code from which decides whether a variable is of type Complex into a is_complex_number procedure (see is_complex_number.jai)
 
 ## 17.14 Reflection on procedures
 As we did in § 16 with structs and enums, we can also obtain reflection info on a procedure, mainly its argument types and return types:

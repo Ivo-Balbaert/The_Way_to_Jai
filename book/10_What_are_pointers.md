@@ -5,7 +5,7 @@ Pointers are really needed to efficiently access memory, instead of having to mo
 To do low-level things and get the best performance, we need direct access to memory locations, just like C and other low-level languages. That's what pointers are for. Jai follows the C pointer model which allows pointers everywhere in code; it does not have smart pointers as in C++.
 
 ## 10.1 What is a pointer?
-A pointer to a variable contains the memory address of that variable, it _points to_ the variable. If var is the variable,  then a pointer ptr to var is written as: 
+A pointer to a variable contains the memory address of that variable, it _points to_ the variable. So it is a  reference to a memory location. If var is the variable,  then a pointer ptr to var is written as: 
 
 ```c++
 ptr = *var

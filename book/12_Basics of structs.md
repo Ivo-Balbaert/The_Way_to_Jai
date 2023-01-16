@@ -138,7 +138,7 @@ Person :: struct {
     location        : Vector2;
 }
 ```
-All struct fields are _public_: they can be read and even changed everywhere! There is a convention to prefix fields which should be private by `_`, but the compiler does not enforce that. A struct field can be of type void, for example to put notes on struct members that do not take up space (see 13.1_unions.jai).
+All struct fields are _public_: they can be read and even changed everywhere! There is a convention to prefix fields which should be private by `_`, but the compiler does not enforce that: there is no built in feature to make a member field private. A struct field can be of type void, for example to put notes on struct members that do not take up space (see 13.1_unions.jai).
 
 > Unlike classes in other languages, Jai does NOT have member functions: there is no concept of functions "belonging" to a particular struct or datatype. So it's better to not define a procedure inside a struct.
 
@@ -370,7 +370,7 @@ Node :: struct {
 ```
 
 ## 12.7 A structs namespace
-Wouldn't it be nice if you could use the fields of a struct without having to prefix them with their struct name? That's possible! A struct defines a **namespace**, which you can locally create with the **using** keyword. Then you don't need to use the struct name anymore.
+Wouldn't it be nice if you could use the fields of a struct without having to prefix them with their struct name? That's possible! A struct defines a **namespace**, which you can locally create with the **using** keyword, to allow memory-smart composition. Then you don't need to use the struct name anymore.
 
 See *12.4_using.jai*:
 ```c++
@@ -555,7 +555,6 @@ can be divided into:
     ptr = *e;      // assignment
 
 ## 12.11 Struct alignment
-
 By aligning certain member fields of structs to 64 bit, we can make memory allocation cache-aligned on 64 bit systems. This can also be done for global variables.  
 The **#align** directive takes care of aligning struct member fields relative to the start of the struct. If the start is 64 bit aligned, and a member field has #align 64, then this fields will also be 64 bit aligned. The same goes for `#align 32` and `#align 16`.
 The start or base of the struct must be #align-ed correctly, otherwise it won't work. You can't do this on the structs definition, like in (1B), this has no effect. You must use the 2nd parameter `alignment` of New when creating a new struct instance (see line (5))  

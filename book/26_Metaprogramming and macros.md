@@ -33,26 +33,28 @@ main :: () {
     // => The type table has 355 entries:
     for table {
         print("%: ", it_index);
-        print("  type: %\n", it.type); 
+        print("  type: % ", it.type); 
+        print("  size: %\n", it.runtime_size); 
     }
 }
 
 /*
 The type table has 355 entries: 
-0:   type: INTEGER
-1:   type: INTEGER
-2:   type: VARIANT
-3:   type: INTEGER
+0:   type: INTEGER   size: 8
+1:   type: INTEGER   size: 2
+2:   type: VARIANT   size: 2
+3:   type: INTEGER   size: 1
 ...
-350:   type: STRUCT
-351:   type: PROCEDURE
-352:   type: PROCEDURE
-353:   type: POINTER
-354:   type: ARRAY
+381:   type: STRUCT   size: 16
+382:   type: PROCEDURE   size: 8
+383:   type: PROCEDURE   size: 8
+384:   type: POINTER   size: 8
+385:   type: ARRAY   size: 16
 */
 ```
 
-Full introspection data is available for all structs, functions, and enums at runtime. A structure called **_type_table** contains all variables with their types; this is populated at compile-time. Then this data structure is stored in the data segment of the executable file, making it available at runtime.
+Full introspection data is available for all structs, functions, and enums at runtime. A structure called **_type_table** contains all variables with their types; this is populated at compile-time. Then this data structure is stored in the data segment of the executable file, making it available at runtime.  
+Requesting type info returns a pointer to an entry in the type table that is a `Type_Info` struct.
 This structure is not directly accessible, you have to use the proc `get_type_table` from module _Compiler_,  as we did in line (1).  
 `table` has as type [] *Type_Info.  
 
@@ -562,20 +564,15 @@ See an example of use in § 26.5.2
 
 You can convert a #code during compile-time execution back-and-forth to the syntax tree structures (AST) defined in Compiler. Also you can take a Code, convert it to the tree, manipulate around with the tree, and resubmit the changed tree.
 
-In the same way as you can do a #insert -> string (see previous §), you can make a `#insert -> Code {  return #code  ...   }`:
-`#insert` can also take a variable c of type Code, e.g.: `#insert(c: Code);`. It is also often used in the body of a macro like this:  
-```c++ 
-some_macro :: (body: Code) #expand {
-    ...
-    #insert body;
-    ...
-}
-```
-
-Here is a simple example (see line (1)):
+Here are some use-cases :
 See _26.26_insert_code.jai_:
 ```c++
 #import "Basic";
+
+what_type :: ($c: Code) {                   // (2)
+    T :: c.type;
+    print("T is %\n", T);
+}
 
 main :: () {
     x := 3;
@@ -587,10 +584,26 @@ main :: () {
     }
     print("x is %\n", x); // => x is 69105
     assert(x == 69105);
+
+    what_type(2 + 3 + 4);           // (3A) => T is s64
+    what_type("Hello, Sailor!");    // (3B) => T is string
 }
 ```
 
-(See § 26.5 Macros, specifically `macroi` in the first example.)
+In the same way as you can do a #insert -> string (see previous §), you can make a `#insert -> Code {  return #code  ...   }` (see line (1)).
+`#insert` can also take a variable c of type Code, e.g.: `#insert(c: Code);`. It is also often used in the body of a macro like this:  
+```c++ 
+some_macro :: (body: Code) #expand {
+    ...
+    #insert body;
+    ...
+}
+```
+
+In lines (3A-B) we call a proc `what_type` (defined in line (1)) with a constant Code argument. The $c ensures that it is constant (see § 22.6)
+Making `what_type` a macro would also ensure that c is constant. For non-constant code arguments, you can use the proc `get_root_type` from the _Compiler_ module (see examples/code_type.jai).
+
+(See also § 26.5 Macros, specifically `macroi` in the first example.)
 
 
 
@@ -1464,7 +1477,8 @@ The piece of source code that gets generated from a #insert can be retrieved fro
 Line (10) mentioned here is this line: #insert -> string.
 
 ## 26.11 How to get info on the nodes tree of a piece of code?
-In § 26.4.1 we saw how #code can make something of type Code out of a piece of code. The helper procedure `compiler_get_nodes` can take something of type Code and get the AST nodes out of it:
+In § 26.4.1 we saw how #code can make something of type Code out of a piece of code. Another way is to call the proc `code_of` on a piece of code. For some examples of code_of, see jai/examples/here_string_detector.jai and self_inspect.jai  
+The helper procedure `compiler_get_nodes` can take the result of `#code` or `code_of` and get the AST nodes out of it:
 ```
 compiler_get_nodes :: (code: Code) -> (root: *Code_Node, expressions: [] *Code_Node) #compiler;
 ```

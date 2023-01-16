@@ -36,7 +36,7 @@ _Question:_ How would you convert `"Hello"` to a number?
 Often these conversions won't work, and you'll get a compiler error.
 
 Jai is a _strongly_ and _statically typed_ language: the compiler must know the types of all the program’s constants, variables and expressions at compile time, and a variable cannot change type, like from number to string as in dynamic languages. This allows Jai to run fast at runtime.
-> Except when the variable has type Any (see ??).  
+> Except when the variable has type Any (see § 9.4).  
  
 Conversion of the type of a variable is strictly controlled, and operations can only work on certain types. This all adds up to better error-checking by the compiler, and thus more robust, safer and much faster programs. 
 
@@ -48,7 +48,7 @@ Here are some examples for these types:
 **bool** :	`true` and `false` values. They take up 8 bits (1 byte) of memory, and are used to test upon in conditions, so that program flow can be changed.
 
 **int** : for example `42`, `0b10` (a binary 2), `0x10` (a hexadecimal with decimal value 16). Underscores can be optionally used to separate digit groups as in: `16_777_216` or `0b1010_0010_0101_1111` (a binary with decimal value 41567).  
-Eight types exist according to their size (number of bytes) and whether they are positive or signed(can have a negative sign):   
+Eight types exist according to their size (number of bytes) and whether they are positive or signed(these can have a negative sign):   
 
 	`s8` or `u8`   - signed and unsigned 1 byte (or 8 bit) integers,  
         range:  -127 to 128 or 0 to 255
@@ -64,8 +64,8 @@ Eight types exist according to their size (number of bytes) and whether they are
 **float** : literals are of the form `3.141592` or `5.98e24`, with a `.` for separating the decimal part, and an `e` for indicating the power of 10 (exponent).  
 Two floating point number types exist according to their size, they are both signed:
 
-	`float32` - 4 byte (32 bit) 
-	`float64` - 8 byte (64 bit) 
+	`float32` - 4 byte (32 bit), single-precision
+	`float64` - 8 byte (64 bit), double-precision 
 
 `float` defaults to `float32`  
 Use the `0h` prefix to specify floats in hex, in IEEE-754 format. 
@@ -135,7 +135,8 @@ Suppose your program needs to calculate a lot of results using the mass of the e
 
 ### 5.2.2 _Solution_: Constants
 The solution is to give such a **constant** a meaningful name, like:  
-    `MASS_EARTH :: 5.97219e24;     // in kg`  
+    `MASS_EARTH :: 5.97219e24;     // in kg`
+and the :: syntax to indicate a declaration of a constant.   
 Do this in only one place, and then use that name in all places in code where that value is needed. At compile-time, the compiler will substitute the value for the constant's name everywhere.
 
 Here is an example program: See *5.2_constants.jai*
@@ -168,7 +169,6 @@ Constants declared out of the main() procedure are defined in a _global scope_, 
 Line (1) shows that you can declare the type of a constant. But this isn't necessary: in line (2) the constant is declared without type, and the compiler infers the type.   
 Notice that by omitting the type, we get the typical **::**  
 `MASS_EARTH :: 5.97219e24;`  
-which indicates a constant value.
 No let, imm or const (as used in other languages) is necessary before the constant's name.
 
 Needless to say that you can't define two or more constants with the same name. Test out what error you get! The same goes for variables, procedure names, and so on.  
@@ -181,6 +181,7 @@ In line (5) we use type_of() procedure to show the type of MASS_EARTH, which is 
 In line (6) we use the **is_constant** procedure to check that MASS_EARTH is a constant.
 > Why do you want to know if something is constant? Jai is very good at meta-programming, which happens at compile-time. During meta-programming you often want to be sure if an expression is a compile-time constant or not.
 
+Constants in Jai include: static values, enums, structs and procedures.
 main (and any other procedure) also has the `::` indicator. This is because main is a procedure, and all procedures are constant values: they will not rebind (get a different value) at run-time.
 
 ## 5.3 - Variables

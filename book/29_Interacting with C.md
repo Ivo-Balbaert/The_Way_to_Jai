@@ -1,6 +1,6 @@
 # 29 Interacting with C
 
-We compared Jai to C/C++ in § 1B - 1.1.2. In § 19.7, we discussed how to work with C strings from Jai.
+We compared Jai to C/C++ in § 1B - 1.1.2. In § 19.7, we discussed how to work with C strings from Jai, and discuss their differences.
 In this section, we will effectively let C and Jai code work together. Jai can indicate that it will use a C function, or call into C libraries through its Foreign Function Interface (FFI).
 
 ## 29.1 Why would you call C?

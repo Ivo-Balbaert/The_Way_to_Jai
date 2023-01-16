@@ -36,7 +36,7 @@ Remarks:
 * The glfw3.dll and glfw3.lib (or similar files for other OS's) have to be copied in the same folder as the executable of program 33.1
 
 ## 33.2 The _Simp_ module
-Simp is a simple framework for drawing graphics completely written in Jai.
+Simp is a simple framework for drawing graphics, completely written in Jai.
 Here is Simp's minimum code to open and close a window:
 
 See *33.2_simp_window.jai*:
@@ -90,7 +90,7 @@ The module also contains some examples (_modules/Simp/examples_):
 - _multiple_windows.jai_: this shows 2 windows next to each other, the 1st is the window from the previous example, the 2nd window has a text with a color-changing background;  
 
 ## 33.3 The _Getrect_ module
-This module works together with Simp.
+This is a simple UI module which works together with Simp.
 The following program draws two buttons when the render1 macro call is uncommented: Button 0 and Button 1. When clicked their button text is printed.
 When render2 is called, a dropdown list is shown.
 

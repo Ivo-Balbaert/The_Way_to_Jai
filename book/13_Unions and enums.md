@@ -1,7 +1,8 @@
 # Chapter 13 - Unions and enums
 
 An union is a special memory-saving kind of struct.  
-An enum on the other hand is an enumeration of possible values a variable can take. Both enums and unions are types. The 'using' keyword to open up a namespace (see § 12.7) works also for enums and unions.
+An enum on the other hand is an enumeration of possible values a variable can take; it is a type of struct that contains a list of constants.  
+Both enums and unions are types. The 'using' keyword to open up a namespace (see § 12.7) works also for enums and unions.
 
 ## 13.1 Working with unions
 A union is kind of like a struct, because it is defined with different fields of possibly different sizes, like a C union. The great difference is that only one field can be active (filled with data) at any one time.
@@ -70,9 +71,10 @@ A variable of the union type is declared in line (3), and one field is given a v
 ## 13.2 Working with enums
 An enum (enumerator) is useful when a property can only take as value one of a limited number of named values, like the compass points north, west, east and south.   
 Why? Because it is much easier for a developer to work with names than with numbers.
-In combination with if #complete (see ??) it can be checked that all possible values of an enum are used.
-All names are constants, internally they are by default 64bit-integers starting from 0 for the 1st value and auto-incrementing by 1.
-_13.2_enums.jai* shows a few examples:
+In combination with if #complete (see § 14.3.1) it can be checked that all possible values of an enum are used.
+All names are constants, internally they are by default 64bit-integers.They start by default from 0 for the 1st value and auto-incrementing by 1, but they can be initialized to arbitrary values.
+
+*13.2_enums.jai* shows a few examples:
 
 ```c++
 #import "Basic";
@@ -177,7 +179,6 @@ Operating_System_Tag, Log_Level, Type_Info_Tag and so on.
 ## 13.3 Enum as a namespace
 Just like with structs, we can do a `using` Enum_Type (see line (6) in the example code), and then we can use the different members of the enum without the `.`  
 
-
 ## 13.4 Enum as #specified
 New member values added to an enum get auto-incremented automatically. But what happens when a member name is deleted? Then all subsequent members get new integer values! If our code depends on these values, this could be a source for bugs.  
 To avoid this, we can annotate an enum with the directive **#specified**.  The author of the enum uses #specified in order to declare the intention of maintaining compatibility of enum values over time. This requires declaring each integer explicitly: an enum declared as #specified will no longer accept the auto-increment.
@@ -245,7 +246,7 @@ In the program above, | is the bitwise or operation. In line (1) you see how we 
 Lines (1) and following show ways to assign enum flags to variables.
 
 ## 13.6 Some useful enum methods
-_13.4_enum_methods.jai* shows some useful methods on enums:
+*13.4_enum_methods.jai* shows some useful methods on enums:
 
 ```c++
 #import "Basic";
@@ -263,7 +264,7 @@ main :: () {
 
     print("Values:\n");
     values :=  enum_values_as_s64(Direction);
-    for values  print("% - ", it); // => 0 - 1 - 2 - 3 -
+    print("%\n", values); // => Values: [0, 1, 2, 3]
 
     names := enum_names(Direction);
     print("\nThe values as strings are: %\n", names);

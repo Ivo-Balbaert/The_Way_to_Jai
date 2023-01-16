@@ -97,9 +97,10 @@ main :: () {
 
 A new hash table is created on the heap as in line (1). Key-value pairs are added to with with the proc `table_add`, and a pair is deleted with the proc `table_remove`.
 You can iterate over the table with a for-loop as in line (3).
+For more detailed info see the examples in the module as well as in the examples folder.
 
 ## 34.3 The Pool module
-This module provides a memory allocator to quickly allocate memory blocks of many different sizes (including bigger sizes, the default size is 64Kb) on the heap, but all when you know that all those blocks will have approximately the same lifetime. Allocate memory from the pool when you need it, and you free the entire pool at once when the program no longer needs the memory. A Pool gives you a very-fast-allocating memory arena, for long-term use with well-defined ownership.
+This module provides a memory allocator to quickly allocate memory blocks of many different sizes (including bigger sizes, the default size is 64Kb) on the heap, when you know that all those blocks will have approximately the same lifetime. Allocate memory from the pool when you need it, and you free the entire pool at once when the program no longer needs the memory. A Pool gives you a very-fast-allocating memory arena, for long-term use with well-defined ownership.
 
 ### 34.3.1 Using a Pool 
 Here is an example which shows how to use a Pool:
@@ -281,3 +282,78 @@ main :: () {
 ```
 
 In line (1), we allocate memory for 100 bytes with `get`. We make a new struct Thing in line (3) with the flat pool allocator defined in line (2). Line (5) prints out garbage, because the structs memory was overwritten in line (4). To release the memory, use `fini` as in line (6). But it's not needed to do this at the end of the program: the memory is released to the OS anyway.
+
+## 34.4 The Mail module
+This single-file module contains all you need to send plain-text or HTML e-mails from an SMTP-server, with optional CC, BCC, and attachments.
+(It uses module _Curl_ under the hood, which also has examples of downloading a file and FTP.)  
+Here is a simple working example that shows how to send an e-mail:  
+
+See *34.7_mailing.jai*:
+```c++
+#import "Basic";
+Mail :: #import "Mail";
+
+USERNAME :: "put_username_here";
+PASSWORD :: "put_password_here";
+
+SMTP_HOST :: "name_of_smtp_host";
+SMTP_PORT :: "port_number, usually 587";
+
+FROM_EMAIL :: "sender_address";
+EMAIL_SUBJECT :: "Testing email!";
+
+EMAIL_BODY :: #string DONE
+This is the body of the mail:
+This is the message:
+
+    %1
+
+Best regards,
+DONE
+
+
+send_an_email :: (address: string, key: string) -> bool {
+    body := sprint(EMAIL_BODY, key);
+    defer free(body);
+
+    smtp : Mail.Mail_Server;
+
+    smtp.host       = SMTP_HOST;
+    smtp.port       = SMTP_PORT;
+    smtp.enable_ssl = true;
+    smtp.username   = USERNAME;
+    smtp.password   = PASSWORD;
+
+    m : Mail.Mail_Message;
+
+    addresses: [..] string;
+    array_add(*addresses, address);
+    
+    m.from        = FROM_EMAIL;
+    m.to          = addresses;
+    m.subject     = EMAIL_SUBJECT;
+    m.body        = body;
+    m.html        = false;
+
+    result := Mail.mail_send(smtp, m);
+    return result;
+}
+
+main :: () {
+    email := "to_email_address";
+    key := "THE KEY";
+    success := send_an_email(email, key);
+    if success  print ("Email sent!");
+}
+```
+
+Don't forget to include `libcurl.dll` and `libcurl.lib` on Windows (or the equivbalent on others OS's) in the same folder as`mailing.exe`.
+
+Running the executable gives the output:
+```
+D:\Jai\testing>mailing.exe
+Email sent!
+```
+A few seconds later, the recipient will get the email in his/her mailbox.
+
+You can find a more sophisticated example in jai/examples/beta_key_mailer.

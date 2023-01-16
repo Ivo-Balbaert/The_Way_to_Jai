@@ -11,11 +11,14 @@ See *6B.1_times.jai*:
 #import "Basic";
 
 main :: () {
+    init_time();
     print("System time: %\n",  get_system_time());      // (1)
     // => System time: {year = 2023; month = 1; day_of_week = 6; day = 7; hour = 10; minute = 11; second = 3; millisecond = 439; }
     print("System time local:  %\n",  get_system_time(true));
     // => System time local:  {year = 2023; month = 1; day_of_week = 6; day = 7; hour = 11; minute = 11; second = 3; millisecond = 439; }
     print("Hour: %\n",  get_system_time(true).hour);    // => 11
+
+    print("Get time: %\n",  get_time());      // (1B) => Get time: Get time: 0.000634
 
     // Apollo time:
     now := current_time_consensus();  // (2)
@@ -50,7 +53,7 @@ Date in Local is: 7 January 2023, 11:30:40
 */
 ```
 `get_system_time` used in line (4) gives you the time as a struct, from which you can extract every time item such as day or hour.
-`get_time` discussed in the next section gives you a number of seconds.
+`get_time`  returns the time in seconds since the call to init_time(). We use it in the next section to measure performance of a piece of code .
 
 The rest of the examples uses Apollo Time. The `to_calendar` proc gives you a struct from which you can extract all useful datetime info. If you just need the current datetime as a string, use to_calendar on this struct as in (2B).
 
@@ -71,7 +74,7 @@ In line (3B), we ask for the current time again, and subtract it from the previo
 
 
 ## 6B.2 - Measuring performance using get_time
-The `get_time` proc from module _Basic_ returns a time in seconds. It is useful for calculating time differences (as in line (1) below), so it can give a measure of performance of a certain proc or part of the program.  
+The `get_time` proc from module _Basic_ returns a time in seconds since init_time() was called; it will call init_time if it hasn't been called. `get_time` uses the system timers  (the OS performance counters) for measuring time. It is useful for calculating time differences (as in line (1) below), so it can give a measure of performance of a certain proc or part of the program.  
 For more accurate results, use Apollo time `current_time_monotonic()` as discussed in the previous section.
 
 See *6B.2_get_time.jai*:

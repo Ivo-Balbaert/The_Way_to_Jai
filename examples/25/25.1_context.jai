@@ -12,6 +12,11 @@ main :: () {
     str := "Hello, Sailor!";
 //    print("The context is %\n", context); // => see below between /* */
 
+    // if this_is_the_way  print("This is the way to do it!");
+     // => Error: Undeclared identifier 'this_is_the_way'.
+    if context.this_is_the_way  print("This is the way to do it!\n");
+    // => This is the way to do it!
+    
     new_context: Context;               // (2)
     new_context.allocator.proc = my_allocator_proc; // (2B)
     new_context.allocator.data = null;
