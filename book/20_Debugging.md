@@ -314,3 +314,6 @@ The _Basic_ module provides an in-built memory debugger, see § 21.4 for how to 
 For Linux and macOS a debugger written in Jai called **Smash** is being built: [Smash](https://github.com/rluba/smash).
 
 Jonathan Blow uses Visual Studio for debugging the compiler (C++) (for Jai??), and uses [RemedyBG](https://remedybg.itch.io/remedybg) for debugging the Sokoban game.    
+
+## 20.7 The WinDbg debugging tool
+For debugging on the Windows platform, a new tool is the WinDbg app, which is in preview (for free) available from the Microsoft Store. It can be used to debug kernel-mode and user-mode code, analyze crash dumps, and examine the CPU registers while the code executes.

@@ -10,7 +10,7 @@ main :: () {
     hello(phrase = "booya", name = "fred"); 
     hello("fred", phrase = "booya"); 
     hello(name = "fred", "booya");
-    hello("fred", 3.14);  
+    // hello("fred", 3.14);  
 }
 
 /*

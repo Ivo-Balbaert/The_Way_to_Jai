@@ -6,7 +6,7 @@ If you find mistakes, ambiguities, things that are not clear, please create an i
 
 The text is backed by more than 200 complete working Jai examples and growing. They are all automatically tested at each new version of the Jai compiler, so this text and code will never get outdated.
 
-[Code tested to compile/run with Jai version beta 0.1.051]
+[Code tested to compile/run with Jai version beta 0.1.052]
 
 _Table of Contents_
 
