@@ -438,21 +438,30 @@ See _26.6_insert.jai_:
 ```c++
 #import "Basic";
 
+my_code :: #string END_STRING
+  a += 100;
+  b += 100;
+  c += 1000;
+END_STRING;
+
 main :: () {
     a := 1;
     b := 2;
     #insert "c := a + b;";   // (1)
-    print("c is %\n", c); // => c is 3
+    print("c is %\n", c);    // => c is 3
 
     d :: "add(42, 8);";      // (2)
     x := 1 - #insert d;
     print("x = %\n", x);     // => x = -49
 
     add :: (n: int, m: int) -> int { return n + m; };
+
+    #insert my_code;         // (3) 
+    print("a, b, c are % % % \n", a, b, c);    // => a, b, c are 101 102 1003
 }
 ```
 
-The 1st way #insert can be used is illustrated in line (1): there `#insert` takes a string containing a line of code, and inserts it as code at that location in the source. Line (2) shows that it also can be used at an expression level.  
+The 1st way #insert can be used is illustrated in line (1): there `#insert` takes a string containing a line of code, and inserts it as code at that location in the source. Line (2) shows that it also can be used at an expression level.  Line (3) shows how a multi-line string can be inserted as a piece of code.
 
 Here is a more useful example, where #insert is used with multi-line strings:
 See _26.24_insert_multi.jai_:
@@ -764,7 +773,7 @@ The ` mechanism for looking up outer variables only works one level up.
 Line (5) shows that a macro can have parameters, just like any proc. This is a way to avoid the backtick syntax.
 `macro2` defined in line (6) refers to two outer variables b and c. In this case it returns 1, but just before leaving the macro, it prints something by using the `defer` keyword in line (6A). But notice what happens when we use `defer in line (6B): because of the backtick the defer now takes the scope of the caller (main() in this case) as its scope, and prints its message just before main() ending (see the attached complete output in both cases).
 `macro3` shows _inner_ or _nested_ macros: a macro can contain and call macros defined inside itself. But there is a limit as to how many macro calls you can generate inside another macro.  
-`factorial` is an example of a recursive macro; #if needs to be used here, else you get the following `Error: Too many nested macro expansions. (The limit is 1000.)` 
+`factorial` is an example of a recursive macro; #if needs to be used here (instead of if), else you get the following `Error: Too many nested macro expansions. (The limit is 1000.)` 
 `maxfunc` is a procedure which calls a nested macro `macron`; this returns "Backtick return macro" as return value from `maxfunc`.  
 
 **Exercise** (see changer_macro.jai)  
@@ -857,10 +866,16 @@ main :: () {
     bubble_sort(arr, #code (a <= b));
     print("sorted array: %\n", arr);
     // => sorted array: [-2500, -89, 0, 7, 23, 42, 54, 108, 666, 1024]
+
+    for i: 0..9  arr[i] = cast(int) random_get() % 100;
+    bubble_sort(arr, #code (a < b));
+    print("sorted array: %\n", arr);
+    // => sorted array: [-58, -43, -33, -33, -25, 6, 26, 78, 89, 92]
 }
 ```
 
-The macro `bubble_sort` defined in line (1) takes an array and a piece of code to compare subsequent item-pairs of the array. The `#insert,scope()` in (2) (formerly #insert_internal) makes it possible to use the outer macro-variables a and b in compare_code. It lets you specify the scope into which to insert the target Code or string, by saying #insert,scope(target). 'target' is a Code that must be constant at compile-time. The scope where the Code lives is used as the enclosing scope for the #insert (which determines how identifiers inside the inserted code are resolved). If they are not in order, they are swapped.
+The macro `bubble_sort` defined in line (1) takes an array and a piece of code to compare subsequent item-pairs of the array. The `#insert,scope()` in (2) (formerly #insert_internal) makes it possible to use the outer macro-variables a and b in compare_code, so it allows code to access variables in the local scope.  It lets you specify the scope into which to insert the target Code or string, by saying #insert,scope(target). 'target' is a Code that must be constant at compile-time. The scope where the Code lives is used as the enclosing scope for the #insert (which determines how identifiers inside the inserted code are resolved). If they are not in order, they are swapped.
+`#insert,scope() compare_code` inserts a comparison code (a <= b) into a bubble sort. The inserted code acts like a comparison function, except without the drawbacks of function pointer callback performance cost.
 This example also shows that a macro can be polymorphic.
 
 ### 26.5.5 Using a macro for swapping values
@@ -1124,9 +1139,10 @@ We test on For_Flags.REVERSE to either start with list.first or list.last. Using
 Use #if instead of ifx  (see for_expansion_version3B.jai) so that you get 2 different compiled versions, one for the for, and one for the reversed for (<).
 How many compiled versions do you have when using if instead of #ifx? 
 
+See also [Named Custom for Expansion](https://jai.community/docs?topic=176) for an example of a for_expansion for a Tree structure.
 
 ## 26.8 The #modify directive
-The **#modify** directive can be used to insert some code between the header and body of a procedure or struct, to change the values of the polymorph variables, or to reject the polymorph for some types or combination of variables. #modify allows to inspect generic parameter types at compile-time. It is a block of code that is executed at compile-time each time a call to that procedure is resolved. 
+The **#modify** directive can be used to insert some code between the header and body of a procedure or struct, to change the values of the polymorph variables, or to reject the polymorph for some types or combination of variables. #modify allows to inspect generic parameter types. It is a block of code that is executed at compile-time each time a call to that procedure is resolved. 
 1) the polymorph types (T, and so on) are resolved by matching.  
 2) then the body of the #modify is run. In there, the value of T is not constant; it can be changed to whatever you want.   
 3) then #modify returns a bool value:
@@ -1541,7 +1557,8 @@ modified := compiler_get_code(root);
 (for a complete working example, see how_to/630, 2nd example)
 
 ## 26.12 The #type directive and type variants
-This directive tells the compiler that the next following syntax is a new type.  
+This directive tells the compiler that the next following syntax is a type literal, useful for defining procedure types and variant types. Variant types are like alias types (see § 9.1), but differ in the casting behavior.
+
 For example:
 ```c++
 IL_LoggingLevel :: u16;

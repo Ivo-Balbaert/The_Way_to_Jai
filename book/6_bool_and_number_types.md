@@ -45,12 +45,12 @@ _Question_ What is the value of `"3" == 3`, why?
 _Answer_ This gives an error! Error: Type mismatch. Type wanted: string; type given: s64.
 
 ### 6.1.2 Boolean operators
-The negation operator **!** changes a true value to false and vice-versa.  
-The **&&** (and) operator is true only when both operands are true. 
-The **||** (or) operator is false only when both operands are false.  
+The negation operator (boolean NOT) **!** changes a true value to false and vice-versa.  
+The **&&** (boolean AND) operator is true only when both operands are true. 
+The **||** (boolean OR) operator is false only when both operands are false.  
 They operate in a 'short-circuit' manner, meaning:
 for && when the 1st operand is false, the 2nd operand is not evaluated, because we know the result is false.
-for !! when the 1st operand is true, the 2nd operand is not evaluated, because we know the result is false.
+for || when the 1st operand is true, the 2nd operand is not evaluated, because we know the result is false.
 
 You can find complete truth tables [here](https://en.wikipedia.org/wiki/Truth_table).
 
@@ -82,7 +82,7 @@ d:/Jai/The_Way_to_Jai/6_Bool_and_number types/examples/6.3_assert.jai:5: main
 
 Instead of always printing out if a bool expression is true of false, there is a handy shortcut with the **assert** procedure, defined in module _Basic_.
 
-When the expression is true, nothing happens. When the expression is false, an assert stops the programs execution with **Assertion failed** and the line where it happened, and prints out a stack trace. A message parameter after the expression is optional, but when there is one, it is also printed out (see the example in line (1)).
+When the expression is true, nothing happens. When the expression is false, an assert stops the program execution with **Assertion failed** and the line where it happened, and prints out a stack trace. A message parameter after the expression is optional, but when there is one, it is also printed out (see the example in line (1)).
 
 assert also works with complex expressions, procedure calls, and so on. It is a very useful tool to make sure your program is always in a correct state. It is also very handy during debugging.
 Also you can leave important assert statements in production code and disable them as described below. That way, when a problem occurs you can quickly enable them in development/test to try to find the cause.
@@ -234,6 +234,8 @@ fails with the same previous error as when doing a cast(u8) a;
 In the float to int example, this works but truncates:  
 `e = xx pi;`
 
+Use xx to do a quick cast, you can always write the complete cast() when reviewing the code.
+
 #### 6.2.5.1 - Cast of bool to int
 bool values can be autocast to ints with xx (see line (7)):
 ```c++    
@@ -290,7 +292,7 @@ true
 */
 ```
 
-These are Jai's bitwise operators:
+These are Jai's bitwise operators (they work as in C):
 
 ```c++
      | - bitwise OR

@@ -115,8 +115,31 @@ You can even import a specific string into your program with `#import, string`:
 Then in the .build folder, a file .added_strings_w2.jai is created which contains this added string.
 
 ## 8.5 Structuring a project
-A project can consist of many source files and modules that are called. But there can only be one main source file. This file contains the `main()` procedure and structures the project with #imports and #loads. It is often called `main.jai` or `first.jai`.
+A project can consist of many source files and modules that are called. But there can only be one main source file. This file contains the `main()` procedure and structures the project with #imports and #loads. It is often called `main.jai`.
 
+## 8.5.1 The folder structure
+For a quick test or a simple program containing a few hundreds of lines of code, a `main.jai` (or whatever you call it in that case) may be sufficient. This source file can simply be compiled with the jai tool and its command-line arguments (see § 2B and 3).  
+
+For small to medium-sized projects, the following folder structure if often used:
+
+```
+\project_name
+    \run
+        \data
+        project_name.exe
+    \src
+        main.jai
+        other .jai files
+    build.jai
+```
+
+The main.jai #loads the other source files in \src, perhaps also data-files from \run\data.  
+`build.jai` (formerly called `first.jai`) is a Jai source file that describes (in Jai) the project's compilation process. Now you start compilation with `jai build.jai`. This is described in detail in § 30.  
+The executable produced by the compilation through build.jai is most often placed in the \run folder (also called `\run_tree`). It can be named after the project, but this is by no means necessary. This is how you code this in build.jai (see § 30):
+`set_build_options_dc(.{output_path="run", output_executable_name="project_name"});`  
+The \run\data can contain data files such as fonts, images, and so on.
+
+## 8.5.2 The source code structure
 The order of statements in a Jai source file is not mandatory. However, for readability  it can be good to adhere to some conventions, particularly in a big codebase.
 
 >It is a good convention to put the #import and #load directives at the top of the main file, starting with the #import (s), followed by the  #load (s). That way you know immediately which modules are loaded in the current file, and which source code is copied in. When many modules and files are imported/loaded, it can even be good to order them alphabetically.  

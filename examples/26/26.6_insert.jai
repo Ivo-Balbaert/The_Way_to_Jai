@@ -1,5 +1,11 @@
 #import "Basic";
 
+my_code :: #string END_STRING
+  a += 100;
+  b += 100;
+  c += 1000;
+END_STRING;
+
 main :: () {
     a := 1;
     b := 2;
@@ -11,4 +17,7 @@ main :: () {
     print("x = %\n", x);     // => x = -49
 
     add :: (n: int, m: int) -> int { return n + m; };
+
+    #insert my_code;         // (3) 
+    print("a, b, c are % % % \n", a, b, c);    // => a, b, c are 101 102 1003
 }

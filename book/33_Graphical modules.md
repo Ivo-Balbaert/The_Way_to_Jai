@@ -316,10 +316,15 @@ GL Vendor = NVIDIA Corporation
 GL Version = 4.6.0 NVIDIA 456.71
 ```
 
+## 33.6 Direct3D
+Direct3D is a graphics application programming interface (API) for Microsoft Windows. Part of DirectX, Direct3D is used to render three-dimensional graphics in applications where performance is important, such as games. Direct3D uses hardware acceleration if it is available on the graphics card, allowing for hardware acceleration of the entire 3D rendering pipeline or even only partial acceleration.
+The modules *d3d_compiler* , _d3d11_ and _d3d12_ contain interfacing code for Direct3D.
+d3d12 contains a minimal example `example.jai`, as well as jai\exampleples\d3d11_example.
+
 Other modules in distribution:
 - ImGui
 - Metal
 - - nvt
 - -stb_image and stb_
-- Vulkan
+- Vulkan (successor of OpenGL)
 - Window_Creation

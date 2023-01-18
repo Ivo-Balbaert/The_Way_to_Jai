@@ -292,7 +292,7 @@ main :: () {
 }
 ```
 
-In the code above lines (1)-(2) declare to dynamic arrays, with the typical syntax:  
+In the code above lines (1)-(2) declare two dynamic arrays, with the typical syntax:  
 `[..]type`  
 To release memory, you can either use the `array_free` proc (line (3)), or the `free` proc which needs a pointer to the memory (line (4)).
 To add one or several item(s) (see § 18B) at a time, use the `array_add` proc with a pointer to the array, and the item(s) as arguments (see lines (5) and following). If you want your array to only contain unique items, use `array_add_if_unique` instead. 

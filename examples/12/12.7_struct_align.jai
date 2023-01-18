@@ -3,7 +3,7 @@
 Accumulator :: struct {
   accumulation: [2][256] s16 #align 64;         // (1)
   computedAccumulation: s32;
-}
+} #no_padding                                   // (1C)
 
 Object :: struct {member: int #align 64; }      // (1B)
 

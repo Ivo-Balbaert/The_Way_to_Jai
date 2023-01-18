@@ -58,6 +58,7 @@ Eight types exist according to their size (number of bytes) and whether they are
         range: -2,147,483,648 to +2,147,483,647 or 0 to 4,294,967,295
 	`s64` or `u64` - signed and unsigned 8 byte (or 64 bit) integers,  
         range: -9,223,372,036,854,775,808 to +9,223,372,036,854,775,807 or 0 to 18,446,744,073,709,551,615
+    (Coming: `s128` and `u128`)
 
 `int` defaults to `s64`
 

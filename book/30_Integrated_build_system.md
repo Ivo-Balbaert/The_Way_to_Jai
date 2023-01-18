@@ -287,6 +287,7 @@ To stop making a .pdb file, use:  `target_options.emit_debug_info=.NONE;`
 
 ### 30.4.2 The output type
 Possible values are: .NO_OUTPUT; .DYNAMIC_LIBRARY; .STATIC_LIBRARY; .OBJECT_FILE; with as default .EXECUTABLE;
+(For examples of useage, see how_to/400_workspaces.jai and Jai\examples\output_types)
 
 ### 30.4.3 The output executable name
 This is only the filename of the executable, it includes no extension.

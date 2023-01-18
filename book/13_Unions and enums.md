@@ -170,7 +170,28 @@ enum {
     VERBOSE;        // 3
 }
 ```
-( example of use ??)
+
+Here is an example of an anonymous enum:
+See *13.5_anonymous_enum*:
+```c++
+#import "Basic";
+
+state: enum {
+    A;
+    B;
+};
+
+main :: () {
+    some_function :: () {
+        state = .B;
+    }
+
+    some_function();
+    print("state is: %", state); // => state is: B
+}
+```
+`state` is not defined as a real enum, because that requires ::  
+This can be useful for an enum that has only one copy.
 
 
 The Jai standard library makes heavy use of enums, for example in module _Preload_:  

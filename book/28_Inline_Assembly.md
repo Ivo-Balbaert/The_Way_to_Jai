@@ -263,3 +263,5 @@ This module contains useful routines for 64-bit Intel/AMD x86 computer architect
 * `mfence` : Memory Fence - performs a serializing operation on all load-from-memory and store-to-memory instructions that were issued prior the mfence instruction
 * `pause`
 * `get_cpu_info` : gets the CPU info and checks whether a particular assembly instruction is available, example:
+
+(For more details: see [Community Wiki](https://jai.community/docs?topic=178))

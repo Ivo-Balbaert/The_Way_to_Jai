@@ -174,6 +174,7 @@ See *19.2_bytes.jai*:
 
 ```c++
 #import "Basic";
+#import "String"; // for is_any
 
 main :: () {
     print("%\n", to_upper(#char "a")); // => 65 - ASCII value of 'A'

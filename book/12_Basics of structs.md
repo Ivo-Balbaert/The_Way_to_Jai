@@ -154,6 +154,28 @@ struct {
 ```
 (see an example of using this in § 12.13.1)
 
+Here is an example of using an anonymous struct:
+See *12.11_anonymous struct.jai*:
+```c++
+#import "Basic";
+
+state: struct {
+    a, b: int;
+};
+
+
+main :: () {
+    some_function :: () {
+        state.a = 4;
+    }
+
+    some_function();
+    print("state is: % - %", state.a, state.b); // => state is: 4 - 0
+}
+```
+It is not a real struct, because it is not defined as a constant with ::
+This can be a useful grouping for data that only has one copy.
+
 Declaring a struct doesn't allocate memory, it just defines a kind of template or blue-print for a data structure to be defined in imperative scope. An **instance** or object of a struct is created with for example:  
 `bob: Person;`
 Here the instance is `bob`, and the struct is `Person`. When this code executes, memory is allocated (when nothing else is specified, all members get their default zero values).
@@ -219,6 +241,8 @@ bob2 := Person.{"Robert", 42, Vector2.{64.139999, -21.92}};
 The Struct_Name. prefix is needed to inform the compiler which struct type is defined here. Note that all values provided in a struct literal must be constant, you can't use variables.
 
 In struct literals you can also name the fields, like `field = value`. This allows you give the values in a different order, and fields that have default values don't need to be specified. Struct literals are only for values that are constant at compile-time.
+
+Here is a simple way to reset a struct (also an anonymous struct) to its default values:  `john_doe := Person.{};`
 
 **Exercise:**
 Make a Super_Node struct variable with values 42 and 108; use the long and literal notation(See *making_struct.jai*)
@@ -483,8 +507,38 @@ This means that Employee is effectively a **subclass** of Person, whereas Patien
 A slightly different way of using #as is demonstrated in Example 2. Here, #as indicates that a struct can implicitly cast to one of its members `i`, and in line (6) 'num' is passed to the function as an int.
 More than one field can be prefixed with #as.
 
-#as is also used in the Type_Info_ types, discussed in § 16.2
+Here is an example of a how to start a building a game entity system:  
+See *12.12_#as_using_entities.jai*:
+```c++
+#import "Basic";
 
+Entity :: struct {
+    type: Type;
+    x, y: float;
+}
+
+Player :: struct {
+    using #as base: Entity;
+    player_index: int;
+}
+
+main :: () {
+    entities: [..] *Entity;
+    p := New(Player);
+    p.type = Player;
+    p.player_index = 1;
+    array_add(*entities, p);
+
+    for entities {
+        if it.type == Player {
+            player := cast(*Player) it;
+            print("%\n", p.player_index); // => 1
+        }
+    }   
+}
+```
+
+#as is also used in the Type_Info_ types, discussed in § 16.2
 
 **Exercise**
 Declare a Point3D struct with 3 float coordinates x, y and z.
@@ -568,7 +622,7 @@ See *12.7_struct_align.jai*:
 Accumulator :: struct {
   accumulation: [2][256] s16 #align 64;         // (1)
   computedAccumulation: s32;
-}
+} #no_padding                                   // (1C)
 
 Object :: struct { member: int #align 64; }     // (1B)
 
@@ -588,6 +642,8 @@ main :: () {
 ```
 
 The `Accumulator.accumulation` field and `global_var` in lines (1) and (3) are 64 bit cache-aligned. Line (4) shows that indeed the address of `global_var` is divisible by 64. In line (5) the heap allocation is NOT 64-bit aligned. (Line (1B) doesn't have any effect.)
+It is often accompanied by the directive **#no_padding**, meaning no additional empty bytes are added to align with word-size.
+(For a good explanation see [Structure Padding in C](https://www.javatpoint.com/structure-padding-in-c)
 (2) #align 1 ??
 
 ## 12.12 Making definitions in an inner module visible with using

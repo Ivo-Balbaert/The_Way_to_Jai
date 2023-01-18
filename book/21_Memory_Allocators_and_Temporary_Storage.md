@@ -225,6 +225,8 @@ If we do free them, we get the 2nd output.
 You can ask for a memory leak report at any time in the program.
 If the output is too verbose, there are ways to alleviate that (see modules/Basic/examples/memory_debugger.jai)
 
+The Visual Memory Debugger tool in module _Basic_ can communicate the collected information about memory allocations to an external visualization client like `examples/codex_view`.
+
 **Exercise**
 Try this out on program 18.5_array_for.jai, without and with free (see leak_array_for.jai).
 
