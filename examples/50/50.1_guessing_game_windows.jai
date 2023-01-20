@@ -1,6 +1,17 @@
 #import "Basic";
 #import "Random";
-#import "POSIX";  
+#import "Windows";
+
+kernel32 :: #system_library "kernel32";
+stdin, stdout: HANDLE;
+
+ReadConsoleA  :: (
+    hConsoleHandle: HANDLE, 
+    buff : *u8, 
+    chars_to_read : s32,  
+    chars_read : *s32, 
+    lpInputControl := *void 
+) -> bool #foreign kernel32;
 
 Game :: struct {            // (1)
     answer: int;
@@ -47,11 +58,17 @@ play :: (game: *Game) {
 }
 
 read_line :: () -> string {
-    buffer: [4096] u8;
-    // No real way to distinguish between empty and error?
-    bytes_read := read(STDIN_FILENO, buffer.data, buffer.count - 1);
-    // No allocation on empty. Could use tprint here if wanted.
-    return sprint("%", to_string(buffer.data, bytes_read));
+    MAX_BYTES_TO_READ :: 1024;
+    buffer : [MAX_BYTES_TO_READ] u8;
+    result: string = ---;
+    bytes_read : s32;
+    
+    if !ReadConsoleA( stdin, buffer.data, xx buffer.count, *bytes_read )   return "";
+
+    result.data  = alloc(bytes_read);
+    result.count = bytes_read;
+    memcpy(result.data, buffer.data, bytes_read);
+    return result;
 }
 
 report :: (game: Game, guess: int) {
@@ -72,6 +89,7 @@ update :: (game: Game, guess: int) -> next: Game {
 }
 
 main :: () {
+    stdin = GetStdHandle( STD_INPUT_HANDLE );
     high :: 100;
     random_seed(current_time_monotonic().low);
     answer := pick_answer(high);
