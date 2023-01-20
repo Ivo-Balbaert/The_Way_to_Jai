@@ -30,12 +30,13 @@ main :: () {
     // if !success {
     //     return;
     // }
-    text, success := read_entire_file(TESTFILE);
+    text, success := read_entire_file(TESTFILE);    // (5B)
     assert(success, "Error. Cannot read file.\n" );
     if success {
         print("File successfully read.\n");
     } else {
         print("Error. Cannot open file.\n");
+        exit(-1);
     }
     print("Contents of TESTFILE:\n\"%\"\n", text);
 

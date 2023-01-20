@@ -185,7 +185,7 @@ main :: () {
 In the example above, we see that the procedure `discuss` Match structs, but also Thing structs, in general any struct that has a name and a type field.
 
 See this applied in module _Math/module.jai_ and _Math/matrix.jai_.
-See also the use of a polymorphic struct when constructing an SOA data design in § 26.9.2
+See also the use of a polymorphic struct when constructing an SOA data design in § 26.10.2
 
 ## 23.7 The #bake_constants directive
 We already discussed #this in § 17.9. In § 22.5 we talked about #bake_arguments, where you can bake in the value of a parameter at compile time. There is also a **#bake_constants** directive, where you can bake in a polymorphic type with a concrete type. In other words: a polymorphic procedure is precompiled for a specific type.  

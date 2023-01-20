@@ -103,7 +103,8 @@ while true {
 ```
 In line (1), the memory is freed and a new cycle can begin.
 
-`temp` is an abbreviation for `__temporary_allocator` (the long variable name for Temporary Storage), so the examples in § 21.1 can be rewritten when the Allocator is Temporary Storage as follows:
+`temp` is an abbreviation for `__temporary_allocator` (the long variable name for Temporary Storage).  
+The procedure `push_allocator(temp)` is used to set temporary storage as the current allocator (see § 25.2).
 
 ## 21.3 Examples of using Temporary Storage
 See *21.1_temp_storage.jai*:
@@ -157,7 +158,7 @@ Line (1) shows how to use the temporary allocator for creating a dynamic array. 
 Line (6B) shows how to store a string builder in temporary storage; this makes calling `free_buffers` unnecessary.
 
 ## 21.3.3 Using New with temp
-As we saw in § 21.1, New can take any defined Allocator, so also `temp`! This can be done with the following code:
+As we saw in § 21.1, New can take any defined Allocator, so also `temp`. This can be done with the following code:
 
 ```c++
 Node :: struct {
@@ -166,14 +167,17 @@ Node :: struct {
 }
 
 node  := New(Node, allocator = temp);
+
+// static arrays:
 array := NewArray(10, int, temp);
 
+// dynamic arrays:
 arrdyn: [..] int;
 arrdyn.allocator = temp;
 ```
 
 ## 21.3.4 Using Temporary Storage on the Stack
-This can be done by using the `auto_release_temp` macro to set the mark. Then you can allocate whatever you want temporarily, then release all the memory at once when the stack unwinds by setting the mark back to the original location with `auto_release_temp()`.
+This can be done by using the `auto_release_temp` macro (defined in module _Basic_) to set the mark. Then you can allocate whatever you want temporarily, then release all the memory at once when the stack unwinds by setting the mark back to the original location with `auto_release_temp()`.
 (example ??)
 
 ## 21.3.5 How much memory is allocated in temp?

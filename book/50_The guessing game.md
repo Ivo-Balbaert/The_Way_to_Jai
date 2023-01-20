@@ -1,7 +1,7 @@
 # 50 The guessing game
 ( This example was taken from [jai-comparisons](https://github.com/contextfreecode/jai-comparisons) )
 
-This is a console game. The program randomly chooses a number lower than a certain maximum (say 100). The player inputs an integer between 0 and 100. The program tells if the number is too low or too high, and when you have guessed the right number in how many steps.  
+This is a console game. The program randomly chooses a number lower than a certain maximum (say 100). The player inputs an integer between 0 and 100. The program tells if the number is too low or too high, and when you have guessed the right number, in how many steps.  
 Here is an example of the interaction between program and player:  
 `ivo@DESKTOP-KN14QQK:~/jai*projects$ ./guessing_game  
 Guess a number between 1 and 100: 75  
@@ -20,7 +20,7 @@ Total input errors: 0
 The current version works only on Linux: it imports the _POSIX_ module for the `read` function in procedure `read_line` (which uses the `libdl` library).
 
 ## 50.1 Discussion
-See *50.1_guessing_game.jai*:
+See *50.1_guessing_game_linux.jai*:
 ```c++
 #import "Basic";
 #import "Random";
@@ -119,8 +119,8 @@ This consists of the following steps:
     --> (1.1) `ask_guess`
         --> (1.1.1) `read_line`
 
-> This reads in a string, which must be converted to an integer before returning as the `guess`.
-> It does this by calling the proc `read` from module _POSIX_, which reads input from stdin and stores it in a `buffer`. This is converted to a string with `to_string`.
+This reads in a string, which must be converted to an integer before returning as the `guess`.
+It does this by calling the proc `read` from module _POSIX_, which reads input from stdin and stores it in a `buffer`. This is converted to a string with `to_string`.
 
 (2) `report`
     This compares the guess with the answer, and prints the guess and the response from the game.
@@ -128,6 +128,6 @@ This consists of the following steps:
 (3) `update`
     Here the Game state is updated: the number of guesses is incremented and `done` is set to true when guess == answer.
 
-When done == true, this stops the while loop in play:
+When done == true, the while loop in play stops :
 `while !game.done`
 and line (3) returns. This prints "Finished in ", the number of guesses and eventual errors and stops the game.

@@ -138,43 +138,9 @@ Person :: struct {
     location        : Vector2;
 }
 ```
-All struct fields are _public_: they can be read and even changed everywhere! There is a convention to prefix fields which should be private by `_`, but the compiler does not enforce that: there is no built in feature to make a member field private. A struct field can be of type void, for example to put notes on struct members that do not take up space (see 13.1_unions.jai).
-
-> Unlike classes in other languages, Jai does NOT have member functions: there is no concept of functions "belonging" to a particular struct or datatype. So it's better to not define a procedure inside a struct.
+All struct fields are _public_: they can be read and even changed everywhere! This means that any function can modify and change a struct's member fields. There is a convention to prefix fields which should be private by `_`, but the compiler does not enforce that: there is no built in feature to make a member field private. A struct field can be of type void, for example to put notes on struct members that do not take up space (see 13.1_unions.jai).
 
 A struct definition must occur in a data scope (see § 7).
-
-An **anonymous struct** can be defined as for example:
-```c++
-struct {
-     x: int;
-     y: int;
-     z: int;
-}
-```
-(see an example of using this in § 12.13.1)
-
-Here is an example of using an anonymous struct:
-See *12.11_anonymous struct.jai*:
-```c++
-#import "Basic";
-
-state: struct {
-    a, b: int;
-};
-
-
-main :: () {
-    some_function :: () {
-        state.a = 4;
-    }
-
-    some_function();
-    print("state is: % - %", state.a, state.b); // => state is: 4 - 0
-}
-```
-It is not a real struct, because it is not defined as a constant with ::
-This can be a useful grouping for data that only has one copy.
 
 Declaring a struct doesn't allocate memory, it just defines a kind of template or blue-print for a data structure to be defined in imperative scope. An **instance** or object of a struct is created with for example:  
 `bob: Person;`
@@ -685,7 +651,7 @@ Compile `12.8_inner_module_test.jai` with:
 and then run it with:  12
 
 ## 12.13 Struct parameters
-See *12.8_struct_parameters.jai*
+See *12.9_struct_parameters.jai*
 ```c++
 #import "Basic";
 
@@ -745,7 +711,7 @@ In line (2), we make an Entity instance with an anonymous struct as Payload. Thi
 ## 12.14 Structs with relative pointers
 Relative pointers (first discussed in § 10.6) are particularly suited when they point to an object in the memory vicinity, as is the case between member fields of a struct instance.
 
-See *12.9_struct_relative_pointer.jai*
+See *12.11_struct_relative_pointer.jai*
 ```c++
 #import "Basic";
 
@@ -778,3 +744,75 @@ main :: () {
 
 Type Holder in line (1) has a 16 bit relative pointer field a, which points to a float. Field a points to field b (line (2)), which indeed is a float.  
 (3) is a declaration assigning to the relative pointer a, but its type is a full pointer, not a relative pointer. This is necessary, because when we copy the relative pointer to the stack, the resulting pointer would overflow and not be valid, because there is no way to reach that data structure from the stack. By converting it to a full pointer, we are able to point to the original value 42.42, as shown in line (4).
+
+## 12.15 Anonymous structs
+An **anonymous struct** can be defined as follows:
+```c++
+struct {
+     x: int;
+     y: int;
+     z: int;
+}
+```
+(see an example of using this in § 12.13.1)
+
+Here is an example of using an anonymous struct:
+See *12.13_anonymous struct.jai*:
+```c++
+#import "Basic";
+
+state: struct {             // (1)
+    a, b: int;
+};
+
+variable := struct {
+  x: int;
+  y: int;
+  z: int;
+}
+
+Vector3 :: struct {             // (2)
+  union {
+    struct { x, y, z: float; }
+    struct { r, g, b: float; }
+    struct { s, t   : float; }
+  }
+}
+
+main :: () {
+    some_function :: () {
+        state.a = 4;
+    }
+
+    some_function();
+    print("state is: % - %", state.a, state.b); // => state is: 4 - 0
+    print("variable is: %", variable); // => variable is: u64
+}
+```
+`state` defined in line (1) is not a real struct, because it is not defined as a constant with ::
+This can be a useful grouping for data that only has one copy, and when creating complex data structures mixing anonymous unions and structs together (see line (2)).
+
+## 12.16 Member procs
+Unlike C++, Java, or any other object-oriented language, structs do not have member functions associated with them. There is no concept of functions “belonging” to a particular object. Functions can be declared inside structs, but functions inside structs are only using the struct as a namespace.
+
+> Unlike classes in other languages, Jai does NOT have member functions: there is no concept of functions "belonging" to a particular struct or datatype. So it's better to not define a procedure inside a struct.
+
+Here is an example of showing what is possible, but it is not recommended:
+See *12.14_member_procs.jai*:
+```c++
+#import "Basic";
+
+Obj :: struct {
+  x: int;
+  set_x :: (obj: *Obj, x: int) {
+    obj.x = x;
+  }
+}
+
+main :: () {
+    o: Obj;
+    // o.set_x(100); // Not allowed: Error: Not enough arguments: Wanted 2, got 1
+    Obj.set_x(*o, 100);
+    print("o is %", o); // => o is {100}
+}
+```

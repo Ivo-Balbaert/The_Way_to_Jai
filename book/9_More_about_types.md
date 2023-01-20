@@ -78,7 +78,7 @@ main :: () {
 ```
 ## 9.1 Constants of type Type: Type alias
 An existing type can be given a new name (a **type alias**), defined as a constant, see Thread_index and TI in lines (0) and (8). Then you can define variables of the new type, and use these in other operations defined for the basic type. 
-See also type variants: § 26.12.
+See also type variants: § 26.13.
 
 ## 9.2 Variables of type Type
 In lines (1) to (4) we have three variables a to d that all have type Type; d even has value Type!  

@@ -1,7 +1,7 @@
 # Chapter 17 - Basics of procedures
 
 Until now we've only used the main :: () proc.
-We know that we can create local code blocks (see 7.1.2), and that we can repeat a code block with in a or for loop. But it is also very useful to be able to call a code block by name, which is exactly what a **procedure** or **proc** (more often called **functions** in other languages) is. Another definition could be: a proc is a callable set of instructions, with optional parameters and return value(s).
+We know that we can create local code blocks (see 7.1.2), and that we can repeat a code block with in a or for loop. But it is also very useful to be able to call a code block by name, which is exactly what a **procedure** or **proc** (more often called **functions** in other languages) is. Another definition could be: a proc is a callable set of statements that together perform a task, with optional parameters and return value(s).
 
 ## 17.1 Declaring and calling a proc
 A block of code that is used several times is a good candidate to be wrapped up inside a proc. This reduces code duplication and can enhance code readability.
@@ -66,10 +66,11 @@ Proc names are written the same way as variable names. They are followed by a ::
 A proc can use global variables and also receive data from where it is called through its _argument_ list (arg1: type1, arg2: type2). Each argument has to be typed separately.
 There can be no (like main :: ()), one or more arguments.
 
-A proc can change global variables, and also return values. This is indicated by `->` followed by the type of the value it returns. 
+A proc can change global variables. It can also return values. This is indicated by `->` followed by the type(s) of the value(s) it returns. 
 Inside the body, the data is returned by using the keyword **return**, like `return variable(s)`.
 If a proc doesn't return anything (like main :: ()), it returns void, you can leave -> out, or you could write `-> void` if you wanted to.
 There can be no return values (returns void, like main), or one or several.
+Procs do not return tuple object values as in Rust or Go, but rather return the values in registers.
 
 ### 17.1.1 Exiting from a proc with return
 `return` breaks out of all scopes to the call site of the proc, so statements after this won’t be executed.
@@ -222,12 +223,13 @@ main :: () {
     hello(1, 2); // => a is 1, b is 2
     hello(1);    // => a is 1, b is 9
     hello();     // => a is 9, b is 9
+    hello(b = 42); // (3) => a is 9, b is 42 
 }
 ```
 
 This is simply done by assigning a value to one or more of the arguments of a procedure. Now we can use type inference in the definition of the arguments; the hello proc can have this header:  
 `hello :: (a := 9, b := 9)` 
-In line (1) we see how the argument a in proc1 gets a default value of 0. In the hello proc both arguments a and b get a default value 9. The lines after marker (3) show the effect of calling hello() with zero, one or two arguments. So you  see that with default values, the number of parameters can be smaller than the number of arguments.
+In line (1) we see how the argument a in proc1 gets a default value of 0. In the hello proc both arguments a and b get a default value 9. The lines after marker (3) show the effect of calling hello() with zero, one or two arguments. So you see that with default values, the number of parameters can be smaller than the number of arguments. If you want to pass parameters after the first named argument, you have to give them the argument name, as in line (3).
 
 > When the procedure is called and no parameter is specified for an argument with a default value, then that value is taken as the parameters value.
 
@@ -263,11 +265,32 @@ proc1 :: () -> int, int {   // (1)
     return 3, 5;
 }
 
+proc2 :: () -> a: int, b: int {  // (1B)
+  a := 100;
+  b := 200;
+  return a, b;
+}
+
+proc3 :: (var: bool) -> a: int = 100, b: int = 200 {  // (1C)
+  if var == true then
+    return; 
+  else
+    return 1_000_000;
+}
+
 mult :: (n1: float, n2: float) -> float #must {  // (2)
     return n1 * n2;
 }
 
 main :: () {
+    a := proc1();         // (2B)
+    print("a is %\n", a); // => a is 3
+
+    b, c := proc3(true);   // (2C)
+    print("%, %\n", b, c); // =>  100, 200
+
+    d, e := proc3(false);  // (2D)
+    print("%, %\n", d, e); // => 1000000, 200
     // x, y: int;
     // x, y = proc1();
     // shorter:
@@ -284,8 +307,10 @@ main :: () {
 ```
 
 As we see in line (1), a procedure can also have two or more return values (like in Go). They are listed after the -> and separated by a `,` If it enhances readability, they may be enclosed between (), like -> (int, int)  
-(These are needed when a proc with multiple return values is used as an argument in another proc).  
-The returned values are assigned to an equal number of variables in the left-hand side (see line (3)); if necessary these variables could have been declared earlier. It is not necessary to assign all return values, unless #must is specified (see § 17.6.1)  
+(These are needed when a proc with multiple return values is used as an argument in another proc).
+`proc2` in line (1B) shows named return values. `proc3` in line (1C) shows return values with named default arguments (they have to be named). In the case of a simple return, all return values are automatically returned by default. Lines (2C-D) shows how this works when the proc is called.
+The returned values are assigned to an equal number of variables in the left-hand side (see line (3)); if necessary these variables could have been declared earlier.  
+It is not necessary to assign all return values, as in (2B) where we ignore the 2nd return value. Ignoring values could be a mistake, so Jai provides #must to enforce you to assign all return values (see § 17.6.1)   .
 It is better to return things by value; this avoid having extra stack copies like in C.
 
 **The _ token**
@@ -379,6 +404,8 @@ For another example, see § 22.1
 The following error is given when there are two procs with same name and argument lists in the code on the same scope level:
 **Error: Two overloaded definitions of the same procedure can't have identical argument lists.**
 
+**Exercise**
+In *overloading.jai*, predict what the program will display. Then run it to check you were right.
 
 ### 17.7.1 Overloading in global and local scope
 Suppose we have overloading procs in global and local scope(s). How will the overloading mechanism then work? Look at the four versions of proc2 in the preceding code.  
@@ -403,12 +430,12 @@ main :: () {
 }
 ```
 
-When you tell the compiler explicitly to **inline** a proc call, it means that the proc body code is inserted at the line where the proc is called (the call site), with the parameter values inserted in the right places. So effectively, the proc call is eliminated, thereby saving the overhead of the proc call and enhancing the performance of the program.  
+When you tell the compiler explicitly to **inline** a proc call, it means that the proc body code is inserted at the line where the proc is called (the call site). The proc call is replaced with the actual body of the function, and the parameter values inserted in the right places. So effectively, the proc call is eliminated, thereby saving the overhead of the call and enhancing the performance of the program.  
 The compiler often does this implicitly, without the developer knowing that. But in Jai, the developer can explicitly indicate where to inline (or not line) a proc. This is done with:  
 `:: inline` or `:: no_inline` at the proc declaration
 or:  
 `inline proc_call()` or `no_inline proc_call()` at the call site    
-Inlining is a command to the compiler is forced if possible, it is not a hint.
+Inlining forces the compiler to attempt to inline a procedure, it is not a hint.
 
 In the snippet above you find a concrete example of each of these cases. A proc declared as :: inline by will by default be inlined.  
 (In certain cases it can be that inlining is impossible, for example inside a recursive proc).
@@ -558,7 +585,7 @@ println :: inline (msg: string, args: ..Any) {  // (2)
 ```
 
 To avoid having to type \n for a new line, you can have your own customized procedure `println`. 
-The code shows two overloading versions. Both have the keyword **inline**, to avoid a procedure call to `println`, increasing performance.
+The code shows two overloaded versions. Both have the keyword **inline**, to avoid a procedure call to `println`, increasing performance.
 - (1) just takes 1 argument of the Any type, and calls the standard print procedure from _Basic_, adding a new-line character, so `println` can also print out variables of any type, in contrast to `print`!  
 - (2) takes a format string msg, and takes a variable (..) number of Any type, it calls `print` with the same arguments, and then prints a \n.
 

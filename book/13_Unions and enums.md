@@ -40,6 +40,22 @@ Object :: struct {
   z: float;
 }
 
+// This is an anonymous union.
+variable := union {                 // (7A)
+  x: int;
+  y: int;
+  z: int;
+}
+
+// complex Vector3 example using anonymous structs and unions
+Vector3 :: struct {                  // (7B)
+  union {
+    struct { x, y, z: float; }
+    struct { r, g, b: float; }
+    struct { s, t   : float; }
+  }
+}
+
 main :: () {
   t: T;             // (3)
   t.a = 100;        // (4)
@@ -66,7 +82,9 @@ The size of the union T is 8
 A **union* is defined like a struct, but replacing `struct` by `union`, see line (1). The possible fields are then enumerated, but remember: only one can be active at any time.
 (An alternative definition is to write it as a kind of struct with a **#place** directive; read it as: "in place of a, you can have the following field".) A union field can be of type void (see line (2B), usage ??). 
 
-A variable of the union type is declared in line (3), and one field is given a value in line (4). When another field gets assigned, the value from the previous field is lost and becomes undefined: see line (6).
+A variable of the union type is declared in line (3), and one field is given a value in line (4). When another field gets assigned, the value from the previous field is lost and becomes undefined: see line (6).  
+
+Anonymous unions can be defined or used as in lines (7A-B).
 
 ## 13.2 Working with enums
 An enum (enumerator) is useful when a property can only take as value one of a limited number of named values, like the compass points north, west, east and south.   

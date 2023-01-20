@@ -15,6 +15,7 @@ build :: () {
 
     target_options.output_type = .EXECUTABLE;      
     target_options.output_executable_name = "my_program";
+    // target_options.text_output_flags = 0; //this line disables most of the text output from the compiler
     target_options.output_path = "./.build";
 
     import_path: [..] string;

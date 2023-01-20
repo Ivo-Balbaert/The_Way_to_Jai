@@ -301,7 +301,7 @@ You can get the last item of an array with `peek` without changing the array (5B
 ### 18.4.1 Useful procs for dynamic arrays
 
 We check if an item is present in the array in line (6), use `array_find`, which returns true if the item is found, false otherwise.
-Removal of items within a dynamic array is done with the `remove` proc, as in line (7): we want to remove the item with value 5, so we loop over the array, if-test with it == value, and if true, remove it. This proc is used to safely remove elements while iterating through an array, which is often a problem in other languages. 
+Removal of items within a dynamic array is done with the `remove` proc, as in line (7): we want to remove the item with value 5, so we loop over the array, if-test with it == value, and if true, remove it. This proc is used to safely remove elements while iterating through an array (it workd only inside a for loop), which is often a problem in other languages. 
 Notes:
 - This proc does not work for fixed-size arrays!  
 - This proc does an unordered remove, the removed item is replaced with the last item (in fact: a swap with the last item, and then a remove of the last element). The remove happens in constant time O(1).
@@ -345,7 +345,6 @@ main :: () {
 
     arrp: *int = arrv.data;
     arrp += 1; // incrementing pointer arrp by 1 adds 8 to the pointer
-
 
     arrv2: []int = int.[1,2,3,4,5]; // (2)
     print("arrv2 is %\n", arrv2); // => arrv2 is [1, 2, 3, 4, 5]
@@ -689,7 +688,7 @@ Because args is an array, the exact number of arguments is given by `args.count`
 ### 18.10.1 Passing an array as a variable argument
 In line (6B) we pass the array arr defined in line (6A) to proc var_args like this:  
 `var_args(..arr);` or `var_args(args = ..arr);`
-This is in fact the same as calling `var_args(1,2,3,4,5,6,7);`; we say that the array items are _spread_ over args.
+This is in fact the same as calling `var_args(1,2,3,4,5,6,7);`. We say that the array items are _spread_ over args.
 
 ### 18.10.2 Named variable arguments proc
 A named variable and (some) default arguments proc would be defined like:

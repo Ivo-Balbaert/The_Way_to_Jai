@@ -122,7 +122,7 @@ build :: () {
 
 The building process started with `jai build.jai` is done at compile-time when `#run build();` is executed.  
 
-The first step in the building process is always to create a new workspace w (see line (1)), which will be Workspace 3. Sot he following workspaces are created:
+The first step in the building process is always to create a new workspace w (see line (1)), which will be Workspace 3. So the following workspaces are created:
 * Workspace 1: reserved for inner compiler workings;
 * Workspace 2: reserved for the target program, here `build.jai`;
 * Workspace 3: reserved for the building script (we could call it a script, although it's completely written in Jai);
@@ -176,6 +176,8 @@ Why is this useful? Because working in this way, the code string could be genera
 
 When you run the executable `program.exe`, you get the output from `main.jai`:
 `This program was built with a meta-program build.jai`.
+
+A build file can instantiate multiple workspaces, to build various different kinds of binaries (executables, static/dynamic libraries). Each build is completely separate from all the others.
 
 > Remark: The use of a build() function is not mandatory: your build file could just be a #run { ... }, as illustrated in 30.7_generate_llvm_bitcode.
 
@@ -278,7 +280,7 @@ For a highly optimized build, having the same effect as `clang -O2`, you would u
 ```c++
 set_optimization_level(*target_options, 2, 0); 
 ```
-Optimized builds take much longer (??) time than debug builds, but are around 2x as fast as an un-optimized build.
+Optimized builds take much longer (10x) time than debug builds, but are around 2x as fast as an un-optimized build.
 
 This automatically turns OFF all runtime checks, and specifies a number of optimizations for LLVM code production.
 
@@ -361,9 +363,16 @@ main :: () {}
 For suitable debug / release options, see § 30.8
 To build for production (release), you would do only `#run build_release();`, or use the command-line option `-run build_release()` while doing `jai build_debug_release.jai`
 
+### 30.4.10 Preventing the output of compiler messages
+If you want a cleaner output, add this code line to the build:
+```c++
+target_options.text_output_flags = 0; 
+```
+This line disables most of the text output from the compiler.
+
 ## 30.5 Changing the default metaprogram
 Here is how to substitute the default metaprogram with your own:  
-Your own metaprogram should be a module (let's call it Build, but any name is ok). This Build module must be in a folder Build (either in the default `jai/modules` folder or in a dedicated `modules_folder`) containing a file module.jai. This file has to contain a `build()` proc and a `#run build()` (it should not contain a `main` proc. You can start from 30.3_build.jai or  _modules/Minimal_Metaprogram.jai_ to make your Build() module. You can then use your metaprogram as follows: 
+Your own metaprogram should be a module (let's call it Build, but any name is ok). This Build module must be in a folder Build (either in the default `jai/modules` folder or in a dedicated `modules_folder`) containing a file module.jai. This file has to contain a `build()` proc and a `#run build()` (it should not contain a `main` proc). You can start from 30.3_build.jai or  _modules/Minimal_Metaprogram.jai_ to make your Build() module. You can then use your metaprogram as follows: 
 `jai main.jai -- meta Build`  
 if Build is in the default jai/modules folder, or  
 `jai main.jai -- import_dir "d:/Jai/my_modules" meta Build`  
@@ -544,7 +553,7 @@ If you want Jai to do just the typechecking and not to compile anything, the met
 
 If you want to output info gathered during compilation, use the phase `PRE_WRITE_EXECUTABLE, which occurs after we have received all the typecheck data, but before COMPLETE (otherwise it would overlap with any diagnostic output printed by the compiler itself, see how_to 490).
 
-4) `.TYPECHECKED` every time code has passed typechecking, this gives an huge amount of output : see lines (12)-(13).  
+4) `.TYPECHECKED` every time code has passed typechecking, this gives a huge amount of output : see lines (12)-(13).  
 
 ```
 Code declaration: {adb_1168, [adb_11f0, adb_1168]}
@@ -554,7 +563,7 @@ Code declaration: {adb_24a8, [adb_2530, adb_24a8]}
 ...
 ```
 
-In this phase you can loop over the type-checked structs only with  
+In this phase code can be inspected, searched for things, and modified. You can loop over the type-checked structs with  
 `for message_typechecked.structs`  
 This is used in how_to 460 to search all subclasses of "Entity" (see § 16.2). 
 
@@ -765,7 +774,6 @@ main :: () {}
 
 #run build();
 ```
-```
 
 We define a new global variable `run_on_success` which will become true when we give a metaprogram argument `- run`.
 In line (1) we get these argument(s) from the property `Build_Options.compile_time_command_line`. Starting in line (2), we loop over them and set `run_on_success` when finding `- run`. In line (3) we now test both success parameters before running the executable.  
@@ -831,18 +839,20 @@ Calling `main3` now shows: main3
 `This program was built with metaprogram 30.8_debug_release_build.jai`
 
 `build_debug` shows the recommended debug options:  
-- backend = .X64  
-// it is faster than the LLVM backend, but for most programs the difference is negligible
-- optimization_level = .DEBUG
-- array_bounds_check = .ON
+* backend = .X64  
+* optimization_level = .DEBUG
+* array_bounds_check = .ON
+
+The X64 backend is faster than the LLVM backend, but for most programs the difference is negligible.
 
 This build compiles faster with as much debugging information as possible, but has some overhead in order to help debug. An executable built in debug mode will, for example, tell the programmer on which line of code the program crashed on, and check for array out of bounds errors. As expected from debug builds, the code is not as optimized as a release build.
 
 `build_release` shows the recommended release options:  
-- backend = .LLVM 
-// it is slower than the X64 backend, but it does a lot more optimizations. 
-- optimization_level = .RELEASE
-- set_optimization_level(target_options, 2, 0); // same as clang -O2
+* backend = .LLVM 
+* optimization_level = .RELEASE
+* set_optimization_level(target_options, 2, 0); // same as clang -O2
+
+The LLVM backend is slower than the X64 backend, because it does a lot more optimizations. 
 
 This build makes the compiler produce the best possible optimized code. An optimized build does not have debug information built into it, and takes longer to compile.
 

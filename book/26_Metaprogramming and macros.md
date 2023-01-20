@@ -430,6 +430,7 @@ This technique is used in the _Basic_ module to load specific code depending on 
 }
 ```
 There is a nice illustration of this in example § 29.8.
+See also jai\examples\system_info for how to display info of your OS and the hardware on which it runs.
 
 ## 26.4 Inserting code with #insert
 The **#insert** directive inserts a piece of compile-time generated code represented as a string (or code that has been represented as data in some other way) into a procedure or a struct.
@@ -559,7 +560,7 @@ The matrix contains:
 
 `Matrix` is a struct with parameter N, which defines the size of the `items` array, which is initialized to all zeros (0) in line (1). In line (2) the matrix is transformed to an identity matrix, using `#insert #run proc()`, where the concrete proc here returns a string. Remember you can view the generated string in the .build/.added_strings_w2.jai file.
 
-(This mechanism is also applied in the unroll for loop in § 26.5.2, and in the construction of an SOA struct, see § 26.9.2).
+(This mechanism is also applied in the unroll for loop in § 26.5.2, and in the construction of an SOA struct, see § 26.10.2).
 
 ### 26.4.1 Type Code and #code
 A variable of type Code can be constructed by using the **#code** directive:  
@@ -836,7 +837,10 @@ main :: () {
 }
 ```
 
-Jai does not support closures. The technique demonstrated here is a way to emulate a closure.  
+Jai does not support closures (also called captures of variables). The technique demonstrated here is a way to emulate a closure.
+
+> Write a macro to get the functionality of closures in Jai.
+
 In § 15.1.3 we showed code that iterated over a linked list with a while loop.
 Wouldn't it be nice if we could do this with a for loop?
 
@@ -904,8 +908,38 @@ Post-swap: a is 5, b is 3
 
 This macro uses Code arguments and #insert to insert the values. It also provides type-checking: a and b must be of the same type. 
 
+### 26.5.6 Measuring performance with a macro
+Remember § 6B.2 where we used get_time() to measure performance of a procedure (see 6B.2_get_time.jai) ? We can also do this with a macro `perf_measure`:
+
+See *26.33_measure_performance.jai*:
+```c++
+#import "Basic";
+
+factorial :: (n: int) -> int {
+    if n <= 1  return 1;
+    return n * factorial(n-1);
+}
+
+perf_measure :: (code: Code) #expand {
+    secs := get_time();
+    #insert code;   // (1)
+    secs = get_time() - secs;
+    print("Piece of code took % seconds\n", secs);
+}
+
+main :: () {
+    code :: #code print("Factorial 20 is %\n", factorial(20));
+    perf_measure(code);
+    // Factorial 20 is 2432902008176640000
+    // Piece of code took 0.000151 seconds
+}
+```
+
+Why use a macro? Because you want to #insert at compile-time the piece of code of which you want to measure the performance. This happens in line (1).
+
+
 ## 26.6 Using a for-expansion macro to define a for loop
-As easy as it is to for-loop over an array, this is not defined for other composite data-structures, such as the linked list we discussed in § 12.6. But this can be done with a macro, by defining a so-called _for_expansion_:
+As easy as it is to for-loop over an array, this is not defined for other composite data-structures, such as the linked list we discussed in § 12.6. But this can be done with a macro, by defining a so-called *for_expansion*:
 
 See *26.8_linked_list_for_expansion.jai*:
 ```c++
@@ -991,7 +1025,8 @@ and `it`    : which is `iter.data` (line (5))
 They both have to be prefixed with a back-tick, because they are outer variables to the macro.  
 
 The `#insert body;` in line (7) is responsible for printing out the data. `body` is the 2nd argument, and is of type Code. `body` denotes the body of the for-loop, and it is substituted into the expanded code. Its content is the `print` statement in line (10). So `#insert` is used inside macros to insert code in the expansion.  
-(There is also a variant directive **#insert,scope()**, which allows you to insert code in the macro itself. A macro often takes an argument suitably named `body: Code`, which is then used to insert in the expansion: `#insert body`.)  
+(There is also a variant directive **#insert,scope()**, which allows you to insert code in the macro itself. A macro often takes an argument suitably named `body: Code`, which is then used to insert in the expansion: `#insert body`.)
+
 The `For_Flags` enum_flags is found in module *Preload_.jai* with the following definition:
 ```c++
 For_Flags :: enum_flags u32 {
@@ -1004,7 +1039,79 @@ Now we can print out the data from a linked list in a for-loop like any other ar
 
 But we can do better! (see for_expansion macro Version 2). Just leave out the temporary variables `iter` and `i` and work only with it and it_index. Also note you only have to backtick the variables the first time you use these. Note that in our actual `for call, we have to print `it.data`.
 
-> Remark: the `for_expansion` may have any other name like `looping`, so that you can define different for_expansions. Also it and it_index can be renamed, like this: `for :looping v, n: data_structure  print("[%] %\n", n, v);`
+> Remark: the `for_expansion` may have any other name like `looping`, so that you can define different for_expansions. It is called like this:
+> `for :looping v, n: data_structure`
+> Also it and it_index can be renamed, like this: 
+> `for :looping v, n: data_structure  print("[%] %\n", n, v);`
+> When you have several for_expansions looping1, looping2 and so on, you could have:
+> `for :looping1 v, n: data_structure`
+> `for :looping2 v, n: data_structure`
+> Our code would then become:
+See *26.8B_linked_list_for_expansion.jai*:
+```c++
+#import "Basic";
+
+LinkedList :: struct {
+    data: s64; 
+    next:  *LinkedList;
+}
+
+main :: () {
+    lst := New(LinkedList); // lst is of type *LinkedList
+    lst.data = 0;
+
+    a :=  New(LinkedList); 
+    a.data = 12;
+    lst.next = a;
+    
+    b  := New(LinkedList);
+    b.data = 24;
+    a.next = b;
+    
+    c  := New(LinkedList);
+    c.data = 36;
+    b.next = c;
+
+    c.next = null; 
+
+    print("List printed in a for loop: \n");
+    print("The list starts with a %\n", lst.data);
+
+    looping :: (list: *LinkedList, body: Code, flags: For_Flags) #expand {  
+        `it := list;        
+        `it_index := 0;
+        while it {            
+            #insert body;       
+            it = it.next;
+            it_index += 1;   
+        }
+    }
+
+    for :looping lst {                   
+        print("List item % is %\n", it_index, it.data);  
+    }
+
+    print("\n");
+
+    for :looping v, n: lst {                   
+        print("List item % is %\n", n, v.data);  
+    }
+
+// List printed in a for loop: 
+// The list starts with a 0
+// List item 0 is 0
+// List item 1 is 12
+// List item 2 is 24
+// List item 3 is 36
+//
+// List item 0 is 0
+// List item 1 is 12
+// List item 2 is 24
+// List item 3 is 36
+
+    free(a); free(b); free(c); free(lst);
+}
+```
 > Remark: iterating over data-structures with for was the primary reason for introducing macros in Jai.
 
 Now let's make the same for-loop for a double linked-list:
@@ -1141,7 +1248,89 @@ How many compiled versions do you have when using if instead of #ifx?
 
 See also [Named Custom for Expansion](https://jai.community/docs?topic=176) for an example of a for_expansion for a Tree structure.
 
-## 26.8 The #modify directive
+## 26.8 A for-expansion macro for an array
+This seems totally unnecessary, because a for-loop is built-in for arrays! But it could be useful in case the for-loop has to do something additional, in which case it is beneficial to define it in one place as a for_expansion macro, instead of writing the addition in every for loop on your array.
+
+See *26.34_abstracting_loop.jai*:
+```c++
+#import "Basic";
+
+Player :: struct {
+    name: string;
+    score: u8;
+}
+
+players: [..]Player;
+
+for_expansion :: (_: *type_of(players), body: Code,   // (1)
+                  flags: For_Flags) #expand {
+    for `it, `it_index: players {
+        print("inside macro! \n");
+        if it_index >= players.count  break;
+        #insert body;
+    }
+}
+
+player_loop :: (_: *type_of(players), body: Code,      // (2)
+                  flags: For_Flags) #expand {
+    for `it, `it_index: players {
+        print("inside macro player_loop! \n");
+        if it_index >= players.count  break;
+        #insert body;
+    }
+}
+
+main :: () {
+    p1 := Player.{"Jane", 82};
+    p2 := Player.{"John", 75};
+    array_add(*players, p1);
+    array_add(*players, p2);
+    for players     print("Player no % is %\n", it_index, it);   // (3)
+    /*
+    Player no 0 is {"Jane", 82}
+    Player no 1 is {"John", 75}
+    */
+
+    for player: players {                                        // (4)
+        print("Player is %\n", player);
+    }
+    /*
+    Player is {"Jane", 82}
+    Player is {"John", 75}
+    */
+
+    // This uses the for_expansion macro
+    for :for_expansion   player: players {                         // (5)
+         print("Player is %\n", player);
+    }
+    /*
+    inside macro!
+    Player is {"Jane", 82}
+    inside macro!
+    Player is {"John", 75}
+    */
+
+     // This uses the player_loop macro
+    for :player_loop   player, ix: players {                       // (6)
+         print("Player % is %\n", ix, player);
+    }
+    /*
+    inside macro player_loop!
+    Player 0 is {"Jane", 82}
+    inside macro player_loop!
+    Player 1 is {"John", 75}
+    */
+}
+
+```
+
+In the code above we have an array `players` of type `Player`. In lines (3) and (4) we call familiar for-loops on this array. In line (1) we have defined a for_expansion macro, that does something additional (printing, logging, checking, and so on). To call it, we have to write:  
+` for :for_expansion {}`  
+as in line (5).  
+We can of course give it another name like `player_loop`, and/or use the index besides the value, and/or make different for_expansion routines. This we can write like in line (6):  
+` for :player_loop   player, ix: players {}`
+
+## 26.9 The #modify directive
 The **#modify** directive can be used to insert some code between the header and body of a procedure or struct, to change the values of the polymorph variables, or to reject the polymorph for some types or combination of variables. #modify allows to inspect generic parameter types. It is a block of code that is executed at compile-time each time a call to that procedure is resolved. 
 1) the polymorph types (T, and so on) are resolved by matching.  
 2) then the body of the #modify is run. In there, the value of T is not constant; it can be changed to whatever you want.   
@@ -1366,15 +1555,15 @@ A Bitmap struct instance is only valid when Width >= Height.
 (2) Write a proc `square` that squares a variable of a numeric type, but rejects any other type (see square_modify.jai)
 (3) Write a proc `struct_work` which only accepts a struct as type T when its name starts with "XYZ" (see struct_work.jai)
 
-## 26.9 SOA (Struct of Arrays)
+## 26.10 SOA (Struct of Arrays)
 
 SOA is a special kind of data-design, which makes memory-use much faster, and so enhances performance.
 It is done at compile-time using `#insert`. This mechanism automatically converts between SOA (Structure of Arrays) and AOS (Array of Structures), without breaking the supporting code. This means a completely different memory access pattern, and it allows for quickly changing data layouts with minor code edits.
 
-### 26.9.1 Data-oriented design
+### 26.10.1 Data-oriented design
 Jai provides built-in support for data-oriented development: it’s a high-level language build for fast memory support. Good memory layout is important because if it is not well done, too many memory cache misses will occur, alongside too much allocator overhead. Moreover consoles and mobile devices tend to have more limited memory constraints. Jai helps you to set up things in memory the way you want, without loss of efficiency or high-level expressiveness.
 
-### 26.9.2 Making a SOA struct using #insert
+### 26.10.2 Making a SOA struct using #insert
 For some arrays we can get much better cache performance by changing the order of data. C++ encourages the use of arrays of structures (AOS), but most CPUs work faster when data is laid oud as structures of arrays (SOA). Object-oriented languages prefer AOS, but a data-oriented language should make it easy to lay out your data in SOA format.
 With SOA, arrays are contiguous in memory, and even their member values are contiguous, instead of being scattered on the heap.  
 For example: updating a set of arrays usually happens coordinate by coordinate, first all x coordinates, and so on. Because in the SOA structure all the vector coordinates are adjacent to each other in memory, updates on them are very fast. This is in contrast with an AOS structure, where updates will have to jump over memory all the time.  
@@ -1478,7 +1667,7 @@ In line (11) we define an array of Person objects. Line (12) shows that only a s
     • Mike Acton: Data-oriented design in C++
 
 
-## 26.10 How to get the generated source files after the meta-program step?
+## 26.11 How to get the generated source files after the meta-program step?
 The piece of source code that gets generated from a #insert can be retrieved from the hidden _.build_ folder. For example: program 26.10_soa.jai generates an additional source file called `.added_strings_w2.jai` in .build with this content:
 ```c++
 // Workspace: Target Program
@@ -1492,7 +1681,7 @@ The piece of source code that gets generated from a #insert can be retrieved fro
 
 Line (10) mentioned here is this line: #insert -> string.
 
-## 26.11 How to get info on the nodes tree of a piece of code?
+## 26.12 How to get info on the nodes tree of a piece of code?
 In § 26.4.1 we saw how #code can make something of type Code out of a piece of code. Another way is to call the proc `code_of` on a piece of code. For some examples of code_of, see jai/examples/here_string_detector.jai and self_inspect.jai  
 The helper procedure `compiler_get_nodes` can take the result of `#code` or `code_of` and get the AST nodes out of it:
 ```
@@ -1556,7 +1745,7 @@ modified := compiler_get_code(root);
 ```
 (for a complete working example, see how_to/630, 2nd example)
 
-## 26.12 The #type directive and type variants
+## 26.13 The #type directive and type variants
 This directive tells the compiler that the next following syntax is a type literal, useful for defining procedure types and variant types. Variant types are like alias types (see § 9.1), but differ in the casting behavior.
 
 For example:
@@ -1608,7 +1797,7 @@ The type of Handle is Type (see (4)), but if we dig deeper in line (5) we see th
 Another variant of the isa type is shown in lines (2A-B). These types will implicitly cast to their isa type, but variants with the same isa type will not implicitly cast to each other.
 Taking type_info(), and dereferencing the `variant_of` field shows the underlying type and size (lines 5B, 6 and 7).
 
-## 26.13 Getting the name of a variable at compile time
+## 26.14 Getting the name of a variable at compile time
 See *26.23_get_variable_name.jai*:
 ```c++
 #import "Compiler";
@@ -1635,7 +1824,7 @@ that invoked the macro.
 With these kinds of techniques you manipulate code from a macro within the program itself (see howto/497).
 There is also a `print_type_to_builder` proc for printing type info to a string builder (see how_to/935).
 
-## 26.14 Converting code to string
+## 26.15 Converting code to string
 See _26.23_get_variable_name.jai_:
 ```c++
 #import "Basic";
@@ -1661,7 +1850,7 @@ main ::() {}
 
 We again use compiler_get_nodes to get the AST, which is then `printed` to a string builder, and then converted to a string.
 
-## 26.15 Creating code for each member in a structure
+## 26.16 Creating code for each member in a structure
 The following example is a quick (non recursive) helper to create some code for each member in a structure (it is derived and slightly changed from a Snippets example in the Jai Community Wiki): 
 
 See *26.29_code_struct_member.jai*:
@@ -1743,7 +1932,7 @@ if !serialize(s.health, builder) return false;
 `for_each_member` checks whether we have a struct, and then substitutes the field name into our format string, which goes into the string builder.
 To compile this, a proc `serialize` has to exist, which is also polymorphic in our example and which writes the field's values in the string builder.
 
-## 26.16 A type-tagged union
+## 26.17 A type-tagged union
 We discussed unions in § 13.2, where we saw that a union has only one field, but can take values of different types. It could be useful to know at any time which type the union value has. This could be done by enclosing the union within a struct, with a field containing the type.
 
 See *26.31_tagged_union.jai*:

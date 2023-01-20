@@ -26,6 +26,22 @@ Object :: struct {
   z: float;
 }
 
+// This is an anonymous union.
+variable := union {                 // (7A)
+  x: int;
+  y: int;
+  z: int;
+}
+
+// complex Vector3 example using anonymous structs and unions
+Vector3 :: struct {                  // (7B)
+  union {
+    struct { x, y, z: float; }
+    struct { r, g, b: float; }
+    struct { s, t   : float; }
+  }
+}
+
 main :: () {
   t: T;             // (3)
   t.a = 100;        // (4)

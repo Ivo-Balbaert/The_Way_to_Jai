@@ -191,6 +191,7 @@ An expression formed with these also results in a bool value:
 ### 6.2.2 - Arithmetic operators
 The usual +, -, * and /, % operators are defined for numbers, with abbreviations +=, -=, *= and /=:  `a *= 5;` is the same as `a = a * 5;`.  
 Integer division truncates. Modulo operator % doesn't work for floats.
+There are no increment (++) or decrement (--) operators.
 
 Division by zero results in a compile-time error if the compiler can see it, but in most cases you get a runtime panic with a stack strace; see line (1) and following.
 
@@ -219,7 +220,7 @@ This gives an added performance bonus.
 If there is information loss, you can _truncate_ the bits you don't care about, when you are very sure nothing wrong will happen with:
 **cast, trunc(type)** 
 
-!! At this time (Jan 2023), math bounds checks are not yet implemented: casting checks for overflow, when the compiler can check it with constant values.  For an example of overflow, see 26.19_modify4. One way of taking care of this with polymorph procedures is to write an #modify that checks the type, see § 26.8 !!
+!! At this time (Jan 2023), math bounds checks are not yet implemented: casting checks for overflow, when the compiler can check it with constant values.  For an example of overflow, see 26.19_modify4. One way of taking care of this with polymorph procedures is to write an #modify that checks the type, see § 26.10 !!
 
 ### 6.2.5 - Autocasting with xx
 Automatic casting can be used when the compiler can infer what casting has to take place at a certain moment, this is indicated with **xx**:  
@@ -258,7 +259,8 @@ This is called the _truthiness_ of a value. This is very useful in branching and
 
 ### 6.2.6 Complex expressions and precedence
 Arbitrarily complex expressions can be formed with boolean and other operators, which can quickly become unreadable.
-The same [precedence rules as in C](https://www.tutorialspoint.com/cprogramming/c_operators_precedence.htm) are followed, but you can override these by using parentheses to make the expression more readable, as the code in line (7) shows.
+The same [precedence rules as in C](https://www.tutorialspoint.com/cprogramming/c_operators_precedence.htm) are followed, for example: *, /, and % operators have higher precedence and are by default evaluated first before evaluating + and -   
+But you can override these rules by using parentheses to make the expression more readable, as the code in line (7) shows.
 
 ### 6.2.7 Bitwise operators
 See *6.4_bitwise.jai*:

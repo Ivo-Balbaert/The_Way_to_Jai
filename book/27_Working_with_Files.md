@@ -44,6 +44,7 @@ main :: () {
         print("File successfully read.\n");
     } else {
         print("Error. Cannot read file.\n");
+        exit(-1);
     }
     print("Contents of TESTFILE:\n\"%\"\n", text);
 
@@ -107,12 +108,25 @@ Sailor!
 
 If you need to create a folder from code, do it as in line (2). Similarly, you have delete_directory.  
 To test whether a file already exists, use `file_exists` as in line (3).
-Use `write_entire_file` (see line (4)) to write a string to a file, creating the file when it does not exist). This proc can also take a `*builder`, where `builder` is a String Builder. `read_entire_file` (line (5)) reads the contents of a file and returns it as a string.  
+Use `write_entire_file` (see line (4)) to write a string to a file, creating the file when it does not exist). This proc can also take a `*builder`, where `builder` is a String Builder.  
+`read_entire_file` (line (5)) reads the contents of a file and returns it as a string. The filename can also be stored in a variable instead of a constant. 
 Whenever a proc returns a bool variable indicating the success of the operation, you can test on it like this:
 * if success {  }
   else {  }
 * if !success return;
 * assert(success);
+
+If the file read returns an error, the program outputs a message like:
+```
+Could not open file "assets/example.txt": code 2, The system cannot find the file specified.
+d:/Jai/The_Way_to_Jai/examples/27/27.1_working_with_files.jai:34,5: Assertion failed: Error. Cannot read file.
+```
+
+Stack trace:
+c:/jai/modules/Preload.jai:350: default_assertion_failed
+c:/jai/modules/Basic/module.jai:72: assert
+d:/Jai/The_Way_to_Jai/examples/27/27.1_working_with_files.jai:34: main
+A breakpoint was hit, but no debugger is attached.
 
 The `file_open` operation (line (6)) has the following signature:
 `file_open :: (name: string, for_writing := false, keep_existing_content := false, log_errors := true) -> File, bool`

@@ -189,4 +189,5 @@ __system_entry_point :: (argc: s32, argv: **u8) -> s32 #c_call {
 ```
 
 This first starts up a `__jai_runtime_init(argc, argv);` proc. This proc is also defined in the _Runtime_Support_ module. Its job is to take in the command-line arguments, and initialize the primary context.
-Then back in `__system_entry_point` the runtime crash handler is activated and `main` is started.
+Then back in `__system_entry_point` the runtime crash handler is activated and the `main` of your program is started.
+(See also https://jai.community/docs?topic=131).

@@ -15,4 +15,5 @@ main :: () {
     hello(1, 2); // => a is 1, b is 2
     hello(1);    // => a is 1, b is 9
     hello();     // => a is 9, b is 9
+    hello(b = 42); // (3) => a is 9, b is 42 
 }

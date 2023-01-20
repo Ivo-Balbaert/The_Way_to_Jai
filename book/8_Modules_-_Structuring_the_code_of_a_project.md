@@ -78,29 +78,43 @@ To illustrate this, `part1.jai` contains the declaration of the variable a_part1
 > Code from a #load-ed file has access to the global scope. Code from a #import-ed module has not!
 
 ## 8.3 Named imports
+There are a couple of important reasons to give a name to an import, instead of just doing #import "Math";
+### 8.3.1 Definition
 Sometimes you want to qualify a function name with the module name it came from (perhaps because that name has already been used, it is duplicate) you can do a named import as follows:	 
 `Math :: #import "Math";`
 
+Notice that the name you give must be a constant.
 Then you have to qualify all functions from that module with its module name (in other words: you give the proc a namespace), like this:
 
-```
+```c++
 	y := Math.sqrt(2.0);
 ```
 
 This improves readability: it makes it clear where a function comes from.  
 Alternatively, you can work with `using` so that you don't need to use the module's name:
-```
+```c++
     using Math;
 	y := sqrt(2.0);
 ```
 
 The name can also be completely different, so it can be shorter:
 
-```
+```c++
     Long :: #import "Long_Name_Library";
 ```
 
 or be used to differentiate between two modules with the same name.
+
+### 8.3.2 Handling naming conflicts
+Suppose you have two structs in two different files/libraries with the same name, causing a name conflict. You can prefix one or both of the imports to prevent naming conflicts.
+
+```c++
+lib1 :: #import "Lib1";
+lib2 :: #import "Lib2";
+
+a: lib1.Object; // create struct "Object" from lib1
+b: lib2.Object; // create struct "Object" from lib2
+```
 
 ## 8.4 Import a file, a dir or a string
 If you only want to import a specific file from a module, you can do it with `#import, file` like this:  

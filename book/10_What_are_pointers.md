@@ -90,7 +90,7 @@ null is a value, so what is the type of null? This is answered in line (6), it i
 _The only thing you can assign null to is a pointer type_; you can't assign null to ints, structs, arrays, strings, or any other type.
 > Only a pointer can be null.
 
-You can even declare a variable ptr as a void pointer, like in line (7). This means ptr doesn't even know at this point what will be the type of variable it points to!
+You can even declare a variable ptr as a void pointer, like in line (7). This means ptr doesn't even know at this point what will be the type of variable it points to! A void pointer has no associated data type. It can hold the address of any type and can be type-casted to any type. void pointer has the same functionality as in C.
 
 In line (9), we make a New(int). `New` is a procedure defined in module _Basic_ that can take any type, construct an instance of it, and return a pointer to it (see line (10)).
 New allocates memory on the heap, so you have to free it yourself, as done in line (11).

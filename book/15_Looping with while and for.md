@@ -401,7 +401,7 @@ We can use `type_info()` on a struct definition and then loop over its members (
 Also the `get_field` method (line (5) gives you detailed information.
 
 ## 15.6 Serialization
-The methods discussed in the previous sections provide type info which can be used to _serialize_ structs into strings, and vice-versa _deserialize_ strings into structs. They enable us to write serialization procedures, commonly used e.g. in network replication of entities and save game data, see § 26.9.2
+The methods discussed in the previous sections provide type info which can be used to _serialize_ structs into strings, and vice-versa _deserialize_ strings into structs. They enable us to write serialization procedures, commonly used e.g. in network replication of entities and save game data, see § 26.10.2
 
 ## 15.7 Annotations or notes
 It's also possible to add a declarative note (annotation) to a struct, a struct field or a procedure, adding an at-sign (@) after a declaration. For example: to indicate a certain field must not be serialized, add a note **@NoSerialize**, see line (2).

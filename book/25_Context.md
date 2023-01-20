@@ -1,7 +1,7 @@
 # 25 Context
 
 A central concept in Jai is the **context**.  
-The context is specifically made to guide different parts of your program to use whatever services you desire. It helps programs and modules to coordinate, by establishing conventions they can use to perform various tasks.
+The context is specifically made to guide different parts of your program to use whatever services you desire. The default context comes with great defaults, but you can change them as needed. It helps programs and modules to coordinate, by establishing conventions they can use to perform various tasks.
 
 The `context` struct is defined in module _Preload_ as:  
 ```c++
@@ -103,7 +103,7 @@ In the same way, you can plug in your own assertion_handler and logger (see modu
 The directive **#add_context** adds a declaration to a context.
 
 ## 25.1 push_context
-The current context can be assigned to a variable like in (2). If you want you can change the procedure used for allocating memory, like in line (2B). Then we can use the `push_context` proc like in (3) to do something within this new context. `push_context lets you push an entire fresh Context.
+The current context can be assigned to a variable like in (2). If you want you can change the procedure used for allocating memory, like in line (2B). Then we can use the `push_context` proc like in (3) to do something within this new context. `push_context lets you push an entire fresh Context, changing the operational context for the duration of the code block that starts in (3). 
 
 For example you could just declare a memory arena (see § ??) and use push_context to use it. All code in the push_context block now allocates with the arena, and you can free the arena memory whenever you want.  
 The new context stops after the closing } (line (4B)), and the initial context is restored.
@@ -208,7 +208,6 @@ There is also a proc called `pack_stack_trace()`, which makes a copy of the stac
 In § 30.4.5 we'll see that there is also a compile option called `build_options.stack_trace`, which is by default true to examine stack traces on program errors/crashes. With this option enabled, every time a procedure is called, code is generated to output a Stack_Trace_Node on the stack and link it up, and unlink it when the procedure returns. Use it as an aid in debugging if necessary.
 
 Stack traces are useful for writing instrumentation code such as a profiler or memory debugger. `Stack_Trace_Node` and related code are defined in module _Preload_.
-
 
 ## 25.7 The print style
 See *25.3_print_style.jai*:

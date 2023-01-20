@@ -229,8 +229,9 @@ main :: () {
 }
 ```
 
-In line (1) we define a proc called `IL_Logger_Callback` as having the signature type that follows and as following the #c_call conventions (we re-used the example from § 26.13). If it doesn't return anything, `void` needs to be specified. Then we define a concrete proc `logger_callback` which has the exact same type as `IL_Logger_Callback`. This proc create a temporary new Context called new_context, and calls the proc `log` in this context to log a text string. text is of type `*u8`, so could be a C string.     
-In line (2B) we see that `print` cannot be called inside a #c_call routine, but it can be called inside the `push_context` section.
+In line (1) we define a proc called `IL_Logger_Callback` as having the signature type that follows and as following the #c_call conventions (we re-used the example from § 26.14). If it doesn't return anything, `void` needs to be specified. Then we define a concrete proc `logger_callback` which has the exact same type as `IL_Logger_Callback`. This proc create a temporary new Context called new_context, and calls the proc `log` in this context to log a text string. text is of type `*u8`, so could be a C string.     
+When we write an actual callback procedure to use with our definition, we need to push a new context inside it. In line (2B) we see that `print` cannot be called inside a #c_call routine, but it can be called inside the `push_context` section.
+(See https://jai.community/docs?topic=137 for a more thorough discussion of this case.)
 
 ## 29.8 Getting the computer name: using #if, OS and C interaction
 (Example taken from /how_to/095_static_if.jai)
