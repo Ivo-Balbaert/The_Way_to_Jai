@@ -316,7 +316,7 @@ It is better to return things by value; this avoid having extra stack copies lik
 **The _ token**
 If you would like to discard one or more of the return values, use `_` instead of a variable, like this:
 `result, ok, _ := to_integer(text);`  
-Here we discard the 3rd return value, which is a remainder in which we are not interested.
+Here we discard the 3rd return value, which is a `remainder` string in which we are not interested.
 
 Unlike languages such as Rust or Go, procs do not return tuple object values, but rather return the values in registers.  
 When a proc returning multiple values is called, you must explicitly assign all values to new variables, calling only proc_mult() only returns the first value. 

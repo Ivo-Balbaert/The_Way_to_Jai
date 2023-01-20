@@ -210,7 +210,8 @@ where x < y doesn't run at all (see exercises/15.1_reversed_for.jai).
 3) Write a program that produces a typical FizzBuzz output: see [Explanation of FizzBuzz](https://imranontech.com/2007/01/24/using-fizzbuzz-to-find-developers-who-grok-coding/). Use a for loop, an if-else if statement, and the modulo % operator (see 15.3_fizzbuzz.jai).
 
 ## 15.3 Breaking out or continuing a loop
-With `while true { }` you can make an infinite loop that could crash your machine. In this as well as in normal while or for-loops you should be able to:
+With `while true { }` you can make an infinite loop that could crash your machine. `while 1 { }` is equivalent to this, because 1 casts to `true`.
+In this as well as in normal while or for-loops you are able to:
 
 i) break out of a loop at a certain condition (that is: leave the loop and continue with the statement next after the loop): use the **break** keyword.
 

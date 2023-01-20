@@ -761,4 +761,4 @@ main :: () {
 
 In line (1) we declare an array of 10 Vec2 structs, a commonly used data-structure, sometimes abbreviated as _AOS_. In line (2) you can see that the it variable in a for-loop can access the struct's fields. Line (3) shows how to overrule the fields default values, making them uninitialized.
 
-In line (4), another version of `array_add` is used, which allows to add something to a dynamic array and returns a pointer to a that item, which must be assigned to a variable. This is most often used for structs, the data of the struct can then be filled in afterwards.
+In line (4), another version of `array_add` is used, which allows to add something to a dynamic array and returns a pointer to that item, which must be assigned to a variable. This is most often used for structs, the data of the struct can then be filled in afterwards.

@@ -373,8 +373,18 @@ main :: ()  {
     i, ok = parse_int(*str3);
     print("i is % and ok is %\n", i, ok); // => i is 108 and ok is true
 
+    str3 = "108";  // parse_int empties str3
+    i, ok = to_integer(str3);             // (2B)  
+    print("i is % and ok is %\n", i, ok); // => i is 108 and ok is true
+    if !ok {
+        print("Expected to read an integer, but got '%'!\n", i);
+        // for str3 == "abc"
+        // => Expected to read an integer, but got '0'!
+        exit(-1);
+    }
+
     a := 4;
-    str := sprint("%", a);                  // (2B)
+    str := sprint("%", a);                  // (2C)
     print("a is %, str is -%-\n", a, str);  // => a is 4, str is -4-
     print("str is type %\n", type_of(str)); // => str is type string
     
@@ -428,13 +438,14 @@ main :: ()  {
 `string_to_float :: (str: string) -> float, bool;` (see line (2)).
 
 The `to_integer` procedure with signature   
-`to_integer :: (s: string) -> result: int, success: bool, remainder: string`  
+`to_integer :: (s: string) -> result: int, success: bool, remainder: string` 
+is shown in line (2B); it also shows a check for the `success` value. 
 uses `string_to_int` for the conversion.
 
 The `parse_int` and `parse_float` procs use `parse_token` and are more robust than the string_to variants.
 
 #### 19.6.1.2 numbers to string
-To accomplish this use `sprint` or `tprint` (see line 2B), or work with a String Builder in more complex cases.   
+To accomplish this use `sprint` or `tprint` (see line 2C), or work with a String Builder in more complex cases.   
 
 ### 19.6.2 String comparisons
 Here are the signatures of the most important ones:
