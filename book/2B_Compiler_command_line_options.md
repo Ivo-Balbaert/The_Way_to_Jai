@@ -58,7 +58,7 @@ It is also allowed to add the options after the source-file name, like this:
 `--- meta MetaProgram`  To replace the default metaprogram by MetaProgram.
 
 **Miscellaneous**:  
- `-no_cwd`           Turn off the compiler's initial change of working directory. This is a temporary option, provided because the policy around working directories is new and is still being worked out.
+ `-no_cwd`  Turn off the compiler's initial change of working directory. This is a temporary option, provided because the policy around working directories is new and is still being worked out.
 
  `-plug name`        Import module 'name' into the metaprogram and use it as a plugin.  
  `-version`          Print the version of the compiler.  

@@ -204,8 +204,7 @@ The backslash characters (also called escape sequences) use the backslash to ind
     \\     The character \
     \0     The byte with value 0.
 
-    \xAB   The byte with the value designated by hexadecimal digits AB (these can be
-                  any digit from 0-9 or A-F, upper or lower case.)
+    \xAB   The byte with the value designated by hexadecimal digits AB (these can be any digit from 0-9 or A-F, upper or lower case.)
 
     \d123  The byte with the decimal digits 123 (these can be any digit from 0-9).       (Since it's a byte, the maximum valid value is 255.)
 

@@ -1193,3 +1193,40 @@ The executable calls the proc `dll_func` from the dynamic library.
 Build both with:        ` jai 30.13_dynamic_libraries.jai`
 and see the result of:  `main7`
 which outputs:  `Hello Sailor`
+
+## 30.15 Adding data to the executable
+The compiler bakes type info data into the executable (see § 16.3.5). But you can also add your own data to it with the proc `add_global_data`.  
+The following code does just that.
+
+See *30.15_global_data.jai*:
+```c++
+#import "Basic";
+#import "Compiler";
+#import "File";
+#import "String";
+
+main :: () {
+    data1 :: #run add_global_data(                  // (1)
+        xx join(
+            "GIF89a\x01\x00\x01\x00\x80\x01\x00\xff\xff\xff\x00",
+            "\x00\x00!\xf9\x04\x01\n\x00\x01\x00,\x00\x00\x00",
+            "\x00\x01\x00\x01\x00\x00\x02\x02L\x01\x00;",
+        ),
+        .READ_ONLY,
+    );
+    print("%\n", data1.count); // => 43
+    
+    data2 :: #run add_global_data(xx read_entire_file("pixel.png"), .READ_ONLY); // (2)
+    print("%\n", data2.count); // => 43
+}
+```
+
+In line (1) we join a number (43 to be exact, see the print of count) of hexadecimal byte strings (see § 19.3) and autocast this to an []u8. This is then added at compile-time through #run to the global data.
+As a result, this data will be baked in into the final executable.
+The same bytes are also stored in the file `pixel.png`. In line (2) we read in this file, autocast it, and also add it to global data to be baked into the executable.
+.READ_ONLY is the 2nd argument which is a Data_Segment_Index.
+This baking can also be done in different data segments if needed.
+
+Why bake data into your main program? Well, maybe you want to distribute a standalone exe that doesn't require any data files and doesn't care where it is located in the filesystem.
+Maybe you want fast access to some of your data at startup, and can load the rest later.
+
