@@ -1113,8 +1113,7 @@ cherry
 dog
 elephant
 ```
-(See also how_to/470, first.jai for code to check if a procedure has a certain note)
-
+(See also how_to/470, first.jai for code to check if a procedure has a certain note and the Jai Cookbook (https://github.com/onelivesleft/jai-cookbook) modules and tools folder.)
 
 ## 30.14 Writing and loading dynamic libraries and #program_export
 (Example from Jai Community Wiki)
@@ -1230,3 +1229,5 @@ This baking can also be done in different data segments if needed.
 Why bake data into your main program? Well, maybe you want to distribute a standalone exe that doesn't require any data files and doesn't care where it is located in the filesystem.
 Maybe you want fast access to some of your data at startup, and can load the rest later.
 
+
+Some useful code examples can be found at (https://github.com/onelivesleft/jai-cookbook).

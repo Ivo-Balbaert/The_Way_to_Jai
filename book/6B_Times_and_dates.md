@@ -96,6 +96,7 @@ main :: () {
 }
 ```
 
+`factorial` is a recursive (see § 17.9) procedure to compute: factorial(n) = n * (n-1) * (n-2) * ... 3 * 2 * 1.
 See an example of use in § 31.2.2
 
 ## 6B.3 - Getting a random number from time

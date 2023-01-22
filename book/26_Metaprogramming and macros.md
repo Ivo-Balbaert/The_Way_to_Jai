@@ -1755,7 +1755,9 @@ IL_Logger_Callback :: #type(level: IL_LoggingLevel, text: *u8, ctx: *void) -> vo
 ```
 The code above defines the procedure `IL_Logger_Callback` as a proc with as type the given signature.
 
-#type is useful for resolving ambiguous type grammar.  
+#type is useful for resolving ambiguous type grammar, for example the following declaration does not compile: `proctest: Type : (s32) -> s32;`
+but adding #type it does:     `proctest: Type : #type (s32) -> s32;`
+  
 It can also be used to define **type variants**, as in the following example, with syntax #type,distinct or #type,isa:
 
 See *26.21_type_variants.jai*:

@@ -177,6 +177,13 @@ Examples:
 
 For an example of its use, see § 12.12
 
+**Exercise**
+Look at the code of program 26.9_doubly_linked_list.jai* in § 26.7  
+Isolate the definition of LinkedList, Node and the for_expansion macro into a module Linked_List (which is just a single file Linked_List.jai).
+Place this file in the current folder, and test out that with a #load the program still works.
+Then import it as a module from the current folder and test out. 
+Then place the file in a module folder *D:\Jai\The_Way_to_Jai\my_modules* and test out.
+
 ## 8.7 Module and program parameters
 ### 8.7.1 Definition and use
 In § 6.1.3 we already encountered the ENABLE_ASSERT program parameter from _Basic_, which by default enables assert debugging (see § 20.1.2). 

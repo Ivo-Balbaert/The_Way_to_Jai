@@ -319,7 +319,7 @@ If you would like to discard one or more of the return values, use `_` instead o
 Here we discard the 3rd return value, which is a `remainder` string in which we are not interested.
 
 Unlike languages such as Rust or Go, procs do not return tuple object values, but rather return the values in registers.  
-When a proc returning multiple values is called, you must explicitly assign all values to new variables, calling only proc_mult() only returns the first value. 
+When a proc returning multiple values is called, you must explicitly assign all values to new variables, calling only proc_mult() only returns the first value.
 
 ## 17.6.1 Named and default return values
 You can name the return parameters:		

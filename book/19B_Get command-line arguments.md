@@ -8,7 +8,7 @@ or:
 
 This is done with the `get_command_line_arguments` proc from module _Basic_, which returns an array of type []string.
 
-See *19B.1_command_line_args.jai)
+See *19B.1_command_line_args.jai*:
 ```c++
 #import "Basic";
 
@@ -36,5 +36,10 @@ Position: 3 - Value: 3.14
 Line (1) prints out all the arguments with their positions. From the output we see that the executable's name is at position 0, and the real arguments start from position 1.
 You can use the arguments as args[1], args[2] and so on.
 
+Here is an example program that adds all the command-line arguments to a string builder:
+
+See *19B.2_clargs_string_builder.jai*:
+```c++
+```
 
 Module _Command_Line_ has more sophisticated functionality for processing options on the command-line.

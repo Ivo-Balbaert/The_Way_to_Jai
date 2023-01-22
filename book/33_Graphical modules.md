@@ -184,7 +184,6 @@ When `if button(r, "Button 0")` is true the button has been clicked (line (1)). 
 The module also contains an example (_modules/Simp/examples_):
 - _example.jai_: this shows a window with all available GUI widgets, besides the above. It also displays a text field, a slider, checkboxes, and so on.
 
-
 ## 33.4 The _SDL_ module
 SDL is the [Simple DirectMedia Layer](https://www.libsdl.org/)). It is a cross-platform development library designed to provide low level access to audio, keyboard, mouse, joystick, and graphics hardware via OpenGL and Direct3D.
 We saw a 1st example of its use in § 31.2
@@ -238,14 +237,13 @@ main :: () {
 This opens a window with the title text "An SDL2 window" using only SDL:`\modules\SDL\examples\sdl_test.jai`.
 (Copy SDL2.dll and SDL2.lib from the SDL/win folder next to the exe)
 
-
 ## 33.5 The _GL_ module
 GL is the [OpenGL - Open Graphics Library](https://en.wikipedia.org/wiki/OpenGL). It is a cross-language, cross-platform application programming interface (API) for rendering 2D and 3D vector graphics. The API is typically used to interact with a graphics processing unit (GPU), to achieve hardware-accelerated rendering.
 
 The Jai distribution contains a simple example of opening a window with the title txt "An SDL2 window" using GL and SDL (see § 33.5):`\modules\GL\examples\gl_sdl.jai`.
 (Copy SDL2.dll and SDL2.lib from the SDL/win folder next to the exe)
 
-See _33.5_gl_sdl.jai_:
+See *33.5_gl_sdl.jai*:
 ```c++
 #import "Basic";
 #import "GL";
@@ -315,16 +313,64 @@ When the window is closed,it prints out the GL Vendor and Version to the termina
 GL Vendor = NVIDIA Corporation
 GL Version = 4.6.0 NVIDIA 456.71
 ```
-
 ## 33.6 Direct3D
 Direct3D is a graphics application programming interface (API) for Microsoft Windows. Part of DirectX, Direct3D is used to render three-dimensional graphics in applications where performance is important, such as games. Direct3D uses hardware acceleration if it is available on the graphics card, allowing for hardware acceleration of the entire 3D rendering pipeline or even only partial acceleration.
 The modules *d3d_compiler* , _d3d11_ and _d3d12_ contain interfacing code for Direct3D.
 d3d12 contains a minimal example `example.jai`, as well as jai\exampleples\d3d11_example.
 
+## 33.7 The *Window_Creation* module
+This module contains platform-independent window creation routines.
+Showing a window is as easy as this code-snippet:
+
+See *33.6_window_creation.jai:
+```c++
+#import "Input";
+#import "Windows";
+#import "Window_Creation";
+
+main :: () {
+    handle_window := create_window(window_name="Example", width=200, height=200);
+
+    while true {
+        update_window_events();
+    }
+}
+```
+
+Adding handling a QUIT event:
+
+See *33.6_window_creation.jai*:
+```c++
+#import "Input";
+#import "Windows";
+#import "Window_Creation";
+
+WINDOW_WIDTH  :: 1280;
+WINDOW_HEIGHT :: 720;
+the_window: Window_Type;
+
+main :: () {
+    the_window = create_window(WINDOW_WIDTH, WINDOW_HEIGHT, "Window Creation");
+
+    quit := false;
+    while !quit {
+        update_window_events();
+
+        for events_this_frame {
+            if it.type == .QUIT then quit = true;
+
+            if it.type == .KEYBOARD {
+                if it.key_pressed == 0       continue;
+                if it.key_code == .ESCAPE    quit = true;
+            }
+        }
+    }
+}
+```
+
 Other modules in distribution:
 - ImGui
 - Metal
-- - nvt
-- -stb_image and stb_
+- nvt
+- stb_image and stb_
 - Vulkan (successor of OpenGL)
-- Window_Creation

@@ -200,12 +200,32 @@ When bool_var is false, the looping is not reversed.
 Like with while we can nest for-loops, as shown in line (5). Line (6) shows that we can cast the index (normally type s64) to a smaller integer type (but the cast bounds are checked!) .
 A for-loop over a string does not work.
 
+Here is a version of a factorial proc (see § 6B.2) that uses a reversed for loop and is much faster than the recursive variant:
+
+See *15.9_for_reverse.jai*:
+
+```c++
+#import "Basic";
+
+factorial :: (f: int) -> int {
+    if f <= 1  return 1;
+    n := 1;
+    for < f..2  n *= it;
+    return n;
+}
+
+main :: () {
+    print("f(%) = %\n", 20, factorial(20));
+    // => f(20) = 2432902008176640000
+}
+```
+
 **Exercises**
 1) Try out that a for-loop like:
 		for < x..y { } 
 where x < y doesn't run at all (see exercises/15.1_reversed_for.jai).
 
-2) Print theinfinite squares of all integers from 10 to 20 (see  15.2_squares.jai) with and without a loop counter.
+2) Print the squares of all integers from 10 to 20 (see  15.2_squares.jai) with and without a loop counter.
 
 3) Write a program that produces a typical FizzBuzz output: see [Explanation of FizzBuzz](https://imranontech.com/2007/01/24/using-fizzbuzz-to-find-developers-who-grok-coding/). Use a for loop, an if-else if statement, and the modulo % operator (see 15.3_fizzbuzz.jai).
 
