@@ -36,7 +36,7 @@ Remarks:
 * The glfw3.dll and glfw3.lib (or similar files for other OS's) have to be copied in the same folder as the executable of program 33.1
 
 ## 33.2 The _Simp_ module
-Simp is a simple framework for drawing graphics, completely written in Jai.
+Simp is a simple 2D API framework for drawing graphics, completely written in Jai.
 Here is Simp's minimum code to open and close a window:
 
 See *33.2_simp_window.jai*:

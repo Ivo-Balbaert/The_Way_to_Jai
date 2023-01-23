@@ -30,9 +30,10 @@ main                              d:\Jai\The_Way_to_Jai\examples\20\20.1_crash.j
 From it we see that Jai has a crash handler module for runtime support, and that the crash occurred in line (5), which our editor tells us is indeed the line `b := 1/a;`
 
 ## 20.1 Some general strategies
-Jai will nearly always show a message when a program crashes. To rule out the possibility of a crash with no output, there is this nice trick: have  
+Jai or the OS will almost always show a message when a program crashes. To rule out the possibility of a crash with no output, there is this nice trick: have  
 `defer print ("Program ended gracefully.\n");`  
-as the very first line in `main()`. That way, if this output is not shown, you know the program ended with a silent crash.
+as the very first line in `main()`.  
+That way, if this output is not shown, you know the program ended with a silent crash. *If you don't see this, something bad happened.*
 
 ### 20.1.1 Print debugging
 Locate the bug to a certain procedure `proc1` by putting `print("Entering proc1");` and `defer print("Exiting proc1");` statements in each procedure that is suspect. 
@@ -57,7 +58,7 @@ A somewhat better solution is to use assert statements to test conditions (see �
 `assert(var == val);`  
 at appropriate places.
 When an assert fails, you know something went wrong in the proc in which it executed.  
-A big advantage compared to `print` is that you can leave the `assert` statements in your code by using `ENABLE_ASSERT=false`, as explained in § 6.1.3. That way the asserts will not be compiled(??)/executed (so there will be no performance penalty), but you can suickly enable them in production code to hunt for a problem!  
+A big advantage compared to `print` is that you can leave the `assert` statements in your code by using `ENABLE_ASSERT=false`, as explained in § 6.1.3. That way the asserts will not be compiled(??)/executed (so there will be no performance penalty), but you can quickly enable them in production code to hunt for a problem!  
 We already showed you the use of assert to catch dereferencing null pointer errors (see § 10.3). Also have a look at the very close relative `#assert` in § 20.2.1
 
 ## 20.2 Debugging compile-time execution
@@ -308,12 +309,22 @@ Instructions for how to install or customize a natvis file are available [here](
 
 For more info see [this article](https://simoncoenen.com/blog/programming/Natvis).
 
-## 20.6 Some general info
+## 20.6 The WinDbg debugging tool
+For debugging on the Windows platform, a new tool is the WinDbg Preview app, which is in preview (for free) available from the Microsoft Store. It can be used to debug kernel-mode and user-mode code, analyze crash dumps, and examine the CPU registers while the code executes.  
+You can download it from the Microsoft Store for free at (https://apps.microsoft.com/store/detail/windbg-preview/9PGJGD53TN86), giving you a decent debugging experience without having to install Visual Studio.
+
+Compile your source file and start the executable.
+From the File menu, Start Debugging, Launch Executable.  
+Open source file to open the .jai source file, where you can put breakpoints and step through your code. Use the Locals and Watch windows to monitor variables:  
+
+![WinDbg window](https://github.com/Ivo-Balbaert/The_Way_to_Jai/tree/main/images/WinDbg.png)
+
+For more info on Windows debugging, consult (https://learn.microsoft.com/en-us/windows-hardware/drivers/debugger/debugger-download-tools).
+
+## 20.7 Some general info
 The _Basic_ module provides an in-built memory debugger, see § 21.4 for how to use it.
 
 For Linux and macOS a debugger written in Jai called **Smash** is being built: [Smash](https://github.com/rluba/smash).
 
 Jonathan Blow uses Visual Studio for debugging the compiler (C++) (for Jai??), and uses [RemedyBG](https://remedybg.itch.io/remedybg) for debugging the Sokoban game.    
 
-## 20.7 The WinDbg debugging tool
-For debugging on the Windows platform, a new tool is the WinDbg app, which is in preview (for free) available from the Microsoft Store. It can be used to debug kernel-mode and user-mode code, analyze crash dumps, and examine the CPU registers while the code executes.

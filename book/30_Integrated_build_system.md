@@ -133,7 +133,9 @@ After all necessary build options have been configured, we write them back to th
 Then we add a file which has to be compiled with the proc `add_build_file` (see line (5)). This takes a string with the complete source file path and the workspace. You can pass the complete path in any form you like, here the file was constructed with tprint for convenience, using the current path `#filepath` and name `main.jai`. In this simple case, `add_build_file("main.jai", w);` works as well. If you have other files to compile, add them one by one with `add_build_file("file.jai", w);`. The compiler will automatically build any files included with the `#load` directive.
 Without line (6), compilation of the build program `30.3_build.jai` produces the specified `program.exe`, but also an executable for the build program itself (in our case named `30.exe`). Normally, you're not interested in an executable for the build process itself. To disable its generation, use line (6):
 `set_build_options_dc(.{do_output=false});`
-_dc means During Compile, and we specify that we don't want any output. This means no executable for the build program itself is generated and no statistics for its compilation are shown (Workspace 2).
+_dc means During Compile, and we specify that we don't want any output.
+If you don't want to see the generated strings either in .build, you can add: `set_build_options_dc(.{write_added_strings=false});`
+This means no executable for the build program itself is generated and no statistics for its compilation are shown (Workspace 2).
 
 ### 30.3.2 Compiling with add_build_string
 In the previous example, we used the `add_build_file()` proc to add source files to compile to the process. Another way of doing this is to the code as a multiline string with `add_build_string()`, as in the following minimal example:
@@ -419,7 +421,7 @@ message_loop :: () {
             }
             case .IMPORT; {            
                 message_import := cast(*Message_Import) message;          // (8)
-//              print("Import module '%'\n", message_import.module_name); // (9)
+//               print("Imported '%', module_type %, with path '%'.\n", m.module_name, m.module_type, m.fully_pathed_filename); // (9)
             }
             case .PHASE; {            
                 message_phase := cast(*Message_Phase) message;     // (10)

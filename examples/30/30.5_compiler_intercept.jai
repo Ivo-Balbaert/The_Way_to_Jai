@@ -34,7 +34,7 @@ message_loop :: () {
             }
             case .IMPORT; {            
                 message_import := cast(*Message_Import) message;          // (8)
-//              print("Import module '%'\n", message_import.module_name); // (9)
+//              print("Imported '%', module_type %, with path '%'.\n", m.module_name, m.module_type, m.fully_pathed_filename); // (9)
             }
             case .PHASE; {            
                 message_phase := cast(*Message_Phase) message;     // (10)
