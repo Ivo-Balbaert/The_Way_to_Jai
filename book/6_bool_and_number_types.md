@@ -310,13 +310,18 @@ These are Jai's bitwise operators (they work as in C):
 The code shows some examples of their use. The bitwise operators perform an arithmetic shift, following C's rules regarding bitwise operators.
 
 #### 6.2.7.1 Test if a number is even
-Using the % or & operator, we can the following expressions return true when n is even:	
+Using the % or & operator, the following expressions return true when n is even:	
 
 ```c++
 n % 2 == 0   
 n & 1 == 0 
 ```
 
+This expression checks that n is a power of 2:
+
+```c++
+n & (n - 1) == 0
+```
 ### 6.2.8 Formatting procs
 See *6.5_formatting.jai*:
 

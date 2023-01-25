@@ -854,9 +854,7 @@ This build compiles faster with as much debugging information as possible, but h
 * optimization_level = .RELEASE
 * set_optimization_level(target_options, 2, 0); // same as clang -O2
 
-The LLVM backend is slower than the X64 backend, because it does a lot more optimizations. 
-
-This build makes the compiler produce the best possible optimized code. An optimized build does not have debug information built into it, and takes longer to compile.
+The LLVM compiler backend is slower than the X64 backend, because it does a lot more optimizations. An optimized build does not have debug information built into it, and takes longer to compile. This build makes the compiler produce the best possible optimized code. 
 
 ## 30.11 Enforcing coding standards
 Another use-case would be enforcing coding house rules, an example is shown in 30.9_house_rules.jai , which shows how to enforce compile-time code checking, for example the MISRA standards (in this case: Check for Multiple Levels of Pointer Indirection, so that you cannot do you cannot do `a: ***int = b;` for example).  
@@ -1232,4 +1230,4 @@ Why bake data into your main program? Well, maybe you want to distribute a stand
 Maybe you want fast access to some of your data at startup, and can load the rest later.
 
 
-Some useful code examples can be found at (https://github.com/onelivesleft/jai-cookbook).
+Some useful code examples of metaprogramming during a build can be found at (https://github.com/onelivesleft/jai-cookbook).

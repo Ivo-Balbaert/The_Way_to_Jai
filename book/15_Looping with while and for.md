@@ -289,6 +289,18 @@ In line (2), we see the same logic written as a while loop. The nested loop in l
 In line (4) we see how you can break out of a while-loop using the condition variable.
 So normally a `break` terminates the current innermost loop immediately, but a `break var` breaks out of the loop where `var` is the iteration or condition variable. 
 
+Here is a more useful example of `break condition` when testing for a QUIT signal in a game's eventloop:
+
+```c++
+ while eventloop := true {
+    Input.update_window_events();
+    ...
+    for event: Input.events_this_frame {
+      if event.type == .QUIT then 
+        break eventloop;
+    ...
+```
+
 See *15.5_continue.jai*:
 
 ```c++
