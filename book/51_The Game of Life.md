@@ -368,8 +368,9 @@ The proc `next_generation` (line (5)) is the code that calculates the grid displ
 In line (6), `gol_grid` is updated.
 
 A particularly nice pattern permits to draw a widget and test an event on it.
-For example in this code snippet:  
-````c++
+For example in this code snippet:
+
+```c++
 if button(r, "Next") {
     next_generation();
     ui_interaction = true;
