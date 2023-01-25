@@ -56,9 +56,5 @@ _Table of Contents_
    [33 - Graphical(GUI) modules](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/33_Graphical%20modules.md)    
    [34 - Other useful modules](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/34_Other_useful_modules.md)  
 
-   [50 - The guessing game](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/50_The%20guessing%20game.md)    
- 
-     
-   
-
-
+   [50 - The guessing game](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/50_The%20guessing%20game.md)      
+   [51 - The game of life](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/51_The%20Game%20of%20Life.md)    
