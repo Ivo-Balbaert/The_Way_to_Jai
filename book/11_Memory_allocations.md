@@ -95,6 +95,25 @@ x is 234
 > ´ defer print("Program ended gracefully");´
 > If this message is printed out, your program ends without crashing
 
+> Also when measuring performance as we did in 6B.2_get_time.jai, you can defer the calculation of the elapsed time in the code, and after the line with defer call all code you want to measure (see 6B.2_get_time.jai, main() version with defer):
+
+```c++
+// version with defer:
+main :: () { 
+    start_time := get_time();
+    defer {
+        elapsed := get_time() - start_time;
+        print("Factorial 20 took % ms\n", elapsed * 1000);
+    }
+    print("Factorial 20 is %\n", factorial(20)); 
+    // => Factorial 20 is 2432902008176640000
+    // calling all code of which we want to measure performance
+
+    // executing defer block:
+    // => Factorial 20 took 0.1857 ms
+}
+```
+
 defer is mainly used to free memory or other resources (closing a file (see § 27.1), or a mutex (see § 31.3) or a database connection), as we'll see in the next sections.
 
 ## 11.2 Allocating and freeing primitive variables

@@ -87,16 +87,17 @@ factorial :: (n: int) -> int {
 }
 
 main :: () {
-    secs := get_time();
+    start_time := get_time();
     print("Factorial 20 is %\n", factorial(20)); 
     // => Factorial 20 is 2432902008176640000
-    secs = get_time() - secs;   // (1)
-    print("Factorial 20 took % seconds\n", secs);
-    // => Factorial 20 took 0.000207 seconds
+    elapsed := get_time() - start_time;
+    print("Factorial 20 took % ms\n", elapsed * 1000);
+    // => Factorial 20 took 0.1857 ms
 }
 ```
 
-`factorial` is a recursive (see § 17.9) procedure to compute: factorial(n) = n * (n-1) * (n-2) * ... 3 * 2 * 1.
+`factorial` is a recursive (see § 17.9) procedure to compute:  
+factorial(n) = n * (n-1) * (n-2) * ... 3 * 2 * 1.
 See an example of use in § 31.2.2
 
 ## 6B.3 - Getting a random number from time
