@@ -23,13 +23,13 @@ We'll discuss the purpose of _editor_support_  (see § 20.5 for natvis) and _red
 You can use the extracted folder structure as-is, no installation is needed!
 Unpack the zip file in a temporary folder using:
 
-    - on Windows: RIGHT-CLICK the file and select Extract All... 
-    - on Linux (or WSL2 in Windows): use tar -xvf in a terminal
+    - On Windows: RIGHT-CLICK the file and select Extract All... 
+    - On Linux (or WSL2 in Windows): use tar -xvf in a terminal
 
 Now copy the _jai_ subfolder in its entirety to its destination (let's call this the _Jai root folder_), as follows:
 
-    - on Windows: for example on the C-drive to c:\jai 
-    - on Linux (or WSL2 in Windows): for example to /usr/local/bin/jai or /opt/jai or $HOME/jai 
+    - On Windows: for example on the C-drive to c:\jai 
+    - On Linux (or WSL2 in Windows): for example to /usr/local/bin/jai or /opt/jai or $HOME/jai 
     (assuming $HOME is /home/your_username)
       Rename jai-linux to jai:  mv jai-linux jai
       You also have to make jai and the link program executable with the following commands 
@@ -38,8 +38,8 @@ Now copy the _jai_ subfolder in its entirety to its destination (let's call this
           chmod +x lld-linux
 
 Now open a terminal in your Jai root folder, and type the command:  
-    - on Windows: `jai -version`
-    - on Linux (or WSL2 in Windows): `./jai -version`
+    - On Windows: `jai -version`
+    - On Linux (or WSL2 in Windows): `./jai -version`
 it will show the following output (for your actual version):
 
 _Version: beta 0.1.036, built on 17 August 2022._
@@ -50,14 +50,14 @@ But of course you'll want to be able to use Jai from any directory, let's see ho
 
 To achieve this, do the following:
 
-    - on Windows: add the path to where jai.exe lives (for example c:\jai\bin) to the PATH system 
+    - On Windows: add the path to where jai.exe lives (for example c:\jai\bin) to the PATH system 
     environment variable; here is how to do that:
         • open Explorer, right-click This PC, Properties, then the System settings window appears
         • click Advanced system settings, then button Environment variables
         • choose System Variables, Path, click button New, add c:\jai
         • click OK on all open windows 
 
-    - on Linux (or WSL2 in Windows): make a symbolic link like ln -s /path/to/jai/bin/jai /usr/bin/jai
+    - On Linux (or WSL2 in Windows): make a symbolic link like ln -s /path/to/jai/bin/jai /usr/bin/jai
         (for example: ln -s $HOME/jai/bin/jai /usr/bin/jai)
 
         Or add this line to your /etc/profile or $HOME/.profile:
