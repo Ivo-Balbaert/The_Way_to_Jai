@@ -58,7 +58,7 @@ A somewhat better solution is to use assert statements to test conditions (see �
 `assert(var == val);`  
 at appropriate places.
 When an assert fails, you know something went wrong in the proc in which it executed.  
-A big advantage compared to `print` is that you can leave the `assert` statements in your code by using `ENABLE_ASSERT=false`, as explained in § 6.1.3. That way the asserts will not be compiled(??)/executed (so there will be no performance penalty), but you can quickly enable them in production code to hunt for a problem!  
+A big advantage compared to `print` is that you can leave the `assert` statements in your code by using `ENABLE_ASSERT=false`, as explained in § 6.1.3. That way the asserts will not be compiled (so there will be no performance penalty), but you can quickly enable them in production code to hunt for a problem!  
 We already showed you the use of assert to catch dereferencing null pointer errors (see § 10.3). Also have a look at the very close relative `#assert` in § 20.2.1
 
 ## 20.2 Debugging compile-time execution
@@ -303,7 +303,6 @@ Install them as follows:
 `jai 20.5_array_of_structs.jai -natvis`
 
 Then run the executable with the Debug instructions as specified in the previous §.
-(Better example ??)
 
 Instructions for how to install or customize a natvis file are available [here](https://docs.microsoft.com/en-us/visualstudio/debugger/create-custom-views-of-native-objects).
 
@@ -326,5 +325,5 @@ The _Basic_ module provides an in-built memory debugger, see § 21.4 for how to 
 
 For Linux and macOS a debugger written in Jai called **Smash** is being built: [Smash](https://github.com/rluba/smash).
 
-Jonathan Blow uses Visual Studio for debugging the compiler (C++) (for Jai??), and uses [RemedyBG](https://remedybg.itch.io/remedybg) for debugging the Sokoban game.    
+Jonathan Blow uses Visual Studio for debugging the compiler (C++), and uses [RemedyBG](https://remedybg.itch.io/remedybg) for debugging the Sokoban game.    
 

@@ -301,7 +301,7 @@ You can get the last item of an array with `peek` without changing the array (5B
 ### 18.4.1 Useful procs for dynamic arrays
 
 We check if an item is present in the array in line (6), use `array_find`, which returns true if the item is found, false otherwise.
-Removal of items within a dynamic array is done with the `remove` proc, as in line (7): we want to remove the item with value 5, so we loop over the array, if-test with it == value, and if true, remove it. This proc is used to safely remove elements while iterating through an array (it workd only inside a for loop), which is often a problem in other languages. 
+Removal of items within a dynamic array is done with the `remove` proc, as in line (7): we want to remove the item with value 5, so we loop over the array, if-test with it == value, and if true, remove it. This proc is used to safely remove elements while iterating through an array (it works only inside a for loop), which is often a problem in other languages. 
 Notes:
 - This proc does not work for fixed-size arrays!  
 - This proc does an unordered remove, the removed item is replaced with the last item (in fact: a swap with the last item, and then a remove of the last element). The remove happens in constant time O(1).
@@ -376,7 +376,7 @@ Package :: struct {
     floats: [10] float;
 }
 ```
-(see howto 300_relative pointers).
+(see how_to 300_relative pointers).
 
 Array views are also bounds-checked, but at run-time: see line (5). The program crashes and a stack trace is printed.
 

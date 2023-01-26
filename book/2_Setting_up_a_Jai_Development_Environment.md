@@ -2,7 +2,7 @@
 
 ## 2.1 Opening up the Jai compiler toolkit
 
-Until this moment Jai is still closed beta (??).
+Until this moment Jai is still closed beta (Jan 2023).
 The group members can download the compiler as a zip file (size +- 220 Mb).
 Unzipping this file shows the following contents:
 
@@ -13,8 +13,8 @@ Here is what these folders contain:
 - _bin_: this contains the Jai compiler executables (jai.exe for Windows, jai-linux for Linux, see $ 4.1-4.4) and the LLVM linker lld (see section § 4.5).
 - *how_to*: this contains some examples with explanatory comments.
 - _examples_: this contains some more advanced example programs.
-- _modules_: this contains Jai’s standard library, we'll discuss this in more detail here: ??
-We'll discuss the purpose of _editor_support_ and _redist_ later (see ?? and § 2.2.4).
+- _modules_: this contains Jai’s standard library, we'll discuss this in the rest of the book, in particular in § 6B, 19, 27, 31-34.  
+We'll discuss the purpose of _editor_support_  (see § 20.5 for natvis) and _redist_ later (see 2.2.4).
 
 ## 2.2 Setting up the Jai compiler
 
@@ -75,7 +75,7 @@ Then just drop the most recent _jai_ folder as the new Jai root folder, and you'
 ### 2.2.4 Prerequisite for Windows 
 
 > (from the distribution README.txt) In order to compile on Windows, you need to have installed on your machine at least one Windows SDK (which is how we link to stuff like kernel32, user32, etc) and one Visual C++
-> Redistributable (which has various C-related libraries). If you
+> Re-distributable (which has various C-related libraries). If you
 > compile C++ programs on your computer, you probably already have this.
 > If you don't, run vs_BuildTools.exe, and select the option to install C++ build tools.
 > (It is the box in the upper-left corner).
@@ -127,9 +127,8 @@ This is done by executing the following commands in a terminal:
 Check with `jai -version`:  
 Version: beta 0.1.039, built on 17 September 2022.
 
-Remark: 
-1) WSL on Windows with Ubuntu doesn't have this problem on a 64 bit machine.  
-2) For Simp or other OpenGL modules you need to install libgl-dev.  
+> 1) WSL on Windows with Ubuntu doesn't have this problem on a 64 bit machine.  
+> 2) For Simp or other OpenGL modules you need to install libgl-dev.  
    
 ## 2.3 Editor help for coding Jai
 Writing a program's source code is easier when you have some support such as syntax highlighting in your code editor. Support exists for vim, Sublime Text 3 and VSCode, see: [Tooling Ecosystem](https://github.com/Jai-Community/Jai-Community-Library/wiki/References#tooling-ecosystem). 

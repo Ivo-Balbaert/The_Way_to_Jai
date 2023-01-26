@@ -1,6 +1,6 @@
 # Chapter 3 – Compiling and running your first program
 
-Some preliminary remarks:
+## 3.1 Some preliminary remarks
   * Jai source code files have the extension **.jai**. But this is a convention, the compiler doesn't force you to use this extension.
 
   * In a code file, as is customary in all C type languages, every code line ends with a **;**  
@@ -17,7 +17,7 @@ Some preliminary remarks:
 
    * As you will soon see, programmers use spaces and indentation to make the program text more readable for humans (the compiler doesn't care). The following rule is mostly used: at _each indentation level_, the code moves _4 spaces_ to the right.  
 
-## 3.1 The main entry point
+## 3.2 The main entry point
 
 To start, let's create a folder _jai_projects_.
 Open this folder in VSCode by selecting File, Open Folder.
@@ -30,7 +30,7 @@ The compiler protests with:
 _In Workspace 2 ("Target Program"):
 Error: No program entry point was found. (The designated entry point name is 'main'.)_
 
-(Don't worry about the Workspace thing, we'll explain this later (see ??).)  
+Don't worry about the Workspace thing, we'll explain this later (see § 30.1).
 What does this mean?
 This error tells us the following:  
 Every Jai program needs a so called _entry point_ called **main**, as in all C-like languages, which is the starting point for code execution. 
@@ -49,7 +49,7 @@ Not only is the main procedure a starting point, it also encompasses the complet
 () is the parameter list, which is empty for main. We also don't see anything after ): main has no return value, unlike C.  
 Then follow the curly braces { } which normally contain the code to execute line by line.
 
-> Remark that Jai doesn't need a special keyword like function or func or even fn to indicate a function.
+> Jai doesn't need a special keyword like function or func or even fn to indicate a function.
 
 Because there is no code, it doesn't do anything. But this is the first program which can be compiled!  
 `jai 3.1_hello_sailor.jai` now produces the output:
@@ -87,10 +87,10 @@ Total     time: 0.177189 seconds.
 
 We won't display this output again, unless it contains something interesting.
 
-## 3.2 Compiling our first program
+## 3.3 Compiling our first program
 
-### 3.2.1 Compile-time
-You see that in the compilation phase, that only took a fraction of a second, which is called **compile-time**, a lot of things happen. As we will see later (§ 3.2.4 and chapter ??), Jai can do very complex things during compilation, even running entire programs! 
+### 3.3.1 Compile-time
+You see that in the compilation phase, that only took a fraction of a second, which is called **compile-time**, a lot of things happen. As we will see later (§ 3.3.4 and chapter § 26 and 30), Jai can do very complex things during compilation, even running entire programs! 
 But as we will soon see with real programs that do something, Jai always compiles very fast.
 
 Let's analyze the compilation output:
@@ -103,7 +103,7 @@ Compilation/linking produces a single executable as output: Jai follows the _sin
 You can execute this by typing:  `hello_sailor`
 (`./hello_sailor` on Linux), but as expected, nothing is displayed.
 
-### 3.2.2 Printing output
+### 3.3.2 Printing output
 
 No we want to display a greeting to a sailor, let's say: _Hello, Sailor from Jai!_  
 This is a string and must be enclosed within double quotes "", like: _"Hello, Sailor from Jai!"_.  
@@ -150,7 +150,7 @@ main :: () {
 
 Now compilation succeeds and an executable is created!
 
-### 3.2.3 Run-time
+### 3.3.3 Run-time
 
 When we now run the _hello_sailor_ executable as shown above, we see the expected output:  
 _Hello, Sailor from Jai!_
@@ -174,7 +174,7 @@ At run-time, a program can still be stopped (it crashes or panics) when a certai
 Due to its extensive meta-programming capabilities, Jai can even 
 _run a program during compile-time_!
 
-### 3.2.4 Running code during compile-time
+### 3.3.4 Running code during compile-time
 
 Make a new source file called *3.2_hello_sailor_comptime.jai* and add the following line after (or before) main: `#run main();`, so that we get:
 
@@ -200,12 +200,12 @@ But before the linking starts (Running linker, which is **_during compile-time_*
 This means `main()` has already been executed at compile-time!
 This is because of the **#run** command. This so-called **directive** tells the compiler to run the procedure called after `#run` in compile-time.
 
-In case of `#run main()`, you run the whole program during compile-time (see ?? for more info on `#run`).
+In case of `#run main()`, you run the whole program during compile-time (see § 26.2 for more info on `#run`).
 
 > Jai uses a lot of directives and we'll discuss them in several coming chapters. You could consider them as special instructions for the compiler. They all start with the **#** token.
 
 
-### 3.2.5 Some remarks
+### 3.3.5 Some remarks
 
   1) Source code file names are usually in lowercase, separated by _ if needed, like *hello_sailor.jai* or *struct_literals.jai*. Never use space characters in a Jai filename! In chapters with multiple code files, we'll number them like *3.1_hello_sailor.jai*.
 
@@ -213,7 +213,7 @@ In case of `#run main()`, you run the whole program during compile-time (see ?? 
   Compile and check it.
 
 
-### 3.2.6 Errors
+### 3.3.6 Errors
 
 Let's see some other compile-time errors.  
 Remove the ; at the end of the print statement and compile again. The compiler gives you the following error-message:
@@ -231,7 +231,7 @@ Also the Jai compiler stops at the first error it encounters and only reports th
 
 Sometimes the compiler signals a _Warning_ instead of an _Error_; a warning means that something strange is detected in the code, but the executable is generated.
 
-### 3.2.7 Exiting a program
+### 3.3.7 Exiting a program
 Normally a Jai program will stop after execution of the last statement in `main()`.
 In exceptional circumstances, a program can encounter a run-time error and crash, which means that the OS has terminated the program. 
 Jai also provides the `exit` procedure to stop the program at any condition it encounters or reaches, see for example the following program (see 3.3_exit.jai):

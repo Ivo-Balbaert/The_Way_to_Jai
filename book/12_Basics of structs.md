@@ -246,7 +246,7 @@ Also remember to free the memory as in lines (6A) and (6B), Jai doesn't warn you
 Why would you use structs on the heap?  
 The stack is limited in size. If your program needs a whole lot of structs, better use the heap. But for faster memory management: keep things on structs by value where possible.
 
-Remark: Module _Basic_ also contains a proc `Dynamic_New`, which is like New, but can be used when you don't know the type at compile-time: 
+> Module _Basic_ also contains a proc `Dynamic_New`, which is like New, but can be used when you don't know the type at compile-time: 
 ```
 z := Dynamic_New(T);  
 defer free(z);
@@ -390,10 +390,10 @@ main :: () {
 Line (1) tells us Patient can use the namespace of Person. That's why in line (2) (where we normally would write pat1.pe.name) we don't need to use Person in order to access the `name` field. Line (3) shows us that we can even use pat1 as a namespace.  
 The keyword using lets you import namespaces, as we did with enums. `pe` is not a keyword here, it can be replaced by any other word, for example `using person: Person`.
 Instead of declaration (1B), we could have written line (4), so that we could use the fields of pat1 without writing pat1.field, just write field.
-**using** allows us to refer to a contained struct's members without referencing that struct. It allows you to bring the member variables of a struct into the scope of another struct (like sub-classing but no methods/overriding) or a proc (like a method but more flexible, see ??).   
+**using** allows us to refer to a contained struct's members without referencing that struct. It allows you to bring the member variables of a struct into the scope of another struct (like sub-classing but no methods/overriding) or a proc (like a method, see § 12.16).   
 This mimics a kind of _inheritance_: Patient is like a subtype of the supertype Person.  
 We use _composition_ instead of a subclass and can reference the fields of the ‘parent’ struct directly. Jai doesn't have classes and inheritance, but as we see here: first class composition works like inheritance!
-(see ?? for a more complete example).
+(see § 23B for a more complete example).
 
 > The `using` keyword allows you to bring the member variables of a struct into the scope of a function (like a method but more flexible) or another struct (like subclassing but no methods/overriding).
 
@@ -617,7 +617,6 @@ main :: () {
 The `Accumulator.accumulation` field and `global_var` in lines (1) and (3) are 64 bit cache-aligned. Line (4) shows that indeed the address of `global_var` is divisible by 64. In line (5) the heap allocation is NOT 64-bit aligned. (Line (1B) doesn't have any effect.)
 It is often accompanied by the directive **#no_padding**, meaning no additional empty bytes are added to align with word-size.
 (For a good explanation see [Structure Padding in C](https://www.javatpoint.com/structure-padding-in-c)
-(2) #align 1 ??
 
 ## 12.12 Making definitions in an inner module visible with using
 Create a module TestInside with this content:

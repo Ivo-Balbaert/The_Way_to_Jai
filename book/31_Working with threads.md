@@ -2,7 +2,7 @@
 
 Threads are a facility provided by the operating system. A different process can run in each thread. Jai exposes this facility: programs can launch multiple threads so that several processes can run in parallel, that is: simultaneously. To use this you need the _Thread_ module.                                        
 Jai provides platform-independent thread routines, as well as Mutexes, Threading primitives, Semaphores and a ThreadGroup functionality.
-Thread is a struct, defined   in the module _Thread_.
+Thread is a struct, defined in the module _Thread_.
 Each thread has its own Context. Because Temporary_Storage is in the Context, there's a separate storage space per thread, so you don't have to synchronize between threads, and it is fast.
 
 ## 31.1 Basics of threads
@@ -295,7 +295,7 @@ main :: () {
     // init(*thread_group, num_threads, work_proc);
 }
 ```
-`get_number_of_processors()` from module _System_ reports the number of processors, but in fact these are hyperthreads, so we have to divide by 2 in line (2). Further we reserve one thread for the main processor (see (3)), and we start a minimum of 2 threads.
+`get_number_of_processors()` from module _System_ reports the number of processors, but in fact these are hyper-threads, so we have to divide by 2 in line (2). Further we reserve one thread for the main processor (see (3)), and we start a minimum of 2 threads.
 
 ## 31.2.4 Periodically checking which portion of the work is completed
 In the _thread_group_ example in module _Thread_  we also find a way to do this. Schematically, it runs as follows:
@@ -420,7 +420,7 @@ c:/jai/modules/Thread/primitives.jai:552,21: Assertion failed!
 This also means that you **cannot have deadlocks** in your program! The reason is that deadlocks can only happen when two mutexes are acquired in opposite order, which is not possible if you only allow one order. 
 
 ## 31.4 Building a program using OpenGL, macros and threads
-> Remark: This example was made by Nuno Afonso, and discussed in his YouTube video series 'The Joy of Programming in Jai", part 11: Advanced Compilation.
+> This example was made by Nuno Afonso, and discussed in his YouTube video series 'The Joy of Programming in Jai", part 11: Advanced Compilation.
 
 In this example, we start from 30.6_build_and_run.jai, to which we have only added 4 lines. While compiling, we are showing an SDL window with title "Compiling..." and a grey background. When the compiler emits the COMPLETE message, we change the window title to "Success!" and the background to green. To accomplish this, OpenGL is used to show the windows in a separate (GUI) thread from the main thread, using macros as well. See it in action: `jai 31.2_build_threads.jai`  
 

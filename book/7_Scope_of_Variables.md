@@ -1,5 +1,5 @@
 # Chapter 7 – Scope of Variables
-It is important to know how long a variable can be used and stays active, that is what its _lifetime_, or _scope_ is. When a variable is no longer active (it goes out of scope, its lifetime has ended), the memory it occupies can be freed (see ??).
+It is important to know how long a variable can be used and stays active, that is what its _lifetime_, or _scope_ is. When a variable is no longer active (it goes out of scope, its lifetime has ended), the memory it occupies can be freed (see § 7.1.2 and § 11).
 
 In fact, there is a hierarchical arrangement of scopes: if you use an identifier, and it's not defined inside the current scope, the compiler looks upward into parent scopes.
 
@@ -79,5 +79,5 @@ A variable in a more inner block can shadow a variable with the same name from a
 > Shadowing can be confusing, use it only when it is really necessary.
 
 Procedures can use global variables from a data scope.
-A procedure, that's defined inside another procedure, cannot use the local variables of that outer procedure, because it has to be able to run independently by itself (see example ??). However, it can use all constants, defined in any outer scope, also imperative. Because procedures are constants, they can also be called.  
+A procedure, that's defined inside another procedure, cannot use the local variables of that outer procedure, because it has to be able to run independently by itself (see example § 17.2). However, it can use all constants, defined in any outer scope, also imperative. Because procedures are constants, they can also be called.  
 

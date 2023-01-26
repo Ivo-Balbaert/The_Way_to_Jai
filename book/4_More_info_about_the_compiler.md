@@ -23,13 +23,13 @@ Here is an overall schema of the compiler architecture:
 
 As we see in the diagram, Jai source code is first converted to an _abstract syntax tree_ (AST), which is then converted to an internal _byte-code_.
 
-The developer can modify the generated AST at compile-time(see Metaprogramming and macros § 26), and can access the compiler through a _compiler message loop_ (see § 30.5).
+The developer can modify the generated AST at compile-time(see Meta-programming and macros § 26), and can access the compiler through a _compiler message loop_ (see § 30.5).
 
 
 ## 4.2 Internal byte-code interpreter
 Jai can run programs in its byte-code during compilation, so only at compile-time, for example with the `#run` command. This is possible because the compiler contains a _byte-code interpreter_.    
 
-When a function or program is run at compile-time, its byte-code is executed by this interpreter. The results (for example: calculation of values, construction of procedures through metaprogramming, see ??) are funneled back into the source code, and then the compiler continues as normal.  
+When a function or program is run at compile-time, its byte-code is executed by this interpreter. The results (for example: calculation of values, construction of procedures through meta-programming, see § 26) are funneled back into the source code, and then the compiler continues as normal.  
 
 At runtime, a Jai executable (binary) is running machine code directly. 
 
@@ -64,7 +64,7 @@ _Compiler  time: 0.587162 seconds._
 	Front-end time + llvm time = Compiler time (for llvm backend)
 
 ## 4.5 Linking
-The backend compiler produces several compiler artefacts in the hidden _.build_ folder (.obj, .exp and .lib files). It is the task of the linker (_link.exe_ from MSVC on Windows, _lld-linux_ on Linux) to combine these object files and OS specific libraries statically into one output executable (.exe on Windows).  
+The backend compiler produces several compiler artifacts in the hidden _.build_ folder (.obj, .exp and .lib files). It is the task of the linker (_link.exe_ from MSVC on Windows, _lld-linux_ on Linux) to combine these object files and OS specific libraries statically into one output executable (.exe on Windows).  
 The time this takes is for example reported as:   
 _Link      time: 0.328986 seconds._
 
@@ -107,7 +107,7 @@ With `-add arg`, you can add the string 'arg' to the target program as code.
        Example: `jai -add "a := 42"; 1_hello_sailor.jai`  
 Now the variable a is know in the program, and we can print it out with for example:  `print("%", a);`
 
-The `-verbose` option gives some extra information about what the metaprogram is doing, for example:  
+The `-verbose` option gives some extra information about what the meta-program is doing, for example:  
 	`jai -run write_string(\"Hello!\n\") -add "a := 42"; -verbose 1_hello_sailor.jai`  
 shows the following at the start of the compiler output:
             
@@ -158,8 +158,8 @@ Optimal memory use places data **contiguous in memory**, that means memory is as
 The compiler knows how much memory each type uses. It also knows the type of each variable. A variable's memory is allocated at type declaration, for example: variable `counter` of type int will allocate 8 bytes. It will occupy one word on a 64 bit machine. 
 
 Variables of a basic type are stored by default in _stack_ memory for performance reasons. This memory is freed automatically when the variable is no longer needed (when it goes out of scope), see § 7.  
-However most of your program's memory will be allocated in the _heap_. Jai has no automatic memory management, so the developer is responsable for releasing (freeing) that memory.
-We'll later (see ??) detail the mechanisms Jai offers to do that.
+However most of your program's memory will be allocated in the _heap_. Jai has no automatic memory management, so the developer is responsible for releasing (freeing) that memory.
+We'll later (see § 11 and 21) detail the mechanisms Jai offers to do that.
 
 For a good discussion about these two types of memory, see [Stack vs Heap](https://hackr.io/blog/stack-vs-heap).  
 

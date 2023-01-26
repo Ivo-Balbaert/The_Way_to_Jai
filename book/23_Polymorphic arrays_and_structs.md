@@ -140,7 +140,7 @@ proc4 is called `implicit polymorphism`
 This allows you to do duck typing.
 
 See *23.6_interface.jai*:
-(Example from howto/160_type_restrictions)
+(Example from how_to/160_type_restrictions)
 ```c++
 #import "Basic";
 
@@ -247,7 +247,7 @@ In example 3 in lines (9-10), we bake in multiple types as named arguments, and 
 #bake_constants makes the argument type fixed at compile-time, in other words: it bakes in the generic type(s) into a pre-compiled procedure, eliminating branches and optimizing the code path. It converts the polymorphic function into a non-polymorphic one.
 
 ## 23.8 Polymorphic struct using #this and #bake_constants
-(Example taken from howto/050_this)
+(Example taken from how_to_/050_this)
 
 See *23.5_bake_constants_struct.jai*:
 ```c++

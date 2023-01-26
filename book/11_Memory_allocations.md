@@ -5,7 +5,7 @@ Now that we know the concept of pointers, we can discuss the basic mechanisms in
 Because there is no garbage collection in Jai, the developer is also responsible for the freeing of memory. Freeing memory should be done as soon as a variable is no longer needed, it is easy to forget.
 If memory allocated on the heap is not freed when it is no longer needed, so-called _memory leaks_ can occur. This means your program continues to use up more and more memory, degrading performance of its execution and of the entire machine on which it runs.
 Because Jai is a manually memory managed language, it is important to be aware of this from the start.  
-Managing memory is not that cumbersome as in C++ however. Later on (see ??) we'll see how Jai makes it much simpler to handle memory. 
+Managing memory is not that cumbersome as in C++ however. Later on (see § 12, 18 and 19) we'll see how Jai makes it much simpler to handle memory. 
 
 ## 11.1 The defer keyword
 The memory occupied by variables must be freed when it is no longer needed. But it can be difficult to manually keep track when this is the case; there can be a lot of code between the variable's creation (the allocation of its memory) and when the variable's lifetime is over (when its memory can be freed).  
@@ -135,7 +135,7 @@ The type of n1 is *s64
 8
  */
 ```
-> Remark: This example is somewhat contrived: normally you wouldn't allocate an int on the heap.
+> This example is somewhat contrived: normally you wouldn't allocate an int on the heap.
 
 The int variable n0 defined in line (1) is allocated on the stack; it will automatically be freed at the end of the procedure (here main) it is defined in.
 The n1 variable is created on the heap in line (2) with the `alloc` proc, like this:

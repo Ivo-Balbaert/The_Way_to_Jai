@@ -1,5 +1,6 @@
 # 24 Operator overloading
 
+## 24.1 Operators and operator overloading
 Operators are in-built procedures like + (addition of numbers) or the index operator [] (array[i]).
 It can be useful in certain cases when you need this kind of operations a lot to be able to define let's say a `+` and `*` operation for Vectors. In § 24.1 we show 2 overloaded operators for Vector3, which are in fact defined in module _Math_.
 In a sense, it's like overloading a procedure (see § 17.7), but now you overload an operator. 
@@ -11,7 +12,7 @@ The following operators cannot be overloaded: = and New.
 
 > Operator overloading allows the programmer to define implementations for the fundamental operators like +, -, and so on, that can be used on custom-defined data types.
 
-## 24.1 Vector operators
+## 24.2 Vector operators
 See *24.1_overloading_vec.jai*:
 ```c++
 #import "Basic";
@@ -54,7 +55,7 @@ followed by how the returned Vector3 value is calculated.
 (look it up in Math\module.jai)  
 The **#symmetric** directive tells us that a Vector3 * a float (like in (3)) or a float * a Vector3 (like in (4)) both give the same result.
 
-## 24.2 Object operators
+## 24.3 Object operators
 In this section we make a few operator overloadings ourselves.
 
 See *24.2_overloading_object.jai*:
@@ -116,7 +117,7 @@ In line (4) we overload `*=` for an Object and a integer, to mean that every ite
 2) Define a polymorphic `square` proc that works for all number types. Then define a Vector3 type as a struct with x, y, z: float. Verify that square doesn't work for Vector3. Now define an operator * for Vector3 so that it does!
 (see poly_square.jai).
 
-## 24.3 The #poke_name directive
+## 24.4 The #poke_name directive
 This directive isn't exclusively used for operators, but the examples we'll show use operators, so that's why it is discussed here.
 Here is a 1st example of its use:
 ```

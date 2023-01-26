@@ -50,7 +50,7 @@ If we absolutely need to mention something which has not been explained yet, we'
 Also for those of you who are beginning their programming journey, do speak out code internally when reading a program, explain to yourself all that happens in the code. 
 Later on this becomes more automatic, but in the beginning stages it is very helpful to not be overwhelmed by code which seems more complex at first.
 
-Nobody else than Jonathan Blow himself can express it in a better way, so here is an excerpt from howto/200_memory_management (a must-read, together with 999_temperance):
+Nobody else than Jonathan Blow himself can express it in a better way, so here is an excerpt from how_to/200_memory_management (a must-read, together with 999_temperance):
 ```
 This language is designed for you, the individual. We expect you to enjoy
 that magical part of programming where the computer is made to do new and

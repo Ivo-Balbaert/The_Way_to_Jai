@@ -80,7 +80,7 @@ Then, enclosed in { } comes the proc's body.
 
 The proc is called as  	 `proc_name(par1, par2)`;
 Here par1 and par2 are the parameters that are substituted in order into the arguments arg1 and arg2, they have to be of the indicated type type1 and type2, otherwise you get an error such as:
-_Error: Number mismatch. Type wanted: int; type given: float32._ (see line (4), compile this for yourself and see how clear the message is: indicating the parameter in the call and the argument in the args list where it went wrong). The number of parameters and arguments must be the same (but see ?? default arguments).
+_Error: Number mismatch. Type wanted: int; type given: float32._ (see line (4), compile this for yourself and see how clear the message is: indicating the parameter in the call and the argument in the args list where it went wrong). The number of parameters and arguments must be the same, except when there are default arguments, see § 17.4.
 
 As we see in line (5), it is always possible to pass the parameter value through its argument name: `square(x = c)`. This enables a more-documented style, but also to call the arguments in a different order than declared.  
 Line (6) shows that a parameter can just be another proc call.

@@ -1,5 +1,4 @@
 # 34 Other useful modules.
-
 ## 34.1 Sorting
 This is covered by the _Sort_ module, which contains implementations of bubble sort and quicksort.
 (We already used bubble sort in program 30.11_using_notes.jai - § 30.12)
@@ -347,7 +346,7 @@ main :: () {
 }
 ```
 
-Don't forget to include `libcurl.dll` and `libcurl.lib` on Windows (or the equivbalent on others OS's) in the same folder as`mailing.exe`.
+Don't forget to include `libcurl.dll` and `libcurl.lib` on Windows (or the equivalent on others OS's) in the same folder as`mailing.exe`.
 
 Running the executable gives the output:
 ```

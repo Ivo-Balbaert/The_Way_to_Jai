@@ -18,14 +18,14 @@ Here are the _priorities_ of Jai in this order:
 
 To realize these priorities, Jai has the following _properties_:
 
-1. The compiler is written in C++. There are no header files, and no forward declarations. Also builds can be controlled from within the language, the process is the same for all platforms (see ??); make-files or any other external build-systems are not needed. Jai has extensive compile time meta programming functionality, even to the point of being able to run programs at compile time (see § 3.2.4). It also has compile time polymorphism (see ??), and a powerful macro system ( see ??).
+1. The compiler is written in C++. There are no header files, and no forward declarations. Also builds can be controlled from within the language, the process is the same for all platforms (see § 30); make-files or any other external build-systems are not needed. Jai has extensive compile time meta programming functionality, even to the point of being able to run programs at compile time (see § 3.2.4). It also has compile time polymorphism (see § 22-23), and a powerful macro system ( see § 26.5).
 
 The goal is to compile 1M lines of code in \< 1s (from scratch, without delta builds). The official compilation speed of the compiler is 250,000 lines of code per second using the x64 backend, according to the CHANGELOG of beta 0.0.045 (using the Sokoban game as a benchmark).
 
-2. Explicit control over optimization and performance characteristics: things like inlining (see ??) and LLVM optimizations (see ??). Jai also effectively uses pointers and it has an implicit context system to switch memory allocation schemes. Currently (Oct 2022) the generated code is around ~20% slower than C, but this will get better.
+2. Explicit control over optimization and performance characteristics: things like inlining (see § 17.8) and LLVM optimizations (see § 30.4.8). Jai also effectively uses pointers and it has an implicit context system to switch memory allocation schemes. Currently (Oct 2022) the generated code is around ~20% slower than C, but this will get better.
 
-3. Bounds checking (see ??), and initialization (see § 5.3.1).
-4. Putting _data at the center_ of the design (see ??).
+3. Bounds checking (see § 18.3.2), and initialization (see § 5.3.1).
+4. Putting _data at the center_ of the design (see § 26.10).
 
 In order to increase performance, Jai has NO:
 

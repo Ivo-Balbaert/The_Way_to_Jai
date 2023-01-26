@@ -1,6 +1,7 @@
 # Chapter 9 – More about types
 
-Jai has _first-class types_: with a type you can do the same things that you would do with any other value. This perhaps gives you a first glimpse of the flexibility of the language.  
+## 9.1 First class Types
+This means that you can do the same things with a type than you can do with any other value. This perhaps gives you a first glimpse of the flexibility of the language.  
 All types in Jai have type **Type**, the type of Type is also Type.
 **Code** is also a type (see § 26.4.1).
 
@@ -76,21 +77,21 @@ main :: () {
     print("is b a float? %\n", b == float); // => false
 }
 ```
-## 9.1 Constants of type Type: Type alias
+## 9.2 Constants of type Type: Type alias
 An existing type can be given a new name (a **type alias**), defined as a constant, see Thread_index and TI in lines (0) and (8). Then you can define variables of the new type, and use these in other operations defined for the basic type. 
 See also type variants: § 26.13.
 
-## 9.2 Variables of type Type
+## 9.3 Variables of type Type
 In lines (1) to (4) we have three variables a to d that all have type Type; d even has value Type!  
 
-## 9.3 size_of
+## 9.4 size_of
 **size_of** is a procedure that gives you the size in bytes a variable occupies in memory.
 To use it, first apply type_of() to the variable:     **size_of(type_of(variable))**
 See the examples starting in line (5):
 t2 is of type string, and in line (6) we see that the size of a string is 16 bytes; this is also the case for Unicode strings (see line (7)).
 We see that Type itself is 8 bytes in size.
 
-## 9.4 The Any type
+## 9.5 The Any type
 (see line (9) and following)
 The **Any** type (defined in module _Preload_), is the most wide type. It encompasses and matches with all other types. Values of all types can be converted to Any.
 This allows you to assign one variable to values of different types (see lines 10-11, even a function type as in line (11)), as you might do in a dynamically-typed programming language.
@@ -98,7 +99,7 @@ This allows you to assign one variable to values of different types (see lines 1
 The Any type has size 16 bytes. It is in fact a more informative and type-safe version of the void pointer from C, including a type pointer for the type and a void pointer for the value (see § 16.1 for its definition).
 It is useful when working with heterogeneous arrays of pointers to different types.
 
-## 9.5 Any and the print procedure
+## 9.6 Any and the print procedure
 `print` is defined as:
 
 ```c++
@@ -110,6 +111,6 @@ print :: (format_string: string, args: .. Any, to_standard_error := false) -> by
 It can print out variables of any type; format_string can also be a variable.
 The print function takes in a variable (..) number of type Any parameters at compile time, and the type information is available at runtime. 
 
-## 9.6 Type comparisons
+## 9.7 Type comparisons
 Types can be compared for equality with == and != : see line (12) and following.
 

@@ -217,7 +217,7 @@ main :: () {
         z === d; // We pin the high level var 'z' to gpr 'd' as required by mul.
         mul z, x, y;
     }
-    print(" z is %\n", z); // => z is 9588  (??)
+    print(" z is %\n", z); // => z is 9588  (z is uninitialized, so contains its previous value)
 
     // loading memory into registers
     array: [32] u8;

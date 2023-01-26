@@ -251,7 +251,7 @@ Simply cast the string to an array of bytes, and then you can use `it` in the lo
 It can be used to build strings dynamically, as shown in line (11).
 
 ### 19.4.6 Releasing a string's memory
-Strings that have been built dynamically have to be de-allocated. This can be done with `free()`, as shown in line (12). An elegant alternative approach is to use the `tprint` twin proc of `sprint` (see § 21.3.1).
+Strings that have been built dynamically have to be de-allocated. This can be done with `free()`, as shown in line (12). An elegant alternative approach is to use the `tprint` twin proc of `sprint` (see § 21.4.1).
 
 ### 19.4.7 Storing code in strings
 In § 26.4.1 we'll see that _Code_ is a type on its own. One of Jai's fortes is meta-programming, that is: manipulating code at compile-time.  
@@ -287,7 +287,7 @@ main :: ()  {
 ```
 
 Just like relative pointers (see § 10.6), we can define strings in an array field of a struct relative to each other, see line (1). The options are: string~s8, string~s16, string~s32, string~s64. Lines (2) and following show how to make a Unicode character string (containing 3 characters) from a []u8 (example taken from Jai-Community Wiki - Snippets).
-(For other examples, see howto 300_relative pointers.)
+(For other examples, see how_to 300_relative pointers.)
 
 ## 19.5 String builder
 See *19.3_string_builder.jai*:
@@ -490,7 +490,7 @@ Some important procs are:
 ```c++
 trim_left, trim_right, trim
 replace_chars :: (s: string, chars: string, replacement: u8);
-replace :: (s: string, old: string, new: string) -> (result: string, ocurrences: int);
+replace :: (s: string, old: string, new: string) -> (result: string, occurrences: int);
 to_lower_in_place :: (s: string);
 to_upper_in_place :: (s: string);
 slice :: inline (s: string, index: s64, count: s64) -> string;
@@ -559,7 +559,7 @@ main :: () {
 ```
 
 In line (1) the `read` from module _POSIX_ waits for user input. The characters the user enters until pressing the ENTER key are stored in the `buffer` array. The `to_string` proc in line (2) (discussed in § 19.7) converts this into a string `str`. `read` is in fact a C function from libc.  
-(See § 50 for aother example where `read` is used.)
+(See § 50 for another example where `read` is used.)
 
 
 On Windows we can directly use the Windows APIs (namely the `ReadConsoleA` function from the Windows kernel32 system library), which makes our code a bit more complex: 

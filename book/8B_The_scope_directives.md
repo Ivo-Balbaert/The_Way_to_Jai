@@ -21,7 +21,7 @@ Each module has its own scope that is completely sealed off: it cannot see the a
 If you want to have some definitions only visible within the module, use the `#scope_module;` directive before these definitions.
 
 ## 8B.3 An example of using the #scope directives
-See *8.2_file_and_global_scopes.jai* (this is the howto 151_file_and_global_scopes example):  
+See *8.2_file_and_global_scopes.jai* (this is the how_to 151_file_and_global_scopes example):  
 
 ```c++
 #import "Basic";

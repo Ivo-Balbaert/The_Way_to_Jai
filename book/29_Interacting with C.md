@@ -35,7 +35,7 @@ The **#library** directive specifies a file (library) for foreign functions writ
 The path to the foreign library is best expressed as relative to the program file, for example: FMOD :: `#library "../../lib/fmod";`
 Also make sure to copy the dll next to the program's exe file.
 
-> Remark: Inside the "" you can write the full path to the library
+> Inside the "" you can write the full path to the library
 > The .dll must be copied next to the Jai .exe 
 
 Then you declare the functions (their signatures) from that library you want to use, for example:
@@ -117,11 +117,11 @@ main :: () {
     print("%\n", clock()); // => 4 
     
     str :: "hello";
-    print("Length of str is %\n", strlen(str)); // => Length of str is 1 (??)
+    print("Length of str is %\n", strlen(str)); // => Length of str is 1 
 }
 ```
 
-In line (1) we declare the Windows C standard library `crt`, lines (2) and following declare some C function from that library. In lines (3) and following, we call some of these C functions from Jai.
+In line (1) we declare the Windows C standard library `crt`, lines (2) and following declare some C function from that library. In lines (3) and following, we call some of these C functions from Jai. The length of str is 1, because C only sees a pointer to data.
 
 ### 29.6.2 Calling user-defined library functions
 (The source code for this example is in _examples/29/mylib_)

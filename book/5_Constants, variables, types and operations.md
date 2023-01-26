@@ -17,7 +17,7 @@ Various types exist, like:
 and so on.   
 These are the **basic**, **fundamental** or **primitive** types in Jai, called respectively **int**, **float**, **string** and **bool**. 
 
-Jai also has some mechanisms to create **composite** or **custom** types, like arrays (see ??) and structs (see ??).  
+Jai also has some mechanisms to create **composite** or **custom** types, like arrays (see § 18) and structs (see § 12).  
 
 The type determines how a data value looks like and what can be done with it, that is: what _operations_ can be performed on these values.
 
@@ -36,7 +36,7 @@ _Question:_ How would you convert `"Hello"` to a number?
 Often these conversions won't work, and you'll get a compiler error.
 
 Jai is a _strongly_ and _statically typed_ language: the compiler must know the types of all the program’s constants, variables and expressions at compile time, and a variable cannot change type, like from number to string as in dynamic languages. This allows Jai to run fast at runtime.
-> Except when the variable has type Any (see § 9.4).  
+> Except when the variable has type Any (see § 9.5).  
  
 Conversion of the type of a variable is strictly controlled, and operations can only work on certain types. This all adds up to better error-checking by the compiler, and thus more robust, safer and much faster programs. 
 
@@ -267,7 +267,6 @@ if you do only a type declaration and skip the value, you'll get a _default zero
 
 This default value is 0 for numbers, false for bool, the empty string "" for strings.
 
->Remark: 
 >In C such variables have a random value, because they get assigned a random free location in memory. This can cause errors later on, so C programmers are advised to initialize their variables immediately. This problem cannot occur in Jai: here variables are by default initialized to a "zero" value, which reduces the mental load for the developer ("have I already initialized these variables or not?"). 
 
 **Case 3:** only value  
@@ -388,7 +387,7 @@ main :: () {
 ```
 
 A swap like n, m = m, n; is allowed, but doesn't work in Jai like you would expect (see line (1)): both variables get the same value. When n and m are of different types an error results, because then they would have to change type, which is not allowed.
-But see § 17.10 for a swap procedure and ?? for built-in versions.  
+But see § 17.10 for a swap procedure and § 22.2.3 for built-in versions.  
 
 ## 5.7 - More about printing
 print is a native routine.                                                              
@@ -452,7 +451,7 @@ Hello, World!
 */
 ```
 
-Jai has some lower-level write procedures which are declared as #runtime_support(see ??). They are defined in modules _Preload_ and *Runtime_Support.jai*, so they don’t need the Basic module. You can use these when you don't want to import the _Basic_ module.
+Jai has some lower-level write procedures which are defined in modules _Preload_ and *Runtime_Support.jai*, so they don’t need the Basic module. You can use these when you don't want to import the _Basic_ module.
 
 ### 5.7.3 - Printing Unicode
 See *5.9_printing_unicode.jai*:

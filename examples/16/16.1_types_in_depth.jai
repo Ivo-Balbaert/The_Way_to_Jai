@@ -1,8 +1,6 @@
 #import "Basic";
 #import "Math";
 
-Complex :: struct { real, imag: float; }
-
 Operating_Systems :: enum u16 #specified {
         VMS      :: 1;
         ATT_UNIX :: 2;
@@ -94,7 +92,7 @@ main :: () {
     print("c1 is: % and has type %\n", c1, type_of(c1)); 
     // => c1 is: {3.14, 42.700001} and has type Complex
     TC := cast(*Type_Info) Complex;
-    print("%\n", TC.type);  // => STRUCT
+    print("%\n", TC.type);  // => VARIANT
     if TC.type != .STRUCT then exit;
     SC := cast(*Type_Info_Struct) TC;
     print("%\n", SC.name); // => Complex

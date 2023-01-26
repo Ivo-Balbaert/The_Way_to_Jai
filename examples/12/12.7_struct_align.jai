@@ -22,7 +22,6 @@ main :: () {
     // assert(cast(int)(*object) % 64 == 0); // => Assertion failed
     free(object);
 
-    big : [16] u8 #align 64;
     big[0] = 10;
     big[1] = 20;
     print("size = %, value = %\n", size_of(type_of(big)), formatInt(big[0], base = 2));

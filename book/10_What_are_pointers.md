@@ -224,7 +224,7 @@ main :: () {
 }
 ```
 
-The variable a in the code snippet above is of type *s64, default initialized to 0. Then we give it the value 5. In line (1) its memory is freed, at which point it is called a _dangling pointer_: it no longer points to its memory location. However in Jai a still knows its address and contained value (??). If you really want to be sure the value has been erased, you can assign the `null` value to the pointer, as in line (2). 
+The variable a in the code snippet above is of type *s64, default initialized to 0. Then we give it the value 5. In line (1) its memory is freed, at which point it is called a _dangling pointer_: it no longer points to its memory location. However in Jai it still knows its address and contained value. If you really want to be sure the value has been erased, you can assign the `null` value to the pointer, as in line (2). 
 
 ## 10.5 Casting to pointer types
 Because a pointer type is like any other type, you can cast a variable to that type, like this:

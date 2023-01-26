@@ -9,7 +9,7 @@ In this chapter we'll see which data-structures from built-in modules are used f
 >To see how type inference works in depth, read the masterfully written 090_how_typechecking_works article in the how_to/ folder of the compiler.)
 
 ## 16.1 Definition of Any
-We encountered the Any type in § 9.4, it is defined as follows:   
+We encountered the Any type in § 9.5, it is defined as follows:   
 
 ```c++
 Any_Struct :: struct {  
@@ -74,13 +74,14 @@ Type_Info_Integer :: struct {
 ```
 
 ## 16.3 Ways to dig into type information
+
+> Module _Math_ contains a definition of type Complex.
+> 
 See *16.1_types_in_depth.jai*:
 
 ```c++
 #import "Basic";
 #import "Math";
-
-Complex :: struct { real, imag: float; }
 
 Operating_Systems :: enum u16 #specified {
         VMS      :: 1;
@@ -174,7 +175,7 @@ main :: () {
     print("c1 is: % and has type %\n", c1, type_of(c1)); 
     // => c1 is: {3.14, 42.700001} and has type Complex
     TC := cast(*Type_Info) Complex;
-    print("%\n", TC.type);  // => STRUCT
+    print("%\n", TC.type);  // => VARIANT
     if TC.type != .STRUCT then exit;
     SC := cast(*Type_Info_Struct) TC;       
     print("%\n", SC.name); // => Complex

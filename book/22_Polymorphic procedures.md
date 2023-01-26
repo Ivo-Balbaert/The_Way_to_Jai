@@ -104,7 +104,8 @@ Polymorphic procedures are used all over in the Jai library modules, look for ex
 In the `convert` proc of program 22.1B, the type itself is a variable, that we call T.
 T is just a name for a generic type, it could also be S, R, U, V, or Targ and so on, or any name that starts with a capital letter.
 The $ before the T indicates that this is a compile-time type variable: it _defines_ T to be whatever type you called it with. T can also be used without the $ (see example 22.2_polyproc2.jai), but there must be one defining instance $T.  
-There can be several different polymorphic types in a procedure (like S, T, R, and so on), in the argument list as well as return type(s) list. They can also be mixed with other types (?? see for example repeat in 100_) 
+There can be several different polymorphic types in a procedure (like S, T, R, and so on), in the argument list as well as return type(s) list. They can also be mixed with other types (see for example the `repeat` proc in how_to 100_polymorphic_procedures, which has as signature:  
+` repeat :: (element: $T, count: s64) -> (output: [] T) {`). 
 However, a definition like $T can only appear once in a polymorphic function, otherwise you get the Error: "is already defined as polymorphic variable".
 
 > This behavior can be shown with the info_flags POLYMORPH_MATCH and POLYMORPH_DEDUPLICATE defined in the _Compiler_ module.
@@ -362,13 +363,13 @@ To make the code more readable, we could have defined lambda as a constant:
 and call add100 like this:
 `add100(array_a, lam)`      (see line (5))
 
-Anonymous functions are useful for passing as arguments to other procedures, or return them from a procedure (example ??). Such procs, like `add100` above, are sometimes called **higher-order functions**. 
+Anonymous functions are useful for passing as arguments to other procedures, or return them from a procedure. Such procs, like `add100` above, are sometimes called **higher-order functions**. 
 
 A procedure is also a type (see § 17.1.2), and therefore also a value (see § 9). This means that procs can be returned as a value from another proc, or they can be used as argument(s) in a proc, as we see here in line (3) where a lambda is used as an argument.
 
 > Unlike C++ or Rust, closures and capture blocks are not supported.
 
-> Remark: `add100` constructs and returns a dynamic array.
+> `add100` constructs and returns a dynamic array.
 
 ## 22.4 A procedure as argument of another proc
 See *22.8_proc_argument.jai*:
@@ -490,7 +491,7 @@ main :: () {
     // print("proc(b) is %\n", proc(b));  
     // => Error: The declaration of argument 1 requires a value bake 
     // (it is declared with a $ before the identifier), 
-    // but this expression is not a bakeable literal (its type is s64).
+    // but this expression is not a bake-able literal (its type is s64).
     print("proc2(b) is %\n", proc2(b));
     // => a is not constant / proc2(b) is 40
 }
@@ -550,6 +551,6 @@ It is also an example of a **higher-order function**, because the 2nd argument o
 The proc `square` in line (2) fulfills that signature. `map` is called in line (3) with `square` as a 2nd parameter. That proc is applied to each element of the array, returning a new array as result. 
 If you prefer the shorter lambda style, see lines (4) andd following. 
 
-> Remark: `map` constructs and returns a static array.
-> In § 23.?? we'll see another version of map.
+> `map` constructs and returns a static array.
+> In § 23.2 we'll see another version of map.
 

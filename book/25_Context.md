@@ -1,5 +1,6 @@
 # 25 Context
 
+## 25.1 What is the context?
 A central concept in Jai is the **context**.  
 The context is specifically made to guide different parts of your program to use whatever services you desire. The default context comes with great defaults, but you can change them as needed. It helps programs and modules to coordinate, by establishing conventions they can use to perform various tasks.
 
@@ -31,6 +32,8 @@ It also contains temporary storage (3), so you can add things yourself to it.
 
 In Jai, each procedure takes a context-based allocation scheme in which the memory allocator is implicitly passed to all procs (unless otherwise specified with **#c_call**). The basic `alloc` procedure calls `context.allocator` to get its memory. The context can be overloaded with a custom allocator: this allows memory management to be coordinated between the compiler and the developer.
 You change the way memory is allocated by passing a different context to the function. 
+
+Some procs and types are annotated with the directive **#runtime_support, indicating they are defined in module Runtime_Support.
 
 See *25.1_context.jai*:
 ```c++
@@ -102,35 +105,35 @@ In the same way, you can plug in your own assertion_handler and logger (see modu
 
 The directive **#add_context** adds a declaration to a context.
 
-## 25.1 push_context
+## 25.2 push_context
 The current context can be assigned to a variable like in (2). If you want you can change the procedure used for allocating memory, like in line (2B). Then we can use the `push_context` proc like in (3) to do something within this new context. `push_context lets you push an entire fresh Context, changing the operational context for the duration of the code block that starts in (3). 
 
-For example you could just declare a memory arena (see § ??) and use push_context to use it. All code in the push_context block now allocates with the arena, and you can free the arena memory whenever you want.  
+For example you could just declare a memory arena (see for example the Pool discussed in § 34.3) and use push_context to use it. All code in the push_context block now allocates with the arena, and you can free the arena memory whenever you want.  
 The new context stops after the closing } (line (4B)), and the initial context is restored.
 
-## 25.2 push_allocator
+## 25.3 push_allocator
 The `push_allocator` macro changes the allocator in the current context in the current scope.
 After the current scope exits, the previous allocator is restored. 
 For example: to temporarily switch-over to Temporary Storage, do:
 `push_allocator(temp);` as done in line (4). This is especially useful in a `push_context` block, but it can be done always. 
 
-## 25.3 What does **#no_context** mean?
+## 25.4 What does **#no_context** mean?
 A lot of procs like write_string() and debug_break() defined in _Preload_ are marked with this directive: it tells the compiler that this proc does not use the context. 
 
-## 25.4 Logging
+## 25.5 Logging
 The `log()` proc from module _Basic_ used in line (5) formats a message, then sends it to `context.logger` (it automatically does a newline).
 You can pass flags, a source_identifier and data gets copied from context.
 Here is its signature:  
 `log :: (format_string: string, args: .. Any, loc := #caller_location, flags := Log_Flags.NONE, user_flags : u32 = 0)`
 Log_Flags is an enum defined in module _Preload_
 
-A full example of defining and using a custom logger can be found in howto/350_logging.
+A full example of defining and using a custom logger can be found in how_to/350_logging.
 
-## 25.5 Temporary storage
+## 25.6 Temporary storage
 Back in § 21.3.3 we saw that Temporary storage characteristics are stored in the context, namely in `context.temporary_storage`  
 In line (6) we print out a number of its properties: its size = 32 Kb,
 
-## 25.6 The stack trace
+## 25.7 The stack trace
 In line (4) of the code of `Context_Base`, we see a field called `stack_trace`. What is its purpose?  
 The stack trace is also called the program's **function call stack**, which is a better description, namely: it is a report of the active stack frames at a certain point in time during the execution of a program. It works cross-platform and contains a logging of all function calls, and where they occurred in the program. You'll often see stack traces in the output of program crashes, and they are used for debugging purposes.
 
@@ -209,7 +212,7 @@ In § 30.4.5 we'll see that there is also a compile option called `build_options
 
 Stack traces are useful for writing instrumentation code such as a profiler or memory debugger. `Stack_Trace_Node` and related code are defined in module _Preload_.
 
-## 25.7 The print style
+## 25.8 The print style
 See *25.3_print_style.jai*:
 ```c++
 #import "Basic";
@@ -238,7 +241,7 @@ Context also contains a member called `print_style`, which contains default Form
 In line (1) we take the `default_format_int` from the Context. In lines (2) and following we change the number base, and print some numbers out with that base in the new context working in a `push_context` block. As we see in line (3), once we leave that block we return to the normal defaults.
 Analogous things can be done for formatting floats, structs and arrays in a specific context.
 
-## 25.8 Check if a variable is on the stack
+## 25.9 Check if a variable is on the stack
 (Example taken from Jai Community Wiki)
 
 This is a nice trick to determine whether a variable is allocated on the stack or on a heap, using the fact that subsequent variables in the stack get addresses that decrement.

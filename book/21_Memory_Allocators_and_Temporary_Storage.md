@@ -1,5 +1,7 @@
 # 21 – Memory Allocators and Temporary Storage
 
+## 21.1 General remarks
+### 21.1.1 Overview of allocation and freeing methods
 Previously (see § 11) we saw how to use alloc / New and free for using heap memory:  
 - alloc(n) is used to allocate n bytes of (by default) heap memory (like malloc in C) free to release it 
 - if you know the data type you want to allocate memory for, use `New`, for example: New(int) (see § 11.2)
@@ -10,15 +12,15 @@ Previously (see § 11) we saw how to use alloc / New and free for using heap mem
 - free_buffers to release the memory of a String Builder (see § 19.5)
 - to_c_string() and free for C strings (see § 19.7)
 
-**User defer when possible**
-Whenever you allocate on the heap (alloc, New, NewArray, [..]Type, and so on), use `defer free(object)` immediately after creating it. But this works only when you use that object right now in your current procedure and then don't need it anymore, because defer calls the free at the end of the current proc.
-
 For these methods, the heap is just a giant storage facility.
 The compiler does not check whether memory is freed, so this is your responsibility as a developer.
 Doing a free for every object allocated on the heap can be cumbersome and forgotten.
-Luckily Jai also has in-built special storage mechanisms for data structures, called **Allocators**, that can help tremendously in this respect. And there is also a built-in **memory-leak detector!** (see § 21.4).
+Luckily Jai also has in-built special storage mechanisms for data structures, called **Allocators**, that can help tremendously in this respect. And there is also a built-in **memory-leak detector!** (see § 21.5).
 
-## 21.1 Allocators
+### 21.1.2 User defer when possible
+Whenever you allocate on the heap (alloc, New, NewArray, [..]Type, and so on), use `defer free(object)` immediately after creating it. But this works only when you use that object right now in your current procedure and then don't need it anymore, because defer calls the free at the end of the current proc.
+
+## 21.2 Allocators
 In § 18.4 we discovered that the definition of a Resizable_Array contains a field `allocator : Allocator`.
 Allocators are specialized ways you can invoke to allocate memory for an object. They are specialized in the sense that they store data very efficiently, and they often have simpler mechanisms for freeing memory.  
 
@@ -42,7 +44,8 @@ Allocator_Proc :: #type (mode: Allocator_Mode, size: s64, old_size: s64, old_mem
 For example module _Basic_ defines a proc `alloc_string`, which can take a specific allocator to store the string:  
 `alloc_string :: (count: int, allocator: Allocator = .{}) -> string`
 
-(The default allocator is .{}, which is ??)
+The default allocator is .{}, which initializes an Allocator with its default values.
+
 Also a dynamic array arrdyn could store its data in an allocator Alloc1:  
 `arrdyn.allocator = Alloc1;`
 
@@ -55,7 +58,7 @@ You can also write your own allocators.
 This data is needed until the end of the program. It's no use freeing it, because after the program exits, the memory is automatically reclaimed by the OS. You can make the memory debugger (see § 21.4) not count global data as a leak by using the following proc:  
 ` this_allocation_is_not_a_leak(some_global_data);`  
 
-## 21.2 Temporary storage
+## 21.3 Temporary storage
 Temporary storage is a special kind of Allocator. It is defined as a struct in the _Preload_ module, and module _Basic_ contains support routines to make working with temporary storage very easy. Its memory resides in the Context (see § 25).
 
 Here is the struct's definition:
@@ -78,7 +81,7 @@ Temporary_Storage :: struct {
 }
 ```
 
-It's a linear allocator, the fastest kind, it is much faster than malloc. It helps your program run faster while also providing many of the benefits of garbage collected languages. Normally Temporary_Storage will allocate heap memory, but see § 21.3.4 
+It's a linear allocator, the fastest kind, it is much faster than malloc. It helps your program run faster while also providing many of the benefits of garbage collected languages. Normally Temporary_Storage will allocate heap memory, but see § 21.4.4 
 There is a pointer `data` to the start of free memory. If enough free memory is available to service your request, this pointer is advanced and returns the result. If there's not enough free memory, we ask the OS for more RAM. Because Temporary_Storage is expected to be for small-to-medium-sized allocations, we don't expect this to happen very often (and if we want, we can pre-allocate all the memory and lock it down so that the OS is never consulted.)  
 
 When does the memory get freed? 	_Fire and forget!_
@@ -104,9 +107,9 @@ while true {
 In line (1), the memory is freed and a new cycle can begin.
 
 `temp` is an abbreviation for `__temporary_allocator` (the long variable name for Temporary Storage).  
-The procedure `push_allocator(temp)` is used to set temporary storage as the current allocator (see § 25.2).
+The procedure `push_allocator(temp)` is used to set temporary storage as the current allocator (see § 25.3).
 
-## 21.3 Examples of using Temporary Storage
+## 21.4 Examples of using Temporary Storage
 See *21.1_temp_storage.jai*:
 ```c++
 #import "Basic";
@@ -144,7 +147,7 @@ main :: () {
 
 _Basic_ defines a function `temporary_alloc`, that is just like `alloc` but uses Temporary_Storage. 
 
-## 21.3.1 Storing strings in temp with tprint
+## 21.4.1 Storing strings in temp with tprint
 `talloc_string :: (count: int) -> string` is the equivalent of `alloc_string` that uses Temporary Storage, see it used in line (6).  
 But even easier to use is the `tprint` proc, which is the equivalent of `sprint` (see § 19.4.5) that uses Temporary Storage.
 It is defined as: 
@@ -153,12 +156,12 @@ It is used in line (2).
 
 >  Use tprint to create a string, but without having to think about freeing the memory. 
 
-## 21.3.2 Storing arrays and string builders in temp
+## 21.4.2 Storing arrays and string builders in temp
 Line (1) shows how to use the temporary allocator for creating a dynamic array. When this array resizes, it will use Temporary_Storage to get its memory. If you need this frequently, you can write your own `make_array` proc.
 Line (6B) shows how to store a string builder in temporary storage; this makes calling `free_buffers` unnecessary.
 
-## 21.3.3 Using New with temp
-As we saw in § 21.1, New can take any defined Allocator, so also `temp`. This can be done with the following code:
+## 21.4.3 Using New with temp
+As we saw in § 21.2, New can take any defined Allocator, so also `temp`. This can be done with the following code:
 
 ```c++
 Node :: struct {
@@ -176,15 +179,14 @@ arrdyn: [..] int;
 arrdyn.allocator = temp;
 ```
 
-## 21.3.4 Using Temporary Storage on the Stack
+## 21.4.4 Using Temporary Storage on the Stack
 This can be done by using the `auto_release_temp` macro (defined in module _Basic_) to set the mark. Then you can allocate whatever you want temporarily, then release all the memory at once when the stack unwinds by setting the mark back to the original location with `auto_release_temp()`.
-(example ??)
 
-## 21.3.5 How much memory is allocated in temp?
+## 21.4.5 How much memory is allocated in temp?
 This is given by the field: `context.temporary_storage.occupied`.  
 We see in line (5) that it goes back to 0 after the temp memory has been reset in (4).
 
-## 21.4 Memory-leak detector
+## 21.5 Memory-leak detector
 To cope with a possible problem of memory-leakage, Jai has a built-in memory-leak detector. It can be activated by importing _Basic_ like this:
 `#import "Basic"()(MEMORY_DEBUGGER=true);`  
 This hooks alloc(), free(), and realloc() with routines that record allocations and frees. Enabling the MEMORY_DEBUGGER will slow down your program, so use it only when solving memory-issues.

@@ -130,7 +130,7 @@ In § 12.6 we constructed a linked-list with a recursive struct LinkedList. To p
     // => 0 -> 12 -> 24 -> 36 ->
 ```
 We declare a variable r of type *LinkedList in line (1). As long as r is not a null pointer, the while loop in (2) will keep on going. Line (2) is shorthand for:   `while r != null`
-We print out the data of the loop and point to the next node in line (3). In our example r becomes null for c, which stops the loop. In § 26 ?? we'll see how we can print this list out in a kind of for-loop, which we'll discuss next.
+We print out the data of the loop and point to the next node in line (3). In our example r becomes null for c, which stops the loop. In § 26.6 we'll see how we can print this list out in a kind of for-loop, which we'll discuss next.
 
 ## 15.2 For loop
 When you want to iterate over a range of things, `for` is your best tool.

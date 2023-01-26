@@ -4,7 +4,7 @@ A 'meta-program' is a piece of code that alters (or 'programs') an existing prog
 In Jai, this takes place solely at compile-time. The compiler gives you the source code in AST format (Abstract Syntax Tree) for you to modify.
 
 > Jai offers arbitrary compile-time execution, with powerful meta-programming features to modify your code in whatever way you want, but all meta-programming is limited strictly to compile-time execution. This capability is one of the main pillars of the language.
-> One could even argue that Jai introduces another programming paradigm: "Metaprogramming oriented programming" or "Compiler oriented programming".
+> One could even argue that Jai introduces another programming paradigm: "Meta-programming oriented programming" or "Compiler oriented programming".
 > In short it's about maximizing code generation at compile time with a nice tool-set: macros, types as first class values, polymorphic procedures and data structures, built-in build system, understanding of AST and so on.
 
 This functionality has been built into the language from the start. Meta-programs can modify the program in arbitrarily complex ways easily. 
@@ -16,7 +16,7 @@ Using type info to meta-program is also called _reflection_ or _introspection_ i
 
 We already talked about running code at compile time as early as § 3.2.4. Jai provides full compile-time code execution, meaning that all Jai code can also be executed while compiling.
 
-> Remark: because all of this processing happens at compile-time, there is a natural overlap between this chapter and § 27.
+> Because all of this processing happens at compile-time, there is a natural overlap between this chapter and § 27.
 
 ## 26.1 The type table
 See *26.1_type_table.jai*:
@@ -213,7 +213,7 @@ The value of x is 6, of type u8.
 ```
 
 Here we have a proc `comprun` in which line (1) will run at compile-time (because of #run), and where line (2) will work at run-time.  
-The three lines following (3) only activate the #run 1 time, because all expressions with which it is called are of the same type u8. It only needs to build once. But at runtime the procedure is called and prints out 3 times.In line (4), comprun is called with a new type 'float', so it compiles again, which we can see because #run executes for the 2nd time. Line (5) doesn't trigger a re-compilation, because the parameter is also of type float. But line (6) recompiles, because now a string is passed. (7) doesn't recompile, because there is already a compiled form for comprun with T == u8.
+The three lines following (3) only activate the #run 1 time, because all expressions with which it is called are of the same type u8. It only needs to build once. But at runtime the procedure is called and prints out 3 times.In line (4), comprun is called with a new type 'float', so it compiles again, which we can see because #run executes for the 2nd time. Line (5) doesn't trigger a re-compilation, because the parameter is also of type float. But line (6) re-compiles, because now a string is passed. (7) doesn't recompile, because there is already a compiled form for comprun with T == u8.
 Note that the order of the #run's can vary, because compilation works multi-threaded.
 
 #run can also return basic struct values or multidimensional arrays. Complications can arise because of pointers inside structs, and values that are not retained between compile-time and run-time. In order to modify more complex data structures with #run,the #no_reset directive can be useful (see § 26.2.2).
@@ -1039,7 +1039,7 @@ Now we can print out the data from a linked list in a for-loop like any other ar
 
 But we can do better! (see for_expansion macro Version 2). Just leave out the temporary variables `iter` and `i` and work only with it and it_index. Also note you only have to backtick the variables the first time you use these. Note that in our actual `for call, we have to print `it.data`.
 
-> Remark: the `for_expansion` may have any other name like `looping`, so that you can define different for_expansions. It is called like this:
+> The `for_expansion` may have any other name like `looping`, so that you can define different for_expansions. It is called like this:
 > `for :looping v, n: data_structure`
 > Also it and it_index can be renamed, like this: 
 > `for :looping v, n: data_structure  print("[%] %\n", n, v);`
@@ -1112,7 +1112,7 @@ main :: () {
     free(a); free(b); free(c); free(lst);
 }
 ```
-> Remark: iterating over data-structures with for was the primary reason for introducing macros in Jai.
+> Iterating over data-structures with for was the primary reason for introducing macros in Jai.
 
 Now let's make the same for-loop for a double linked-list:
 
@@ -1339,7 +1339,7 @@ The **#modify** directive can be used to insert some code between the header and
 > false: it generates a compile-time error: the proc will not compile, or the struct is not defined.
 
 Here are a number of examples:
-(Some are taken from howto/170_modify)
+(Some are taken from how_to/170_modify)
 
 (1) Suppose we want to force a polymorph type to be a certain concrete type:
 See *26.16_modify1.jai*:
@@ -1661,7 +1661,7 @@ where the new SOA type is constructed with T equal to type Person and count equa
 **How to transform an AOS to an SOA?**
 In line (11) we define an array of Person objects. Line (12) shows that only a simple for loop over the AOS is needed to transfer the data to an SOA.
 
-> Remark: Other references (videos on youtube):
+> Other references (videos on youtube):
     • Noel Llopis: Data-oriented design
     • Chandler Carruth: Efficiency with Algorithms, Performance with Data Structures
     • Mike Acton: Data-oriented design in C++
@@ -1730,7 +1730,7 @@ To print out the nodes, we need to import the module _Program_Print_ (line (1)).
 
 `compiler_get_nodes` converts the Code to a syntax tree. As we see in line (2), it returns two values:  
 - the first is the root expression of the Code, which you can navigate recursively.   
-- the second is a flattened array of all expressions at all levels, just like you would get in a metaprogram inside a Code_Typechecked message. This makes it easy to iterate over all the expressions looking for what you want, without having to do some kind of recursive tree navigation.  
+- the second is a flattened array of all expressions at all levels, just like you would get in a meta-program inside a Code_Type_Checked message. This makes it easy to iterate over all the expressions looking for what you want, without having to do some kind of recursive tree navigation.  
 - Here is a snippet of code that searches for string literals in code, (possibly) changing them, and writing the changes back with the proc `compiler_get_code`:
 ```c++
 root, expressions := compiler_get_nodes(code);
@@ -1823,7 +1823,7 @@ The directive **#caller_code** when used as the default
 value of a macro argument, will be set to the Code of the procedure call
 that invoked the macro.  
 `compiler_get_nodes()` from module _Compiler_ can then be called on this code to inspect and manipulate it. `print_expression` from module _Program_Print_ `prints` the 2nd argument in a string-format to the string builder.
-With these kinds of techniques you manipulate code from a macro within the program itself (see howto/497).
+With these kinds of techniques you manipulate code from a macro within the program itself (see how_to/497).
 There is also a `print_type_to_builder` proc for printing type info to a string builder (see how_to/935).
 
 ## 26.15 Converting code to string
