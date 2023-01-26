@@ -10,7 +10,7 @@ Jai is an **ahead of time (AOT) compiled, imperative, static** and **strongly-ty
 
 Here are the _priorities_ of Jai in this order:
 
-**\>developer productivity (quality of life, simplicity, expressive power and joy)**
+**\> developer productivity (quality of life, simplicity, expressive power and joy)**
 
 **\> performance**
 
@@ -167,6 +167,6 @@ Blow's videos about the design and making of Jai are very popular: They get view
 2022 May 21: **1.4 K / 199 /** 122.3 K / **62.3 K / 42 - 151**  
 2022 Jul 4: **1.5 K / 236 /** 122.6 K / **63.7 K / 46 – 177 / 45**  
 2022 Jul 27: **1.6 K / 255 /** 123 K / **64.3 K / 48 – 186 / 49**  
-2022 Nov 13:    300 people on Discord
-2022 Dec 12:    328 people enrolled in the closed beta
-2023 Jan 2:     349 people enrolled in the closed beta
+2022 Nov 13:    300 people on Discord  
+2022 Dec 12:    328 people enrolled in the closed beta  
+2023 Jan 2:     349 people enrolled in the closed beta  
