@@ -21,10 +21,10 @@ We have two versions:
 * a version working on Linux: it imports the _POSIX_ module for the `read` function in procedure `read_line` (which uses the `libdl` library): *50.1_guessing_game_linux.jai*
 * a version working on Windows: it imports the _Windows_ module for the `ReadConsoleA` function in procedure `read_line`: *50.1_guessing_game_windows.jai* This version uses a somewhat lower-level API than the Linux version, that's why it is a bit more involved.
 
-## 50.1 Discussion
 First we look at the Linux version. The logic for the Windows version is entirely the same, except for the read_line input part.
 
-### 50.1.1 Linux version
+
+## 50.1 Linux version
 See *50.1_guessing_game_linux.jai*:
 ```c++
 #import "Basic";
@@ -137,7 +137,7 @@ When done == true, the while loop in play stops :
 `while !game.done`
 and line (3) returns. This prints "Finished in ", the number of guesses and eventual errors and stops the game.
 
-### 50.1.2 Windows version
+## 50.2 Windows version
 Here is the Windows version:
 See *50.1_guessing_game_windows.jai*:
 ```c++

@@ -5,7 +5,7 @@ This program is a so called cellular automation. The GitHub repo contains a good
 The display of the evolving generations and the menu for changing game options needs some graphics programming. This is achieved here by using pure Jai modules:  
 *Window_Creation* (Platform-independent window creation routines), *Input* (keyboard and mouse input),  *Simp* (drawing graphics) and *GetRect* (to display widgets).
 
-### 51.1.1  A console print version 
+## 51.1  A console print version 
 Let's first make a version which uses only print to display the living cells. This way we only need to concern ourselves with the life - algorithm.  
 A living cell is depicted with '1', a dead cell with '0'. Because we cannot give any input, the starting generation has to be hardcoded.
 
@@ -89,7 +89,7 @@ show_gol :: () {
 We represent the game grid as a 2 dimensional matrix [M][M] s8. `next_generation` implements the rules of the game: it first calculates the next step in a temp matrix, which is then copied over to `gol_grid`. `show_gol` simply prints out that matrix.
 When running you see the oscillating horizontal and vertical "111" pattern typical for this configuration. Stop the program with "CTRL/C". 
 
-### 51.1.2  A graphical version
+## 51.2  A graphical version
 This version uses the same algorithm, but shows a graphical display. It is much more refined: the starting situation can be given by the user, and several other options are available to direct the game. And all this only in some 260 lines of code!
 
 See *51.2_game_of_life_gui.jai*:

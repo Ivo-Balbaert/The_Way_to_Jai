@@ -31,16 +31,16 @@ Now copy the _jai_ subfolder in its entirety to its destination (let's call this
     - on Windows: for example on the C-drive to c:\jai 
     - on Linux (or WSL2 in Windows): for example to /usr/local/bin/jai or /opt/jai or $HOME/jai 
     (assuming $HOME is /home/your_username)
-        Rename jai-linux to jai:  mv jai-linux jai
-        You also have to make jai and the link program executable with the following commands 
-        (perhaps using sudo):
+      Rename jai-linux to jai:  mv jai-linux jai
+      You also have to make jai and the link program executable with the following commands 
+      (perhaps sudo is needed):
           chmod +x jai
           chmod +x lld-linux
 
-Now open a terminal in your Jai root folder, and type the command:
+Now open a terminal in your Jai root folder, and type the command:  
     - on Windows: `jai -version`
     - on Linux (or WSL2 in Windows): `./jai -version`
-, it will show the following output (for your actual version):
+it will show the following output (for your actual version):
 
 _Version: beta 0.1.036, built on 17 August 2022._
 
@@ -63,13 +63,13 @@ To achieve this, do the following:
         Or add this line to your /etc/profile or $HOME/.profile:
         export PATH="$HOME/jai/bin/:$PATH"
 
-        After creating the link, you can run Jai on Linux also with: `jai`
+        After creating the link, you can run Jai on Linux simply with: `jai`
 
 Test this out by moving in a terminal to another folder than the Jai root folder and typing in the command: `jai -version`. You should see the same output as in the previous section.
     
 ### 2.2.3 Updating Jai
 
-Remove the current _jai_ folder (make sure that you have backed up any files you have added or changed in there) or rename it to _jai_old_.
+Remove the current _jai_ folder (make sure that you have backed up any files or modules you have added or changed in there) or rename it to _jai_old_.
 Then just drop the most recent _jai_ folder as the new Jai root folder, and you're done!
 
 ### 2.2.4 Prerequisite for Windows 
@@ -173,13 +173,14 @@ Then in File, Preferences, Settings:
   Edit Jai settings by Searching for:  Jai
     If necessary, set the Path to Jai executable.
     Search for:  Run code configuration:
-		Custom command: `jai $fileName -exe a.exe & a`
+		Custom command:  
+        `jai $fileName -exe a.exe & a`
 	
 This is the same as editing in settings.json:
 		 `"code-runner.executorMap": { "jai": "jai $fileName -exe a.exe && a",` 
 			...
 	
-Now you can RIGHT-click on the code window and select the 1st command: `Run code`, and it will execute this command, which will compile and then run the generated executable.
+Now you can RIGHT-click on the code window and select the 1st command: `Run Code`, and it will execute this command, which will compile and then run the generated executable a.exe.
 We'll show an image of this in chapter 3.
 
 ### 2.4 The compiler command
