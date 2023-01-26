@@ -10,7 +10,7 @@ Jai is an **ahead of time (AOT) compiled, imperative, static** and **strongly-ty
 
 Here are the _priorities_ of Jai in this order:
 
-**developer productivity (quality of life, simplicity, expressive power and joy)**
+**\>developer productivity (quality of life, simplicity, expressive power and joy)**
 
 **\> performance**
 
@@ -52,7 +52,7 @@ Jai is specifically meant to be a game programming language, where a game is def
 
 So Jai should be useable and able to replace C++ for projects on the AAA scale. 
 
-Keep in mind that the language is _designed for good programmers; it_ has no training wheels for beginners. For example: developers have to take care of manual memory management, handling memory is all important.
+Keep in mind that the language is _designed for good programmers_; it has no training wheels for beginners. For example: developers have to take care of manual memory management, handling memory is all important.
 
 ### 1.1.2 Jai tries to be a better C/C++
 
@@ -92,22 +92,21 @@ Blow fired the compiler team in early 2019 because they didn't understand Jon's 
 A _closed beta program_ (the compiler/docs were send to a limited number of people) started Dec 21 2019: this was the first beta with 10 people. Apr 2020: 20 people.    
 This reached version 0.0.30 on Oct 25 2020. Nov 2020: 40 people. Beta 37 was issued on Jan 1 2021, and had 51 participants.    
 On Dec 24 2021, beta 100 was shipped, with around 100 beta users.  
-A new way of _transitive invites_ to grow the beta user group was introduced.  
-On May 2022, the beta reached v 0.1.025 and extended to around 200 users.  
-On August 2022, the beta reached v 0.1.036 and extended to around 250 users.
+A new way of _transitive invites_ to grow the beta user group was introduced: on May 2022, the beta reached v 0.1.025 and extended to around 200 users.  
+In August 2022, the beta reached v 0.1.036 and extended to around 250 users.  
+On Jan 26 2023, the beta reached v 0.1.054 and extended to around 362 users.
 
-In the 2014-2018 period, Jonathan Blow frequently did educational video overviews of Jai's development ((a series of talks/demos about the language here: [Jonathan Blow - YouTube](https://www.youtube.com/user/jblow888/videos)), and got feedback from people through Q & A sessions and mail. In the closed-beta period, Blow switched to videos of working on the compiler and the game and got user feedback mostly through mail.
+In the 2014-2018 period, Jonathan Blow frequently did educational video overviews of Jai's development ((a series of talks/demos about the language here: [Jonathan Blow - YouTube](https://www.youtube.com/user/jblow888/videos)), and got feedback from people through Q & A sessions and mail. In the closed-beta period, Blow switched to videos of working on the compiler and the game and got user feedback mostly through mail, but also through video Q & A sessions. 
 
 Jai's robustness and usability is extensively tested through the Sokoban game which is being developed in Jai (some 250 K LOC Lines Of Code), but also through the many projects undertaken by the beta users.
 
 The business-model is based on the commercial release of games written in Jai by the Thekla company, starting with the Sokoban game.  
 
-Jai will be released gradually, as in this order:  
-- a closed beta release (from Dec 2019 until ??)
-- an open binary distribution release
-- an open-source release on GitHub of the compiler code, a game-engine and (part of) the Sokoban game, but with no open-source contributions by pull requests in the beginning period
-- a full open-source release  
-The Sokoban game will be commercially released.
+Jai will be released gradually, in this order:  
+- A closed beta release (from Dec 2019 until ??)
+- An open binary distribution release
+- An open-source release on GitHub of the compiler code, a game-engine and (part of) the Sokoban game, but with no open-source contributions by pull requests in the beginning period. This will probably concur with the commercial release of the Sokoban game.
+- A full open-source release.
 
 ### As to licensing:
 
@@ -144,8 +143,7 @@ They have more badly-fitting couplings, take longer to compile, etc.
 5- You should use RAII / ARC, GC etc.  
 Programs are 100x slower, harder to understand, …
 
-
-**1.7 Jai community and communication channels**
+## 1.7 Jai community and communication channels
 
 Jonathan Blow is CEO of a game-developing company called Thekla ([The Witness](www.thekla.com)](http://www.thekla.com/)).  
 Blow receives and sometimes answers discussions and issues about Jai on [_language@thekla.com_](mailto:language@thekla.com).  
@@ -168,7 +166,7 @@ Blow's videos about the design and making of Jai are very popular: They get view
 2022 Feb 25: **1.4 K /** / 122.4 K / **62.3 K / 40 - 129**  
 2022 May 21: **1.4 K / 199 /** 122.3 K / **62.3 K / 42 - 151**  
 2022 Jul 4: **1.5 K / 236 /** 122.6 K / **63.7 K / 46 – 177 / 45**  
-2022 Jul 27: **1.6 K / 255 /** 123 K / **64.3 K / 48 – 186 / 49**
+2022 Jul 27: **1.6 K / 255 /** 123 K / **64.3 K / 48 – 186 / 49**  
 2022 Nov 13:    300 people on Discord
 2022 Dec 12:    328 people enrolled in the closed beta
 2023 Jan 2:     349 people enrolled in the closed beta
