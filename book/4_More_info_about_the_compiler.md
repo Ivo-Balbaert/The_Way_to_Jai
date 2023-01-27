@@ -2,13 +2,13 @@
 ## 4.1 General info
 
 Originally, Jai compiled to C, and this C code was compiled with gcc or the LLVM clang C compiler.    
-Now the compiler (written in C++) generates first an IR (intermediate representation) _byte-code_, which is then turned into machine-code through the LLVM tool-chain.  
-Its growing size:
-    - at the initial stages: 10,000 LOC (lines of code)
-	- this expanded to around 50,000 LOC after adding the LLVM backend, macros, operator overloading, multiple 	return values, unions, etc.; 
-	- it jumped to around 75,000 LOC of code after adding inline assembly support, 
-	- it is now some 87,000 LOC.  
-The compiler source is proprietary at this time (Aug 2022), and will not be self-hosting (meaning: written in Jai) in the near future. The compiler is _very fast_: all typical debug-builds even up to 250,000 LOC are processed fully in under 1 s.
+Now the compiler (written in C++) generates first an IR (intermediate representation) _byte-code_. This is then turned into LLVM IR code and then machine-code through the LLVM tool-chain, or directly into machine code by the x64 backend.     
+The compiler size growth:  
+    - at the initial stages: 10,000 LOC (lines of code)  
+	- this expanded to around 50,000 LOC after adding the LLVM backend, macros, operator overloading, multiple 	return values, unions, etc.   
+	- it jumped to around 75,000 LOC of code after adding inline assembly support   
+	- it is now some 87,000 LOC.    
+The compiler source is proprietary at this time (Jan 2023), and will not be self-hosting (meaning: written in Jai) in the near future. The compiler is _very fast_: all typical debug-builds even up to 250,000 LOC are processed fully in under 1 s.
 
 > To reduce build-time further:
 > * remove the .pdb file before compiling
@@ -23,7 +23,7 @@ Here is an overall schema of the compiler architecture:
 
 As we see in the diagram, Jai source code is first converted to an _abstract syntax tree_ (AST), which is then converted to an internal _byte-code_.
 
-The developer can modify the generated AST at compile-time(see Meta-programming and macros § 26), and can access the compiler through a _compiler message loop_ (see § 30.5).
+The developer can modify the generated AST at compile-time (see Meta-programming and macros § 26), and can access the compiler through a _compiler message loop_ (see § 30.5).
 
 
 ## 4.2 Internal byte-code interpreter
@@ -64,12 +64,12 @@ _Compiler  time: 0.587162 seconds._
 	Front-end time + llvm time = Compiler time (for llvm backend)
 
 ## 4.5 Linking
-The backend compiler produces several compiler artifacts in the hidden _.build_ folder (.obj, .exp and .lib files). It is the task of the linker (_link.exe_ from MSVC on Windows, _lld-linux_ on Linux) to combine these object files and OS specific libraries statically into one output executable (.exe on Windows).  
+The backend compiler produces several compiler artifacts in the hidden _.build_ folder (.obj, .exp and .lib files). It is the task of the linker (_link.exe_ from MSVC on Windows, _lld-linux_ on Linux) to combine these object files and (sometimes) OS specific libraries statically into one output executable (.exe on Windows).  
 The time this takes is for example reported as:   
 _Link      time: 0.328986 seconds._
 
-The link phase with the llvm backend on Windows can take about 3 x longer than the compilation phase.  
-Finally, the sum of compilation and link time is reported as _Total time:    0.425573 seconds._
+The link phase with the llvm backend on Windows can take about 3-30 x longer than the compilation phase.  
+Finally, the sum of compilation and link time is reported as _Total time:    0.425573 seconds._  
 	Compiler time + Link time = Total time 
 
 Here is a complete example output again:
@@ -92,7 +92,7 @@ Specifically at this time, Jai supports:
     • 	OS / Platforms: Windows, Ubuntu Linux, limited Mac support, at least one gaming console
 
 ## 4.7 Debug and release build
-While developing, you’ll work with normal _debug builds_ which is the default, because you want to have as much info as possible when something goes wrong. For example a .pdb file with debugging info is produced, stack trace info will be shown and optimizations which can hide erroneous behavior must be disabled.
+While developing, you’ll work with normal _debug builds_ which is the default, because you want to have as much info as possible when something goes wrong. For example a .pdb file with debugging info is produced, stack trace info will be shown, and optimizations which can hide erroneous behavior must be disabled.
 
 When, after a thorough test process, you decide that your application is production-ready, you will want to deploy a _release version_, optimized for speed. Here you don’t want any debugging or stack-trace info, and you require all optimizations turned on. At this stage you’ll want to use the llvm backend and the -release option, as in:	`jai -release program.jai`
 
@@ -104,41 +104,59 @@ With `-run arg`, you can start a #run directive that parses and runs 'arg' as co
 The string Hello! is then shown at the start of the compiler output.
 
 With `-add arg`, you can add the string 'arg' to the target program as code.  
-       Example: `jai -add "a := 42"; 1_hello_sailor.jai`  
+       Example: `jai -add "a := 42" 4.1_hello_sailor.jai`  
 Now the variable a is know in the program, and we can print it out with for example:  `print("%", a);`
 
+See *4.1_hello_sailor.jai*
+```c++
+#import "Basic";
+
+main :: () {
+    print("Hello, Sailor from Jai!\n");
+    print("a is %\n", a);
+}
+```
+
+Which produces as output when run:
+```
+Hello, Sailor from Jai!
+a is 42
+```
+
 The `-verbose` option gives some extra information about what the meta-program is doing, for example:  
-	`jai -run write_string(\"Hello!\n\") -add "a := 42"; -verbose 1_hello_sailor.jai`  
+	`jai -run write_string(\"Hello!\n\") -add "a := 42" -verbose                4.1_hello_sailor.jai`  
 shows the following at the start of the compiler output:
             
 ```c++
-Basename: 1_hello_sailor
-Path:
-Input files: ["1_hello_sailor.jai"]
-Add strings: ["a := 42;"]
+4.1_hello_sailor.jai
+options.output_path = "D:/Jai/The_Way_to_Jai/examples/4/";
+options.output_executable_name = "4.1_hello_sailor";
+Changing working directory to 'D:/Jai/The_Way_to_Jai/examples/4/'.
+Input files: ["D:\Jai\The_Way_to_Jai\examples\4\4.1_hello_sailor.jai"]
+Add strings: ["a := 42"]
 Run strings: ["write_string("Hello!\n")"]
-Plugins:     [2f2_50b8]
+Plugins:     [2ee_65e8]
 Hello!
 Running linker: … (abbreviated)_
 ```
 ## 4.9 The Preload module
-We already talked about the Basic module, which is necessary for printing. But there is also a **Preload** module, which is even more fundamental and is implicitly loaded whenever the Jai compiler is started, so it doesn’t need to be imported.
+We already talked about the Basic module, which is necessary for printing. But there is also a _Preload_ module, which is even more fundamental and is implicitly loaded whenever the Jai compiler is started, so it doesn’t need to be imported.
 It contains the minimal definitions the compiler needs in order to compile user source code.
 
-It contains enums for the Operating_System, the _Type_Info_ definitions, the definitions for _Allocator, Logger, Stack trace, Context, Temporary Storage, Source Code location, Array_View and Resizable_Array_.   
+It contains enums for the _Operating_System_, the _Type_Info_ definitions, the definitions for _Allocator, Logger, Stack trace, Context, Temporary Storage, Source Code location, Array_View and Resizable_Array_.   
 It also contains very low-level functions or **intrinsics** which closely mimic corresponding C functions, like the following.
 
    	memcpy :: (dest: *void, source: *void, count: s64) #intrinsic;
 	memcmp :: (a: *void, b: *void, count: s64) -> s16  #intrinsic;
 	memset :: (dest: *void, value: u8, count: s64)     #intrinsic;
    
-**memcpy** copies count bytes from source to dest, see line (1). 
-**memcmp** compares the first count bytes of a and b, its return value is < 0 when a is less than b, > 0 when a is greater than b and 0 when a is equal to b.  
+**memcpy** copies count bytes from source to dest, see line (1).   
+**memcmp** compares the first count bytes of a and b, its return value is < 0 when a is less than b, > 0 when a is greater than b and 0 when a is equal to b.    
 **memset** sets count bytes of dest to value.  
 
 > Notice the #intrinsic directive with which these functions are marked.
 
-For some example code, See *4.1_intrinsics.jai*:
+For some example code, See *4.2_intrinsics.jai*:
 ```c++
 #import "Basic";
 
@@ -152,7 +170,7 @@ main :: () {
 ```
 
 ## 4.10 Memory management
-In Jai, developers have complete control over where and when memory is allocated. Jai does a much better job of packing values in memory so they are close together, which increases runtime performance.   
+In Jai, developers have complete control over where and when memory is allocated. Jai does an excellent job of packing values in memory so they are close together, which increases runtime performance.   
 Optimal memory use places data **contiguous in memory**, that means memory is assigned in consecutive blocks (having consecutive addresses) that are adjacent to each other.
   
 The compiler knows how much memory each type uses. It also knows the type of each variable. A variable's memory is allocated at type declaration, for example: variable `counter` of type int will allocate 8 bytes. It will occupy one word on a 64 bit machine. 
@@ -188,6 +206,6 @@ __system_entry_point :: (argc: s32, argv: **u8) -> s32 #c_call {
 }
 ```
 
-This first starts up a `__jai_runtime_init(argc, argv);` proc. This proc is also defined in the _Runtime_Support_ module. Its job is to take in the command-line arguments, and initialize the primary context.
-Then back in `__system_entry_point` the runtime crash handler is activated and the `main` of your program is started.
+This first starts up a `__jai_runtime_init(argc, argv)` proc in line (1). This proc is also defined in the _Runtime_Support_ module. Its job is to take in the command-line arguments, and initialize the primary context.
+Then back in `__system_entry_point` the runtime crash handler is activated and the `main` of your program is started (see line (2)).
 (See also https://jai.community/docs?topic=131).
