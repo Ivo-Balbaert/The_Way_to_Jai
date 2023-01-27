@@ -4,13 +4,9 @@ The structure of a typical jai command is as follows:
 `jai -option1 -option2 file_to_compile.jai - arguments for meta-program`
 
 Every argument after `-` is ignored by the compiler itself, and is passed to the user-level meta-program for its own use.
-Any argument not starting with a -, and before --, is the name of a file to compile.
+Any argument not starting with a -, and before a - by itself, is the name of a file to compile.
 
-The -- command line arguments are not for the compiler itself; 
-they are passed from the default meta-program to your compile-time execution environment. 
-The --- arguments are the actual command-line arguments for the compiler itself (see § 30.5).
-
-Example:     `jai -x64 program.jai -- info for the compile_time execution`
+Example:     `jai -x64 program.jai - info for -the compile_time execution`
 It is also allowed to add the options after the source-file name, like this:  
  `jai program.jai -x64`
 
@@ -19,8 +15,7 @@ It is also allowed to add the options after the source-file name, like this:
 **Backends**:  
  `-x64`              Use the x64 backend by default (unless overridden by a meta-program).
 
- `-llvm`             Use the LLVM backend by default (unless overridden by a meta-program).
-                     LLVM is the default backend.
+ `-llvm`             Use the LLVM backend by default (unless overridden by a meta-program). LLVM is the default backend.
 
 **Command-line args**:  
  `-add arg`          Add the string 'arg' to the target program as code.
@@ -31,6 +26,7 @@ It is also allowed to add the options after the source-file name, like this:
                    
 **Debugging**:  
  `-debugger`         If there is a crash in compile-time execution, drop into the interactive debugger.
+ `-debug_for`        Enable debugging of for_expansion macros. (Otherwise the debugger will never step into them to make stepping through for loops more convenient.)
 
  `-msvc_format`      Use Visual Studio's message format for error messages.
 
@@ -38,13 +34,14 @@ It is also allowed to add the options after the source-file name, like this:
 
  `-verbose`          Output some extra information about what this meta-program is doing.
 
-**Output**:  
+**Output**:
+ `-output_path`     Set the path where your output files (such as the executable) will go.  
  `-exe name`         Set output_executable_name on the target workspace to 'name'.  
  `-no_color`         Disable ANSI terminal coloring in output messages.    
  `-quiet`            Reduces the (statistics) output from the compiler 
 
 **Modules**:  
- `-import_dir arg`   Add this directory (arg is path/to/dir) to the list of directories searched by #import. Can be used multiple times. (see § 12.12)
+ `-import_dir arg`   Add this directory (arg is path/to/dir) to the list of directories searched by #import. Can be used multiple times. (see § 12.12). Also `-- import_dir arg` when importing modules for the Metaprogram (see § 30.5)
 
 **Performance**:  
  `-release`          Build a release build, i.e., tell the default meta-program to disable stack traces and enable optimizations. This compiles the program with LLVM backend -O2 optimization
@@ -55,20 +52,27 @@ It is also allowed to add the options after the source-file name, like this:
 
  `-no_check_bindings`  	Disable checking of module bindings when running modules/Check. If modules/Check is not run due to -no_check, this does nothing.
 
+ `-no_dedup`        Disable the new bytecode deduplication, if your program is crashing due to any problem in this new code.
+
+ `-no_backtrace_on_crash`    Do not catch OS-level exceptions and print a stack trace when your program crashes. Causes less code to be imported on startup. Depending on your OS (for example, on Windows), crashes may look like silent exits.
+
 **MetaProgram**
-`--- meta MetaProgram`  To replace the default meta-program by MetaProgram.
+`-- meta MetaProgram`  To replace the default meta-program by MetaProgram.
+The -- command line arguments are not for the compiler itself; 
+they are passed from the default meta-program to your compile-time execution environment. 
 
 **Miscellaneous**:  
  `-no_cwd`  Turn off the compiler's initial change of working directory. This is a temporary option, provided because the policy around working directories is new and is still being worked out.
 
- `-plug name`        Import module 'name' into the meta-program and use it as a plugin.  
- `-version`          Print the version of the compiler.  
+ `-plug name`    Import module 'name' into the meta-program and use it as a plugin.  
+ `-version`      Print the version of the compiler.
+
+ `-report_poly`  Print the Polymorph Report when compilation is done.  
 
 Other _compiler-front-end options_:
-To see these, type:  
-           `jai --- help`
+To see these, type:  `jai -- help`
 
 which outputs the following additional options:
-_Developer options: -no_jobs, -randomize, -seed some_number, -extra, -chaos_
+Developer options: `-no_jobs, -randomize, -seed some_number, -extra, -chaos`
 
 These options are deliberately minimal compared to other programming languages. As we'll see later Jai provides a very sophisticated system to build your application and setting these options from Jai code itself (see § 30). It favors _configuration from code_ which is the same and all platforms and lets you use the Jai programming language you know. This is in sharp contrast to many other programming language environments, where you have separate complicated build systems often using a separate language, that also often changes depending on which platform you are on.

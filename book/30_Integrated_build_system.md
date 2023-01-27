@@ -375,12 +375,13 @@ This line disables most of the text output from the compiler.
 
 ## 30.5 Changing the default meta-program
 Here is how to substitute the default meta-program with your own:  
-Your own meta-program should be a module (let's call it Build, but any name is ok). This Build module must be in a folder Build (either in the default `jai/modules` folder or in a dedicated `modules_folder`) containing a file module.jai. This file has to contain a `build()` proc and a `#run build()` (it should not contain a `main` proc). You can start from 30.3_build.jai or  _modules/Minimal_Metaprogram.jai_ to make your Build() module. You can then use your meta-program as follows: 
+Your own meta-program should be a module (let's call it Build, but any name is ok). This Build module must be in a folder Build (either in the default `jai/modules` folder or in a dedicated `modules_folder`) containing a file module.jai. This file has to contain a `build()` proc and a `#run build()` (it should not contain a `main` proc). You can start from 30.3_build.jai or _modules/Minimal_Metaprogram.jai_ to make your Build() module. You can then use your meta-program as follows: 
 `jai main.jai -- meta Build`  
 if Build is in the default jai/modules folder, or  
 `jai main.jai -- import_dir "d:/Jai/my_modules" meta Build`  
 if Build is in a dedicated _d:/Jai/my_modules_.
 (--- instead of -- is also allowed. The compiler now accepts either -- or --- as the delimiter of hardcoded compiler arguments.)
+
 ## 30.6 Intercepting the compiler message loop
 As developer you can access the workings of the compiler through the compiler message loop.
 
