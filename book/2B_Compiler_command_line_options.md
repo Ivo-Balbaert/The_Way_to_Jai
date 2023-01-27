@@ -34,7 +34,7 @@ It is also allowed to add the options after the source-file name, like this:
 
  `-verbose`          Output some extra information about what this meta-program is doing.
 
-**Output**:
+**Output**:  
  `-output_path`     Set the path where your output files (such as the executable) will go.  
  `-exe name`         Set output_executable_name on the target workspace to 'name'.  
  `-no_color`         Disable ANSI terminal coloring in output messages.    
@@ -56,7 +56,7 @@ It is also allowed to add the options after the source-file name, like this:
 
  `-no_backtrace_on_crash`    Do not catch OS-level exceptions and print a stack trace when your program crashes. Causes less code to be imported on startup. Depending on your OS (for example, on Windows), crashes may look like silent exits.
 
-**MetaProgram**
+**MetaProgram**  
 `-- meta MetaProgram`  To replace the default meta-program by MetaProgram.
 The -- command line arguments are not for the compiler itself; 
 they are passed from the default meta-program to your compile-time execution environment. 
@@ -72,7 +72,7 @@ they are passed from the default meta-program to your compile-time execution env
 Other _compiler-front-end options_:
 To see these, type:  `jai -- help`
 
-which outputs the following additional options:
+which outputs the following additional options:  
 Developer options: `-no_jobs, -randomize, -seed some_number, -extra, -chaos`
 
 These options are deliberately minimal compared to other programming languages. As we'll see later Jai provides a very sophisticated system to build your application and setting these options from Jai code itself (see § 30). It favors _configuration from code_ which is the same and all platforms and lets you use the Jai programming language you know. This is in sharp contrast to many other programming language environments, where you have separate complicated build systems often using a separate language, that also often changes depending on which platform you are on.
