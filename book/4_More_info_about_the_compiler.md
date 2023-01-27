@@ -124,7 +124,7 @@ a is 42
 ```
 
 The `-verbose` option gives some extra information about what the meta-program is doing, for example:  
-	`jai -run write_string(\"Hello!\n\") -add "a := 42" -verbose                4.1_hello_sailor.jai`  
+	`jai -run write_string(\"Hello!\n\") -add "a := 42" -verbose 4.1_hello_sailor.jai`  
 shows the following at the start of the compiler output:
             
 ```c++
