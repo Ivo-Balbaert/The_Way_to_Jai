@@ -82,7 +82,9 @@ main :: () {
         print("List item % is %\n", it_index, << it);      
     }
 
-    free(*a); free(*b); free(*c); free(*list);
+    // no need to free the variables a,b and c, because they are allocated on the stack
+    // if they were create with New(), then the following line would be necessary
+    // free(*a); free(*b); free(*c); free(*list);
 }
 
 /* Version 1:

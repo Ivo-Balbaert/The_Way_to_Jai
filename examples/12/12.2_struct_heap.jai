@@ -15,7 +15,9 @@ main :: () {
     print("%\n", bob);             // (3) => 2d1_e8d2_c100
     print("%\n", << bob);          // (4) => {"Robert", 42}
 
-    bob2 := New(Person);
-    defer free(bob2);
-    bob2 = *Person.{"Robert", 42}; // (5)
+    ps := New(Person);
+    defer free(ps);
+    ps.name = "Jim";
+    ps.age = 67; 
+    print("%\n", << ps);          // => {"Jim", 67}
 }

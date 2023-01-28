@@ -1,4 +1,4 @@
-#import "Basic";
+#import "Basic"();
 
 main :: () {
     arrdyn : [..]int;          // (1) dynamic array of integers.
@@ -8,9 +8,9 @@ main :: () {
 
     // clean up memory
     defer array_free(arrdyn);     // (3)
-    defer free(*another_array);   // (4)
-    defer free(*another_array2);   
-    defer free(*b);   // 
+    defer array_free(another_array);   // (4)
+    defer array_free(another_array2);
+    defer array_free(b);  
     
     array_add(*arrdyn, 5);  // (5) Add 5 to the end of arrdyn
     array_add(*arrdyn, 9);  // Add 9 to the end of arrdyn

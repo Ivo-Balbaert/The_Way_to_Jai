@@ -254,9 +254,9 @@ main :: () {
 
     // clean up memory
     defer array_free(arrdyn);     // (3)
-    defer free(*another_array);   // (4)
-    defer free(*another_array2);  
-    defer free(*b);   // 
+    defer array_free(another_array);   // (4)
+    defer array_free(another_array2);  
+    defer array_free(b);   // 
     
     array_add(*arrdyn, 5);  // (5) Add 5 to the end of arrdyn
     array_add(*arrdyn, 9);  // Add 9 to the end of arrdyn
@@ -423,6 +423,7 @@ main :: () {
     static_array: [N]int = .[0, 1, 2, 3]; 
     dynamic_array : [..]int;
     array_view : []int = static_array;
+    defer array_free(dynamic_array);
 
     for static_array   static_array[it_index] = it;
     // for 0..static_array.count-1  static_array[it_index] = it; // (1) => Error: Undeclared identifier 'it_index'.
@@ -533,12 +534,6 @@ main :: () {
 
     for luminance_color_ramp    print("% % % / ", it[0], it[1], it[2]); // (2)
     // => 0 0 0 / 0 0 1 / 0 1 1 / 0 1 0 / 1 1 0 / 1 0 0 / 1 0 1 / 1 1 1 /
-
-// do they need to be freed, probably they are in stack ?
-    array_free(a2);
-    array_free(b2);
-    array_free(array3);
-    array_free(luminance_color_ramp);
 }
 ```
 Lines (1) and following show some examples of declaration and initialization. Line (2) prints out a 2D-array within a for loop.
@@ -572,7 +567,7 @@ main :: () {
     // => Array has size 4 - arr[0] = 0 / arr[1] = 1 / arr[2] = 2 / arr[3] = 3 / 
 
     dynamic_array : [..]int;
-    defer free(*dynamic_array);
+    defer array_free(dynamic_array);
     array_add(*dynamic_array, 4);
     array_add(*dynamic_array, 5);
     array_add(*dynamic_array, 6);

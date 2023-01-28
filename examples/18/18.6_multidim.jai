@@ -27,12 +27,6 @@ main :: () {
 
     for luminance_color_ramp    print("% % % / ", it[0], it[1], it[2]); // (2)
     // => 0 0 0 / 0 0 1 / 0 1 1 / 0 1 0 / 1 1 0 / 1 0 0 / 1 0 1 / 1 1 1 /
-
-// do they need to be freed, probably they are in stack ?
-    array_free(a2);
-    array_free(b2);
-    array_free(array3);
-    array_free(luminance_color_ramp);
 }
 
 

@@ -506,15 +506,17 @@ A recursive procedure is a proc that calls itself in its body.
 In the example above, we have a proc `factorial`, which prints out the factorial of the first 20 integers (for i > 20, the calculation results in overflow of the int type). It uses a for loop to call itself in line (2).  
 
 Each recursive iteration is put on the stack, and also decrements n, so eventually we arrive at the base case of line (1). Then the stack is unwound in LIFO order, and all calls are calculated.  
-This cannot go on infinitely, once stack memory is depleted (a condition called **stack overflow**), the program crashes: `The program crashed`. (Try this out by changed the end value in the for loop to 10_000, in our case the crash occurred at around recursion 9200). So there has to be a base-case (here n <= 1), where the recursive calling in stopped and the stack starts to unwound. The following code snippet recursive calls indefinitely because it has no bas-case to stop:
+This cannot go on infinitely, once stack memory is depleted (a condition called **stack overflow**), the program crashes: `The program crashed`. (Try this out by changed the end value in the for loop to 10_000, in our case the crash occurred at around recursion 9200). So there has to be a base-case (here n <= 1), where the recursive calling in stopped and the stack starts to unwound. The following code snippet recursive calls indefinitely because it has no base-case to stop:
 ```
-fibonacci :: () #expand {
+fibonacci :: () {
   fibonacci();
 }
 
 fibonacci();
 ```
-It ends with: `The program crashed. Printing the stack trace:`
+It ends with:  
+`The program crashed because of a stack overflow.
+Printing the stack trace (this may fail when a stack overflow occurred):`
 
 A recursive solution may be logically the simplest, but it most probably is not the most performant solution, not withstanding its sometimes incorrect and always stack-limited behavior. 
 
@@ -761,6 +763,22 @@ main :: () {
 ## 17.15 The #deprecated directive
 You can mark a function as deprecated with the **#deprecated** directive. Calling a deprecated function leads to a compiler warning.  
 You can add string messages after deprecated procedures as warnings to tell someone to use a different procedure or different set of instructions to accomplish what you want.
+
+See *17.18_deprecated.jai*:
+```c++
+#import "Basic";
+
+old_function :: () #deprecated "please use new_function :: () instead" {}
+
+new_function :: () {}
+
+
+main :: ()  {
+    old_function(); 
+    // => Warning: This procedure is deprecated. Note: "please use new_function :: () instead"
+}
+
+```
 
 The purpose is to indicate to a developer using your code(or yourself):  
 Look, this is an older version of this function, and in a short time this function will no longer exist. You can continue to use this function for now, but you should replace it with this new_function.

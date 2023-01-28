@@ -59,8 +59,6 @@ main :: () {
     for < list {                   // (5) 
         print("List item % is %\n", it_index, << it);      
     }
-
-    free(*a); free(*b); free(*c); free(*list);
 }
 
 /*

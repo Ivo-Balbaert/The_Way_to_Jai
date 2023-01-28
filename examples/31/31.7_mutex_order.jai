@@ -1,5 +1,6 @@
 #import "Basic";
-#import "Thread"()(DEBUG=true);   // (1)
+#import "Thread";   // (1)
+// #import "Thread"()(DEBUG=true);   // (1)
 
 mutex_A: Mutex;
 mutex_B: Mutex;

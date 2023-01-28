@@ -151,7 +151,7 @@ Here the instance is `bob`, and the struct is `Person`. When this code executes,
 ## 12.2 Making struct variables
 When defining a struct no variable is defined, so no memory is allocated yet.  
 You have to define a struct variable, like this:  `v: Vector2;`
-This variable v is defined on the stack, in § 12.5 we'll see how to make a struct on the heap.  
+This variable v **is defined on the stack**, in § 12.5 we'll see how to make a struct on the heap.  
 All data values are contiguous in memory, that is: they are packed together successively in the order in which they are defined.
 
 How can we access the data in a field?  
@@ -227,21 +227,22 @@ Person :: struct {
 main :: () {
     bob := New(Person);            // (1)
     print("%\n", type_of(bob));    // (2) => *Person
-    defer free(bob);               // (6A)
+    defer free(bob);               // (5A)
 
     bob.name = "Robert";           
     bob.age = 42;
     print("%\n", bob);             // (3) => 2d1_e8d2_c100
     print("%\n", << bob);          // (4) => {"Robert", 42}
 
-    bob2 := New(Person);
-    defer free(bob2);              // (6B) 
-    bob2 = *Person.{"Robert", 42}; // (5)
+    ps := New(Person);
+    defer free(ps);                // (5B)
+    ps.name = "Jim";
+    ps.age = 67; 
+    print("%\n", << ps);           // => {"Jim", 67}
 }
 ```
 In line (1) we use New to create our struct variable on the heap. Line (2) says the variable is now a pointer to a location in the heap, of type *Person. That's why in line (3) an address is printed. To print out the values, now you have to dereference << the variable, see line (4).  
-You can use a struct literal as in line (5), but note: it's now a Pointer type.
-Also remember to free the memory as in lines (6A) and (6B), Jai doesn't warn you when you forget it!
+Also, because the allocation is on the heap, remember to free the memory with `free` as in lines (5A) and (5B), Jai doesn't warn you when you forget it!
 
 Why would you use structs on the heap?  
 The stack is limited in size. If your program needs a whole lot of structs, better use the heap. But for faster memory management: keep things on structs by value where possible.

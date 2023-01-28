@@ -342,11 +342,15 @@ Line (1) marks the start of the critical section. First in line (2), a lock is s
 
 In Jai a mutex can also be given an order number when it is defined, like: `init(*mutex1, "Critical", 1);`  
 Now several mutexes can be  defined having an order like 1, 2, 3. If the DEBUG module parameter of _Thread_ is set to true, Jai will check at runtime to ensure they are only locked consistently with that descending order, so like 3, 2, 1. If a mutex has no order defined as its 3rd parameter, its value is -1 and it will not be checked. Out of order unlocking is also detected.
+
+[The DEBUG parameter is temporarily disabled starting from version beta 0.1.055b, so the error checking doesn't work for now.]
+
 This is illustrated in the following program:  
 See _31.7_mutex_order.jai_:
 ```c++
 #import "Basic";
-#import "Thread"()(DEBUG=true);   // (1)
+#import "Thread";   // (1)
+// #import "Thread"()(DEBUG=true);   // (1)
 
 mutex_A: Mutex;
 mutex_B: Mutex;

@@ -7,7 +7,7 @@ In this section, we will effectively let C and Jai code work together. Jai can i
 Calling C is not necessary for performance reasons, but of course a whole universe of ready-made C libraries exist, that can be used of the shelf. So C can be useful to speed up the development of a project, so that you don't have to write everything in Jai from the start.  
 Also it can ease the migration of an existing C project to Jzi: project parts can be converted to Jai incrementally, and the Jai parts can call into the remaining C modules.
 
-## 29.2 How to call C? The #foreign directives
+## 29.2 How to call C? The #foreign directive
 To access a C function, use the **#foreign**  directive after the Jai declaration of the C function. After `#foreign` you must specify the name of the library where the function is located in. The compiler will then import the C function with the specified name in the code. You can also specify an alternative name for the function as shown in the lz4 examples below.
 
 > #foreign specifies a foreign (C) procedure 

@@ -23,7 +23,7 @@ main :: () {
     // => Array has size 4 - arr[0] = 0 / arr[1] = 1 / arr[2] = 2 / arr[3] = 3 / 
 
     dynamic_array : [..]int;
-    defer free(*dynamic_array);
+    defer array_free(dynamic_array);
     array_add(*dynamic_array, 4);
     array_add(*dynamic_array, 5);
     array_add(*dynamic_array, 6);

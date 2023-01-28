@@ -5,7 +5,7 @@ main :: () {
     static_array: [N]int = .[0, 1, 2, 3]; 
     dynamic_array : [..]int;
     array_view : []int = static_array;
-    defer free(*dynamic_array);
+    defer array_free(dynamic_array);
 
     for static_array   static_array[it_index] = it;
     // for 0..static_array.count-1  static_array[it_index] = it; // (1) => Error: Undeclared identifier 'it_index'.

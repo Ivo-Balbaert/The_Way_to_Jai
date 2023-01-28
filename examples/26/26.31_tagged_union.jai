@@ -30,6 +30,7 @@ set :: (u: *$Tag/Tag_Union, value: $T) {
       }
     }
     assert(false, "Invalid value: %\n", T);
+    return "";
   }
 }
 
