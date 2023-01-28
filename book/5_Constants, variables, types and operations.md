@@ -36,7 +36,7 @@ _Question:_ How would you convert `"Hello"` to a number?
 Often these conversions won't work, and you'll get a compiler error.
 
 Jai is a _strongly_ and _statically typed_ language: the compiler must know the types of all the program’s constants, variables and expressions at compile time, and a variable cannot change type, like from number to string as in dynamic languages. This allows Jai to run fast at runtime.
-> Except when the variable has type Any (see § 9.5).  
+> Except when the variable has type Any (see § 9.5): variables of all types can be cast to Any.  
  
 Conversion of the type of a variable is strictly controlled, and operations can only work on certain types. This all adds up to better error-checking by the compiler, and thus more robust, safer and much faster programs. 
 
@@ -75,14 +75,14 @@ Module _Math_ contains the minimum and maximum range values for integer and floa
 
 
 **string** : the most common data type, which we have already used, for example: `"Hello from Jai!"`.   
-_Question_: Why are these values strings?  "42", "false" or "0b10".
+_Question_: Why are these values strings?  "42", "false" or "0b10".  
 Indeed all types can disguise as string when surrounded by "".
 
 **void** : this is a special type of size 0, with no values. It is used when a variable has no value. Other types cannot cast to it.
 
 Jai has no explicit character type. The **#char** directive on a single character string gives the numeric value of the ASCII character, inferred as type s64; for example:		
     `#char "1"; // this is 49`  
-(see for example this [ASCII table](https://www.rapidtables.com/code/text/ascii-table.html))
+(consult an [ASCII table](https://www.rapidtables.com/code/text/ascii-table.html))
 
 ### 5.1.3 Using print to display a value
 See *5.1_literals.jai*:
@@ -110,21 +110,23 @@ main :: () {
 ```
 
 Try to print out a number (line (1)); you'll see that this doesn't work. But printing a string is no problem, why is this?    
-The print procedure only accepts a string, or a format string with arguments to be substituted in the % placeholders.  
-If you use the print procedure with only 1 parameter, then this parameter must be of type string. If not, you get the **Error: Type mismatch. Type wanted: string; type given: s64.**
+The print procedure only accepts   
+- a string, 
+- or a format string with arguments to be substituted in the % placeholders.    
+If you use the print procedure with only 1 parameter, then this parameter must be of type string. If not, you for example in `print(1);` get the **Error: Type mismatch. Type wanted: string; type given: s64.**
 
     print(1);
 
     c:/jai/modules/Basic/Print.jai:386,10: Info: ... in checking argument 1 of call to print.
     print :: (format_string: string, args: .. Any, to_standard_error := false) -> bytes_printed: s64 { 
 
-The error text shows that the 1st argument needs to be a string, but that in fact it is meant to be a format string, so that you can specify what you want to print.
+The error text shows that the 1st argument needs to be a string, or that it is meant to be a format string, so that you can specify what you want to print.
 
 ```c++
  	print ("I greet you: %\n", "Hello, Sailor!");  // => I greet you: Hello, Sailor!
 ```
 
-The print procedure uses **%** to indicate insertion points for values: the value is substituted for % in the format string.   Unlike many other languages, you don't need to specify what kind of thing is being printed, and it handles complex types too. There is no need for any indication of the type as is done in C (e.g. %d for an integer, or %s for a string) because the Jai compiler knows the types of all print arguments. However, if you want any special formatting of the thing to be printed, you must handle that separately.   
+The print procedure uses **%** to indicate insertion points for values: the value is substituted for % in the format string.   Unlike many other languages, you don't need to specify what kind of thing (which type) is being printed, and it handles complex types too. There is no need for any indication of the type as is done in C (e.g. %d for an integer, or %s for a string) because the Jai compiler knows the types of all print arguments. However, if you want any special formatting of the thing to be printed, you must handle that separately.   
 To make the print-out more readable, place a new-line (\n) at the end of the format string.
 
 ### 5.1.4 type_of()
@@ -172,7 +174,7 @@ Notice that by omitting the type, we get the typical **::**
 `MASS_EARTH :: 5.97219e24;`  
 No let, imm or const (as used in other languages) is necessary before the constant's name.
 
-Needless to say that you can't define two or more constants with the same name. Test out what error you get! The same goes for variables, procedure names, and so on.  
+Needless to say that you can't define two or more constants with the same name. Test out what error you get! The same goes for variables, procedure names, and so on (see § 5.4 2)).  
 In line (2B) we use `#run` to calculate an expression at compile-time, so that `COMP_CALC` is really a constant.   
 In line (3), we use MASS_EARTH to calculate the mass of planet Mars, which is also declared as a constant. Because MASS_MARS is declared inside main(), it is only known in that _local scope_.
 
@@ -269,16 +271,16 @@ This default value is 0 for numbers, false for bool, the empty string "" for str
 
 >In C such variables have a random value, because they get assigned a random free location in memory. This can cause errors later on, so C programmers are advised to initialize their variables immediately. This problem cannot occur in Jai: here variables are by default initialized to a "zero" value, which reduces the mental load for the developer ("have I already initialized these variables or not?"). 
 
+Changing a value from a previously declared variable is done with the assignment operator **=**  
+		    `counter = 100;`
+
 **Case 3:** only value  
 We've already seen that the compiler often can infer the type from the given value. If you skip the type - notice that you then get the := , then the type will be inferred from the value:
 		    `first_name := "Jon";`  
 In practice, this will be the format mostly used.
 
-Changing a value from a previously declared variable is done with the assignment operator **=**  
-		    `counter = 100;`
-
 **Case 4:** no default value is given - explicit un-initialization with **---**   
-Giving variables a default zero value (Case 3) is sometimes unnecessary, because you will supply (or calculate) the values yourself later in the program. In such a case you can skip the default zero initialization (and so gain some performance!) by leaving the variable uninitialized with the **---** symbol as in: 
+Giving variables a default zero value (Case 3) is sometimes unnecessary, because you will supply (or calculate) the values yourself later in the program. In such a case you can skip the default zero initialization (and so gain some performance) by leaving the variable uninitialized with the **---** symbol as in: 
 		    `varname : type = ---;`
 
 Example:    `average : float = ---;`
@@ -366,7 +368,7 @@ This can of course be shortened.
 A compound assignment like in line (2)
 is not allowed, but you can write: `n3, m3 := 12, 13;`  
 The right-hand sides in such a _multiple assignment_ can also contain expressions, even calculated at compile-time with #run.  
-If needed, declaration and assignment can be on separate lines.
+If wanted, declaration and assignment can be on separate lines.
 
 ## 5.6 - Swapping values
 See *5.5_swapping.jai*:
@@ -378,7 +380,7 @@ main :: () {
     n := 2;
     m := 3;
   // n, m = m, n;                        
-  // print("n is % and m is %\n", n, m); // (1) => n is 3 and m is 3
+    print("n is % and m is %\n", n, m); // (1) => n is 3 and m is 3
 
     s, p := "abc", 13;
   // this gives an error:
@@ -386,7 +388,7 @@ main :: () {
 }
 ```
 
-A swap like n, m = m, n; is allowed, but doesn't work in Jai like you would expect (see line (1)): both variables get the same value. When n and m are of different types an error results, because then they would have to change type, which is not allowed.
+A swap like n, m = m, n; is allowed, but doesn't work in Jai like you would expect (see line (1)): both variables get the same value. When n and m are of different types an error results, because then the variables would have to change type, which is not allowed.
 But see § 17.10 for a swap procedure and § 22.2.3 for built-in versions.  
 
 ## 5.7 - More about printing
@@ -423,7 +425,7 @@ main :: () {
 
 The substitution % symbols can also take a number to indicate the position. In this way, you can change the order in which values are displayed in the format string, or use the same value more than once (see lines (2) and (3)).
 	
-The number of % and supplied values must be the same. If not you get a warning:
+The number of %'s and supplied values must be the same. If not you get a warning:
 
 ```c++
  print("% %", n, m, counter); // =>  Warning: Incorrect number of arguments supplied to 'print':  
@@ -451,7 +453,7 @@ Hello, World!
 */
 ```
 
-Jai has some lower-level write procedures which are defined in modules _Preload_ and *Runtime_Support.jai*, so they don’t need the Basic module. You can use these when you don't want to import the _Basic_ module.
+Jai has some lower-level write procedures which are defined in modules _Preload_ and *Runtime_Support.jai*, so they don’t need the _Basic_ module. Use these when you don't want to import the _Basic_ module.
 
 ### 5.7.3 - Printing Unicode
 See *5.9_printing_unicode.jai*:
@@ -493,12 +495,11 @@ In general, print out any Unicode character like this: `print("\u03C0");`
 
 ## 5.8 - General naming conventions
 The following naming conventions are more or less standard:
-- snake_case for identifiers (procedures, variables, ...)
-- Capitalized_Snake_Case for types
-- PascalCase for macros and imports
-- full caps for constants and enum members
+- snake_case for identifiers (procedures, variables, macros, ...): birth_date, is_constant()
+- Capitalized_Snake_Case for types and imports: Entity, Enemy_Entity, Command_Line
+- Full Capitalized_Snake_Case for constants and enum members: MASS_EARTH, .SOUTH
 
-Note that these conventions are not enforced in the language, and you'll see exceptions to these rules in the standard library distribution. 
+Note that these conventions are not enforced in the language, and you'll find exceptions to these rules in the standard library distribution. 
 
 [5B - Identifier Backslashes](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/5B_Identifier_Backslashes.md)   
 [5C - ASCII table](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/5C_Ascii_table.pdf)   
