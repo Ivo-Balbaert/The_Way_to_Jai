@@ -499,3 +499,6 @@ The following naming conventions are more or less standard:
 - full caps for constants and enum members
 
 Note that these conventions are not enforced in the language, and you'll see exceptions to these rules in the standard library distribution. 
+
+[5B - Identifier Backslashes](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/5B_Identifier_Backslashes.md)   
+[5C - ASCII table](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/5C_Ascii_table.pdf)   
