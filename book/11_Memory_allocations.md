@@ -1,6 +1,6 @@
 # Chapter 11 – Allocating and freeing memory
 
-We talked about memory and Jai before in § 1.1.1, § 1.4 and § 4.10.
+We talked about memory and Jai before in § 1.1.1, § 1.4 and § 4D.
 Now that we know the concept of pointers, we can discuss the basic mechanisms in Jai for creating (also called _allocating_) and _freeing_ memory.
 Because there is no garbage collection in Jai, the developer is also responsible for the freeing of memory. Freeing memory should be done as soon as a variable is no longer needed, it is easy to forget.
 If memory allocated on the heap is not freed when it is no longer needed, so-called _memory leaks_ can occur. This means your program continues to use up more and more memory, degrading performance of its execution and of the entire machine on which it runs.

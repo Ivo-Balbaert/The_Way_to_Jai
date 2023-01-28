@@ -1,7 +1,7 @@
 # Chapter 8 – Modules - Structuring a project's code
 
 A Jai project consists of a start-up file, usually called ´main.jai´, which contains tne `main :: ()` entry-point procedure.
-In § 3.2.2 we saw how we can import a module in our project by using `#import`. We encountered the implicitly loaded _Preload_ module in § 4.9
+In § 3.2.2 we saw how we can import a module in our project by using `#import`. We encountered the implicitly loaded _Preload_ module in § 4C
 
 **Searching for identifier names**
 When an identifier for a type, variable or procedure is encountered while compiling, the compiler first looks in the current source file. Then it searches the imported modules (if any, see § 8.1), and it also searches the loaded files (see § 8.2).

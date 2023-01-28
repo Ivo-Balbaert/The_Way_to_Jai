@@ -1,7 +1,7 @@
 # Chapter 18C - Copying a struct with memcpy
 (Example taken from how_to\006_structs)
 
-In § 4.9, we saw the low-level memcpy function. We'll use this now to copy the contents of a struct to another struct, using a static array as intermediary. 
+In § 4C, we saw the low-level memcpy function. We'll use this now to copy the contents of a struct to another struct, using a static array as intermediary. 
 
 See *18C_memcpy_struct.jai*:
 ```c++
