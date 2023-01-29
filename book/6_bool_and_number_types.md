@@ -34,12 +34,12 @@ This is a _boolean expression_ or _condition_, resulting in a bool value:
   - it is true when a and b have the same value  
   - it is false in all other cases.
 
-For example:  true == true and 1 == 1.0 are both true
-The inequality operator **!=** reverses this, it gives true when the values are different:    `"Jai" != "Java"` gives true
+For example:  true == true and 1 == 1.0 are both true.  
+The inequality operator **!=** reverses this, it returns true when the values are different:    `"Jai" != "Java"` gives true
 
 In Jai you cannot compare values of a different type, for example: 
 `0 == false: // => Error: Type mismatch. Type wanted: s64; type given: bool.`
-Number types are an exception to this rule:   `1 == 2.0`  is allowed and returns false.
+Number types are an exception to this rule, for example `1 == 2.0`  is allowed and returns false.
 
 _Question_ What is the value of `"3" == 3`, why?  
 _Answer_ This gives an error! Error: Type mismatch. Type wanted: string; type given: s64.
@@ -48,9 +48,9 @@ _Answer_ This gives an error! Error: Type mismatch. Type wanted: string; type gi
 The negation operator (boolean NOT) **!** changes a true value to false and vice-versa.  
 The **&&** (boolean AND) operator is true only when both operands are true. 
 The **||** (boolean OR) operator is false only when both operands are false.  
-They operate in a 'short-circuit' manner, meaning:
-for && when the 1st operand is false, the 2nd operand is not evaluated, because we know the result is false.
-for || when the 1st operand is true, the 2nd operand is not evaluated, because we know the result is false.
+They operate in a 'short-circuit' manner, meaning:  
+* for && when the 1st operand is false, the 2nd operand is not evaluated, because we know the result is false.  
+* for || when the 1st operand is true, the 2nd operand is not evaluated, because we know the result is false.
 
 You can find complete truth tables [here](https://en.wikipedia.org/wiki/Truth_table).
 
@@ -62,7 +62,7 @@ See *6.2_assert.jai*:
 
 main :: () {
     assert(5 == 5.0);
-    assert(4 == 5, "4 does not equal 5"); // (1)
+    // assert(4 == 5, "4 does not equal 5"); // (1)
     // print("This is not printed when assert (false)");
 
     n := 42;
@@ -82,15 +82,10 @@ d:/Jai/The_Way_to_Jai/6_Bool_and_number types/examples/6.3_assert.jai:5: main
 
 Instead of always printing out if a bool expression is true of false, there is a handy shortcut with the **assert** procedure, defined in module _Basic_.
 
-When the expression is true, nothing happens. When the expression is false, an assert stops the program execution with **Assertion failed** and the line where it happened, and prints out a stack trace. A message parameter after the expression is optional, but when there is one, it is also printed out (see the example in line (1)).
+`assert` takes an expression, and when this is true, nothing happens. When the expression is false, an assert stops the program execution with **Assertion failed** and the line where it happened, and prints out a stack trace. A message parameter after the expression is optional, but when there is one, it is also printed out (see the example in line (1)).
 
-assert also works with complex expressions, procedure calls, and so on. It is a very useful tool to make sure your program is always in a correct state. It is also very handy during debugging.
-Also you can leave important assert statements in production code and disable them as described below. That way, when a problem occurs you can quickly enable them in development/test to try to find the cause.
-
-> Basic has a program parameter defined for it: ENABLE_ASSERT := true
->To increase performance for a release build, you can disable asserts by changing the import to:
->	`#import "Basic"()(ENABLE_ASSERT=false);`
-> That way you can leave the asserts in your code, without incurring a performance penalty.
+`assert` also works with complex expressions, procedure calls, and so on. It is a very useful tool to make sure your program is always in a correct state. It is also very handy during debugging.
+Also you can leave important assert statements in production code and disable them as described in § 20.1.2. That way, when a problem occurs you can quickly enable them in development/test to try to find the cause.
 
 ## 6.2 - Number types
 See *6.3_numbers.jai*:
@@ -118,7 +113,7 @@ main :: () {
     The program crashed. Printing the stack trace:
 handle_exception                  c:\jai\modules\Runtime_Support_Crash_Handler.jai:211    
 ... (skipping OS-internal procedures)
-main                        d:\Jai\The_Way_to_Jai\examples\6\6.3_numbers.jai:18 
+main                              d:\Jai\The_Way_to_Jai\examples\6\6.3_numbers.jai:18 
     */
 
     // Mixing of different types:
@@ -126,19 +121,18 @@ main                        d:\Jai\The_Way_to_Jai\examples\6\6.3_numbers.jai:18
     b: u8  = 10;
     c: u16 = 50;
     d := a + b; 
-    print("d is %\n", d); // => d is -5068898 
-    // total_score *= 3.14; // Error: Number mismatch. Type wanted: s64; type given: float32.
+    print("d is %\n", d); // => d is -5068898
+    // total_score *= 3.14; // (2) => Error: Number mismatch. Type wanted: s64; type given: float32.
     message := "YOU WON!";
     // score3 := total_score + message; 
-    // => Error: Type mismatch between the arguments of binary operator + (left type: s64; right type: string).
+    // (3) => Error: Type mismatch between the arguments of binary operator + (left type: s64; right type: string).
 
-    // Size of integers:
+    // (4) Size of integers:
     // This number won't fit into 16 bits
-    // i: s16 = 80000;  // => Error: Loss of information   
-    // (trying to fit 64 bits into 16 bits). Can't do this without  an explicit cast. Type wanted: s16; type given: s64.  
+    // i: s16 = 80000;  // => Error: Loss of information (trying to fit 64 bits into 16 bits). Can't do this without an explicit cast. Type wanted: s16; type given: s64.
     // -1 is signed, so it is out of range of what a u32 can store. 
-    // j: u32 = -1; // => Error: Number signed-ness mismatch. Type wanted: u32; type given: s64.    
-    // b = c; // Error: Loss of information (trying to fit 16 bits   into 8 bits). Can't do this without an explicit cast. Type   wanted: u8; type given: u16.
+    // j: u32 = -1; // => Error: Number signedness mismatch. Type wanted: u32; type given: s64.    
+    // b = c; // Error: Loss of information (trying to fit 16 bits into 8 bits). Can't do this without an explicit cast. Type wanted: u8; type given: u16.
 
     // (5) Casting:
     b = cast(u8) c;
@@ -152,7 +146,7 @@ main                        d:\Jai\The_Way_to_Jai\examples\6\6.3_numbers.jai:18
     // cast error at runtime:
     // b = cast(u8) a;
     // (6) => Cast bounds check failed.  Number must be in [0, 255]; it was -5069105.  Site is D:/Jai/The Book of Jai/3_Constants_Variables_Types_Operations/code/5_numbers.jai:19. Panic.
-    // b = xx a; // => Error
+    // b = xx a; // => Same error
     b = cast, no_check(u8) a;
     print("a is % and b is %\n", a, b); // => a is -5069105 and b is 207
     a, b += 1;
@@ -170,8 +164,12 @@ main                        d:\Jai\The_Way_to_Jai\examples\6\6.3_numbers.jai:18
     print("e is %\n", e); // (8A) => e is 1
     e = xx false;
     print("e is %\n", e); // (8B) => e is 0
-
-
+    // Cast of int to bool:
+    b1: bool = cast(bool) 0;
+    print("%\n", b1);       // (8C) => false
+    b1 = cast(bool) -50;  // same for positive integers
+    print("%\n", b1);       // (8D) => true
+    
     // (9) Precedence
     count := 10;
     print("%\n", count/2 - 1);   // => 4

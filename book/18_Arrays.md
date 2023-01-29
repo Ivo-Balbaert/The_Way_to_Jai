@@ -194,6 +194,10 @@ They are declared like this:  `arr_name: [count]type`
 See some concrete examples in lines (1) and following. The items of an array are by default initialized to their zero-value (see line (3)). The example starting in line (4) shows that the items can be initialized one by one, but if the values are constant, we know that it can be done shorter with an array literal. The size (or count) can also be a constant, as indicated in line (5).  
 The indices of an array arr range from 0 to `arr.count - 1`. 
 
+**Exercise**
+What is the size of an array of type [100_000]void?
+(see void_array.jai)
+
 ### 18.3.1 Setting up an array with a for loop
 Lines (4C) and following show the many different ways to for-loop over an array, either using it and/or it_index, or using own variables for the items and/or the index.
 So you can make a for loop over this range:  `for 0..arr.count-1 { ... }` and initialize the array using the `it` variable as in line (6). (Try out if `for arr` works here).  

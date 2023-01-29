@@ -57,8 +57,12 @@ This will not show when you run the program.
 A somewhat better solution is to use assert statements to test conditions (see § 6.1.3). When you know a variable var must have the value val, you can put  
 `assert(var == val);`  
 at appropriate places.
-When an assert fails, you know something went wrong in the proc in which it executed.  
-A big advantage compared to `print` is that you can leave the `assert` statements in your code by using `ENABLE_ASSERT=false`, as explained in § 6.1.3. That way the asserts will not be compiled (so there will be no performance penalty), but you can quickly enable them in production code to hunt for a problem!  
+When an assert fails, you know something went wrong in the proc in which it executed.
+
+A big advantage compared to `print` is that you can leave the `assert` statements in your code. This is done by writing `ENABLE_ASSERT=false`, through importing _Basic_ like this:  `#import "Basic"()(ENABLE_ASSERT=false);`  
+(ENABLE_ASSERT is a program parameter for _Basic_, and is by default true, see § 8.7).
+
+That way you can leave the asserts in your code and they will not be compiled. So there will be no performance penalty, but you can quickly enable them in production code by changing this parameter to true to hunt for a problem!  
 We already showed you the use of assert to catch dereferencing null pointer errors (see § 10.3). Also have a look at the very close relative `#assert` in § 20.2.1
 
 ## 20.2 Debugging compile-time execution

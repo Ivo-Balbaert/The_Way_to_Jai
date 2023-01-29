@@ -1,6 +1,6 @@
 # 33 Graphical (GUI) modules
 
-In § 31 we used OpenGL (through the modules _SDL_ and _GL_) to draw a simple screen and change its title. Here are other modules from the compiler distribution that are used for graphics displaying. OpenGL is platform-independent, so we first need a library that can do all the operation-system specific work and give us a window and an OpenGL context to render in. Some of the more popular libraries that do this are GLUT, SDL, SFML and GLFW.
+In § 31 we used OpenGL (through the modules _SDL_ and _GL_) to draw a simple screen and change its title. Here we discuss other modules from the compiler distribution that are used for graphics displaying. At the present time, Jai has bindings in the distribution for D3D12, Vulcan and OpenGL, and an untested Metal module.                              OpenGL is platform-independent, so we first need a library that can do all the operation-system specific work and give us a window and an OpenGL context to render in. Some of the more popular libraries that do this are GLUT, SDL, SFML and GLFW.
 
 ## 33.1 The _GLFW_ module
 [GLFW](https://www.glfw.org/) is an open source, multi-platform library for OpenGL, OpenGL ES and Vulkan development on the desktop. It provides a simple API for creating an OpenGL context, creating windows, contexts and surfaces and receiving user input and events.
@@ -50,8 +50,6 @@ After exiting the render loop,  we want to properly clean/delete all of GLFW's r
 
 When running this program a black window appears (created in line (1)) with a title bar showing the text "GLFW Window".
 
-
-
 > Module _glfw_ disappeared from the distribution starting from version 1-027, we took a copy from 1-025 and put it in the examples/33 folder. Now compile the program with:  `jai 33.1_glfw_window.jai -import_dir "."`
 > The glfw3.dll and glfw3.lib (or similar files for other OS's) have to be copied in the same folder as the executable of program 33.1
 
@@ -90,7 +88,7 @@ main :: () {
                 case SDL_QUIT;
                     exit = true;
                 case SDL_KEYUP;
-                    if event.key.keysym.sym == SDLK_ESCAPE exit = true;
+                    if event.key.keysym.sym == SDLK_ESCAPE  exit = true;
             }
         }
 
@@ -191,7 +189,8 @@ d3d12 contains a minimal example `example.jai`, as well as jai\examples\d3d11_ex
 
 
 ## 33.5 The _Simp_ module
-Simp is a simple 2D API framework for drawing graphics, completely written in Jai.
+Simp is a simple 2D API framework for drawing graphics with OpenGL as backend, completely written in Jai.
+
 Here is Simp's minimum code to open and close a window:
 
 See *33.2_simp_window.jai*:
