@@ -20,7 +20,6 @@ _Table of Contents_
    [4 - More info about the compiler](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/4_More_info_about_the_compiler.md)  
    [5 - Constants, variables, types and operations](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/5_Constants%2C%20variables%2C%20types%20and%20operations.md)  
    [6 - Bool and number types](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/6_bool_and_number_types.md)  
-   [6B - Times and dates](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/6B_Times_and_dates.md)   
    [7 - Scope of variables](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/7_Scope_of_Variables.md)  
    [8 - Modules - Structuring the code of a project](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/8_Modules_-_Structuring_the_code_of_a_project.md)  
    [8B - The #scope directives](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/8B_The_scope_directives.md)    

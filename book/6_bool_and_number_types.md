@@ -122,6 +122,8 @@ main                              d:\Jai\The_Way_to_Jai\examples\6\6.3_numbers.j
     c: u16 = 50;
     d := a + b; 
     print("d is %\n", d); // => d is -5068898
+    print("total_score has type %\n", type_of(total_score));
+    // => total_score has type s64
     // total_score *= 3.14; // (2) => Error: Number mismatch. Type wanted: s64; type given: float32.
     message := "YOU WON!";
     // score3 := total_score + message; 
@@ -156,7 +158,7 @@ main                              d:\Jai\The_Way_to_Jai\examples\6\6.3_numbers.j
     pi := 3.14; 
     e: u8;
     e = cast(u8) pi;
-    e = xx pi;
+    e = xx pi; // autocast, equivalent of cast above
     print("e is %\n", e); // (7) => e is 3
 
     // Cast of bool to int:
@@ -191,31 +193,30 @@ The usual +, -, * and /, % operators are defined for numbers, with abbreviations
 Integer division truncates. Modulo operator % doesn't work for floats.
 There are no increment (++) or decrement (--) operators.
 
-Division by zero results in a compile-time error if the compiler can see it, but in most cases you get a runtime panic with a stack strace; see line (1) and following.
+Division by zero results in a compile-time error if the compiler can see it, but with variables you get a runtime panic with a stack strace; see line (1) and following.
 
 ### 6.2.3 - Mixing of different types
-Different int types can be mixed, int and float types cannot: see line (2).
-
-Addition (+) is only defined for numbers, not for strings, as we see in line (3).
-
-Line (4) and following: Any number literal or variable can be assigned to a variable if the variable has a ‘bigger’ type than the literal (widening), that is: if it can accommodate the literal; this is _implicit conversion_.
+Different int types can be mixed, but int and float types cannot: see line (2).  
+Addition (+) is only defined for numbers, not for strings, as we see in line (3).  
+Line (4) and following: Any number literal or variable can be assigned to a variable if the variable has a 'bigger' type than the literal (so called widening), that is: if it can accommodate the literal; this is _implicit conversion_.
 For example, s8, s16, u32 will automatically cast to s64.
 But in many cases, Jai blocks the conversion, when the receiving type is too small, or when you want to put a signed integer into an unsigned type.
 
 Conversions cause a lot of bugs in C/C++, that’s why Jai only allows implicit type conversions that make sense.
 
 ### 6.2.4 - Casting of values
-Line (5) and following: In cases where the compiler indicates an assignment is not possible (for example: to put a bigger type into a smaller type), you can try to force an explicit cast (conversion) with :    **n = cast(type) m;**
+Line (5) and following: In cases where the compiler indicates an assignment is not possible (for example: to put a bigger type into a smaller type), you can try to force an explicit cast (conversion) with :    **n = cast(Type) m;**  
+casting m to type Type and assigning the result to n.
 
 Casting will not always work as you can see in line (6). Cast operations check the range of the value they are casting; if information is lost, that's an error, but it's a runtime error:  
 
 Explicit cast of a float to an int works, but the value is truncated, as you see in line (7):
 
-If you're rally sure what you're doing, you can turn off the check at runtime with:  **cast, no_check(type)**
+If you're really sure what you're doing, you can turn off the check at runtime with:  **cast, no_check(type)**
 `b = cast, no_check(u8) a;`
 This gives an added performance bonus. 
 
-If there is information loss, you can _truncate_ the bits you don't care about, when you are very sure nothing wrong will happen with:
+If there is information loss, you can _truncate_ the bits you don't care about, when you are very sure nothing wrong will happen:
 **cast, trunc(type)** 
 
 !! At this time (Jan 2023), math bounds checks are not yet implemented: casting checks for overflow, when the compiler can check it with constant values.  For an example of overflow, see 26.19_modify4. One way of taking care of this with polymorph procedures is to write an #modify that checks the type, see § 26.10 !!
@@ -236,7 +237,7 @@ In the float to int example, this works but truncates:
 Use xx to do a quick cast, you can always write the complete cast() when reviewing the code.
 
 #### 6.2.5.1 - Cast of bool to int
-bool values can be autocast to ints with xx (see line (7)):
+bool values can be autocast to ints with xx (see lines (8A-B)):
 ```c++    
 xx true  returns 1  
 xx false returns 0
@@ -252,15 +253,18 @@ xx doesn't work here, but a cast(bool) of 0 returns false, and a cast(bool) of a
     print("%", b1);       // (8D) => true
 ```
 
-In general a cast(bool) of a variable will be false if it's value is zero, null or empty. A cast(bool) of a variable will be true if it contains a real value.
+In general:
+* a cast(bool) of a variable will be false if it's value is zero, null or empty. * a cast(bool) of a variable will be true if it contains a real value.  
 This is called the _truthiness_ of a value. This is very useful in branching and looping conditions, see § 14 and § 15. 
 
 ### 6.2.6 Complex expressions and precedence
-Arbitrarily complex expressions can be formed with boolean and other operators, which can quickly become unreadable.
-The same [precedence rules as in C](https://www.tutorialspoint.com/cprogramming/c_operators_precedence.htm) are followed, for example: *, /, and % operators have higher precedence and are by default evaluated first before evaluating + and -   
-But you can override these rules by using parentheses to make the expression more readable, as the code in line (7) shows.
+The same [precedence rules as in C](https://www.tutorialspoint.com/cprogramming/c_operators_precedence.htm) are followed, for example: *, /, and % operators have higher precedence and are by default evaluated first before evaluating + and -  
+But you can override these rules by using parentheses ( ) around the expression(s) that have to be evaluated first.  
+Arbitrarily complex expressions can be formed with boolean and other operators, which can quickly become unreadable. Use parentheses to make the expression more readable, as the code in line (7) shows.
 
 ### 6.2.7 Bitwise operators
+
+#### 6.2.7.1 Using bitwise operators
 See *6.4_bitwise.jai*:
 
 ```c++
@@ -295,19 +299,19 @@ true
 These are Jai's bitwise operators (they work as in C):
 
 ```c++
-     | - bitwise OR
- 	 & - bitwise AND
-	 ^ - bitwise XOR
-	 << - shift left
-	 <<< - rotate left
-	 >> - shift right
-	 >>> - rotate right
- 	 ~ - bitwise NOT (one's complement) (unary)
+| - bitwise OR
+& - bitwise AND
+^ - bitwise XOR
+<< - shift left
+<<< - rotate left
+>> - shift right
+>>> - rotate right
+~ - bitwise NOT (one's complement) (unary)
 ```
 
-The code shows some examples of their use. The bitwise operators perform an arithmetic shift, following C's rules regarding bitwise operators.
+The code shows some examples of their use. The bitwise operators perform an arithmetic shift, following C's rules.
 
-#### 6.2.7.1 Test if a number is even
+#### 6.2.7.2 Tests on numbers
 Using the % or & operator, the following expressions return true when n is even:	
 
 ```c++
@@ -320,6 +324,7 @@ This expression checks that n is a power of 2:
 ```c++
 n & (n - 1) == 0
 ```
+
 ### 6.2.8 Formatting procs
 See *6.5_formatting.jai*:
 
@@ -353,13 +358,13 @@ Scientific-notation-formatted float: 1.234235e+10, Decimal value: 12342345234
 */
 ```
 
-These format* procs give additional functionality for formatting integers and floating numbers. They are defined in Print.jai in the _Basic_ module and return Formatter data structures. The print functions know how to use Formatters as control structures.
+These `format` procs give additional functionality for formatting integers and floating numbers. They are defined in Print.jai in the _Basic_ module and return a `Formatter` data structure. The print function knows how to use a Formatter as control structure.
 
 **formatInt** :: (value : Any, base := 10, minimum_digits := 1, digits_per_comma : u16 = 0, comma_string := "") -> FormatInt 
 
 **formatFloat** :: (value : Any, width := -1, trailing_width := -1, mode := FormatFloat.Mode.DECIMAL, zero_removal := FormatFloat.Zero_Removal.YES) -> FormatFloat
 
-Additionally, you can use print_style.default_format_int and print_style.default_format_float from the context, which contains default Formatters (see § 25.8).
+Additionally, you can use `print_style.default_format_int` and `print_style.default_format_float` from the context, which contains default Formatters (see § 25.8).
 
 ### 6.2.9 Random numbers
 See *6.6_random.jai*:
@@ -384,7 +389,7 @@ A random float between 0 and 100: 75.796494
 */
 ```
 
-The following procedures are defined in the _Random_ module which deals with random number generation (it is just a file *Random.jai* in the _modules_ folder).  
+The following procedures are defined in the _Random_ module (this is just a file *Random.jai* in the _modules_ folder) which deals with random number generation.    
 ```c++
 // sets the global random seed to the value passed as argument
 random_seed :: (new_seed: u32) 
@@ -409,4 +414,7 @@ It contains amongst others:
 * a list of constants like PI, TAU, FLOAT64_MIN, FLOAT64_MAX, FLOAT64_INFINITY, FLOAT64_NAN
 * a set of common mathematical functions, like abs,log2
 * color utility procedures
-* a set of common mathematical objects, such as Vector2, Vector3, Vector4, Quaternion, Matrix2, Matrix3 and Matrix4, Plane, which are all structs
+* a set of common mathematical objects, such as Vector2, Vector3, Vector4, Quaternion, Matrix2, Matrix3 and Matrix4, Plane, which are all structs  
+
+
+[6B - Times and dates](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/6B_Times_and_dates.md)   

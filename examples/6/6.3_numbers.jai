@@ -29,6 +29,8 @@ main                              d:\Jai\The_Way_to_Jai\examples\6\6.3_numbers.j
     c: u16 = 50;
     d := a + b; 
     print("d is %\n", d); // => d is -5068898
+    print("total_score has type %\n", type_of(total_score));
+    // => total_score has type s64
     // total_score *= 3.14; // (2) => Error: Number mismatch. Type wanted: s64; type given: float32.
     message := "YOU WON!";
     // score3 := total_score + message; 
@@ -63,7 +65,7 @@ main                              d:\Jai\The_Way_to_Jai\examples\6\6.3_numbers.j
     pi := 3.14; 
     e: u8;
     e = cast(u8) pi;
-    e = xx pi;
+    e = xx pi; // autocast, equivalent of cast above
     print("e is %\n", e); // (7) => e is 3
 
     // Cast of bool to int:

@@ -23,11 +23,6 @@ main :: () {
     calendar_local := to_calendar(now, .LOCAL);
     s = calendar_to_string(calendar_local);
     print("Date in Local is: %\n", s);
-
-    a := current_time_monotonic();              // (3)
-    print("%\n", a);
-    a = operator - (current_time_monotonic(), a); // (3B)
-    print("%\n", a);
 }
 
 /*
@@ -38,7 +33,5 @@ Now in Apollo Time: {2041441820542339328, 91467}
 Calendar UTC in data structure form: {year = 2023; month_starting_at_0 = 0; day_of_month_starting_at_0 = 6; day_of_week_starting_at_0 = 6; hour = 10; minute = 30; second = 40; millisecond = 631; time_zone = UTC; }
 Date in UTC is:   7 January 2023, 10:30:40
 Date in Local is: 7 January 2023, 11:30:40
-{6197379770900000000, 0}
-{120700000000, 0}
 */
 

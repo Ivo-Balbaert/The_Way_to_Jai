@@ -1,10 +1,11 @@
 # Chapter 6B – Times and dates
 
-Jai uses Apollo Time as its basis for working with time. It is defined in module _Basic_, and is a cross-platform time implementation that has both high precision and very long range. Apollo Time is a 128-bit integer, defined as the number of femtoseconds since the Apollo 11 Moon Landing. There are 10**15 femtoseconds in one second.
+Jai uses Apollo Time as its basis for working with time. It is defined in module _Basic_, and is a cross-platform time implementation that has both high precision and very long range. Apollo Time is a 128-bit integer, defined as the number of femtoseconds since the Apollo 11 Moon Landing. There are 10e15 femtoseconds in one second.
 
 The common operations like +, - and so on are operator overloaded, and coded in inline assembly for speed.
 
 ## 6B.1 - Getting the current time
+The following code starts out (see line (1)) with time functions defined in _Basic_.
 
 See *6B.1_times.jai*:
 ```c++
@@ -33,11 +34,6 @@ main :: () {
     calendar_local := to_calendar(now, .LOCAL);
     s = calendar_to_string(calendar_local);
     print("Date in Local is: %\n", s);
-
-    a := current_time_monotonic();              // (3)
-    print("%\n", a);
-    a = operator - (current_time_monotonic(), a); // (3B)
-    print("%\n", a);
 }
 
 /*
@@ -48,14 +44,12 @@ Now in Apollo Time: {2041441820542339328, 91467}
 Calendar UTC in data structure form: {year = 2023; month_starting_at_0 = 0; day_of_month_starting_at_0 = 6; day_of_week_starting_at_0 = 6; hour = 10; minute = 30; second = 40; millisecond = 631; time_zone = UTC; }
 Date in UTC is:   7 January 2023, 10:30:40
 Date in Local is: 7 January 2023, 11:30:40
-{6197379770900000000, 0}
-{120700000000, 0}
 */
 ```
-`get_system_time` used in line (4) gives you the time as a struct, from which you can extract every time item such as day or hour.
-`get_time`  returns the time in seconds since the call to init_time(). We use it in the next section to measure performance of a piece of code .
+`get_system_time` used in line (1) gives you the time as a struct, from which you can extract every time item such as day or hour.
+`get_time` (see (1B)) returns the time in seconds since the call to init_time(). We use it in the next section to measure performance of a piece of code .
 
-The rest of the examples uses Apollo Time. The `to_calendar` proc gives you a struct from which you can extract all useful datetime info. If you just need the current datetime as a string, use to_calendar on this struct as in (2B).
+The rest of the examples starting from line (2) use Apollo Time. The `to_calendar` proc gives you a struct from which you can extract all useful datetime info. If you just need the current datetime as a string, use to_calendar on this struct as in (2B).
 
 The proc `current_time_monotonic` is called in line (3). 
 It returns an instance of Apollo_Time, which is a struct:  ptr
@@ -66,16 +60,17 @@ Apollo_Time :: struct {
     high: s64;
 }
 ```
-( A monotonic clock is a time source that won't ever jump forward or go backward, due to NTP or Daylight Savings Time updates ).
+(A monotonic clock is a time source that won't ever jump forward or go backward, due to NTP or Daylight Savings Time updates).
 
 In line (3B), we ask for the current time again, and subtract it from the previous time.This gives us a very accurate way to measure time-spans.
 
 (For other examples of Apollo Time, see modules/Basic/examples/time.jai)
 
 
-## 6B.2 - Measuring performance using get_time
+## 6B.2 - Measuring performance using get_time and current_time_monotonic
 The `get_time` proc from module _Basic_ returns a time in seconds since init_time() was called; it will call init_time if it hasn't been called. `get_time` uses the system timers  (the OS performance counters) for measuring time. It is useful for calculating time differences (as in line (1) below), so it can give a measure of performance of a certain proc or part of the program.  
-For more accurate results, use Apollo time `current_time_monotonic()` as discussed in the previous section.
+
+For more accurate results, use Apollo time `current_time_monotonic()` as shown in lines (3-3B).
 
 See *6B.2_get_time.jai*:
 ```c++
@@ -87,12 +82,20 @@ factorial :: (n: int) -> int {
 }
 
 main :: () {
+    // _Basic_ time:
     start_time := get_time();
     print("Factorial 20 is %\n", factorial(20)); 
     // => Factorial 20 is 2432902008176640000
     elapsed := get_time() - start_time;
     print("Factorial 20 took % ms\n", elapsed * 1000);
     // => Factorial 20 took 0.1857 ms
+
+    // Apollo time:    
+    start := current_time_monotonic();              // (3)
+    print("%\n", start); // => // {3386047850652241920, 5}
+    factorial(20);
+    duration := operator - (current_time_monotonic(), start); // (3B)
+    print("%\n", duration); // => //{185400000000, 0}
 }
 ```
 

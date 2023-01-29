@@ -97,6 +97,7 @@ x is 234
 
 > Also when measuring performance as we did in 6B.2_get_time.jai, you can defer the calculation of the elapsed time in the code, and after the line with defer call all code you want to measure (see 6B.2_get_time.jai, main() version with defer):
 
+See *11.5_get_time*:
 ```c++
 // version with defer:
 main :: () { 
