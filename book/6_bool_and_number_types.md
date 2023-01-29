@@ -342,7 +342,8 @@ main :: () {
     f1 := 2.25193;
     f2 := 3.1400;
     LEADING_WIDTH :: 4;
-    print("% \n", formatFloat(f1, width=LEADING_WIDTH, trailing_width=3, zero_removal=.NO)); // => 2.252
+    print("% \n", formatFloat(f1, width=LEADING_WIDTH, trailing_width=3, zero_removal=.NO)); 
+    // => 2.252
     print("% \n", formatFloat(f2, width=1, trailing_width=3, zero_removal=.NO)); // => 3.140
     print("% \n", formatFloat(f2, width=1, trailing_width=3, zero_removal=.YES)); // => 3.14
     print("Scientific-notation-formatted float: %, Decimal value: %\n",  
@@ -380,12 +381,21 @@ main :: () {
     print("A random float between 0 and 100: %\n", random_get_within_range(0, 100)); // => 75.796494
 
     r := random_seed(current_time_monotonic().low); 
+    
+    print("\nA random integer: %\n", random_get()); // => 1137526400306752306
+    print("A random float between 0 and 1: %\n", random_get_zero_to_one()); // => 0.709799
+    print("A random float between 0 and 100: %\n", random_get_within_range(0, 100)); // => 75.796494
+
 }
 
 /*
 A random integer: 1137526400306752306
 A random float between 0 and 1: 0.709799
 A random float between 0 and 100: 75.796494
+
+A random integer: 16108974926811509810
+A random float between 0 and 1: 0.603063
+A random float between 0 and 100: 65.397636 
 */
 ```
 
@@ -393,8 +403,6 @@ The following procedures are defined in the _Random_ module (this is just a file
 ```c++
 // sets the global random seed to the value passed as argument
 random_seed :: (new_seed: u32) 
-This is often used with an Apollo time-value (discussed inb § 6B) like this:     `r := random_seed(current_time_monotonic().low);` 
-(see § 6B.3)
 
 // returns a 32 bit unsigned integer, a random number between 0 and 4,294,967,295
 random_get :: () -> u64
@@ -404,6 +412,10 @@ random_get_zero_to_one :: () -> float
 // returns a 32 bit floating point number within the range of min and max
 random_get_within_range :: (min: float, max: float) -> float
 ```
+
+This is often used with an Apollo time-value (discussed in § 6B) like this:  
+`r := random_seed(current_time_monotonic().low);`  
+That way the `random_get` functions start with a new seed (which they retrieve from the Context, see § 25).  
 
 If you want more sophistication, use the _PCG_ module which contains the same procs.
 
