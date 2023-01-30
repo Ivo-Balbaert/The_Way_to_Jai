@@ -20,7 +20,8 @@ Any_Struct :: struct {  
 
 It is a struct of two values: 
 - the **type** info, which is a pointer to a Type_Info struct with specific details about the assigned value type;
-- and the **value_pointer** pointer to the value, which is a *void because we don't know the type of the value, that's why its Any!. 
+- and the **value_pointer** pointer to the value, which is a *void because we don't know the type of the value, that's why its Any!.
+In § 9.5 we saw that its size is 16 bytes (on a 64 bit system). Now we see why: it contains 2 pointers, each 8 bytes in size.
 To extract the value, you first need to cast the value_pointer to a pointer of the right type, and then dereference this pointer.  
 Any is a type-safe version of a void pointer.  
 But what is this Type_Info ?

@@ -1,8 +1,16 @@
 #import "Basic";
 
-Thread_Index :: s64;  // (0)
+Thread_Index :: s64;  // (0A)
 
 main :: () {
+    // Type alias:
+    t_index : Thread_Index = 100;
+    TI :: s32; // (8B) TI is now a constant, of type Type, of value s32.
+    s: TI = 7;
+    t: TI = 9;
+    print("s * t = %\n", s * t); // => 63
+    print("size_of(TI) is %\n", size_of(TI)); // => 4 (bytes)    
+    
     // type Type
     a: Type = float64;  // (1)
     b := int;           // (2)
@@ -27,14 +35,6 @@ main :: () {
     print("the size of t3 is %\n", size_of(type_of(t3))); // => 16
     print("the size of Type is % bytes\n", size_of(Type)); // => 8 bytes
     
-    // Type alias:
-    t_index : Thread_Index = 100;
-    TI :: s32; // (8) TI is now a constant, of type Type, of value s32.
-    s: TI = 7;
-    t: TI = 9;
-    print("s * t = %\n", s * t); // => 63
-    print("size_of(TI) is %\n", size_of(TI)); // 4 (bytes)
-
     // Any:
     x: Any = 3.0;  // (9)
     print("x contains this float: %\n", << cast(*float) x.value_pointer);
