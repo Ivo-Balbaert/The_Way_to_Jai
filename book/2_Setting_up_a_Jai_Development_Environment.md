@@ -67,10 +67,11 @@ To achieve this, do the following:
 
 Test this out by moving in a terminal to another folder than the Jai root folder and typing in the command: `jai -version`. You should see the same output as in the previous section.
     
-### 2.2.3 Updating Jai
+### 2.2.3 Updating Jai and switching versions
 
 Remove the current _jai_ folder (make sure that you have backed up any files or modules you have added or changed in there) or rename it to _jai_old_.
 Then just drop the most recent _jai_ folder as the new Jai root folder, and you're done!
+In the same way, you can have many jai-versions in 'parallel', just rename the newest version to *jai_new*, and rename the version you want to use to _jai_. When the work in the older version is finished: rename _jai_ to _jai_vnnn_ and *jai_new* to *jai*.
 
 ### 2.2.4 Prerequisite for Windows 
 

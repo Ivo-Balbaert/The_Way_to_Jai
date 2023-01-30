@@ -87,7 +87,7 @@ The video talk that started Jai development was called: _Ideas about a new progr
 In Apr 2017, Blow showed a small demo of the language at Reboot Development 2017, ["Making Game Programming Less Terrible"](https://www.youtube.com/watch?v=gWv_vUgbmug)(https://www.youtube.com/watch?v=gWv\_vUgbmug).  
 In Jan 2018 a status update video was published ([https://www.youtube.com/watch?v=rFaBs-CUX5w](https://www.youtube.com/watch?v=rFaBs-CUX5w)).  
 In Mar 2018, Jai was given to a few close associates of Blow.  
-Blow fired the compiler team in early 2019 because they didn't understand Jon's intentions with Jai (they wanted to open it up earlier).
+Blow dismissed the compiler team in early 2019 because they didn't understand Jon's intentions with Jai (they wanted to open it up earlier).
 
 A _closed beta program_ (the compiler/docs were send to a limited number of people) started Dec 21 2019: this was the first beta with 10 people. Apr 2020: 20 people.    
 This reached version 0.0.30 on Oct 25 2020. Nov 2020: 40 people. Beta 37 was issued on Jan 1 2021, and had 51 participants.    

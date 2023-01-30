@@ -96,6 +96,7 @@ main :: () {
     factorial(20);
     duration := operator - (current_time_monotonic(), start); // (3B)
     print("%\n", duration); // => //{185400000000, 0}
+    // This is 0.1854 ms
 }
 ```
 

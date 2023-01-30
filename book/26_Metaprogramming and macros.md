@@ -430,6 +430,26 @@ This technique is used in the _Basic_ module to load specific code depending on 
 }
 ```
 There is a nice illustration of this in example § 29.8.
+
+The same idea works for importing modules, for example:  
+```c++
+#import "Basic";
+#import "Compiler";
+#import "String";
+#import "Process";
+#import "File_Utilities";
+#import "File";
+
+#if OS == .WINDOWS {
+    Windows_Resources :: #import "Windows_Resources";
+    Ico_File :: #import "Ico_File";
+}
+
+#if OS == .MACOS {
+    Bundler :: #import "MacOS_Bundler";
+}
+```
+
 See also jai\examples\system_info for how to display info of your OS and the hardware on which it runs.
 
 ## 26.4 Inserting code with #insert

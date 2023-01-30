@@ -388,7 +388,8 @@ main :: () {
 }
 ```
 
-A swap like n, m = m, n; is allowed, but doesn't work in Jai like you would expect (see line (1)): both variables get the same value. When n and m are of different types an error results, because then the variables would have to change type, which is not allowed.
+A swap like n, m = m, n; is allowed, but doesn't work in Jai like you would expect (see line (1)): both variables get the same value. It works like this: `x, y = y, x` does `x = y; y = x;` and not like in Python for example. The reason is when one gets too picky about what order things happen in, this causes problems for compiler optimizations.    
+Also when n and m are of different types an error results, because then the variables would have to change type, which is not allowed.
 But see § 17.10 for a swap procedure and § 22.2.3 for built-in versions.  
 
 ## 5.7 - More about printing

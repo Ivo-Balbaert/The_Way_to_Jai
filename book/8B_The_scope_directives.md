@@ -1,9 +1,9 @@
 # 8B – The #scope directives
 
-§ 7 talked about scope of definitions, and in § 8 we saw how files and modules are loaded and imported: Jai cleans up the mess of header-files and namespaces in C/C++  
+§ 7 talked about the scope of definitions, and in § 8 we saw how files and modules are loaded and imported: Jai cleans up the mess of header-files and namespaces in C/C++  
 
 ## 8B.1 The #scope_file and #scope_export directives
-Declarations of a source file are _exported_ into application scope. If you want some definitions to only be visible in the file itself (in _file_scope_), place these behind the **#scope_file;** directive, like this inside a `file1.jai`:  
+Declarations of a source file are _exported_ into application scope. If you want some definitions to only be visible in the file itself (in _file scope_), place these behind the **#scope_file;** directive, like this inside a `file1.jai`:  
 
 ```
 #scope_file;
@@ -21,7 +21,7 @@ Each module has its own scope that is completely sealed off: it cannot see the a
 If you want to have some definitions only visible within the module, use the `#scope_module;` directive before these definitions.
 
 ## 8B.3 An example of using the #scope directives
-See *8.2_file_and_global_scopes.jai* (this is the how_to 151_file_and_global_scopes example):  
+See *8.2_file_and_global_scopes.jai* (this is the code of the how_to 151_file_and_global_scopes example by J. Blow):  
 
 ```c++
 #import "Basic";
@@ -53,7 +53,7 @@ main :: () {
 }
 ```
 
-_file_alpha.jai*:
+*file_alpha.jai*:
 ```c++
 file_and_application_scope_in_file_alpha :: () {
     print("Whiskey: %\n", whiskey);
@@ -68,7 +68,7 @@ tango :: "File Scope        (in file alpha)";
 foxtrot :: "File Scope        (from file alpha).";
 ```
 
-_file_beta.jai*:
+*file_beta.jai*:
 ```c++
 file_and_application_scope_in_file_beta :: () {
     print("Whiskey: %\n", whiskey);
@@ -100,8 +100,8 @@ Foxtrot: Application Scope (from file alpha).
 ```
 
 Summarized:  
-> #scope_file: all code that follows is private to the file
-> #scope_export: restores public scope
-> #scope_module: all code that follows is private to the module
+> #scope_file: all code that follows is private to the file  
+> #scope_export: restores public scope  
+> #scope_module: all code that follows is private to the module  
 
 
