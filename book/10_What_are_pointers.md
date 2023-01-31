@@ -263,9 +263,9 @@ main :: () {
     print("ptrc is %\n", ptrc); // => ptrc is r null  - r for relative
 
     print("size: %\n", size_of(*~s8 int));  // => size: 1
-	print("size: %\n", size_of(*~s16 int)); // => size: 2
-	print("size: %\n", size_of(*~s32 int)); // => size: 4
-	print("size: %\n", size_of(*~s64 int)); // => size: 8
+    print("size: %\n", size_of(*~s16 int)); // => size: 2
+    print("size: %\n", size_of(*~s32 int)); // => size: 4
+    print("size: %\n", size_of(*~s64 int)); // => size: 8
 
     a := New(int);
     << a = 5;
