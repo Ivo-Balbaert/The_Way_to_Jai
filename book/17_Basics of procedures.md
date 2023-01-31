@@ -238,7 +238,7 @@ A default value must not be a literal value, it can be any symbol, like a variab
 ## 17.5 Named arguments
 We already saw an example of this in line (5) of *17.1_proc_definitions.jai*:  `a2 := square(x = c);`
 the argument, which is named x, gets the parameter value c in an explicit assignment.  
-Named arguments are useful when you have procs which take many arguments, often of the same type.   
+Named arguments are useful to enhance readability when you have procs which take many arguments, often of the same type. The feature also exists in Python.  
 When arguments are given default values, it can be even more complicated. In such a case it is possible that the compiler can’t distinguish between them if you pass parameters in the wrong order. Named arguments allow you to specify the parameter values in any order.  
 Here is another example to illustrate its usefulness:  
  `make_character(name = "Fred", catch_phrase = "Hot damn!", color = BLUE);`  

@@ -49,6 +49,7 @@ Not only is the main procedure a starting point, it also envelops the complete p
 () is the parameter list, which is empty for main. We also don't see a -> after ) This means main has no return value, unlike C.  
 Then come the curly braces { } which contain the code to execute line by line.
 
+> An error you might get into in the beginning is writing main () :: {}. You get an Error: ... This does not make sense! ;-)
 > Jai doesn't need a special keyword like proc, function or func or even fn to indicate a function.
 
 Because there is no code, it doesn't do anything. But this is the first program which can be compiled!  
@@ -201,6 +202,20 @@ This means `main()` has already been executed at compile-time!
 This is because of the **#run** command. This so-called **directive** tells the compiler to run the procedure called after `#run` during compile-time.
 
 In case of `#run main()`, you run the whole program during compile-time (see § 26.2 for more info on `#run`).
+
+_On Linux_ we can use the **#!** mechanism so that we can run the Jai source file as a kind of script at compile-time. Add the following line at the start of *3.2_hello_sailor_comptime.jai*:  
+`#! /path/to/jai/bin/jai`  
+This has to be the full path to the `jai` executable on your machine, for example /home/username/jai/bin/jai (the executable is by default jai-linux, which we renamed to jai in § 2.2).
+Now make your script executable with:  
+`chmod u+x ./3.2_hello_sailor_comptime.jai`
+Now you can execute your jai script (running at compile-time) by typing in:  
+`./3.2_hello_sailor_comptime.jai`
+
+This displays:  
+**Hello, sailor from Jai!**
+Running linker: /home/ivo/jai//bin/lld-linux ...
+...
+This is just a nice trick, and by no means a commonly used way of doing things.
 
 > Jai uses a lot of directives and we'll discuss them in several coming chapters. You could consider them as special instructions for the compiler. They all start with the **#** character.
 

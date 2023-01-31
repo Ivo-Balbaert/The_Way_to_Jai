@@ -165,7 +165,7 @@ There is a VS Code plugin for Jai named _The Language_, which provides basic IDE
 
 VSCode is very helpful for editing you source code. Compiling is usually done from the command-line (cmd on Windows or a terminal in Linux), but you can do it also from within VSCode by opening up a New Terminal.
 
-> Hint: Whenever you want to search for a procedure (say for example parse_int) in the Jai modules, open VS-code in that folder, select Edit / Find in Files (or the equivalent in your code editor) and fill in `parse_int ::` in the search field. This will only find the definition of parse_int, not all the cases where it is called.
+> Hint: Whenever you want to search for a procedure (say for example parse_int) in the Jai modules, open VS-code in that folder, select Edit / Find in Files (or the equivalent in your code editor) and fill in `parse_int ::` in the search field. This will only find the definition of parse_int, not all the cases where it is called. In a Linux terminal you can also use `grep -rn 'parse_int ::'`.
 
 ### 2.3.3 How to edit, build and run a Jai program in VS-Code through CodeRunner
 
