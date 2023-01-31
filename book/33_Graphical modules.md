@@ -191,9 +191,10 @@ d3d12 contains a minimal example `example.jai`, as well as jai\examples\d3d11_ex
 ## 33.5 The _Simp_ module
 Simp is a simple 2D API framework for drawing graphics with OpenGL as backend, completely written in Jai.
 
+### 33.5.1 A simple window
 Here is Simp's minimum code to open and close a window:
 
-See *33.2_simp_window.jai*:
+See *33.2A_simp_window.jai*:
 ```c++
 #import "Basic";
 #import "Input";
@@ -230,16 +231,93 @@ main :: () {
     }
 
     sleep_milliseconds(10);
-    Simp.swap_buffers(win);
+    Simp.swap_buffers(win);         // (2B)
     reset_temporary_storage();      // (3)
   }
 }
 ```
 
-In line (1) the window is created. Line (2) starts the event-loop: the program is waiting for events to occur on the window and to act upon them. Line (3) clears temporary storage, so in the loop you'll want to store all your data in temp.
+In line (1) the window is created. Line (2) starts the event-loop: the program is waiting for events to occur on the window and to act upon them. Each iteration in this loop draws a **frame** in line (2B). Line (3) clears temporary storage, so in the loop you'll want to store all your data in temp.
 To make SIMP draw objects with opacity, use: `Simp.set_shader_for_color(true);`
 
-The module also contains some examples (_modules/Simp/examples_):
+### 33.5. A bouncing square
+By only adding some 10 lines of code to the previous example, we can draw a moving red square, that bounces of the sides of the window: 
+
+See *33.2B_bouncing_square.jai*:
+```c++
+#import "Basic";
+#import "Input";
+#import "Math";
+Simp :: #import "Simp";
+#import "System";
+#import "Window_Creation";
+
+main :: () {
+    window_width  := 800;
+    window_height := 600;
+    render_width  := 800;
+    render_height := 600;
+
+    win := create_window(window_width, window_height, "Xiangqi");    
+    Simp.set_render_target(win);
+    Simp.set_shader_for_color(true);
+
+    x := 0.0;                               // (1)
+    y := 0.0;
+    dx := 1.0;
+    dy := 1.0;
+    quad_size := 50.0;
+    velocity :: 5.0;
+
+    quit := false;
+    while !quit {                         
+        Simp.clear_render_target(0.2, 0.3, 0.3, 1);
+        update_window_events();
+
+        for get_window_resizes() {
+            if it.window == win {
+                window_width  = it.width;
+                window_height = it.height;
+                render_width  = window_width;
+                render_height = window_height;
+                Simp.update_window(win);
+            }
+        }
+
+        for event : events_this_frame {
+            if event.type == {
+                case .QUIT; { quit = true; break; }
+
+                case .KEYBOARD; if event.key_pressed {
+                    if event.key_code == {
+                        case .ESCAPE;    quit = true; break;
+                    }
+                }
+            }
+        }
+
+        // (2)
+        if x + dx < 0.0 || x + dx + quad_size > cast(float) window_width     dx = -dx;
+        if y + dy < 0.0 || y + dy + quad_size > cast(float) window_height    dy = -dy;
+
+        x += dx * velocity;         // (3)
+        y += dy * velocity;       
+
+        // (4)
+        Simp.immediate_quad(x, y, x + quad_size, y + quad_size, make_vector4(1.0, 0.5, 0.5, 1.0));
+        // last argument is the color: Vector4, here pink
+
+        sleep_milliseconds(10);
+        Simp.swap_buffers(win);
+        reset_temporary_storage();    
+    }
+}
+```
+In line (1) we define starting coordinates x and y for the left bottom point of the square. dx and dy are the increments, with which x and y are incremented each frame. To control its speed, we define a velocity parameter, to multiply dx and dy before adding them, see line (3).  
+The square is drawn with `immediate_quad` from Simp, see line (4).  
+Tp make the square bounce of the window boundary, we reverse the sign of dx and dy when the boundary is exceeded.
+
+The module Simp also contains some examples (_modules/Simp/examples_):
 - _example.jai_: this shows a window with a texture background and a colored rotating square in the centre;
 - _multiple_windows.jai_: this shows 2 windows next to each other, the 1st is the window from the previous example, the 2nd window has a text with a color-changing background;  
 

@@ -177,6 +177,8 @@ This example illustrates Jai's switch statement equivalent, using if-case (inste
             ..;
     }
 ```
+If you started with an if var == value { }, and you realize that you want to test var on several values, it is very simple to start building your 'switch' statement. Just copy the value inside the { after a `case`, and add more cases!
+
 Following line (2) the **#through** directive is used in an if-case statement. This directive ensures that a fall_through to the next case occurs, so that this branch is also executed. So this is the exact opposite behavior as in C, where you have to write `break` in order not to fall-through. A common use-case is where you want to perform the same code for multiple cases.
 A case branch can have multiple statements, but they don't need { }. 
 
