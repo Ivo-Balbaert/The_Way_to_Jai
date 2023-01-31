@@ -1,8 +1,8 @@
 # Chapter 10 – Working with pointers
-** Don’t be afraid of pointers.**
+**Don’t be afraid of pointers.**
 
 Pointers are really needed to efficiently access memory, instead of having to move around big chunks of data in memory all the time.
-To do low-level things and get the best performance, we need direct access to memory locations, just like C and other low-level languages. That's what pointers are for. Jai follows the C pointer model which allows pointers everywhere in code; it does not have smart pointers as in C++.
+To do low-level things and get the best performance, we need direct access to memory locations, just like C and other low-level languages. That's what pointers are for. Jai follows the C pointer model which allows pointers everywhere in code. Jai does not have smart pointers as in C++.
 
 ## 10.1 What is a pointer?
 A pointer to a variable contains the memory address of that variable, it _points to_ the variable. So it is a  reference to a memory location. If var is the variable,  then a pointer ptr to var is written with a * as follows: 
@@ -11,10 +11,10 @@ A pointer to a variable contains the memory address of that variable, it _points
 ptr = *var
 ```
 
+* is sometimes called the **address-of** operator.  
 You can visualize it as in the following image:  
 ![Pointer diagram](https://github.com/Ivo-Balbaert/The_Way_to_Jai/tree/main/images/pointers.jpg)  
 Here you see a pointer ptr in the blue box (left) which has a value 0x123. This is the memory address of the variable var in the green box (right). The variable has value 100. Notice that the pointer itself has an address, here 0x155.
-* is sometimes called the **address-of** operator.
 
 > Often the name of a pointer starts with ptr for readability, but this is by no means mandatory.
 
@@ -32,41 +32,59 @@ main :: () {
     b : *int;     // (1A) declaration: b is a pointer to an integer.
     b = *a;       // (1B) initialize the pointer: point b at a.
     print("Value of a is %, address of a is %\n", a, *a);
-    // => Value of a is 42, address of a is 9e_02cf_f898
-    print("Value of b is %, but b points at address of a: %\n", << b, b);
-    // (2) => Value of b is 42, but b points at address of a: 9e_02cf_f898
+    print("Value b points to is %, which is located at address of a: %\n", << b, b);
+    // (2) => Value b points to is 42, which is located at address of a: 54_8d14_fb50
     print("Type of b is %\n", type_of(b)); // (3) => Type of b is *s64
 
     c := *a; // (4)
-    print("Value of c is %, but c points also at address of a: %\n", << c, c);
-    << c = 108; // (4B)
-    print("Value of c is now %\n", << c); // => Value of c is now 108
-  
+    print("Value c points to is %, which is located at address of a: %\n", << c, c);
+    // => Value c points to is 42, which is located at address of a: 54_8d14_fb50
+    << c = 108;
+    print("Value c points to is now %\n", << c); // => Value c points to is now 108
+ 
     // null pointer:
-    d: *u32; // 
-    print("Value of d is %\n", d); // (5) => Value of d is null
+    d: *u32; // (5)
+    print("Value of d is %\n", d); // => Value of d is null
+    // print("d is %\n", << d); // => program crashes at run-time!
     print("Type of null is %\n", type_of(null)); // (6) => Type of null is *void
-
+   
     // void pointer:
     ptr: *void; // (7)
-    print("Value of ptr is %\n", ptr); // => Value of ptr is null
- 
-    // pointers to pointers:
-    a2: int = 3; // (8)
+    print("ptr contains %\n", ptr); // => ptr contains null
+    print("Value ptr is %\n", << ptr); // => Value ptr is void
+   
+    // (8) pointers to pointers:
+    a2: int = 3;
     b2: *int = *a2;
     c2: **int = *b2;
     d2: ***int = *c2;
-    print("%\n", << << << d2); // => 3, the value of a2
+    print("%\n", << << << d2); // => 3 - prints out the value of a2, which is 3
 
     // New:
     n := New(int);      // (9)
-    print("%\n", n);    // => 1f7_2f06_6470
+    print("%\n", n);    // => 1d3_156b_0080
     print("%\n", type_of(n));    // (10) => *s64
     print("%\n", << n); // => 0
     free(n);            // (11)
 }
+
+/*
+Value of a is 42, address of a is 54_8d14_fb50
+Value b points to is 42, which is located at address of a: 54_8d14_fb50
+Type of b is *s64
+Value c points to is 42, which is located at address of a: 54_8d14_fb50
+Value c points to is now 108
+Value of d is null
+Type of null is *void
+ptr contains null
+Value ptr is void
+3
+1d3_156b_0080
+*s64
+0
+*/
 ```
-In lines (1A-B) we first declare and then initialize a pointer to an int. b contains the memory address of a, in this example 9e_02cf_f898.
+In lines (1A-B) we first declare and then initialize a pointer to an int. b contains the memory address of a, in this example 9e_02cf_f898 (this varies with each execution!).
 
 To obtain the value pointed to by a pointer (often called _dereferencing_ the pointer), use the **<<** notation on the pointer, like in C (see line (2)):
 
@@ -80,7 +98,7 @@ In line (4) we see how this type can be inferred with the shorter := notation. W
 ```c++
 << ptr = new_val;   
 ```
-The value at the address ptr points to is changed, but the address ptr points to stays the same.
+The value at the address ptr points to is changed, but the address ptr contains stays the same.
 
 What is the value of an uninitialized pointer (in other words:a pointer that doesn't yet have a memory address assigned to it)? Let's find out.  
 In line (5) we see that the value of the uninitialized pointer d with type *u32 is **null**.  null means: d has no address to point to.  
@@ -105,8 +123,6 @@ a : int = 5;
 b := <<*a; // b also has the value 5
 ```
 
-
-
 ## 10.2 Pointers to pointer
 We saw that a pointer has also an address, so nothing prevents you from having a pointer to a pointer. This can even be several levels of _indirection_ deep, as lines (8) and following show. 
 To get to the value of a three-level pointer, you have to dereference three times:  
@@ -117,7 +133,7 @@ To get to the value of a three-level pointer, you have to dereference three time
 ```
 
 ## 10.3 Dereferencing a null pointer
-Danger zone: attempting to dereference a null pointer makes the program crash at run-time.  
+**Danger zone: attempting to dereference a null pointer makes the program crash at run-time.**  
 When this happens in a program, there clearly is a bug, because the pointer didn't point to any value. So Jai's behavior is to stop the program and print out a stack trace where the problem occurred.
 
 See *10.2_dereference_a_null_pointer.jai*:
@@ -130,13 +146,13 @@ main :: () {
     // c : *int = null;
     c : *int;
     // ... lots of code
-    // print("%\n", c); // (1) => null
+    // print("%\n", c);    // (1) => null
     // assert(c != null);  // (2) => Assertion failed!
 
-    print("%\n", << c); // (3) program compiles but crashes at run-time with stack trace
+    print("%\n", << c);    // (3) program compiles but crashes at run-time with stack trace
 }
 
-// #run main(); // (4)
+// #run main();             // (4)
 ```
 
 Executing the above program on Windows gives the following output:
@@ -171,10 +187,10 @@ Segmentation fault. The faulty address is 0x0, from 0x234f01.
 ```
 Again, the first two lines tell you enough.
 
-
 A program that crashes at run-time when used by clients is a developer's nightmare. So, apart from extensive testing to find such bugs, what can we do else to avoid or trace them?
 
-If you can track the bug to a certain part of the code, you can try to print out the pointer's value to see if it equals null, as in line (1):  `print("%\n", c); // (1) => null`
+If you can track the bug to a certain part of the code, you can try to print out the pointer to see if it equals null, as in line (1):   
+`print("%\n", c); // (1) => null`
 Or better, use an `assert` as in line (2):
 which gives the output:  
 
@@ -204,7 +220,7 @@ get_s64_from_void_pointer (c:/jai/modules/Basic/Print.jai:152,23)
 In a later chapter on Debugging (see § 20), we'll see how you can pinpoint the bug even closer.
 
 ## 10.4 Dangling pointers
-See *10.4_Dangling_pointers.jai*:
+See *10.4_dangling_pointers.jai*:
 
 ```c++
 #import "Basic";
@@ -224,37 +240,43 @@ main :: () {
 }
 ```
 
-The variable a in the code snippet above is of type *s64, default initialized to 0. Then we give it the value 5. In line (1) its memory is freed, at which point it is called a _dangling pointer_: it no longer points to its memory location. However in Jai it still knows its address and contained value. If you really want to be sure the value has been erased, you can assign the `null` value to the pointer, as in line (2). 
+The variable a in the code snippet above is of type *s64, default initialized to 0. Then we give it the value 5. In line (1) its memory is freed, at which point it is called a _dangling pointer_: it should no longer point to a value memory location. However in Jai it still knows its address and contained value. If you really want to be sure the value has been erased, you can assign the `null` value to the pointer, as in line (2). 
 
 ## 10.5 Casting to pointer types
-Because a pointer type is like any other type, you can cast a variable to that type, like this:
+Because a pointer type is like any other type, you can cast a pointer variable to a pointer type, like this:
 ```
 ptr1 := cast(*int) ptr;
 ```
 
+However when ptr does not point to an int variable, this will either give an unexpected result, or cause your program to crash.
+
 ## 10.6 Relative pointers *~snn
-See *10.3_Relative_pointers.jai*:
+See *10.3_relative_pointers.jai*:
 
 ```c++
 #import "Basic";
 
 main :: () {
-    Obj :: struct { var := 0; }
-
-    ptr0: *Obj;      // (1)
-    print("ptr0 is %\n", ptr0); // => ptr0 is null
-    ptra: *~s32 Obj; // (2) - 32-bit relative pointer to an Obj
-    ptrb: *~s16 Obj; // (3) - 16-bit relative pointer to an Obj
-    ptrc: *~s8  Obj; // (4) - 8-bit relative pointer to an Obj
-    print("ptrc is %\n", ptrc); // => ptrc is r null
+    ptra:  *~s32 int; // (1) - 32-bit relative pointer to an int
+    ptrb:  *~s16 int; // (2) - 16-bit relative pointer to an int
+    ptrc:  *~s8  int; // (3) - 8-bit relative pointer to an int
+    print("ptrc is %\n", ptrc); // => ptrc is r null  - r for relative
 
     print("size: %\n", size_of(*~s8 int));  // => size: 1
 	print("size: %\n", size_of(*~s16 int)); // => size: 2
 	print("size: %\n", size_of(*~s32 int)); // => size: 4
 	print("size: %\n", size_of(*~s64 int)); // => size: 8
+
+    a := New(int);
+    << a = 5;
+    ptrb = a;       // (4)
+    print("ptrb is %\n", ptrb); // => ptrb is r1998 (d1_f31c_0080)
+    // print("ptrb points to %\n", << ptrb); 
+    // => The program crashed because of an access violation reading location 0x352ff00080
 }
 ```
 
-In § 10.1 we saw that a pointer like in line (1) on a 64 bit OS is 8 bytes in size, which is quite large.  
-Jai allows you to use smaller, so called **relative pointers**, respectively of 4, 2 and 1 byte(s) in size, which can be used to point to an object at a place in the memory vicinity. They are signed integers that indicate the target of a pointer, relative to the memory location where the pointer is stored. Because they are signed, they can point backward and forward. So a *~s16 is like a *float, but it can only point at floats within 32kB upward or downward in memory from where it is stored. 
-Relative pointers are limited in range, so they can only point to nearby things. That's why they are typically used to point from one member field to another (see § 12.14). These types of pointers are serializable, and they can be cast to a non-relative pointer whenever needed.  
+In § 10.1 we saw that a pointer on a 64 bit OS is 8 bytes in size, which is quite large.  
+Jai allows you to use smaller, so called **relative pointers**, respectively of 4, 2 and 1 byte(s) in size, which can be used to point to an object at a place in the memory vicinity. They are signed integers that indicate the target of a pointer, relative to the memory location where the pointer is stored. Because they are signed, they can point backward and forward. So a *~s16 is like a *float, but it can only point at floats within 32kB upward or downward in memory from where it is stored.  
+Assigning relative pointers to normal pointers is often unsound as we show in line (4).
+Relative pointers are limited in range, so they can only point to nearby things. That's why they are typically used with structs to point from one member field to another (see § 12.14). These types of pointers are serializable, and they can be cast to a non-relative pointer whenever needed.  
