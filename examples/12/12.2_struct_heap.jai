@@ -17,7 +17,6 @@ main :: () {
 
     ps := New(Person);
     defer free(ps);
-    ps.name = "Jim";
-    ps.age = 67; 
+    << ps = .{"Jim", 67};
     print("%\n", << ps);          // => {"Jim", 67}
 }

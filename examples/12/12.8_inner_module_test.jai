@@ -2,6 +2,6 @@
 #import "TestScope";
 
 main :: () {
-    s1 := Struct1.{number = 42}; // (1) Error: Undeclared identifier 'Str'.
+    s1 := Struct1.{number = 42}; 
     print("%", s1);     // => {42}
 }

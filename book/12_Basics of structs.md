@@ -2,14 +2,24 @@
 
 Every programming language needs a kind of data structure to define some kind of entity, having several characteristics, called **fields** (also called member variables), which can be of different types. The solution to this is the **struct** type, that is common in many other languages, and is a kind of lightweight version of a class.
 
-Also because composite types like arrays and strings are defined internally as a struct, we need to have a basic knowledge of that concept first.
+Also because composite types like arrays and strings are defined internally as a struct, we need to have a basic knowledge of that concept first, before discussing arrays and strings.
 
 ## 12.1 Struct declarations
 See *12.1_struct_declarations.jai*:
 
 ```c++  
 #import "Basic";
-#import "Math"; // contains Vector2
+#import "Math"; // contains Vector2 struct
+
+Entity :: struct {
+    serial_number: int;
+}
+
+Person :: struct {
+    name            : string;
+    age             : int;
+    location        : Vector2;
+}
 
 // default values:
 Vector2d :: struct {
@@ -28,16 +38,6 @@ Vector3un :: struct {
     x: float = 1;
     y: float = ---; // uninitialized
     z: float = 3;
-}
-
-Entity :: struct {
-    serial_number: int;
-}
-
-Person :: struct {
-    name            : string;
-    age             : int;
-    location        : Vector2;
 }
 
 main :: () {
@@ -69,7 +69,7 @@ main :: () {
     // same as:
     vec3 : Vector2;
     vec3 = .{2.0, 6.28};
-    vec4:= Vector2.{y = 6.28, x= 2.0}; 
+    vec4:= Vector2.{y = 6.28, x = 2.0}; 
     print("%\n", vec2); // => {2, 6.28}
     bob2 := Person.{"Robert", 42, Vector2.{64.139999, -21.92}}; // (10)
     print("%\n", type_of(bob2)); // => Person
@@ -110,7 +110,7 @@ v3d = {
 */
 ```
 
-Here is an example of a declaration of a struct that represents a 2-dimensional point. It is called `Vector2`, and is defined in module _Math_ (as is the also common `Vector3`):
+Here is an example of a declaration of a struct that represents a 2-dimensional point. It is called `Vector2`, and is defined in module _Math_ (as are the also common `Vector3` and `Vector4`):
 
 ```c++
 Vector2 :: struct {
@@ -138,20 +138,20 @@ Person :: struct {
     location        : Vector2;
 }
 ```
-All struct fields are _public_: they can be read and even changed everywhere! This means that any function can modify and change a struct's member fields. There is a convention to prefix fields which should be private by `_`, but the compiler does not enforce that: there is no built in feature to make a member field private. A struct field can be of type void, for example to put notes on struct members that do not take up space (see 13.1_unions.jai).
+All struct fields are _public_: they can be read and even changed everywhere! This means that any function can modify and change a structs member fields. There is a convention to prefix fields which should be private by `_`, but the compiler does not enforce that: there is no built in feature to make a member field private. A struct field can be of type void, for example to put notes on struct members that do not take up space (see *13.1_unions.jai*).
 
 A struct definition must occur in a data scope (see § 7).
 
 Declaring a struct doesn't allocate memory, it just defines a kind of template or blue-print for a data structure to be defined in imperative scope. An **instance** or object of a struct is created with for example:  
 `bob: Person;`
-Here the instance is `bob`, and the struct is `Person`. When this code executes, memory is allocated (when nothing else is specified, all members get their default zero values).
+Here the instance is `bob`, and the struct is `Person`. When this code executes, memory is allocated. When nothing else is specified, all members get their default zero values.
 
 > A struct cannot be casted to a bool.
 
 ## 12.2 Making struct variables
 When defining a struct no variable is defined, so no memory is allocated yet.  
 You have to define a struct variable, like this:  `v: Vector2;`
-This variable v **is defined on the stack**, in § 12.5 we'll see how to make a struct on the heap.  
+This variable v **is defined on the stack**, in § 12.5 we'll see how to make a struct on the heap with New.  
 All data values are contiguous in memory, that is: they are packed together successively in the order in which they are defined.
 
 How can we access the data in a field?  
@@ -169,7 +169,7 @@ What if you don't want default zero-values?
 3) Or you can make a mix of default and uninitialized values, like in `Vector3un`.
 
 ## 12.3 Nested structs
-The location field in Person is itself a Vector2 struct, that's why it is called a **nested struct**: a struct that contains another struct. Note how you can access and change the fields of a nested struct by 'drilling down' with the . notation, like:   `bob.location.x  
+The location field in Person is itself a Vector2 struct, that's why it is called a **nested struct**: a struct that is contained in another struct. Note how you can access and change the fields of a nested struct by 'drilling down' with the . notation, like:   `bob.location.x  
 (But also see § 12.7 for how to shorten this notation.)
 
 Here are two examples of nested structs:
@@ -204,9 +204,9 @@ This suggests that there is a much easier way to make a struct variable called *
 vec2 := Vector2.{2.0, 6.28}; 
 bob2 := Person.{"Robert", 42, Vector2.{64.139999, -21.92}}; 
 ```
-The Struct_Name. prefix is needed to inform the compiler which struct type is defined here. Note that all values provided in a struct literal must be constant, you can't use variables.
+The Struct_Name. prefix is needed to inform the compiler which struct type is defined here. Note that all values provided in a struct literal must be constant, you can't use variables. Struct literals can only use values that are constant at compile-time.
 
-In struct literals you can also name the fields, like `field = value`. This allows you give the values in a different order, and fields that have default values don't need to be specified. Struct literals are only for values that are constant at compile-time.
+In struct literals you can also name the fields, like `field = value`. This allows you to give the values in a different order, and fields that have default values don't need to be specified. 
 
 Here is a simple way to reset a struct (also an anonymous struct) to its default values:  `john_doe := Person.{};`
 
@@ -236,16 +236,15 @@ main :: () {
 
     ps := New(Person);
     defer free(ps);                // (5B)
-    ps.name = "Jim";
-    ps.age = 67; 
+    << ps = .{"Jim", 67};          // (5C)
     print("%\n", << ps);           // => {"Jim", 67}
 }
 ```
 In line (1) we use New to create our struct variable on the heap. Line (2) says the variable is now a pointer to a location in the heap, of type *Person. That's why in line (3) an address is printed. To print out the values, now you have to dereference << the variable, see line (4).  
-Also, because the allocation is on the heap, remember to free the memory with `free` as in lines (5A) and (5B), Jai doesn't warn you when you forget it!
+Also, because the allocation is on the heap, remember to free the memory with `free` as in lines (5A) and (5B), Jai doesn't warn you when you forget it! The struct literal notation can be used as in (5C), but we have to dereference because it is a pointer.
 
 Why would you use structs on the heap?  
-The stack is limited in size. If your program needs a whole lot of structs, better use the heap. But for faster memory management: keep things on structs by value where possible.
+The stack is limited in size. If your program needs a whole lot of structs, better use the heap. But for faster memory management: keep things on structs by value (so on the stack) where possible.
 
 > Module _Basic_ also contains a proc `Dynamic_New`, which is like New, but can be used when you don't know the type at compile-time: 
 ```
@@ -254,7 +253,7 @@ defer free(z);
 ```
 
 ## 12.6 Recursive structs
-A recursive struct is a struct that has as one (or more) of its fields a struct of its own type (in most cases it will be a pointer to that type). They can be used to build more complex data structures like linked-lists and trees.
+A recursive struct is a struct that has as one (or more) of its fields a struct of its own type. This must be a pointer to that type, see § 12.6.4. Recursive structs can be used to build more complex data structures like linked-lists and trees.
 
 ### 12.6.1 Linked List
 In code example *12.3_linked_list.jai*, we see how we can build a simple linked list, where each node has a 'payload' field `data`, and a `next` field that points to the next node:
@@ -285,7 +284,10 @@ main :: () {
 
     c.next = null; // the list ends here for the time being
 
-    print("Our list is: %\n", lst); // => Our list is: 2ba_b8c6_6d70
+    print("Our list is: %\n", lst); // => Our list is: 1e0_7637_0080        
+    print("Our << list is: %\n", << lst); 
+    // => Our << list is: {0, 1e0_7637_0090}
+
     print("List data is % -> % -> % -> % \n", lst.data, a.data, b.data, c.data); 
     // => List data is 0 -> 12 -> 24 -> 36
 
@@ -307,20 +309,20 @@ LinkedList :: struct {
 This can be defined as:
 
 ```c++
-LinkedList :: struct (T: Type) {  // (1)
-    first: *Node(T); 
-    last:  *Node(T);
+LinkedList :: struct {  
+    first: *Node; 
+    last:  *Node;
 }
 
-Node :: struct (T: Type) {          // (2)
-    value: T;
-    prev: *Node(T);
-    next: *Node(T);
+Node :: struct {        
+    value:  s64;
+    prev: *Node;
+    next: *Node;
 }
 ```
 
 ### 12.6.3 Tree
-We can define a Tree structure as follows:
+We can define a Tree data structure as follows:
 
 ```c++
 Tree :: struct {
@@ -330,7 +332,7 @@ Tree :: struct {
 }
 ```
 
-Later on we'll see (§ 26.6 and 26.7) how to read/print/process such structs out, node by node. 
+Later on we'll see (§ 26.6-7) how to read/print/process such structs, node by node. 
 
 ### 12.6.4 Circular dependencies
 A program containing the following struct definition:
@@ -351,7 +353,7 @@ Cycle:
   [1] Node (d:/Jai/testing/test.jai:3)
       depends on [0]
 `
-Use this definition to get rid of the error:
+Use a pointer to get rid of the error:
 ```c++
 Node :: struct {
     owned_a: *Node;
@@ -361,7 +363,7 @@ Node :: struct {
 ```
 
 ## 12.7 A structs namespace
-Wouldn't it be nice if you could use the fields of a struct without having to prefix them with their struct name? That's possible! A struct defines a **namespace**, which you can locally create with the **using** keyword, to allow memory-smart composition. Then you don't need to use the struct name anymore.
+Wouldn't it be nice if you could use the fields of a struct without having to prefix them with their struct-variable's name? That's possible! A struct defines a **namespace**, which you can locally create with the **using** keyword, to allow memory-smart composition. Then you don't need to use the variable's name anymore.
 
 See *12.4_using.jai*:
 ```c++
@@ -388,25 +390,25 @@ main :: () {
     print("Patient has name: %\n", name); // => Patient has name: Johnson
 }
 ```
-Line (1) tells us Patient can use the namespace of Person. That's why in line (2) (where we normally would write pat1.pe.name) we don't need to use Person in order to access the `name` field. Line (3) shows us that we can even use pat1 as a namespace.  
+Line (1) tells us Patient can use the namespace of Person. That's why in line (2) (where we normally would write pat1.pe.name) we don't need to use Person in order to access the `name` field. Line (3) shows us that we can even use `pat1` as a namespace.  
 The keyword using lets you import namespaces, as we did with enums. `pe` is not a keyword here, it can be replaced by any other word, for example `using person: Person`.
 Instead of declaration (1B), we could have written line (4), so that we could use the fields of pat1 without writing pat1.field, just write field.
 **using** allows us to refer to a contained struct's members without referencing that struct. It allows you to bring the member variables of a struct into the scope of another struct (like sub-classing but no methods/overriding) or a proc (like a method, see § 12.16).   
 This mimics a kind of _inheritance_: Patient is like a subtype of the supertype Person.  
-We use _composition_ instead of a subclass and can reference the fields of the ‘parent’ struct directly. Jai doesn't have classes and inheritance, but as we see here: first class composition works like inheritance!
-(see § 23B for a more complete example).
+Jai uses _composition_ instead of inheritance and can reference the fields of the 'parent' struct directly. Jai doesn't have classes and inheritance, but as we see here: first class composition works like inheritance!
+    **Favor composition over inheritance.**
 
-> The `using` keyword allows you to bring the member variables of a struct into the scope of a function (like a method but more flexible) or another struct (like subclassing but no methods/overriding).
-
-> In a large program with many structs, `using` can give rise to field-name collisions. To avoid this, use the `except` modifier to avoid these field name(s):
-> `using,except(length) position: Vector3_With_Length;` 
-> As the exact opposite, the `only` modifier imports only the names that are in its list: `using,only(w, y) orientation: Quaternion;`
-> `using,map(proc) can be used to map duplicate names to other names.
-> (see how_to/044)
-
-> Favor composition over inheritance.
+(See § 23B for a more complete example).
 
 See this [Discussion about OOP](https://en.wikipedia.org/wiki/Entity%E2%80%93component%E2%80%93system)
+
+> In a large program with many structs, `using` can give rise to field-name collisions. To avoid this, use the `except` modifier to avoid these field name(s):  
+> `using,except(length) position: Vector3_With_Length;`   
+> As the exact opposite, the `only` modifier imports only the names that are in its list: `using,only(w, y) orientation: Quaternion;`  
+> `using,map(proc)` can be used to map duplicate names to other names.
+> (see how_to/044)
+
+
 
 ## 12.8 The #as directive
 What if we want the power of `using` from § 12.7 and the ability to implicitly cast a variable of the struct subtype to a variable of the struct supertype? This is accomplished with the **#as** directive:
@@ -450,7 +452,7 @@ main :: () {
     print("%\n", emp1); // => {{"Gates"}, "software engineer"}
 
     p1: Person;
-    // p1 = pat1; // (3) Error: Type mismatch: incompatible structs (wanted 'Person', given 'Patient').
+    // p1 = pat1;     // (3) Error: Type mismatch: incompatible structs (wanted 'Person', given 'Patient').
     p1 = emp1;
     print("%\n", p1); // (4) => {"Gates"}
 
@@ -465,13 +467,13 @@ In this example we have our Patient subtype from before, but in line (1) an Empl
 `using #as p: Person;`  
 We see the difference when comparing lines (3) and (4):
 - in (3) we attempt to assign a Patient to a Person variable, this errors out!
-- in (4) we assign an Employee to a Person variable, this works, but of course only retains the name in p1.
+- in (4) we assign an Employee to a Person variable, this works, but evidently only retains the `name` in p1.
 
 So #as means we can implicitly cast from the subtype to the supertype!  
 This means that Employee is effectively a **subclass** of Person, whereas Patient is not!
 (`using #as p: Person;`  can also be written as:  `#as using p: Person;` )
 
-A slightly different way of using #as is demonstrated in Example 2. Here, #as indicates that a struct can implicitly cast to one of its members `i`, and in line (6) 'num' is passed to the function as an int.
+A slightly different way of using #as is demonstrated in Example 2. Here, #as indicates that a struct can implicitly cast to one of its members `i`, and in line (6) `num` is passed to the function as an int.
 More than one field can be prefixed with #as.
 
 Here is an example of a how to start a building a game entity system:  
@@ -507,12 +509,12 @@ main :: () {
 
 #as is also used in the Type_Info_ types, discussed in § 16.2
 
-**Exercise**
+**Exercise**  
 Declare a Point3D struct with 3 float coordinates x, y and z.
 Make a pnt variable of type Point2D, initialize it as a struct literal. Then print out the coordinates without writing pnt.x, and so on (see exercises/12/using.jai).
 
 ## 12.9 Using a structs namespace for better storage management
-Suppose our application uses a struct Entity, with a number of fields that our used very much, and the rest is used much less. We could then place the frequently needed fields in an Entity_Hot struct, to be placed on the stack. The less needed fields could be placed in an Entity_Cold struct, to be allocated on the heap.  
+Suppose our application uses a struct Entity, with a number of fields that are used very much, and the rest is used much less. We could then place the frequently needed fields in an Entity_Hot struct, to be placed on the stack. The less needed fields could be placed in an Entity_Cold struct, to be allocated on the heap.  
 Our Entity struct could now be composed with pointers to these two parts as follows:
 
 ```c++
@@ -530,7 +532,7 @@ Entity :: struct {
 }
 ```
 
-Now fields can even be switched from Hot to Cold or vice-versa without having to change the code! This can be decided based on the target platform.
+Now fields can even be switched (for example based on the target platform) from Hot to Cold or vice-versa without having to change the code!
 
 ## 12.10 Pointer to struct
 See *12.5_pointer_to_struct.jai*:
@@ -560,7 +562,7 @@ main :: () {
 
     e: Entity;              // e is a variable of type Entity
     e.serial_number = 0349825645;
-//    ptr: *Entity;           // (3) ptr is a pointer to an Entity struct- a declaration
+//    ptr: *Entity;           // (3) ptr is a pointer to an Entity struct - a declaration
 //    ptr = *e;               // (4) ptr is a pointer to e - initialization
     // shorter:
     ptr := *e;                // (5)
@@ -568,17 +570,18 @@ main :: () {
 }
 ```
 
-In line (1) we see how a pointer variable rob is created as a pointer to a struct variable. Its type us *Person.
+In line (1) we see how a pointer variable rob is created as a pointer to a struct variable. Its type is *Person.
 In the 2nd example we note that a struct can also be declared in a local scope.
-The short definition of a pointer to a struct:  ptr := *e;  
-can be divided into:  
-    ptr: *Entity;  // declaration
-    ptr = *e;      // assignment
+The short definition of a pointer to a struct:  `ptr := *e;`  
+can be divided into:    
+    `ptr: *Entity;`  // declaration
+    `ptr = *e;`      // assignment
 
 ## 12.11 Struct alignment
 By aligning certain member fields of structs to 64 bit, we can make memory allocation cache-aligned on 64 bit systems. This can also be done for global variables.  
-The **#align** directive takes care of aligning struct member fields relative to the start of the struct. If the start is 64 bit aligned, and a member field has #align 64, then this fields will also be 64 bit aligned. The same goes for `#align 32` and `#align 16`.
-The start or base of the struct must be #align-ed correctly, otherwise it won't work. You can't do this on the structs definition, like in (1B), this has no effect. You must use the 2nd parameter `alignment` of New when creating a new struct instance (see line (5))  
+The **#align** directive takes care of aligning struct member fields relative to the start of the struct. If the start is 64 bit aligned, and a member field has #align 64, then this field will also be 64 bit aligned. The same goes for `#align 32` and `#align 16`.
+The start of the struct must be #align-ed correctly, otherwise it won't work. You can't do this on the structs definition, this has no effect.  
+You must use the 2nd parameter `alignment` of New when creating a new struct instance (see line (5))  
 This enhances memory efficiency and reduces cache misses for cache-sensitive data-structures. Use it when you want to do SIMD or you need something with a bigger alignment. 
 It is used in the following example:
 
@@ -591,19 +594,13 @@ Accumulator :: struct {
   computedAccumulation: s32;
 } #no_padding                                   // (1C)
 
-Object :: struct { member: int #align 64; }     // (1B)
-
-Thing :: struct {
-   member1: u8  #align 1;                        // (2)
-   member2: u32 #align 1;
-}
-
-global_var: [100] int #align 64;                 // (3) 
+Object :: struct {member: int #align 64; }      // (1B)
+global_var: [100] int #align 64;                 // (2) 
 
 main :: () {
-    assert(cast(int)(*global_var) % 64 == 0);    // (4)
-    object := New(Object);                       // (5)
-    // assert(cast(int)(*object) % 64 == 0); // => Assertion failed
+    assert(cast(int)(*global_var) % 64 == 0);    // (3)
+    object := New(Object);                       // (4)
+    assert(cast(int)(object) % 64 == 0);         // (4B)
     free(object);
 
     big : [16] u8 #align 64;
@@ -611,12 +608,11 @@ main :: () {
     big[1] = 20;
     print("size = %, value = %\n", size_of(type_of(big)), formatInt(big[0], base = 2));
     // => size = 16, value = 1010
-
 }
 ```
 
-The `Accumulator.accumulation` field and `global_var` in lines (1) and (3) are 64 bit cache-aligned. Line (4) shows that indeed the address of `global_var` is divisible by 64. In line (5) the heap allocation is NOT 64-bit aligned. (Line (1B) doesn't have any effect.)
-It is often accompanied by the directive **#no_padding**, meaning no additional empty bytes are added to align with word-size.
+The `Accumulator.accumulation` field and `global_var` in lines (1) and (2) are 64 bit cache-aligned. Line (3) shows that indeed the address of `global_var` is divisible by 64. An instance of a struct like defined in (1B) is also 64 bit-aligned, see (4B).
+`#align` is often accompanied by the directive **#no_padding** as in (1C), meaning no additional empty bytes are added to align with word-size.
 (For a good explanation see [Structure Padding in C](https://www.javatpoint.com/structure-padding-in-c)
 
 ## 12.12 Making definitions in an inner module visible with using
@@ -639,12 +635,14 @@ Now create a `12.8_inner_module_test.jai` with as content:
 #import "TestScope";
 
 main :: () {
-    s1 := Struct1.{number = 42}; // (1) Error: Undeclared identifier 'Str'.
+    s1 := Struct1.{number = 42}; 
     print("%", s1);     // => {42}
 }
 ```
 
-Compiling `12.8_inner_module_test.jai` gives the Error: Undeclared identifier 'Str'. This is because the definition of Struct1 gets into #scope_module in module TestScope, and is not visible inside our test program.  
+Compile `12.8_inner_module_test.jai` with:  
+`jai 12.8_inner_module_test.jai -import_dir d:\jai\The_Way_To_Jai\my_modules"`  
+This gives the `Error: Undeclared identifier 'Str'`. The reason is that the definition of Struct1 gets into #scope_module in module TestScope, and is not visible inside our program.  
 
 If you want `Struct1` to be visible inside the program, change the content of TestScope to:  
 ```
@@ -652,10 +650,6 @@ using TestInside :: #import "TestInside";
 ```
 
 Then we can make an instance s1 of Struct1, and print out its value {42}. 
-Compile `12.8_inner_module_test.jai` with:
-`jai 12.8_inner_module_test.jai -import_dir "d:\jai\The_Way_To_Jai\my_modules"`
-
-and then run it with:  12
 
 ## 12.13 Struct parameters
 See *12.9_struct_parameters.jai*
@@ -688,13 +682,14 @@ Also a struct can use outer constant values.
 
 What if we pass Type as a parameter?
 ### 12.13.1 Type as a struct parameter
-(Example taken from how_to/160_type_restrictions)
+(Example taken from how_to/160_type_restrictions)  
+
 See *12.10_struct_parameters_type.jai*
 ```c++
 #import "Basic";
 
 Entity :: struct (Payload: Type) {           // (1)
-        payload: Payload;
+    payload: Payload;
 }
 
 proc :: (x: Entity) {                        // (3) 
@@ -737,20 +732,20 @@ make_holder :: (value: float) -> *Holder {
 
 main :: () {
     holder := make_holder(42.42);
-    print("    holder is: %\n", holder); // => holder is: 200_3893_57a0
-    print("    type_of(holder.a) is: %\n", type_of(holder.a));
+    print("holder is: %\n", holder); // => holder is: 200_3893_57a0
+    print("type_of(holder.a) is: %\n", type_of(holder.a));
     // => type_of(holder.a) is: *~s16 float32
 
     pointer_from_stack := holder.a;  // (3) 
-    print("    type_of(pointer_from_stack) is: %\n", type_of(pointer_from_stack));
+    print("type_of(pointer_from_stack) is: %\n", type_of(pointer_from_stack));
     // =>  type_of(pointer_from_stack) is: *float32
-    print("    Dereferencing pointer_from_stack: %\n", << pointer_from_stack);
+    print("Dereferencing pointer_from_stack: %\n", << pointer_from_stack);
     // (4) => Dereferencing pointer_from_stack: 42.419998
  }
 ```
 
 Type Holder in line (1) has a 16 bit relative pointer field a, which points to a float. Field a points to field b (line (2)), which indeed is a float.  
-(3) is a declaration assigning to the relative pointer a, but its type is a full pointer, not a relative pointer. This is necessary, because when we copy the relative pointer to the stack, the resulting pointer would overflow and not be valid, because there is no way to reach that data structure from the stack. By converting it to a full pointer, we are able to point to the original value 42.42, as shown in line (4).
+(3) is a declaration assigning the relative pointer a to another pointer, but its type is a full pointer, not a relative pointer. This is necessary, because when we copy the relative pointer to the stack, the resulting pointer would overflow and not be valid, because there is no way to reach that data structure from the stack. By converting it to a full pointer, we are able to point to the original value 42.42, as shown in line (4).
 
 ## 12.15 Anonymous structs
 An **anonymous struct** can be defined as follows:
@@ -763,7 +758,7 @@ struct {
 ```
 (see an example of using this in § 12.13.1)
 
-Here is an example of using an anonymous struct:
+Here is an example of using an anonymous struct:  
 See *12.13_anonymous struct.jai*:
 ```c++
 #import "Basic";
@@ -797,14 +792,12 @@ main :: () {
 }
 ```
 `state` defined in line (1) is not a real struct, because it is not defined as a constant with ::
-This can be a useful grouping for data that only has one copy, and when creating complex data structures mixing anonymous unions and structs together (see line (2)).
+This can be a useful grouping for data that only has one copy, or when creating complex data structures mixing anonymous unions and structs together (see line (2)).
 
 ## 12.16 Member procs
-Unlike C++, Java, or any other object-oriented language, structs do not have member functions associated with them. There is no concept of functions “belonging” to a particular object. Functions can be declared inside structs, but functions inside structs are only using the struct as a namespace.
+Unlike classes in C++, Java, or any other object-oriented language, structs in Jai do not have member functions associated with them. There is no concept of functions “belonging” to a particular struct object or any other datatype. Functions can be declared inside structs, but these are only using the struct as a namespace. So its use is not recommended.
 
-> Unlike classes in other languages, Jai does NOT have member functions: there is no concept of functions "belonging" to a particular struct or datatype. So it's better to not define a procedure inside a struct.
-
-Here is an example of showing what is possible, but it is not recommended:
+Here is an example of showing what is possible:   
 See *12.14_member_procs.jai*:
 ```c++
 #import "Basic";
@@ -821,5 +814,9 @@ main :: () {
     // o.set_x(100); // Not allowed: Error: Not enough arguments: Wanted 2, got 1
     Obj.set_x(*o, 100);
     print("o is %", o); // => o is {100}
+    set_x(*o, 42);
+    print("o is %\n", o); // => o is {42}
 }
 ```
+
+[12B - A showcase of inheritance](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/23B_A%20showcase%20of%20inheritance%20using%20structs%2C%20as%20and%20polymorphism.md)  

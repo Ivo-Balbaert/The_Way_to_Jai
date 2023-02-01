@@ -50,7 +50,7 @@ main :: () {
 This way we get the size passed as a generic parameter. If the applied lambda doesn't change the type T of the items, we can replace R by T as well.
 
 ## 23.3 Polymorphic structs
-We can also use generic parameters to pass to a struct, in this case to define a 2D array as a struct field:
+We can also use generic parameters to pass to a struct, in this example to define a 2D array as a struct field:
 
 See *23.3_poly_struct.jai*:
 ```c++
@@ -75,6 +75,23 @@ main :: () {
 The struct is defined in line (1). In line (2) we use #bake_arguments to bake in one of the dimensions. In line (3) the other dimension is passed when declaring a struct twod.
 Line (4) shows the initial struct. Line (5) shows that we can access the passed parameters on the struct variable's name.
 The polymorph arguments M and N have to be compile-time constants. They can have default values: `TwoD :: struct (M: int = 3, N: int = 3)`
+
+Here is how we can write the double linked list from § 12.6.2 more generally:
+
+```c++
+LinkedList :: struct (T: Type) {  
+    first: *Node(T); 
+    last:  *Node(T);
+}
+
+Node :: struct (T: Type) {        
+    value: T;
+    prev: *Node(T);
+    next: *Node(T);
+}
+```
+
+T is a generic type, it can be any type given when a struct instance is made, for example:  `lst := New(LinkedList(s64));` or  lst := New(LinkedList(string));
 
 ## 23.4 Restricting the type of polymorphic proc arguments
 In the following struct definition (see line (1)):

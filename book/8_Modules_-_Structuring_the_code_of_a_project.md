@@ -122,6 +122,8 @@ This can be useful to avoid name-conflicts.
 
 To load a directory from a module, use `#import, dir`:  
 `module :: #import, dir "files/directory";`  
+for example: `raylib :: #import,dir "../raylib/raylib";`  
+This is the same as doing:  `jai program.jai -import_dir "../raylib/raylib"`
 
 You can even import a specific string into your program with `#import, string`, for example:  
 `#import, string "factorial :: (x: int) -> int { if x <= 1 return 1; return x * factorial(x-1); }";`
@@ -168,7 +170,7 @@ Examples:
 - To load a `module.jai` in the same folder as program.jai:  
     `jai program.jai -import_dir "./"`
 - To load a module from a folder /path/to/mod1:  
-    `jai program.jai -import_dir "/path/to/mod1"`  
+    `jai program.jai -import_dir "/path/to/mod1"`
   Or if arg1 == "/path/to/mod1"  
     `jai program.jai -import_dir arg1`
 - You can specify several path arguments to module directories at the same time:

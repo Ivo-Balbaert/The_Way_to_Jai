@@ -23,7 +23,8 @@ main :: () {
 
     c.next = null; // the list ends here for the time being
 
-    print("Our list is: %\n", lst); // => Our list is: 2ba_b8c6_6d70
+    print("Our list is: %\n", lst); // => Our list is: 149_5343_0090
+    print("Our << list is: %\n", << lst); // => Our list is: {0, 149_5343_0090}
     print("List data is % -> % -> % -> % \n", lst.data, a.data, b.data, c.data); 
     // => List data is 0 -> 12 -> 24 -> 36
 
