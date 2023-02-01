@@ -445,3 +445,5 @@ Hello from a Subscriber: "nothing"
 
 **Some wise words of Jon Blow about polymorphism:**
 " If lots of procedures in your program are polymorphic, you pay for this in compile time, and possibly also in understandability of the program. Polymorphism is powerful, but historically, when people start writing code that is over-generic, it becomes hard to understand and modify. In general, don't get carried away making things polymorphic if they do not need to be. "
+
+[23B - A showcase of inheritance](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/12B_A%20showcase%20of%20inheritance%20using%20structs%20and%20%23as.md)  

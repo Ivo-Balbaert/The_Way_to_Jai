@@ -817,5 +817,3 @@ main :: () {
     print("o is %\n", o); // => o is {42}
 }
 ```
-
-[12B - A showcase of inheritance](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/12B_A%20showcase%20of%20inheritance%20using%20structs%20and%20%23as.md)  
