@@ -1,4 +1,4 @@
-# 23B Document types: a showcase of inheritance using structs, as and polymorphism
+# 23B Document types: a showcase of inheritance using structs and #as
 (Example taken from how_to\008_types.jai)
 
 We'll now combine all our previous knowledge to construct an OO-like type-inheritance system.
