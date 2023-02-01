@@ -574,15 +574,14 @@ In line (1) we see how a pointer variable rob is created as a pointer to a struc
 In the 2nd example we note that a struct can also be declared in a local scope.
 The short definition of a pointer to a struct:  `ptr := *e;`  
 can be divided into:    
-    `ptr: *Entity;`  // declaration
+    `ptr: *Entity;`  // declaration  
     `ptr = *e;`      // assignment
 
 ## 12.11 Struct alignment
 By aligning certain member fields of structs to 64 bit, we can make memory allocation cache-aligned on 64 bit systems. This can also be done for global variables.  
 The **#align** directive takes care of aligning struct member fields relative to the start of the struct. If the start is 64 bit aligned, and a member field has #align 64, then this field will also be 64 bit aligned. The same goes for `#align 32` and `#align 16`.
-The start of the struct must be #align-ed correctly, otherwise it won't work. You can't do this on the structs definition, this has no effect.  
-You must use the 2nd parameter `alignment` of New when creating a new struct instance (see line (5))  
-This enhances memory efficiency and reduces cache misses for cache-sensitive data-structures. Use it when you want to do SIMD or you need something with a bigger alignment. 
+The start of the struct must be #align-ed correctly, otherwise it won't work. 
+This enhances memory efficiency and reduces cache misses for cache-sensitive data-structures. Use it when you want to do SIMD (see § 28) or you need something with a bigger alignment. 
 It is used in the following example:
 
 See *12.7_struct_align.jai*:
@@ -595,12 +594,12 @@ Accumulator :: struct {
 } #no_padding                                   // (1C)
 
 Object :: struct {member: int #align 64; }      // (1B)
-global_var: [100] int #align 64;                 // (2) 
+global_var: [100] int #align 64;                // (2) 
 
 main :: () {
-    assert(cast(int)(*global_var) % 64 == 0);    // (3)
-    object := New(Object);                       // (4)
-    assert(cast(int)(object) % 64 == 0);         // (4B)
+    assert(cast(int)(*global_var) % 64 == 0);   // (3)
+    object := New(Object);                      // (4)
+    assert(cast(int)(object) % 64 == 0);        // (4B)
     free(object);
 
     big : [16] u8 #align 64;
@@ -681,7 +680,7 @@ Line (2) shows that we can give another value for the parameter(s) when a struct
 Also a struct can use outer constant values.
 
 What if we pass Type as a parameter?
-### 12.13.1 Type as a struct parameter
+### 12.13.1 Struct parameters of type Type
 (Example taken from how_to/160_type_restrictions)  
 
 See *12.10_struct_parameters_type.jai*
@@ -819,4 +818,4 @@ main :: () {
 }
 ```
 
-[12B - A showcase of inheritance](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/23B_A%20showcase%20of%20inheritance%20using%20structs%2C%20as%20and%20polymorphism.md)  
+[12B - A showcase of inheritance](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/12B_A%20showcase%20of%20inheritance%20using%20structs%2C%20as%20and%20polymorphism.md)  
