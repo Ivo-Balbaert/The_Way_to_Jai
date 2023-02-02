@@ -2,14 +2,23 @@
 
 main :: () {
     a3 := 0;
+    if a3 == 0 {                 // (0)
+        print("case 0\n");       // => case 0
+    }
+    else if a3 == 1 {
+        print("case 1\n");       // because a is 0, this will be ignored
+        print("This is also in case 1!"); 
+    } 
+    else {
+        print("default case\n"); // because a is 0, this will be ignored.
+    }
+
     if a3 == {                       // (1)
-        case 0;
-            print("case 0\n");       // => case 0
+        case 0; print("case 0\n");       // => case 0
         case 1; 
             print("case 1\n");       // because a is 0, this will be ignored
             print("This is also in case 1!"); 
-        case;
-            print("default case\n"); // because a is 0, this will be ignored.
+        case;   print("default case\n"); // because a is 0, this will be ignored.
     }
 
     a4 := 0;
@@ -50,6 +59,8 @@ main :: () {
 /*
 case 0
 case 0
+case 0
 case 1
 This is Val.A case
+e is A
 */

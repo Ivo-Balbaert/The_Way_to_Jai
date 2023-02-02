@@ -242,7 +242,7 @@ bool values can be autocast to ints with xx (see lines (8A-B)):
 xx true  returns 1  
 xx false returns 0
 ```
-#### 6.2.5.2 - Cast of int to bool
+#### 6.2.5.2 - Cast of int to bool - truthiness
 xx doesn't work here, but a cast(bool) of 0 returns false, and a cast(bool) of any other integer gives true (see line (8C and 8D)).
 
 ```c++ 

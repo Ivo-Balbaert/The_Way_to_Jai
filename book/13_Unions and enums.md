@@ -47,7 +47,7 @@ variable := union {                 // (7A)
   z: int;
 }
 
-// complex Vector3 example using anonymous structs and unions
+// Vector3 example using anonymous structs and unions
 Vector3 :: struct {                  // (7B)
   union {
     struct { x, y, z: float; }
@@ -80,7 +80,7 @@ The size of the union T is 8
 ```
 
 A **union* is defined like a struct, but replacing `struct` by `union`, see line (1). The possible fields are then enumerated, but remember: only one can be active at any time.
-(An alternative definition is to write it as a kind of struct with a **#place** directive; read it as: "in place of a, you can have the following field".) A union field can be of type void (see line (2B). 
+An alternative definition is to write it as a kind of struct with a **#place** directive; read it as: "in place of a, you can have the following field". A union field can be of type void (see line (2B). 
 
 A variable of the union type is declared in line (3), and one field is given a value in line (4). When another field gets assigned, the value from the previous field is lost and becomes undefined: see line (6).  
 
@@ -89,8 +89,8 @@ Anonymous unions can be defined or used as in lines (7A-B).
 ## 13.2 Working with enums
 An enum (enumerator) is useful when a property can only take as value one of a limited number of named values, like the compass points north, west, east and south.   
 Why? Because it is much easier for a developer to work with names than with numbers.
-In combination with if #complete (see § 14.3.1) it can be checked that all possible values of an enum are used.
-All names are constants, internally they are by default 64bit-integers.They start by default from 0 for the 1st value and auto-incrementing by 1, but they can be initialized to arbitrary values.
+In combination with `if #complete` (see § 14.3.1) it can be checked that all possible values of an enum are used.
+All names are constants, internally they are if not specified  64bit-integers.They start by default from 0 for the 1st value and auto-increment by 1, but they can be initialized to arbitrary values.
 
 *13.2_enums.jai* shows a few examples:
 
@@ -279,7 +279,7 @@ main :: () {
   0111 <--> EAST | NORTH | WEST
   */
 ```
-In the program above, | is the bitwise or operation. In line (1) you see how we can mask out a flag by doing `d &= ~SOUTH;` (see the bit explanation in the comments above).
+In the program above, | is the bitwise or operation. In line (1) you see how we can mask out a flag by doing  `d &= ~SOUTH;` (see the bit explanation in the comments above).
 
 Lines (1) and following show ways to assign enum flags to variables.
 
@@ -298,7 +298,8 @@ Direction :: enum {
 
 main :: () {
     low, high := enum_range(Direction);
-    print("The values range from % to %\n", low, high); // 0 to 3
+    print("The values range from % to %\n", low, high); 
+    // => The values range from 0 to 3
 
     print("Values:\n");
     values :=  enum_values_as_s64(Direction);
@@ -306,14 +307,8 @@ main :: () {
 
     names := enum_names(Direction);
     print("\nThe values as strings are: %\n", names);
-
+    // => The values as strings are: ["EAST", "NORTH", "WEST", "SOUTH"]
 }
-/*
-The values range from 0 to 3
-Values:
-0 - 1 - 2 - 3 -
-The values as strings are: ["EAST", "NORTH", "WEST", "SOUTH"]
-*/
 ```
 
 **enum_range** gives you the range in integer values from low to high.
