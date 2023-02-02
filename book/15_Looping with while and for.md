@@ -1,6 +1,6 @@
 # Chapter 15 - Looping with while and for
 
-Often we need to repeat a block of code a number of times (a for-loop) or as long as a condition is true (a while-loop). Looping is also often called _iterating_.
+Often we need to repeat a block of code a number of times (a for-loop) or as long as a condition is true (a while-loop). Looping is also often called _iterating_, especially when you loop over the values of a data-structure.
 
 ## 15.1 While loop
 See *15.1_while.jai*:
@@ -51,13 +51,13 @@ main :: () {
 
     // Nested while loop:	
     i, j: int;
-    while j < 4 {    // (6)
-        defer j += 1;
+    while j < 4 {       // (6)
         i = 0;
         while i < 4 {
-            defer i += 1;
             print("(%, %) - ", i, j);
-        }
+            i += 1; 
+        } 
+        j += 1;  
         print("\n");
     }
 
@@ -67,17 +67,18 @@ main :: () {
     print("Counting down 2\n");
     while counting := count2 > lift_off2 { // (7)
         print("% - ", count2);
+        if count2 == 5  break // or: break counting;
         count2-=1;
     }
-    print("Lift off!\n");
+    print("Launch aborted!\n");
 
     // while with defer:
     x := 0;
     while x < 10 {
-        defer x += 1;        // (8)
+        defer x += 1;        // (8)  // executes right before 8B
         if x & 1  continue;  // don't print if x is odd.
         print("% - ", x); // => 0 - 2 - 4 - 6 - 8 -
-    }
+    } // (8B)
 }
 
 /*
@@ -95,7 +96,8 @@ ptr now is 41_b68f_fba0
 (0, 2) - (1, 2) - (2, 2) - (3, 2) -
 (0, 3) - (1, 3) - (2, 3) - (3, 3) - 
 Counting down 2
-10 - 9 - 8 - 7 - 6 - 5 - 4 - 3 - 2 - 1 - Lift off!
+10 - 9 - 8 - 7 - 6 - 5 - Launch aborted!
+0 - 2 - 4 - 6 - 8 -
 */
 ```
 
@@ -107,9 +109,9 @@ Line (6) shows an if inside a while, which is used to terminate the loop.
 In line (8) we change the loop variable after a `defer`. Such a defer at the start of the loop ensures that the loop-variable will always change, even with a break or continue.
 
 ### 15.1.1 Nested while loops
-Starting in line (6), we see a loop over counter i which is enclosed with a loop over counter j. At the end of the respective loops, we must increment the counter. Using `defer` we can code this at the start of the loop to achieve that.
+Starting in line (6), we see a loop over counter i which is enclosed with a loop over counter j. At the end of the respective loops, we must increment the counter. As shown in line (8) we can use `defer` at the start of the loop to achieve that.
 
-> If a while loop uses a counter, change the counter by prefixing with defer. But  be careful in combination with break and continue (put defer after these).
+> If a while loop uses a counter, change the counter by prefixing with defer.
 
 ### 15.1.2 Named while-loops
 In line (7) you see the same while loop as used for the counting down, but now the condition has been given a name (`counting`). This name can be used to break out of the loop when you have nested while loops (see § 15.3).
@@ -129,8 +131,8 @@ In § 12.6 we constructed a linked-list with a recursive struct LinkedList. To p
     // => List printed in a while loop:
     // => 0 -> 12 -> 24 -> 36 ->
 ```
-We declare a variable r of type *LinkedList in line (1). As long as r is not a null pointer, the while loop in (2) will keep on going. Line (2) is shorthand for:   `while r != null`
-We print out the data of the loop and point to the next node in line (3). In our example r becomes null for c, which stops the loop. In § 26.6 we'll see how we can print this list out in a kind of for-loop, which we'll discuss next.
+We declare a variable r of type *LinkedList in line (1). As long as r is not a null pointer, the while loop in (2) will keep on going  (line (2) is shorthand for:   `while r != null`).  
+We print out the data of the loop and point to the next node in line (3). In our example r becomes null for c, which stops the loop. In § 26.6 we'll see how we can print this list out in a for-loop, which we'll discuss next.
 
 ## 15.2 For loop
 When you want to iterate over a range of things, `for` is your best tool.
@@ -188,19 +190,19 @@ Number 1 - Number 2 - Number 3 - Number 4 - Number 5 -
 ```
 
 Jai knows the concept of a **range** like 1..100, which means all successive integers starting from 1 to 100 included (so like [1, 100] in mathematics).
-In general `for start..end { }`; for an exclusive range write end–1. start and end can be variables, expressions, even procedure calls.
+more generally `for start..end { }`; for an exclusive range write end–1. start and end can be variables, expressions, even procedure calls.
 If there is no name for the loop variable, Jai has its own implicit iteration variable called `it`, see line (1). In line (2) we give the loop variable a name like `number`. This is the same as naming the condition variable in a while. 
 In that case `it` is no longer defined. 
 
-(1) and (2) are one-line for-loops. (3) shows that we need { } to write a for with a code block; end here is a variable.  
+(1) and (2) are one-line for-loops. (3) shows how we can write a code block with { }, necessary if you need several code-lines in the for loop.  
 In line (4) we see a reversed for-loop indicated with **<**. Note that you still have to write the range as end..start, or put it in another way, as : `for < i: max..0 { ... }`.  
 You can also add a boolean to indicate whether the looping should be reversed or not: `for <= bool_var arr print("%\n", it);`  
 When bool_var is false, the looping is not reversed.
 
-Like with while we can nest for-loops, as shown in line (5). Line (6) shows that we can cast the index (normally type s64) to a smaller integer type (but the cast bounds are checked!) .
+Like with while we can nest for-loops, as shown in line (5). Line (6) shows that we can cast the index (normally type s64) to a smaller integer type (but the cast bounds are checked!).
 A for-loop over a string does not work.
 
-Here is a version of a factorial proc (see § 6B.2) that uses a reversed for loop and is much faster than the recursive variant:
+Here is a version of a factorial proc (see § 6B.2) that uses a reversed for loop:
 
 See *15.9_for_reverse.jai*:
 
@@ -215,6 +217,7 @@ factorial :: (f: int) -> int {
 }
 
 main :: () {
+
     print("f(%) = %\n", 20, factorial(20));
     // => f(20) = 2432902008176640000
 }
@@ -231,7 +234,7 @@ where x < y doesn't run at all (see exercises/15.1_reversed_for.jai).
 
 ## 15.3 Breaking out or continuing a loop
 With `while true { }` you can make an infinite loop that could crash your machine. `while 1 { }` is equivalent to this, because 1 casts to `true`.
-In this as well as in normal while or for-loops you are able to:
+Sometimes such loops are useful, but you need a mechanism to break out of such a loop! In infinite loops as well as in normal while or for-loops you are able to:
 
 i) break out of a loop at a certain condition (that is: leave the loop and continue with the statement next after the loop): use the **break** keyword.
 
@@ -268,11 +271,11 @@ main :: () {
     print("\n");
 
     x := 0;
-  	while cond := x < 6 {   // (4)
+    while cond := x < 6 {   // (4)
         defer x += 1;
         if x == 3 break cond;
         print("%, ", x);
-  	} // => 0, 1, 2,
+    } // => 0, 1, 2,
 }
 
 /*
@@ -287,7 +290,7 @@ main :: () {
 In line (1), we break out of the for loop when i gets the value 3. Note that the variable i is known only inside the for loop.  
 In line (2), we see the same logic written as a while loop. The nested loop in line (3) does a `break i`, it stops looping when i becomes 3.
 In line (4) we see how you can break out of a while-loop using the condition variable.
-So normally a `break` terminates the current innermost loop immediately, but a `break var` breaks out of the loop where `var` is the iteration or condition variable. 
+So normally a `break` terminates the current innermost loop immediately, but a `break var` breaks out of the loop where `var` is the iteration or condition variable. So you could use it to break out outer loop of a nested loop.
 
 Here is a more useful example of `break condition` when testing for a QUIT signal in a game's eventloop:
 
@@ -388,7 +391,7 @@ Direction contains the following values:
 */
 ```
 
-In addition to the enum methods we discovered in § 13.6 that give us the range and the member names, we can also user a for-loop shown in line (1) to get the enum's values with the `enum_values_as_s64` proc.  
+In addition to the enum methods we discovered in § 13.6 that give us the range and the member names, we can also use a for-loop as shown in line (1) to get the enum's values with the `enum_values_as_s64` proc.  
 
 ## 15.5 Looping over a struct's fields with type_info()
 See *15.7_struct_members.jai*:
@@ -432,7 +435,7 @@ flags = 0; notes = []; offset_into_constant_storage = 0; } and has offset 16
 */    
 ```
 We can use `type_info()` on a struct definition and then loop over its members (as in line (3)) to get their names, their type, and if present, flags and attached notes.
-Also the `get_field` method (line (5) gives you detailed information.
+Also the `get_field` method (line (5)) gives you detailed information.
 
 ## 15.6 Serialization
 The methods discussed in the previous sections provide type info which can be used to _serialize_ structs into strings, and vice-versa _deserialize_ strings into structs. They enable us to write serialization procedures, commonly used e.g. in network replication of entities and save game data, see § 26.10.2
@@ -446,6 +449,6 @@ Here is an example of a procedure with a note:
 `generate_code :: () { ... } @RunWhenReady`
 
 Notes are also abundantly used within code comments to add useful info for refactoring.
-For example: @TestProcedure, @test, @Incomplete, @Refactor, @Cleanup, @Simplify, @Temporary, @pure ...
+For example: @TestProcedure, @test, @Incomplete, @Refactor, @Cleanup, @Simplify, @Temporary, @pure ...  
 Example of use: Look up in your code editor all occurrences of @Cleanup when you want to further improve your code.
 You can invent your own sorts of notes, they are not limited.

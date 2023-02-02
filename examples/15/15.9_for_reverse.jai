@@ -8,7 +8,7 @@ factorial :: (f: int) -> int {
 }
 
 main :: () {
-    print("f(%) = %\n", 20, factorial(20));
+     print("f(%) = %\n", 20, factorial(20));
     // => f(20) = 2432902008176640000
 }
 
