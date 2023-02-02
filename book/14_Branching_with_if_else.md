@@ -256,7 +256,7 @@ This example illustrates Jai's switch statement equivalent, using if-case (inste
             ..;
         case; // default case
             ..;
-    }
+}
 ```
 If you started with an if var == value { }, and you realize that you want to test var on several values, it is very simple to start building your 'switch' statement. Just copy the value inside the { after a `case`, and add more cases!
 
