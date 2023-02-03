@@ -195,8 +195,16 @@ See some concrete examples in lines (1) and following. The items of an array are
 The indices of an array arr range from 0 to `arr.count - 1`. 
 
 **Exercise**
-What is the size of an array of type [100_000]void?
+1) What is the size of an array of type [100_000]void?
 (see void_array.jai)
+2) Given the following struct definition:  
+```c++
+Thing :: struct {
+    x: int; @amount
+}
+```
+Extract the note of field x in one line of code.  
+(see extract_node.jai)
 
 ### 18.3.1 Setting up an array with a for loop
 Lines (4C) and following show the many different ways to for-loop over an array, either using it and/or it_index, or using own variables for the items and/or the index.

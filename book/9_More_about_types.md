@@ -55,16 +55,14 @@ main :: () {
     
     // Any:
     x: Any = 3.0;  // (9)
-    print("x contains this float: %\n", << cast(*float) x.value_pointer);
-    // => x contains this float: 3
-    x = "foo";
-    print("now x contains this string: %\n", << cast(*string) x.value_pointer);
-    // => now x contains this string: foo
     x = 3;         // (10)
     x = "Hello";
     x = 2.345;
     x = main;      // (11)
     print("the type of x is %\n", type_of(x)); // => the type of x is Any
+    print("The type of main is %\n", type_of(main));  // (11B)
+    // => The type of main is procedure ()
+
     a5 : s32 = 5;
     x2: Any = a5;
     print("the size of Any is %\n", size_of(Any));       // => 16
@@ -96,7 +94,7 @@ We see that Type itself is 8 bytes in size.
 ## 9.5 The Any type
 (see line (9) and following)  
 The **Any** type (defined in module _Preload_, see § 16.1), is the most wide type. It encompasses and matches with all other types. Values of all types can be converted to Any.
-This allows you to use one variable to assign values of different types (see lines 10-11, even a procedure type as in line (11)), as you might do in a dynamically-typed programming language.
+This allows you to use one variable to assign values of different types (see lines 10-11, even a procedure type as in line (11)), as you might do in a dynamically-typed programming language. Line (11B) tells us that the type of main is `procedure ()`.
 
 The Any type has size 16 bytes (if you want to know why, see § 16.1). It is in fact a more informative and type-safe version of the void pointer from C, including a type pointer for the type and a void pointer for the value.
 It is useful when working with heterogeneous arrays of pointers to different types.

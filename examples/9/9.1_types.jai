@@ -37,16 +37,14 @@ main :: () {
     
     // Any:
     x: Any = 3.0;  // (9)
-    print("x contains this float: %\n", << cast(*float) x.value_pointer);
-    // => x contains this float: 3
-    x = "foo";
-    print("now x contains this string: %\n", << cast(*string) x.value_pointer);
-    // => now x contains this string: foo
     x = 3;         // (10)
     x = "Hello";
     x = 2.345;
     x = main;      // (11)
     print("the type of x is %\n", type_of(x)); // => the type of x is Any
+    print("The type of main is %\n", type_of(main));  // (11B)
+    // => The type of main is procedure ()
+
     a5 : s32 = 5;
     x2: Any = a5;
     print("the size of Any is %\n", size_of(Any));       // => 16

@@ -35,6 +35,7 @@ main :: () {
     } else {
          print("Employee is NOT a subclass of Person\n"); 
     }
+    // => Employee is a subclass of Person
 
     // Test if Patient is a subclass of Person:
     tip := cast(*Type_Info) type_info(Patient);
@@ -43,11 +44,7 @@ main :: () {
     } else {
         print("Patient is NOT a subclass of Person\n");  
     }
+    // => Patient is NOT a subclass of Person
 }
-
-/*
-Employee is a subclass of Person
-Patient is NOT a subclass of Person
-*/
 
 
