@@ -9,7 +9,7 @@ In this chapter we'll see which data-structures from built-in modules are used f
 >To see how type inference works in depth, read the masterfully written 090_how_typechecking_works article in the how_to/ folder of the compiler.)
 
 ## 16.1 Definition of Any, .type and .type.type
-We encountered the Any type in § 9.5, it is defined as follows:   
+We encountered the Any type in § 9.5, it is defined as follows (see module _Preload_):   
 
 ```c++
 Any_Struct :: struct {  
@@ -208,7 +208,7 @@ main :: () {
 }
 ```
 
-## 16.4.2 Checking whether a struct uses another struct with #as
+## 16.4.2 Checking whether a struct is a subclass of another struct
 This in fact checks whether a struct is a subclass of another struct.
 In § 12.8 we introduced the `using #as` clause, which allows to define a struct as a subclass of another struct, so in program _12.6_#using_as.jai_ Employee was a subclass of Person.
 

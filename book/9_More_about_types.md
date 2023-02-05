@@ -1,7 +1,7 @@
 # Chapter 9 – More about types
 
 ## 9.1 First class Types
-Types are a first-class thing in Jai. This means that you can do the same things with a type than you can do with any other value. This gives you a first glimpse of the flexibility of the language.  
+Types are first-class values in Jai. This means that you can do the same things with a type than you can do with any other value. This gives you a first glimpse of the flexibility of the language.  
 All types in Jai have type **Type**, the type of Type is also Type.
 **Code** is also a type (see § 26.4.1).
 

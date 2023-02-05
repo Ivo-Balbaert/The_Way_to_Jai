@@ -1,10 +1,11 @@
 # Chapter 17 - Basics of procedures
 
-Until now we've only used the main :: () proc.
-We know that we can create local code blocks (see 7.1.2), and that we can repeat a code block with in a or for loop. But it is also very useful to be able to call a code block by name, which is exactly what a **procedure** or **proc** (more often called **functions** in other languages) is. Another definition could be: a proc is a callable set of statements that together perform a task, with optional parameters and return value(s).
+Until now we've only used the `main :: ()` proc in our own code, but we already used a lot of procedures from the standard modules library. In this section, we'll start defining our own procedures and explore all functionality to do so.
+We know that we can create local code blocks (see § 7.1.2), and that we can repeat a code block with in a or for loop. But it is also very useful to be able to call a code block by name, which is exactly what a **procedure** or **proc** (more often called **functions** in other languages) is.   
+Another definition could be: a proc is a callable set of statements that together perform a task, with optional parameters and return value(s).
 
 ## 17.1 Declaring and calling a proc
-A block of code that is used several times is a good candidate to be wrapped up inside a proc. This reduces code duplication and can enhance code readability.
+A block of code that is called several times is a good candidate to be wrapped up inside a proc. This reduces code duplication and can enhance code readability.
 
 See *17.1_proc_definitions.jai*:
 
@@ -48,7 +49,7 @@ main :: () {
 
 ```
 
-In lines (1) - (3) we define three proc's in global scope: square, mult and sum. These are one-liners, so you could write them as such. The procs need not be defined before main; the order doesn't matter.
+In lines (1) - (3) we define three proc's in global scope: square, mult and sum. These are one-liners, so you could write them as such. The procs need not be defined before `main`; the order doesn't matter.
    
 But a proc call causes a change in the execution flow, so it's inherently slower. Unless for documentation/readability reasons, you should only use a proc for multiple lines. As often, Jai offers a solution for this redirection problem with the keyword **inline** (see § 17.7).
 
@@ -62,14 +63,14 @@ proc_name :: (arg1: type1, arg2: type2) -> return_type {
 ```
 
 Line (9) also shows a typical functional language syntax for one-line procs or **lambdas**:  `lam :: (a, b) => a + b;` (note that types are absent here).  
-Proc names are written the same way as variable names. They are followed by a ::, which indicates they are constants.  
-A proc can use global variables and also receive data from where it is called through its _argument_ list (arg1: type1, arg2: type2). Each argument has to be typed separately.
-There can be no (like main :: ()), one or more arguments.
+Proc names are written the same way as variable names. They are followed by a **::**, which indicates they are constants.  
+A proc can use global variables and also receive data from where it is called through its _argument_ list (arg1: type1, arg2: type2). Each argument has to be given a type separately.
+There can be no arguments like with main :: (), or one or more arguments.
 
 A proc can change global variables. It can also return values. This is indicated by `->` followed by the type(s) of the value(s) it returns. 
 Inside the body, the data is returned by using the keyword **return**, like `return variable(s)`.
-If a proc doesn't return anything (like main :: ()), it returns void, you can leave -> out, or you could write `-> void` if you wanted to.
-There can be no return values (returns void, like main), or one or several.
+If a proc doesn't return anything (like main :: ()), it returns void. Then you can leave -> out, or you could write `-> void` if you wanted to.  
+There can be no return values (returns void, like main), or one or several.  
 Procs do not return tuple object values as in Rust or Go, but rather return the values in registers.
 
 ### 17.1.1 Exiting from a proc with return
@@ -80,9 +81,11 @@ Then, enclosed in { } comes the proc's body.
 
 The proc is called as  	 `proc_name(par1, par2)`;
 Here par1 and par2 are the parameters that are substituted in order into the arguments arg1 and arg2, they have to be of the indicated type type1 and type2, otherwise you get an error such as:
-_Error: Number mismatch. Type wanted: int; type given: float32._ (see line (4), compile this for yourself and see how clear the message is: indicating the parameter in the call and the argument in the args list where it went wrong). The number of parameters and arguments must be the same, except when there are default arguments, see § 17.4.
+_Error: Number mismatch. Type wanted: int; type given: float32._ (see line (4), compile this for yourself and see how clear the message is: indicating the parameter in the call and the argument in the args list where it went wrong).  
+The number of parameters and arguments must be the same, except when there are default arguments, see § 17.4.
 
-As we see in line (5), it is always possible to pass the parameter value through its argument name: `square(x = c)`. This enables a more-documented style, but also to call the arguments in a different order than declared.  
+As we see in line (5), it is always possible to pass the parameter value through its argument name: `square(x = c)`.  
+This enables to call the arguments in a different order than declared, but also a more-documented style.    
 Line (6) shows that a parameter can just be another proc call.
 
 ### 17.1.2 Getting the type and address of a proc
@@ -100,7 +103,7 @@ In line (10) we declare a proc variable `p_ptr` with the same signature as sum, 
 (5) Jai has its own assert built-in, but let us write our own assert proc that takes a condition and does nothing if this is true, else it prints an error message “ASSERTION FAILED” (see assert.jai).   
 
 ## 17.2 Local procs
-Procedures defined at the same top-level as main are called global procs. They can be called by main and can also call each other. An example is `proc` and `proc2` in the following code:
+Procedures defined at the same top-level as main are called global procs. They can be called by main and can also call each other. Examples are `proc` and `proc2` in the following code:
 
 See *17.2_local_procs.jai*:
 
@@ -156,7 +159,7 @@ There is one important limitation: an inner proc cannot access outer variables! 
 Also a procedure doesn't even see the inner procs defined inside other procs (see line (6)).
 > A local proc is only known in the procedure where it is defined, it lives inside the scope of that proc. If you call it from outside its scope (like in proc2) you get the error: Error: Undeclared identifier
 ### What is the purpose and advantage of local procs?
-Using local procs for things like helper procs promotes code hygiene: there are less global procs to worry about. Only make procs global when they are really used in several places.
+Using local procs for things like helper functions promotes code hygiene: there are less global procs to worry about. Only make procs global when they are really used in several places.
 
 ## 17.3 Difference between passing a copy and passing a pointer
 See *17.3_passing.jai*:
@@ -192,12 +195,12 @@ main :: () {
 }
 ```
 
-Passing a copy (by value) of the variable n in (1) only changes the local variable m, which is a copy of n. The initial variable n is not changed when its copy changes in the proc. 
-Passing a pointer to n in (2) allows the proc `passing_pointer` to change the value pointed to by dereferencing the pointer (m also points to the address of n, as does *n). In lines (3) and following, we see the same mechanism applied to a struct variable.
+Passing a copy (by value) of the variable n in (1) only changes the local variable m, which is a copy of n. The initial variable n is not changed when its copy changes in the proc.   
+Passing a pointer to n in (2) allows the proc `passing_pointer` to change the value pointed to by dereferencing the pointer (m also has the address of n, as does *n). In lines (3) and following, we see the same mechanism applied to a struct variable.
 
 > To change a variable inside a proc, you need to pass a pointer to that variable as parameter to the proc.
 
-**What happens if you don't pass by pointer explicitly?**
+**What happens if you don't pass by pointer explicitly?**  
 Arguments of size <= 8 bytes (basic types such as s64, u8, Type, any pointer, or any enum) are always passed by value (copy).  
 Bigger sized values which is any type > 8 bytes, including Any, string, struct, and so on, are most probably passed by reference (pointer), but anyhow they cannot be changed. To change their data, make a local copy and change that. 
 To ensure you get a pointer for some reason (to modify the contents of the struct) you can explicitly pass a pointer.
@@ -227,11 +230,12 @@ main :: () {
 }
 ```
 
-This is simply done by assigning a value to one or more of the arguments of a procedure. Now we can use type inference in the definition of the arguments; the hello proc can have this header:  
-`hello :: (a := 9, b := 9)` 
-In line (1) we see how the argument a in proc1 gets a default value of 0. In the hello proc both arguments a and b get a default value 9. The lines after marker (3) show the effect of calling hello() with zero, one or two arguments. So you see that with default values, the number of parameters can be smaller than the number of arguments. If you want to pass parameters after the first named argument, you have to give them the argument name, as in line (3).
+This is simply done by assigning a value to one or more of the arguments of a procedure in the argument list itself. Now we can use type inference in the definition of the arguments.   
 
 > When the procedure is called and no parameter is specified for an argument with a default value, then that value is taken as the parameters value.
+
+In line (1) we see how the argument a in proc1 gets a default value of 0. In the hello proc both arguments a and b get a default value 9:   `hello :: (a := 9, b := 9)`. The lines after marker (3) show the effect of calling hello() with zero, one or two arguments.   
+So you see that with default values, the number of parameters can be smaller than the number of arguments. 
 
 A default value must not be a literal value, it can be any symbol, like a variable or even another procedure call.
 
@@ -239,12 +243,14 @@ A default value must not be a literal value, it can be any symbol, like a variab
 We already saw an example of this in line (5) of *17.1_proc_definitions.jai*:  `a2 := square(x = c);`
 the argument, which is named x, gets the parameter value c in an explicit assignment.  
 Named arguments are useful to enhance readability when you have procs which take many arguments, often of the same type. The feature also exists in Python.  
-When arguments are given default values, it can be even more complicated. In such a case it is possible that the compiler can’t distinguish between them if you pass parameters in the wrong order. Named arguments allow you to specify the parameter values in any order.  
+
+When arguments are given default values, it can be even more complicated. In such a case it is possible that the compiler can’t distinguish between them if you pass parameters in the wrong order. Named arguments allow you to specify the parameter values in any order. If you want to pass parameters after the first argument with a default value, you have to pass them with the argument name, as in line (3).  
+
 Here is another example to illustrate its usefulness:  
  `make_character(name = "Fred", catch_phrase = "Hot damn!", color = BLUE);`  
 Partially naming arguments is allowed, then you have to be very cautious, but Jai carefully checks the parameters. After using named arguments you cannot switch to unnamed ones.
 
-**Exercise**
+**Exercise**  
 (See named_args.jai)
 Check the proc `hello`. Predict the outcome of the following calls: 
     hello("fred", "booya"); 
@@ -255,7 +261,7 @@ Check the proc `hello`. Predict the outcome of the following calls:
     hello("fred", 3.14); 
 Then test the program out to see if you were right.
 
-## 17.6 #must and multiple return values
+## 17.6 Multiple return values and #must  
 See *17.5_multiple_return.jai*:
 
 ```c++
@@ -307,35 +313,37 @@ main :: () {
 ```
 
 As we see in line (1), a procedure can also have two or more return values (like in Go). They are listed after the -> and separated by a `,` If it enhances readability, they may be enclosed between (), like -> (int, int)  
-(These are needed when a proc with multiple return values is used as an argument in another proc).
-`proc2` in line (1B) shows named return values. `proc3` in line (1C) shows return values with named default arguments (they have to be named). In the case of a simple return, all return values are automatically returned by default. Lines (2C-D) shows how this works when the proc is called.
-The returned values are assigned to an equal number of variables in the left-hand side (see line (3)); if necessary these variables could have been declared earlier.  
-It is not necessary to assign all return values, as in (2B) where we ignore the 2nd return value. Ignoring values could be a mistake, so Jai provides #must to enforce you to assign all return values (see § 17.6.1)   .
-It is better to return things by value; this avoid having extra stack copies like in C.
+(These are needed when a proc with multiple return values is used as an argument in another proc).  
 
-**The _ token**
-If you would like to discard one or more of the return values, use `_` instead of a variable, like this:
+The returned values are assigned to an equal number of variables in the left-hand side (see line (3)); if necessary these variables could have been declared earlier.  
+It is not necessary to assign all return values, as in (2B) where we ignore the 2nd return value. 
+It is better to return things by value; this avoids having extra stack copies like in C.
+
+**The _ token**  
+If you would like to discard one or more of the return values, use `_` instead of a variable as in Go, like this:
 `result, ok, _ := to_integer(text);`  
 Here we discard the 3rd return value, which is a `remainder` string in which we are not interested.
 
 Unlike languages such as Rust or Go, procs do not return tuple object values, but rather return the values in registers.  
-When a proc returning multiple values is called, you must explicitly assign all values to new variables, calling only proc_mult() only returns the first value.
 
 ## 17.6.1 Named and default return values
 You can name the return parameters:		
 `proc1 :: () -> n: int, m: int { … }` 
 You can also have default values for return parameters:
 `proc1 :: () -> (n: int = 1, m: int = 2) { … }`
-The n and m above are not declared variables, you need to declare them inside the proc and explicitly return them: `return n,m` .
+The n and m above are not declared variables, you need to declare them inside the proc and explicitly return them: `return n, m` .
 The default values are returned if the proc does not provide a value for them.
 
+`proc2` in line (1B) shows named return values. `proc3` in line (1C) shows return values with named default arguments (they have to be named). In the case of a simple return, all return values are automatically returned by default. Lines (2C-D) shows how this works when the proc is called.
+
 ### 17.6.2 The #must directive
+Ignoring return values could be a mistake, so Jai provides the **#must** directive to enforce you to assign all return values (see § 17.6.1) 
 When #must is written after the return values as in line (2),it is not allowed to ignore these: see line (4). The value(s) must be assigned, as in line (5). This prevents a common source of mistakes.
 
 > When a return value is annotated with #must, this indicates that it must be received in a variable at the call site, it cannot be ignored.
 
 ### 17.6.3 Example proc: file_open
-As example of a procedure with named arguments, default values and multiple return values, consider the `file_open` proc, which is defined in module _File_ (a different version exists in windows.jai and unix.jai for these OS's, for performance reasons).
+As an example of a procedure with named arguments, default values and multiple return values, consider the `file_open` proc, which is defined in module _File_ (a different version exists in windows.jai and unix.jai for these OS's, for performance reasons).
 
 `file_open :: (name: string, for_writing := false, keep_existing_content := false, log_errors := false) -> File, bool { ... }`
 
@@ -353,12 +361,14 @@ if !success {      // (1)
 
 By returning a bool which signals success of the file-opening action, we can test as in line (1) on success, and leave the current procedure when there was a problem.
 
-**Exercise**
+**Exercise**  
 (See return_values.jai)
 Predict the outcome when the proc `fun` is respectively called with argument x equal to 0, 1, 2, 3 and 4. Then compile/run the program and check your answers.
 
 
 ## 17.7 Overloading procedures
+Normally variables with the same name cannot exist, but procedures can if they have different arguments.
+## 17.7.1 What are overloading procedures?
 Procedures are said to _overload_ each other when they have the same name, but different argument list. The only things in which they differ are the types of their arguments. Here is an example with two procedures proc1:
 
 See *17.6_overloading.jai*:
@@ -388,12 +398,17 @@ main :: () {
 
     {
         proc2 :: (n: u16) { print("In proc2 - u16 line (5)\n"); }         // (5)
+        // proc2 :: (n: u8)  { print("In proc2 - u8 line (5B)\n"); }         // (5B)
         proc2 :: (n: u64) { print("In proc2 - u64 line (6)\n"); }         // (6)  
         m: u8 = 8;
         proc2(m);                 // (7) 
-        // => In proc2 - u8 line (3)
+        // with (5B) commented out => In proc2 - u8 line (3)
+        // with (5B) => In proc2 - u8 line (5B)
         proc2("Hello, JAI!");     // (8)
         // => In proc2 - string line (4)
+        n: u16 = 12500;
+        proc2(n);                 // (9) 
+        // => In proc2 - u16 line (5))
     }
 }
 ```
@@ -407,9 +422,10 @@ The following error is given when there are two procs with same name and argumen
 **Exercise**
 In *overloading.jai*, predict what the program will display. Then run it to check you were right.
 
-### 17.7.1 Overloading in global and local scope
+### 17.7.2 Overloading in global and local scope
 Suppose we have overloading procs in global and local scope(s). How will the overloading mechanism then work? Look at the four versions of proc2 in the preceding code.  
-The way the resolution mechanism works is: it looks through all overload versions regardless their scope, and will pick the overload where the argument(s) type fit best.
+The way the resolution mechanism works is:  
+It looks through all overload versions regardless their scope, and will pick the overload where the argument(s) type fit best. When there is a local proc overload that fits, this well get chosen.
 
 **Problem?**
 You've probably spotted the problem: nearly every procedure will have possibly (many) overloads, differing only in the proc header, the code often stays the same. This promotes code bloat, and a change in logic means changing a number of procs. Lots of programming languages have a solution for this, called generics, templates or parametrization. Jai's solution is called **polymorphic procedures**, which we'll discuss in § 22.
@@ -620,7 +636,7 @@ Why doesn't this work?      `v := Vec2D.{x, y};`
 ## 17.13 Structs and procs
 Just like with any other types, we can pass struct variables or pointers to them to a procedure.
 
-## 17.13.1 Using the namespace of a struct in procs
+## 17.13.1 Using the namespace of a struct in procedures
 See *17.11_using_structs_procs.jai*:
 
 ```c++
@@ -704,7 +720,7 @@ main :: () {
 In § 12.8 we discussed the usage of the #as directive to implicitly cast a subtype to a supertype. In the above example in line (1) this is declared for B as a subtype of A.  
 Line (2) shows how an instance of B can pass seamlessly for an instance of A. In line (3) we see that the same is true when using the namespace.  
 
-**Exercises**
+**Exercises**  
 (1) Use struct Person from § 17.3. Add fields name and location, which is a Vector2 used from module _Math_. Define a proc `move_person`, which can change a person's location. Test it out!
 (see structs_and_procs.jai)
 
@@ -713,7 +729,9 @@ In the solution in line (1) you see that a simple . notation is enough to access
 (2) Wrap the code from which decides whether a variable is of type Complex into a is_complex_number procedure (see is_complex_number.jai)
 
 ## 17.14 Reflection on procedures
-As we did in § 16 with structs and enums, we can also obtain reflection info on a procedure, mainly its argument types and return types:
+As we did in § 16 with structs and enums, we can also get reflection info on a procedure, mainly its argument types and return types:
+
+## 17.14.1 Getting the argument and return types
 
 See *17.14_reflection_procedure.jai*:
 
@@ -743,7 +761,7 @@ In line (1) we take the `type_of` the `add` procedure. From that type we get the
 The complete output shows the signature of the `add` procedure, obtained by reflection:
 `PROCEDURE ({INTEGER, 8} - , {INTEGER, 8} - ) -> {INTEGER, 8} - `
 
-## 17.14.1 The #procedure_name directive
+## 17.14.2 The #procedure_name directive
 This directive returns the statically-known at-compile-time name of a procedure, See *17.15_procedure_name.jai*:
 
 ```c++
