@@ -170,7 +170,7 @@ main :: () {
         print("arr2 is NOT empty\n"); // => arr2 is NOT empty
     }
 
-     // Heap-allocated static arrays:
+    // Heap-allocated static arrays:
     arr_heap := NewArray(4, float); // (9) will heap-allocate an array of 4 floats; from module _Basic_
     defer array_free(arr_heap);   // (10)
     print("%\n", arr_heap); // => [0, 0, 0, 0]
@@ -194,7 +194,7 @@ Array literals are in fact static (or fixed-size or fixed) arrays. Static arrays
 See some concrete examples in lines (1) and following. The items of an array are by default initialized to their zero-value (see line (3)). The example starting in line (4) shows that the items can be initialized one by one, but if the values are constant, we know that it can be done shorter with an array literal. The size (or count) can also be a constant, as indicated in line (5).  
 The indices of an array arr range from 0 to `arr.count - 1`. 
 
-**Exercise**
+**Exercises**
 1) What is the size of an array of type [100_000]void?
 (see void_array.jai)
 2) Given the following struct definition:  
@@ -210,7 +210,8 @@ Extract the note of field x in one line of code.
 Lines (4C) and following show the many different ways to for-loop over an array, either using it and/or it_index, or using own variables for the items and/or the index.
 So you can make a for loop over this range:  `for 0..arr.count-1 { ... }` and initialize the array using the `it` variable as in line (6). (Try out if `for arr` works here).  
 The size in bytes of the i-th item is given by `size_of(arr[i])`.
-Line (7) indicates that you can use Any as the array type if you want to make an array that contains items of different types (The syntax `arr2 = Any.["Hello", 42, Vector3.{1, 2, 3}];` doesn't work here, Error: Attempt to use a non-literal element inside an array literal! (At index 0.)).
+Line (7) indicates that you can use Any as the array type if you want to make an array that contains items of different types.   
+(the syntax `arr2 = Any.["Hello", 42, Vector3.{1, 2, 3}];` doesn't work here, Error: Attempt to use a non-literal element inside an array literal! (At index 0.)).
 
 ### 18.3.2 Compile-time and run-time bounds check
 If the size of the array and the index are known at compile time a compile-time bounds check will be performed: see line (6B) where it fails, the error is:
@@ -220,7 +221,7 @@ This also works for a constant (6C), but not for a variable like in (6D). Then t
 Panic.
 The program crashed. Printing the stack trace:
 handle_exception                  c:\jai\modules\Runtime_Support_Crash_Handler.jai:211
-... (skipping OS-internal procedures)
+... (skipping OS-internal procedures)  
 debug_break                       c:\jai\modules\Runtime_Support.jai:8
 my_panic                          c:\jai\modules\Runtime_Support.jai:136
 __array_bounds_check_fail         c:\jai\modules\Runtime_Support.jai:185
