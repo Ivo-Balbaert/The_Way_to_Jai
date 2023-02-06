@@ -541,7 +541,7 @@ The while loop around line (2) shows how to get the length of a C string by dere
 
 
 [19B - Get command-line arguments](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/19B_Get%20command-line%20arguments.md)  
-[19C - Get console input](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/19B_Get%20command-line%20arguments.md)   
+[19C - Get console input](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/19C_Get_console_input.md)   
 [19D - Comparing field names of structs](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/19D_Comparing%20field%20names%20of%20structs.md)  
 
 
