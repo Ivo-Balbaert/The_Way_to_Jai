@@ -7,7 +7,7 @@ main :: () {
     b : [..]string;            // (2) dynamic array of strings.
 
     // clean up memory
-    defer array_free(arrdyn);     // (3)
+    defer array_free(arrdyn);          // (3)
     defer array_free(another_array);   // (4)
     defer array_free(another_array2);
     defer array_free(b);  
@@ -30,7 +30,7 @@ main :: () {
     print("arrdyn is: %\n", arrdyn); // => arrdyn is: [13, 9]
 
     print("another_array is: %\n", another_array); // => another_array is: []
-    array_copy(*another_array, arrdyn); // (8) copy arrdyn into another_array
+    array_copy(*another_array, arrdyn); // (8) - copy arrdyn into another_array
     print("another_array is: %\n", another_array); // => another_array is: [13, 9]
     another_array2 = array_copy(arrdyn); // (8B)
     print("another_array2 is: %\n", another_array2); // => another_array2 is: [13, 9]

@@ -605,3 +605,8 @@ main :: () {
 ```
 
 Again the input is read into a []u8 buffer `temp` and then copied with `memcpy` to the `result` string.
+
+[19B - Get command-line arguments](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/19B_Get%20command-line%20arguments.md)  
+[19C - Comparing field names of structs](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/19C_Comparing%20field%20names%20of%20structs.md)  
+
+

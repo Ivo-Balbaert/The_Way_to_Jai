@@ -61,8 +61,8 @@ main :: () {
     // print("% \n", static_array[N2]); // (6C)
     // => Error: Subscript is out of array bounds. 
     n := 100;
-    // print("% \n", static_array[n]); // (6D)
-    // run-time => Array bounds check failed. ...
+    print("% \n", static_array[n]); // (6D)
+    // run-time crash => Array bounds check failed. ...
 
     M :: 4;
     arr2 : [M]Any;      // (7)
@@ -79,7 +79,7 @@ main :: () {
         print("arr2 is NOT empty\n"); // => arr2 is NOT empty
     }
 
-    // Heap-allocated arrays:
+    // Heap-allocated static arrays:
     arr_heap := NewArray(4, float); // (9) will heap-allocate an array of 4 floats; from Basic
     print("%\n", arr_heap); // => [0, 0, 0, 0]
     // ...

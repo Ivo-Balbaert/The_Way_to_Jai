@@ -1,9 +1,9 @@
 # Chapter 18 - Arrays
 
-Whenever you need a series of items of the same type that are packed together in memory for maximum performance, use an **array**.
-Arrays are the work horses of Jai. Another definition of an array could be: an indexed list of values.  
-Because in almost all cases all items of an array are of the same type, an array is called a _homogeneous_ type. But if you really would want to, you can make an array with item type Any (see § 9.4 and § 16.1).
-Arrays are a datatype built into the compiler, to improve performance and avoid some of the errors common in C (C’s biggest mistake is conflating pointers with arrays JB).   
+Arrays are the work horses of Jai. Whenever you need a series of items of the same type that are packed together in memory for maximum performance, use an **array**.  
+Another definition of an array could be: an indexed list of values.  
+Because in almost all cases all items of an array are of the same type, an array is called a _homogeneous_ type. But if you really want to, you can make an array with item type Any (see § 9.4 and § 16.1). Such an array could contain very different kinds of data, but is probably not very useful.    
+Arrays are a datatype built into the compiler, to improve performance and avoid some of the errors common in C ("C’s biggest mistake is conflating pointers with arrays", Jon Blow).   
 Jai supports both static (fixed) and dynamic arrays, and array views.
 Module _Preload_ defines an array type as:
  
@@ -31,7 +31,7 @@ Good_Fruit :: enum {
 }
 
 main :: () {
-    numbers := int.[1, 3, 5, 7, 9]; // (1) array literal
+    numbers := int.[1, 3, 5, 7, 9];  // (1) array literal
     // numbers2 := .[1, 3, 5, 7, 9]; // (1B) => Error: This declaration is bound to a struct or array literal that did not specify its type, so there is no way to know its type.
     print("count is %, and data is %.\n", numbers.count, numbers.data); // (2)
     // => count is 5, and data is f8_01ba_f828.
@@ -70,11 +70,12 @@ main :: () {
 }
 ```
 
-In line (1) we define an int array literal, in general the syntax is: type.[item1, ..., itemn]
+In line (1) we define an int array literal, in general the syntax is: `type.[item1, ..., itemn]`  
 Line (1B) shows that indicating the type as prefix is necessary.
 Every array has a `count` and `data` field (see § 18.4.2 and 18.5): the count gives the number of items in the array, and data is a pointer to the 1st item.  
-As we see from line (3), it's type is `[5] s64`, [] is the typical array notation, 5 is the count (or size), and s64 is the items type, which is equivalent to int. This type shows that the array literal is in fact a **static array**. Line (4) shows that [4]int and [5]int have the same type Type. Empty array literals will have their count pointer not set to 0; their data pointer is guaranteed to be null.
-In line (6) we see a typed declaration of a static array, which is then initialized to an array literal. The definition can include the complete type, but this can also be inferred. In line (7) we see that an array can simply be printed out as a whole.
+As we see from line (3), it's type is `[5] s64`, [] is the typical array notation, 5 is the count (or size), and s64 is the items type, which is equivalent to int.  
+This type shows that the array literal is in fact a **static array**. Line (4) shows that [4]int and [5]int have the same type Type. Empty array literals will have their count pointer not set to 0; their data pointer is guaranteed to be null.  
+In line (6) we see a typed declaration of a static array, which is then initialized to an array literal. The definition can include the complete type, but this can also be inferred. In line (7) we see that an array can simply be printed out as a whole.  
 Lines (8) and (9) tell us that we can read out the i-th item as `arr[i]`, and change its value with `arr[i] = new_val`.
 In line (10) an array literal is created with the values of an enum.
 
@@ -155,7 +156,7 @@ main :: () {
     // => Error: Subscript is out of array bounds. 
     n := 100;
     // print("% \n", static_array[n]); // (6D)
-    // run-time => Array bounds check failed. ...
+    // at run-time => Array bounds check failed. ...
 
     M :: 4;
     arr2 : [M]Any;      // (7)
@@ -169,7 +170,7 @@ main :: () {
         print("arr2 is NOT empty\n"); // => arr2 is NOT empty
     }
 
-     // Heap-allocated arrays:
+     // Heap-allocated static arrays:
     arr_heap := NewArray(4, float); // (9) will heap-allocate an array of 4 floats; from module _Basic_
     defer array_free(arr_heap);   // (10)
     print("%\n", arr_heap); // => [0, 0, 0, 0]
@@ -189,8 +190,7 @@ main :: () {
 }
 ```
 
-Array literals are in fact static (or fixed-size or fixed) arrays. Static arrays are arrays where the size is known at compile time.  
-They are declared like this:  `arr_name: [count]type`    
+Array literals are in fact static (or fixed-size or fixed) arrays. Static arrays are arrays where the size is known at compile time. They are declared like this:  `arr_name: [count]type`    
 See some concrete examples in lines (1) and following. The items of an array are by default initialized to their zero-value (see line (3)). The example starting in line (4) shows that the items can be initialized one by one, but if the values are constant, we know that it can be done shorter with an array literal. The size (or count) can also be a constant, as indicated in line (5).  
 The indices of an array arr range from 0 to `arr.count - 1`. 
 
@@ -204,19 +204,19 @@ Thing :: struct {
 }
 ```
 Extract the note of field x in one line of code.  
-(see extract_node.jai)
+(see § 15.5 - solution is extract_node.jai)
 
 ### 18.3.1 Setting up an array with a for loop
 Lines (4C) and following show the many different ways to for-loop over an array, either using it and/or it_index, or using own variables for the items and/or the index.
 So you can make a for loop over this range:  `for 0..arr.count-1 { ... }` and initialize the array using the `it` variable as in line (6). (Try out if `for arr` works here).  
 The size in bytes of the i-th item is given by `size_of(arr[i])`.
-Line (7) indicates that you can use Any as the array type if you want to make an array that contains items of different types (The syntax `arr2 = Any.["Hello", 42, Vector3.{1, 2, 3}];` doesn't work here).
+Line (7) indicates that you can use Any as the array type if you want to make an array that contains items of different types (The syntax `arr2 = Any.["Hello", 42, Vector3.{1, 2, 3}];` doesn't work here, Error: Attempt to use a non-literal element inside an array literal! (At index 0.)).
 
 ### 18.3.2 Compile-time and run-time bounds check
-If the size of the array and the index are known at compile time a compile-time bounds check will be performed: see line (6B), the error is:
-** Error: Subscript is out of array bounds. (The attempted index is 100, but the highest valid index is 99.) **
+If the size of the array and the index are known at compile time a compile-time bounds check will be performed: see line (6B) where it fails, the error is:
+**Error: Subscript is out of array bounds. (The attempted index is 100, but the highest valid index is 99.)**  
 This also works for a constant (6C), but not for a variable like in (6D). Then the code compiles, but we get a run-time panic:
-_Array bounds check failed. (The attempted index is 100, but the highest valid index is 99). Site is d:/Jai/The_Way_to_Jai/examples/18/18.2_static_arrays.jai:46.        
+`Array bounds check failed. (The attempted index is 100, but the highest valid index is 99). Site is d:/Jai/The_Way_to_Jai/examples/18/18.2_static_arrays.jai:46.        
 Panic.
 The program crashed. Printing the stack trace:
 handle_exception                  c:\jai\modules\Runtime_Support_Crash_Handler.jai:211
@@ -224,19 +224,20 @@ handle_exception                  c:\jai\modules\Runtime_Support_Crash_Handler.j
 debug_break                       c:\jai\modules\Runtime_Support.jai:8
 my_panic                          c:\jai\modules\Runtime_Support.jai:136
 __array_bounds_check_fail         c:\jai\modules\Runtime_Support.jai:185
-main                              d:\Jai\The_Way_to_Jai\examples\18\18.2_static_arrays.jai:46_
+main                              d:\Jai\The_Way_to_Jai\examples\18\18.2_static_arrays.jai:46_`
 
 **#no_abc**
 An array bounds check makes your code more robust, but costs in performance.
 Use the #no_abc directive to disable the array bounds check in a proc in a production build:
 `proc1 :: () #no_abc { }`   
+Alternatively you can use the `array_bounds_check` build option (see § 30.4). 
 
 ### 18.3.3 Using an array as a boolean
 Line (8) shows that we can use an array as a bool (condition): an array that is not empty is true.
 
 ### 18.3.4 Allocating an array on the heap
 We can force the compiler to allocate an array on the heap with the **NewArray** procedure from module _Basic_: `arr_heap := NewArray(4, float);` (see line (9))
-This proc also has some default vales for arguments like initialized, allocator, and memory alignment; for example: `. The types of these arrays are `[] int`.
+This proc also has some default vales for arguments like initialized, allocator, and memory alignment.  
 In line (10B) we see how we can cache-align an array with the 3rd argument `alignment=64`, which makes the array 64-bit cache aligned and is especially useful for larger arrays. This is proven for the aligned array `object_array` by the assertions in line (10D) and following.
 
 Releasing the memory when the array is no longer in use must be done by the developer with defer `array_free` (see line (10)).  
@@ -244,7 +245,7 @@ A more familiar and consistent syntax using `New` and `free` is shown in line (1
 `arr_heap2 := New([3] int);`
 For releasing the memory, simply use `defer free(arr_heap2);`.
 The difference with NewArray is that New returns a pointer. To print the array, you must now dereference the pointer, as in line (14).  
-Also use << to change any item in the array, as iin line (13): `(<<arr_heap2)[it] = ...`
+Also use << to change any item in the array, as in line (13): `(<<arr_heap2)[it] = ...`
 
 _Performance_:
 Arrays are built into the compiler so that they are very fast. The array items can be very efficiently (contiguously) stored, packed together on the stack for small arrays.
@@ -306,14 +307,14 @@ main :: () {
 
 In the code above lines (1)-(2) declare two dynamic arrays, with the typical syntax:  
 `[..]type`  
-To release memory, you can either use the `array_free` proc (line (3)), or the `free` proc which needs a pointer to the memory (line (4)).
+To release memory, use the `array_free` proc (line (3)).
 To add one or several item(s) (see § 18B) at a time, use the `array_add` proc with a pointer to the array, and the item(s) as arguments (see lines (5) and following). If you want your array to only contain unique items, use `array_add_if_unique` instead. 
 You can get the last item of an array with `peek` without changing the array (5B), `pop` in (5C) is the same but effectively removes the last item.
 
 ### 18.4.1 Useful procs for dynamic arrays
+To check if an item is present in the array use `array_find` (see line (6)), which returns true if the item is found, false otherwise.  
 
-We check if an item is present in the array in line (6), use `array_find`, which returns true if the item is found, false otherwise.
-Removal of items within a dynamic array is done with the `remove` proc, as in line (7): we want to remove the item with value 5, so we loop over the array, if-test with it == value, and if true, remove it. This proc is used to safely remove elements while iterating through an array (it works only inside a for loop), which is often a problem in other languages. 
+Removal of items within a dynamic array is done with the `remove` proc, as in line (7): we want to remove the item with value 5, so we loop over the array, if-test with it == value, and if true, remove it. This proc is used to safely remove elements while iterating through an array (it works only inside a for loop), which is often a problem in other languages.   
 Notes:
 - This proc does not work for fixed-size arrays!  
 - This proc does an unordered remove, the removed item is replaced with the last item (in fact: a swap with the last item, and then a remove of the last element). The remove happens in constant time O(1).
@@ -330,7 +331,7 @@ This is found in module _Preload_; again it is a struct, which takes up 40 bytes
 
 ```c++
 Resizable_Array :: struct {
-    count      : s64;  // Signed so that for 0..count-1 it works...
+    count      : s64;        // Signed so that for 0..count-1 it works
     data       : *void;
     allocated  : s64;        // (1)
     allocator  : Allocator;  // (2)
@@ -373,7 +374,7 @@ main :: () {
 }
 ```
 
-An **array view** is like the name says, a view on an underlying array in memory; so it uses that memory, it allocates no memory of its own. In lines (1)-(3) above, we define array views arrv, arrv2 and v (a view on a dynamic array). They are all of type **[]int**  
+An **array view** is like the name says, a view on an underlying array in memory; so it uses that memory. It allocates no memory of its own, so no need to free it. In lines (1)-(3) above, we define array views arrv, arrv2 and v (a view on a dynamic array). They are all of type **[]int**  
 _Preload_ defines an array view as:  
 ```c++
 Array_View_64 :: struct {
@@ -388,13 +389,13 @@ Package :: struct {
     floats: [10] float;
 }
 ```
-(see how_to 300_relative pointers).
 
 Array views are also bounds-checked, but at run-time: see line (5). The program crashes and a stack trace is printed.
 
 ### 18.5.1 Changing the view and the base array
 In line (1B) we show that you can change the underlying array by manipulating the view with the normal index notation.
-`data` is a pointer to the base data in memory. So by adding an offset to this pointer, and changing the count of the view, the view changes as we want (see line (4)). We can take a slice of the base array. But this can also be dangerous: if count exceeds the bounds of the array, you can read and possibly rewrite adjacent memory parts, which are perhaps not initialized or do not belong to your program! 
+`data` is a pointer to the base data in memory. So by adding an offset to this pointer, and changing the count of the view, the view changes as we want (see line (4)). We can take a slice of the base array.  
+But this can also be dangerous: if count exceeds the bounds of the array, you can read and possibly rewrite adjacent memory parts, which are perhaps not initialized and may or may not belong to your program! 
 This is the first example of pointer arithmetic we encounter in Jai. Needless to say you must be very careful to stay within the memory limits of the base array.
 >  Incrementing a pointer by 1 adds 8 to the pointer, since a 64-bit integer consists of 8 bytes. The increment for a pointer depends on the size of the data the pointer points to. 
 
@@ -424,7 +425,7 @@ The reason for this is that any time you call `array_add` on a, it might move it
 > So only take an array view on a dynamic array when this will no longer be resized. In general, making a pointer to an item of a dynamic array is not a good idea, because the array can move in memory when its size grows, and then the pointer becomes invalid!
 
 ## 18.6. For-loops over arrays: more examples
-(See 18.1_static_arrays.jai* line (4B) and following for examples with static arrays.)
+(See also *18.1_static_arrays.jai* line (4B) and following for examples with static arrays.)  
 See *18.5_array_for.jai*:
 
 ```c++
@@ -491,18 +492,18 @@ You can replace the in-built iteration variable `it` with your own as in line (2
 but then `it` is no longer available.
 
 ### 18.6.1 Named index and value
-You can also replace both `it` and `it_index` with your own variables as in line (3):
+You can also replace both `it` and `it_index` with your own variables as in line (3):  
 `for value, index: array_view`      // in that order!
 
 ### 18.6.2 Changing an array by iterating with a pointer
 The it variable is read-only, it cannot be used to change the items of an array (try it out!). Look at the code starting in line (4):  
-- `for * elem: arr {}` we now loop over the array with an iteration variable that is a pointer
+- `for *elem: arr {}` we now loop over the array with an iteration variable that is a pointer
 - `<< elem = val * val` inside the loop, we dereference that pointer and assign a new value to it.
 This can even be done more succinct as shown in line (4B). 
 
-So iteration can be done by pointer or by value, by value you cannot change that over which you iterate, but by pointer you can. Iteration is built-in at a very low level: the compiler understands arrays in depth, and so does the debugger.
+So iteration can be done by pointer or by value; by value you cannot change that over which you iterate, but by pointer you can. Iteration is built-in at a very low level: the compiler understands arrays in depth, and so does the debugger.
 
-**Exercises**
+**Exercises**  
 (1) Double the values of an array in a for loop. Then do the same in a while loop and see what is easiest (see array_double.jai).  
 (2) Use module _Random_ to populate a static array of 16 items with random integer numbers (see random_array.jai). 
 
@@ -512,7 +513,7 @@ In line (5) we see that simply writing a `for <` reverses the iteration order.
 
 ## 18.7. Multidimensional arrays
 All the arrays we've encountered until now were 1-dimensional, with an index going from 0 to array.count-1
-But for example when writing a game in 2D or 3D, we easily need objects with that number of dimensions. So how do we define these in Jai?
+But for example when writing a game in 2D or 3D, we need arrays with that number of dimensions. So how do we define these in Jai?
 
 See *18.6_multidim.jai*:
 
@@ -598,11 +599,12 @@ main :: () {
 A function can take an array (or many) as argument. 
 The argument array is typed like an array view: `arr: []int` 
 A pointer to the array as well as its size are passed to the function.  
-See as first example the proc _print_int_array_ . In line (1) it is called with a static array as parameter, and in line (2) with a dynamic array. _Static and dynamic arrays are automatically converted to an array view when passed to a proc with such an argument_.  
+See as first example the proc _print_int_array_ . In line (1) it is called with a static array as parameter, and in line (2) with a dynamic array.  
+ _Static and dynamic arrays are automatically converted to an array view when passed to a proc with such an argument_.  
 This is extremely useful: array views let us do stuff like calling the same proc for different-sized arrays, like in the previous example.  
 Another example is the _add_numbers_ proc (called in line (3) and following), which takes an array view as an argument and returns the sum of its items.
 
-### 18.8.1 C's biggest mistake
+**C's biggest mistake**
 C's biggest mistake is: treating arrays as pointers. When passing an array to a function in C, only the pointer is passed, so that the size information is lost. This results in many bugs, see Walter Bright's article: ["C’s biggest mistake" (dec 2009)](www.drdobbs.com/architecture-and-design/cs-biggest-mistake/228701625).  
 In Jai, arrays do not automatically cast to pointers as in C. Rather, they are like fat or wide pointers that contain a pointer to the start of the array, and the size of the array. Internally, they are a struct (pointer + size). 
 This prevents the many possible bugs resulting from the way C handles this. In Jai the procedure can test that it doesn’t change the array out of bounds, because it knows its size through arr.count. 
@@ -644,7 +646,8 @@ main :: () {
 ```
 
 Game entities (objects) are most often defined as structs. Each type of entity can have many instances at any time. Because we probably will have thousands of objects, we need to allocate them on the heap with New.  
-A handy way to work with them is to make an array, where each item is a pointer to an entity instance. In our example, arr_dragons is an array of size NR_DRAGONS of pointers to Dragons, the array contains the addresses of the Dragon instances.
+A handy way to work with them is to make an array, where each item is a pointer to an entity instance.  
+In our example, arr_dragons is an array of size NR_DRAGONS of pointers to Dragons, the array contains the addresses of the Dragon instances.
 
 ## 18.10 Variable number of arguments .. for a procedure
 Such a proc is sometimes called `variadic`.
@@ -698,7 +701,7 @@ In line (6B) we pass the array arr defined in line (6A) to proc var_args like th
 This is in fact the same as calling `var_args(1,2,3,4,5,6,7);`. We say that the array items are _spread_ over args.
 
 ### 18.10.2 Named variable arguments proc
-A named variable and (some) default arguments proc would be defined like:
+A named variable and (some) default arguments proc would be defined like:  
 `varargs_proc :: (s:= "Fred", f:= 2.5, v: ..string) { }`
 
 called as for example in line (7A):
@@ -708,9 +711,10 @@ After the varargs name v is used, all parameters are going into the variable arg
 You can spread parameters with a name as well as in line (7B): 
 `varargs_proc(f = 5, 3.14 = "How", v = ..array);`
 
-## 18.11 The print procedure uses variable number of arguments
-See *18.11_print_proc.jai*:
+## 18.11 The print procedure
+The `print` proc is variadic:  
 
+See *18.11_print_proc.jai*:
 ```c++
 #import "Basic";
 
@@ -723,7 +727,7 @@ main :: () {
 ```
 
 In the above example as well as in § 5.7, we see that `print` can accept a variable number of arguments.
-This is because `print` is defined in module _Basic_ file *Print.jai* as:  
+This is because `print` is defined in module _Basic_, file *Print.jai* as:  
 `print :: (format_string: string, args: .. Any, to_standard_error := false) -> bytes_printed: s64 {...}` 
 
 We see it has a variable number argument `args`, which makes this possible.
@@ -769,3 +773,6 @@ main :: () {
 In line (1) we declare an array of 10 Vec2 structs, a commonly used data-structure, sometimes abbreviated as _AOS_. In line (2) you can see that the it variable in a for-loop can access the struct's fields. Line (3) shows how to overrule the fields default values, making them uninitialized.
 
 In line (4), another version of `array_add` is used, which allows to add something to a dynamic array and returns a pointer to that item, which must be assigned to a variable. This is most often used for structs, the data of the struct can then be filled in afterwards.
+
+[18B - Ordered remove in Arrays](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/18B_Ordered%20remove%20in%20arrays.md)  
+[18C - Copy a struct with memcpy](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/18C_Copying%20a%20struct%20with%20memcpy.md)    
