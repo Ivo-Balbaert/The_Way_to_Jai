@@ -221,7 +221,7 @@ This also works for a constant (6C), but not for a variable like in (6D). Then t
 Panic.
 The program crashed. Printing the stack trace:
 handle_exception                  c:\jai\modules\Runtime_Support_Crash_Handler.jai:211
-... (skipping OS-internal procedures)  
+ ... (skipping OS-internal procedures)
 debug_break                       c:\jai\modules\Runtime_Support.jai:8
 my_panic                          c:\jai\modules\Runtime_Support.jai:136
 __array_bounds_check_fail         c:\jai\modules\Runtime_Support.jai:185

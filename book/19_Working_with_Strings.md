@@ -222,14 +222,14 @@ Using backslashes gets unreadable very quickly.
 ### 19.4.1 String literals are immutable and bounds-checked
 String literals like str, a or ch can (because they are array views) also be accessed via index, like in line (5): `str[5]` (46 is the ASCII value for '.')
 But string literals are **immutable** (they are stored in read-only memory): you can access a string byte via indexing [], but not change it. For example line (6) crashes the program, see output within code snippet.
-(Also try out str[5] = "!" or str[5] = '!' and explain the compiler error messages)  
+(Also try out str[5] = "!" or str[5] = '!' and explain the compiler error messages)    
 **Ways to change the data from string literals**
 To be able to modify the string, you must copy its data into allocated memory on the stack or the heap.
 You can use sprint to make that change as in line (12B): make an `sprint` string out of the original string. Because this resides in memory, you can change it like in the for-loop shown here.  
 (12C) shows how to copy the string to a stack memory array, making a new string out of it with to_string.  
 (12D) shows how to use copy_string to make a copy on the heap, which you can then change.   
 
-String literals are also **bounds-checked** at run-time, see line (7) and the output in the code snippet. We get a clear indication of the cause with **array_bounds_check_fail**
+String literals are also **bounds-checked** at run-time, see line (7) and the output in the code snippet. We get a clear indication of the cause with *array_bounds_check_fail*
 
 ### 19.4.2 Strings as boolean values
 All non-empty strings are implicitly converted to true when used in a condition (see line (8)); the empty string converts to false.
@@ -286,7 +286,7 @@ main :: ()  {
 }
 ```
 
-Just like relative pointers (see § 10.6), we can define strings in an array field of a struct relative to each other, see line (1). The options are: string~s8, string~s16, string~s32, string~s64. Lines (2) and following show how to make a Unicode character string (containing 3 characters) from a []u8 (example taken from Jai-Community Wiki - Snippets).
+Just like relative pointers (see § 10.6), we can define strings in an array field of a struct relative to each other, see line (1). The options are: string ~s8, string ~s16, string ~s32, string ~s64. Lines (2) and following show how to make a Unicode character string (containing 3 characters) from a []u8 (example taken from Jai-Community Wiki - Snippets).
 (For other examples, see how_to 300_relative pointers.)
 
 ## 19.5 String builder
@@ -540,7 +540,7 @@ The memory of C strings has to be freed, as shown in line (1) with `free`.
 The while loop around line (2) shows how to get the length of a C string by dereferencing and incrementing the pointer. When c_string points to the ending 0 value, its value is evaluated as false and the while loop terminates.
 
 ## 19.8 Getting console input
-(The code in this section comes from the Jai Community Wiki.)
+(The code in this section comes from the Jai Community Wiki.)  
 Getting string input from a user at a console (terminal) window is quite straightforward on a Linux platform:  
 
 See *19.7_linux_input.jai*:
@@ -606,7 +606,8 @@ main :: () {
 
 Again the input is read into a []u8 buffer `temp` and then copied with `memcpy` to the `result` string.
 
-[19B - Get command-line arguments](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/19B_Get%20command-line%20arguments.md)  
-[19C - Comparing field names of structs](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/19C_Comparing%20field%20names%20of%20structs.md)  
+[19B - Get command-line arguments](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/19B_Get%20command-line%20arguments.md)
+[19C - Get console input](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/19B_Get%20command-line%20arguments.md)   
+[19D - Comparing field names of structs](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/19C_Comparing%20field%20names%20of%20structs.md)  
 
 
