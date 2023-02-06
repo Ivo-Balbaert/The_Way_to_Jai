@@ -408,8 +408,11 @@ Person :: struct @Version9 {                  // (1)
 
 main :: ()  {
     pinfo := type_info(Person);
-    print("The struct has name: %\n", pinfo.name); 
+    print("The struct has name: %\n", pinfo.name);
     // => The struct has name: Person
+    print("Person notes: %\n", type_info(Person).notes); // (2B)
+    // => Person notes: ["Version9"]
+
     for pinfo.members {       // (3)
         print("% - ", it.name);  
         print("% - ", << it.type);
@@ -434,7 +437,7 @@ flags = 0; notes = []; offset_into_constant_storage = 0; } and has offset 16
 
 */    
 ```
-We can use `type_info()` on a struct definition and then loop over its members (as in line (3)) to get their names, their type, and if present, flags and attached notes.
+We can use `type_info()` on a struct definition and then get the struct notes (see (2B). Furthermore you can loop over its members (as in line (3)) to get their names, their type, and if present, flags and attached notes.
 Also the `get_field` method (line (5)) gives you detailed information.
 
 ## 15.6 Serialization

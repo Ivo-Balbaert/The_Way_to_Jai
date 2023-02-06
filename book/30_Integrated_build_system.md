@@ -241,6 +241,7 @@ build :: () {
     target_options.enable_bytecode_inliner = true; 
     
     target_options.runtime_storageless_type_info = true;
+    target_options.dead_code_elimination = .NONE;
 
     format := *context.print_style.default_format_struct;  // (1)
     format.use_newlines_if_long_form = true;
@@ -302,6 +303,7 @@ This is the path where the executable (and the other compiler artifacts, such as
 
 ### 30.4.3C The import path
 If you need to import modules from another folder than the standard jai\modules, use options.import_path as shown here.
+
 ### 30.4.4 The backend options
 Current options are .LLVM and .X64; X64 is the fastest backend.
 
@@ -315,6 +317,13 @@ Array bounds operations, castings and null pointer checks can be turned ON or FA
 ### 30.4.7 runtime_storageless_type_info
 With this option, you can specify whether type_table info is available at runtime (see § 26.1). By default its value is _false_, but if you set its value to _true_, the type table info is not available at runtime, which reduces the executable's size. You’re than basically saying "I don’t want all that data", but you still can use Type_Info and the `type_info` function
 This could be useful when writing for an embedded system.
+
+### 30.4.7B Dead code elimination
+Normally code that isn't called at run-time (so called dead-code) is NOT compiled: the dead code is eliminated.  
+For example a proc that gives a compile error when called won't give any error if not called.  
+You can stop this dead-code elimination with this line in your build file:     
+`target_options.dead_code_elimination = .NONE;`
+ALternatively, there is the `-no_dce` compiler command-line option (see § 2B).
 
 ### 30.4.8 Optimizing LLVM or X64 build
 Llvm_options or X64_Options exist for this purpose, but to work with these you have to have a deeper knowledge of the backends.

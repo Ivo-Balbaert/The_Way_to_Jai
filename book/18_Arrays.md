@@ -114,6 +114,8 @@ main :: () {
     arrf[1] = 20.0;
     arrf[2] = 1.4;
     arrf[3] = 10.0;
+    print("The item type of arrf is: %\n", type_of(arrf[0]));
+    // => The item type of arrf is: float32
     arrf2 := float.[10, 20, 1.4, 10]; // (4B)
     print("arrf\n");
     for arrf    print("% - ", it);  // (4C) => 10 - 20 - 1.4 - 10 -
