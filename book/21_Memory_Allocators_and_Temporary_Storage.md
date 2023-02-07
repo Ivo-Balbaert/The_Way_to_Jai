@@ -3,10 +3,10 @@
 ## 21.1 General remarks
 ### 21.1.1 Overview of allocation and freeing methods
 Previously (see § 11) we saw how to use alloc / New and free for using heap memory:  
-- alloc(n) is used to allocate n bytes of (by default) heap memory (like malloc in C) free to release it 
+- alloc(n) is used to allocate n bytes of (by default) heap memory (like malloc in C), free to release it 
 - if you know the data type you want to allocate memory for, use `New`, for example: New(int) (see § 11.2)
 - New and free is also used for structs (see § 12.5) (same as new in C++)
-- NewArray or New and free for static arrays (see § 18.3)
+- NewArray or New and array_free, free for static arrays (see § 18.3)
 - array_reserve and array_free or free for dynamic arrays (see § 18.4)
 - sprint and free for dynamically building strings (see § 19.1)
 - free_buffers to release the memory of a String Builder (see § 19.5)
@@ -15,10 +15,10 @@ Previously (see § 11) we saw how to use alloc / New and free for using heap mem
 For these methods, the heap is just a giant storage facility.
 The compiler does not check whether memory is freed, so this is your responsibility as a developer.
 Doing a free for every object allocated on the heap can be cumbersome and forgotten.
-Luckily Jai also has in-built special storage mechanisms for data structures, called **Allocators**, that can help tremendously in this respect. And there is also a built-in **memory-leak detector!** (see § 21.5).
+Luckily Jai also has in-built special storage mechanisms for data structures, called **Allocators**, that can help tremendously in this respect. And there is also a built-in **memory-leak detector**!(see § 21.5).
 
-### 21.1.2 User defer when possible
-Whenever you allocate on the heap (alloc, New, NewArray, [..]Type, and so on), use `defer free(object)` immediately after creating it. But this works only when you use that object right now in your current procedure and then don't need it anymore, because defer calls the free at the end of the current proc.
+### 21.1.2 Use defer when possible
+Whenever you allocate on the heap (alloc, New, NewArray, [..]Type, and so on), use `defer free(object)` immediately after creating it. But this works only when you use that object right there in your current procedure and then don't need it anymore, because defer calls the free at the end of the current proc.
 
 ## 21.2 Allocators
 In § 18.4 we discovered that the definition of a Resizable_Array contains a field `allocator : Allocator`.
@@ -38,7 +38,8 @@ where `my_allocator_proc` is a function that allocates memory.
 
 Here is the signature of `Allocator_Proc` from module _Preload_:
 ```c++
-Allocator_Proc :: #type (mode: Allocator_Mode, size: s64, old_size: s64, old_memory: *void, allocator_data: *void) -> *void;
+Allocator_Proc :: #type (mode: Allocator_Mode, size: s64, old_size: s64, old_memory: *void,  
+allocator_data: *void) -> *void;
 ```
 
 For example module _Basic_ defines a proc `alloc_string`, which can take a specific allocator to store the string:  
@@ -81,16 +82,19 @@ Temporary_Storage :: struct {
 }
 ```
 
-It's a linear allocator, the fastest kind, it is much faster than malloc. It helps your program run faster while also providing many of the benefits of garbage collected languages. Normally Temporary_Storage will allocate heap memory, but see § 21.4.4 
-There is a pointer `data` to the start of free memory. If enough free memory is available to service your request, this pointer is advanced and returns the result. If there's not enough free memory, we ask the OS for more RAM. Because Temporary_Storage is expected to be for small-to-medium-sized allocations, we don't expect this to happen very often (and if we want, we can pre-allocate all the memory and lock it down so that the OS is never consulted.)  
+It's a linear allocator, the fastest kind, it is much faster than malloc. It helps your program run faster while also providing many of the benefits of garbage collected languages. Normally Temporary_Storage will allocate heap memory, but see § 21.4.4   
+There is a pointer `data` to the start of free memory. If enough free memory is available to service your request, this pointer is advanced and returns the result. If there's not enough free memory, we ask the OS for more RAM.  
+Because Temporary_Storage is expected to be for small-to-medium-sized allocations, we don't expect this to happen very often (and if we want, we can pre-allocate all the memory and lock it down so that the OS is never consulted.)  
 
-When does the memory get freed? 	_Fire and forget!_
-It happens when your program  calls `Basic.reset_temporary_storage()`. When does this happen? Whenever you want, but many programs have a natural time at which it is best to call this. For example, interactive programs like games or phone applications tend to run in a loop, drawing one frame for each iteration of the loop. You can call `reset_temporary_storage()` at the end (or beginning) of each frame. This makes a clear boundary that you know temporarily-allocated memory cannot cross: at the end of the loop, it's all gone. You can't free individual items in Temporary Storage. Also, don't keep pointers to things in Temporary Storage.
+When does the memory get freed?  
+_Fire and forget!_
+It happens when your program  calls `Basic.reset_temporary_storage()`.   When does this happen?  
+Whenever you want, but many programs have a natural time at which it is best to call this. For example, interactive programs like games or phone applications tend to run in a loop, drawing one frame for each iteration of the loop. You can call `reset_temporary_storage()` at the end (or beginning) of each frame. This makes a clear boundary that you know temporarily-allocated memory cannot cross: at the end of the loop, it's all gone. You can't free individual items in Temporary Storage. Also, don't keep pointers to things in Temporary Storage.
 
 > What happens when Temporary Storage is completely occupied?
 > In a debug build, if the `high_water_mark` exceeds the temporary storage memory capacity, temporary storage will default back to the normal heap allocator to allocate more memory. In a release build, your program might crash, or have memory corruption problems. Use the memory-leak detector discussed in § 21.4 to investigate such cases.
 
-> When is Temporary_Storage appropriate? when your memory allocations have a (relatively) short life-time.  
+> When is Temporary_Storage appropriate? When your memory allocations have a (relatively) short life-time.  
 > When is Temporary_Storage NOT appropriate? If your data need to live beyond the current frame, or be seen by a separate thread that doesn't re-join before you reset the memory.
 
 A typical game loop goes like this:
@@ -129,9 +133,7 @@ main :: () {
 
     arrdyn := make_array(5);
     print("%\n", arrdyn); // => [1, 2, 3, 4, 5]
-    
-
-    
+        
     s := talloc_string(256); // (6)
 
     builder: String_Builder;
@@ -233,7 +235,7 @@ If the output is too verbose, there are ways to alleviate that (see modules/Basi
 
 The Visual Memory Debugger tool in module _Basic_ can communicate the collected information about memory allocations to an external visualization client like `examples/codex_view`.
 
-**Exercise**
+**Exercise**  
 Try this out on program 18.5_array_for.jai, without and with free (see leak_array_for.jai).
 
 `push_allocator` can be used with temp, see § 25.2.
