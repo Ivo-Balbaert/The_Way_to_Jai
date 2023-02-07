@@ -210,7 +210,8 @@ main :: () {
 
 /* When memory is not freed:
 ** Summary 0: **
-{count = 1; bytes = 100; allocations_since_last_visualizer_update = 1; bytes_allocated_since_last_visualizer_update = 100; alloc_site_trace = 1ca_ada2_85e8; allocator_proc = procedure 0x7ff6_5518_14f0; group_info = null; }
+{count = 1; bytes = 100; allocations_since_last_visualizer_update = 1; bytes_allocated_since_last_visualizer_update = 100;  
+alloc_site_trace = 1ca_ada2_85e8; allocator_proc = procedure 0x7ff6_5518_14f0; group_info = null; }
 
 ----- 100 bytes in 1 allocation -----
 alloc  c:/jai/modules/Basic/module.jai:87

@@ -50,8 +50,8 @@ main :: () {
 
 ```
 
-The first three convert statements work with the proc `convert :: (arg: s32)`. However the convert in line (1) does not: Error: Number mismatch. Type wanted: s32; type given: float32.  
-To accommodate this case, we have to make an overloading version `convert :: (arg: float)` with the same logic. But then again the convert in line (2) does not work: Error: Procedure call did not match any of the possible overloads. (Note how the elaborate error message clarifies the problem.)
+The first three convert statements work with the proc `convert :: (arg: s32)`. However the convert in line (1) does not: `Error: Number mismatch. Type wanted: s32; type given: float32`.  
+To accommodate this case, we have to make an overloading version `convert :: (arg: float)` with the same logic. But then again the convert in line (2) does not work: `Error: Procedure call did not match any of the possible overloads`. (Note how the elaborate error message clarifies the problem.)  
 On again to make a `convert :: (arg: string)` version.
 The same goes for the conversions in lines (3) and (4). Each time we have to make another overload. 
 
@@ -85,11 +85,13 @@ main :: () {
     // => [true, false, true, false] of type [] bool, cast to bool is true
 }
 ```
-We only need one version of `convert`, and arg is now said to be **polymorphic**, of a **generic** type **$T**.
+We only need one version of `convert`, it is now **polymorphic**, and arg is of a **generic** type **$T**.  
 The dollar sign ($) indicates a **type variable**, and it also identifies which parameter is authoritative over the error message.  
-This procedure can compile to different versions. Each time the compiler sees that the procedure is called with a different concrete type for T (like s32, float32, string or array in the example), it is compiled to a machine-code version for that type.
-The type T has to be derived by the compiler; it can be any type possible. Of course: the code of the procedure must make sense for that type, otherwise a compiler error is generated.  
-In Jai parlance this is called: **baking out** a copy of the procedure with the polymorphic type(s) fully known. For example, when called as `convert(0)`, a version will be compiled for type s32, in line (1) a new version will be compiled for type float32, in line (2) a new version will be compiled for type string, and so on.
+
+This procedure can compile to different versions. Each time the compiler sees that the procedure is called with a different concrete type for T (like s32, float32, string or array in the example), it is compiled to a machine-code version for that type.  
+The type T has to be derived by the compiler; it can in principal be any type possible. Of course: the code of the procedure must make sense for that type, otherwise a compiler error is generated.  
+
+In Jai parlance this is called: **baking out** a copy of the procedure with the polymorphic type(s) fully known. For example, when called as `convert(0)`, a version will be compiled for type s32, in line (1) a new version will be compiled for type float32, in line (2) a new version will be compiled for type string, and so on.  
 This will happen only once for each type: when the procedure is called again with the same type, the already compiled version for that type will be re-used.  
 Polymorphic functions will work correctly as long as the code inside them compiles for the input types.
 
@@ -101,12 +103,12 @@ Polymorphic procedures are used all over in the Jai library modules, look for ex
 - the `bubble_sort` and `quick_sort` code in the _Sort_ module Sort.jai
 
 ### 22.1.1 What is $T ?
-In the `convert` proc of program 22.1B, the type itself is a variable, that we call T.
+In the `convert` proc of program *22.1B_polyproc.jai*, the type itself is a variable, that we call T.  
 T is just a name for a generic type, it could also be S, R, U, V, or Targ and so on, or any name that starts with a capital letter.
-The $ before the T indicates that this is a compile-time type variable: it _defines_ T to be whatever type you called it with. T can also be used without the $ (see example 22.2_polyproc2.jai), but there must be one defining instance $T.  
-There can be several different polymorphic types in a procedure (like S, T, R, and so on), in the argument list as well as return type(s) list. They can also be mixed with other types (see for example the `repeat` proc in how_to 100_polymorphic_procedures, which has as signature:  
-` repeat :: (element: $T, count: s64) -> (output: [] T) {`). 
-However, a definition like $T can only appear once in a polymorphic function, otherwise you get the Error: "is already defined as polymorphic variable".
+The $ before the T indicates that this is a compile-time type variable: it _defines_ T to be whatever type you called it with. T can also be used without the $ (see example 22.2_polyproc2.jai), but there must always be one defining instance $T.    
+There can be several different polymorphic types in a procedure (like S, T, R, and so on), in the argument list as well as return type(s) list. They can also be mixed with other types? See for example the `repeat` proc in how_to 100_polymorphic_procedures, which has as signature:  
+` repeat :: (element: $T, count: s64) -> (output: [] T) {`.   
+However, a definition like $T can only appear once in a polymorphic function, otherwise you get the `Error: "is already defined as polymorphic variable"`.
 
 > This behavior can be shown with the info_flags POLYMORPH_MATCH and POLYMORPH_DEDUPLICATE defined in the _Compiler_ module.
 
