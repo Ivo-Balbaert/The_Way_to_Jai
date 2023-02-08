@@ -805,12 +805,14 @@ The ` mechanism for looking up outer variables only works one level up.
 
 Line (5) shows that a macro can have parameters, just like any proc. This is a way to avoid the backtick syntax.
 `macro2` defined in line (6) refers to two outer variables b and c. In this case it returns 1, but just before leaving the macro, it prints something by using the `defer` keyword in line (6A).  
-But notice what happens when we use `defer` in line (6B): because of the backtick the defer now takes the scope of the caller (main() in this case) as its scope, and prints its message just before main() ending (see the attached complete output in both cases).
-`macro3` shows _inner_ or _nested_ macros: a macro can contain and call macros defined inside itself. But there is a limit as to how many macro calls you can generate inside another macro.  
-`factorial` is an example of a recursive macro; #if needs to be used here (instead of if), else you get the following `Error: Too many nested macro expansions. (The limit is 1000.)` 
+But notice what happens when we use `defer` in line (6B): because of the backtick the defer now takes the scope of the caller (main() in this case) as its scope, and prints its message just before main() ending (see the attached complete output in both cases).  
+
+`macro3` shows _inner_ or _nested_ macros: a macro can contain and call macros defined inside itself. But there is a limit as to how many macro calls you can generate inside another macro.    
+`factorial` is an example of a recursive macro; #if needs to be used here (instead of if), else you get the following `Error: Too many nested macro expansions. (The limit is 1000.)`  
+
 `maxfunc` is a procedure which calls a nested macro `macron`; this returns "Backtick return macro" as return value from `maxfunc`.  
 
-**Exercise** (see changer_macro.jai)  
+**Exercise** (see *changer_macro.jai*)  
 Write a macro changer that takes 2 integer arguments and can access an outer variable x. x is multiplied with the 1st argument, and the 2nd argument is added to it.
 
 ### 26.5.1 Using a macro with #insert
@@ -849,7 +851,7 @@ In this example `unroll_for_loop` is a macro that receives a Code parameter. It 
 When compiling, you can see what is inserted in `.\build\.added_strings_w2`.
 
 ### 26.5.3 Using a macro for an inner proc
-In § 17.2 we saw that an inner proc cannot access outer variables. A way to circumvent this is to define the inner proc as a macro and use `. The example below is inner_proc() from 17.2_local_procs.jai, which is now redefined as a macro to be able to change the outer variable x.
+In § 17.2 we saw that an inner proc cannot access outer variables. A way to circumvent this is to define the inner proc as a macro and use `. The example below is inner_proc() from *17.2_local_procs.jai*, which is now redefined as a macro to be able to change the outer variable x.
 
 See *26.13_local_procs.jai*:
 ```c++
@@ -872,7 +874,7 @@ main :: () {
 
 Jai does not support closures (also called captures of variables). The technique demonstrated here is a way to emulate a closure.
 
-> Write a macro to get the functionality of closures in Jai.
+> Use a macro to get the functionality of closures in Jai.
 
 In § 15.1.3 we showed code that iterated over a linked list with a while loop.
 Wouldn't it be nice if we could do this with a for loop?
@@ -911,7 +913,12 @@ main :: () {
 }
 ```
 
-The macro `bubble_sort` defined in line (1) takes an array and a piece of code to compare subsequent item-pairs of the array. The `#insert,scope()` in (2) (formerly #insert_internal) makes it possible to use the outer macro-variables a and b in compare_code, so it allows code to access variables in the local scope.  It lets you specify the scope into which to insert the target Code or string, by saying #insert,scope(target). 'target' is a Code that must be constant at compile-time. The scope where the Code lives is used as the enclosing scope for the #insert (which determines how identifiers inside the inserted code are resolved). If they are not in order, they are swapped.
+The macro `bubble_sort` defined in line (1) takes an array and a piece of code to compare subsequent item-pairs of the array. The `#insert,scope()` in (2) (formerly #insert_internal) makes it possible to use the outer macro-variables a and b in compare_code, so it allows code to access variables in the local scope.  
+
+It lets you specify the scope into which to insert the target Code or string, by saying #insert,scope(target). 'target' is a Code that must be constant at compile-time.
+
+The scope where the Code lives is used as the enclosing scope for the #insert (which determines how identifiers inside the inserted code are resolved).   
+If they are not in order, they are swapped.
 `#insert,scope() compare_code` inserts a comparison code (a <= b) into a bubble sort. The inserted code acts like a comparison function, except without the drawbacks of function pointer callback performance cost.
 This example also shows that a macro can be polymorphic.
 
@@ -966,7 +973,8 @@ main :: () {
     perf_measure(code);
     // Factorial 20 is 2432902008176640000
     // Piece of code took 0.2209 ms
-}```
+}
+```
 
 Why use a macro? Because you want to #insert at compile-time the piece of code of which you want to measure the performance. This happens in line (1).
 
