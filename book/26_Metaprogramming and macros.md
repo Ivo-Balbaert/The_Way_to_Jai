@@ -1625,8 +1625,10 @@ Jai provides built-in support for data-oriented development: it’s a high-level
 
 ### 26.10.2 Making a SOA struct using #insert
 For some arrays we can get much better cache performance by changing the order of data. C++ encourages the use of arrays of structures (AOS), but most CPUs work faster when data is laid oud as structures of arrays (SOA). Object-oriented languages prefer AOS, but a data-oriented language should make it easy to lay out your data in SOA format.
-With SOA, arrays are contiguous in memory, and even their member values are contiguous, instead of being scattered on the heap.  
-For example: updating a set of arrays usually happens coordinate by coordinate, first all x coordinates, and so on. Because in the SOA structure all the vector coordinates are adjacent to each other in memory, updates on them are very fast. This is in contrast with an AOS structure, where updates will have to jump over memory all the time.  
+With SOA, arrays are contiguous in memory, and even their member values are contiguous, instead of being scattered on the heap.
+
+For example: updating a set of arrays usually happens coordinate by coordinate, first all x coordinates, and so on. Because in the SOA structure all the vector coordinates are adjacent to each other in memory, updates on them are very fast. This is in contrast with an AOS structure, where updates will have to jump over memory all the time.
+
 > There are two different ways of storing data here:
 > Array of Structs:(AOS)  A list of objects (like marines) where objects are stored one after another.
 > Struct of Arrays: (SOA) An object that contains lists of fields, so similar fields are stored together.  
@@ -1635,6 +1637,7 @@ This is marvelously explained in the following article [SOA vs AOS](https://www.
 
 Suppose our program works with `Vec3 :: { x: float, y: float, z: float }` (defined in module _Math_).
 An AOS with Vec3's would be like `[vec31, vec32, vec33, vec34, vec35]`, where vec31: Vec3, and so on, so basically: `[{x1, y1, z1}, {x2, y2, z2}, {x3, y3, z3}, {x4, y4, z4}, {x5, y5, z5}]`  
+
 An SOA Vec3 struct would be like:  
 ```c++
     SOA_Vec3 :: struct {
@@ -1706,7 +1709,9 @@ Person[4]: name= , age= 0, is_cool= false
 
 In line (1) we have a Person struct definition, and in line (2) we have the definition of the **SOA struct**. This takes a polymorphic type T, and an integer count, which is the number of objects.  
 The #insert starts building  a string in line (3):  `#insert -> string { // building string }`  
-In line (4) we define a string builder in which we'll construct our string (we immediately take care of its memory release). In line (5) we extract the type_info from our type T (see § 15.5). Then we loop over all its member fields (line (6)), and use print_to_builder (see § 19.5) to serialize the info into a struct definition. We get a string from the builder in (8) and return that as the SOA struct.
+In line (4) we define a string builder in which we'll construct our string (we immediately take care of its memory release).  
+In line (5) we extract the type_info from our type T (see § 15.5). Then we loop over all its member fields (line (6)), and use print_to_builder (see § 19.5) to serialize the info into a struct definition.  
+We get a string from the builder in (8) and return that as the SOA struct.
 
 This gets called in line (9):  `soa_person: SOA(Person, 5);`
 where the new SOA type is constructed with T equal to type Person and count equal to 5 and zero-initialized data as shown by printing it out in a for-loop ().
@@ -1722,9 +1727,9 @@ where the new SOA type is constructed with T equal to type Person and count equa
 In line (11) we define an array of Person objects. Line (12) shows that only a simple for loop over the AOS is needed to transfer the data to an SOA.
 
 > Other references (videos on youtube):
-    • Noel Llopis: Data-oriented design
-    • Chandler Carruth: Efficiency with Algorithms, Performance with Data Structures
-    • Mike Acton: Data-oriented design in C++
+    • Noel Llopis: Data-oriented design  
+    • Chandler Carruth: Efficiency with Algorithms, Performance with Data Structures  
+    • Mike Acton: Data-oriented design in C++  
 
 
 ## 26.11 How to get the generated source files after the meta-program step?
@@ -1786,12 +1791,14 @@ Here are the types of all expressions in this syntax tree:
 */
 ```
 
-To print out the nodes, we need to import the module _Program_Print_ (line (1)). We call `compiler_get_nodes` on our code statement in line (2), to get the root node and the exprs. `print_expression` 'prints' the code to a String Builder (line (3)). In line (4) we can now iterate over `exprs` to show the `kind` of each sub-expression and their `node_flags` if any.
+To print out the nodes, we need to import the module _Program_Print_ (line (1)). We call `compiler_get_nodes` on our code statement in line (2), to get the root node and the exprs. `print_expression` 'prints' the code to a String Builder (line (3)).  
+In line (4) we can now iterate over `exprs` to show the `kind` of each sub-expression and their `node_flags` if any.
 
 `compiler_get_nodes` converts the Code to a syntax tree. As we see in line (2), it returns two values:  
 - the first is the root expression of the Code, which you can navigate recursively.   
 - the second is a flattened array of all expressions at all levels, just like you would get in a meta-program inside a Code_Type_Checked message. This makes it easy to iterate over all the expressions looking for what you want, without having to do some kind of recursive tree navigation.  
-- Here is a snippet of code that searches for string literals in code, (possibly) changing them, and writing the changes back with the proc `compiler_get_code`:
+
+Here is a snippet of code that searches for string literals in code, (possibly) changing them, and writing the changes back with the proc `compiler_get_code`:
 ```c++
 root, expressions := compiler_get_nodes(code);
 for expressions {
@@ -1854,8 +1861,11 @@ main :: () {
 }
 ```
 
-Line (1) defines a distinct variant type Handle, which is a u32, but distinct from it. You can do numerical operations on variables of type Handle. Trying to assign (implicitly cast) a u32 variable to a Handle variable fails (see line 3B): this is type safety and that's why it is a distinct type. However, an explicit cast or an auto-cast as in lines (3C-D) works.  
+Line (1) defines a distinct variant type Handle, which is a u32, but distinct from it. You can do numerical operations on variables of type Handle.  
+Trying to assign (implicitly cast) a u32 variable to a Handle variable fails (see line 3B): this is type safety and that's why it is a distinct type. However, an explicit cast or an auto-cast as in lines (3C-D) works.  
+
 The type of Handle is Type (see (4)), but if we dig deeper in line (5) we see that it is a VARIANT type, the item with value 18 from the Type_Info_Tag enum (see § 16.2).  
+
 Another variant of the isa type is shown in lines (2A-B). These types will implicitly cast to their isa type, but variants with the same isa type will not implicitly cast to each other.
 Taking type_info(), and dereferencing the `variant_of` field shows the underlying type and size (lines 5B, 6 and 7).
 
@@ -2067,7 +2077,8 @@ tag_union.string_c = James Bond tag_union.tag = string
 */
 ```
 
-In the above code a struct `Tag_Union` has a field `tag` that contains the current type, and struct parameters fields of type [] string and types of type []Type. The `fields` are the names of the possible union fields, and `types` are their corresponding types.  
+In the above code a struct `Tag_Union` has a field `tag` that contains the current type, and struct parameters fields of type [] string and types of type []Type. The `fields` are the names of the possible union fields, and `types` are their corresponding types. 
+
 The structs code is dynamically build with a `#insert -> string` using the structs parameters. You can find the code in .build/.added_strings_w2.jai:  
 ```
 union {
@@ -2076,6 +2087,10 @@ union {
   string_c: string;
 }
 ```
-`tag_union` is an instance of the struct. At its declaration in line (1), the parameters are passed and the structs definition is built. The `set :: (u: *$Tag/Tag_Union, value: $T)` proc changes the instance by supplying a value for the union. Its code also uses a `#insert -> string` which loops over the fields of the union. If the type of the supplied value matches one of the union types, that type is written to the `tag` field and the value is written to the union's field. The `/Tag_Union` in set's declaration checks that $Tag has the fields of Tag_Union (see § 23.6).
+
+`tag_union` is an instance of the struct. At its declaration in line (1), the parameters are passed and the structs definition is built. The `set :: (u: *$Tag/Tag_Union, value: $T)` proc changes the instance by supplying a value for the union.  
+
+Its code also uses a `#insert -> string` which loops over the fields of the union. If the type of the supplied value matches one of the union types, that type is written to the `tag` field and the value is written to the union's field. The `/Tag_Union` in set's declaration checks that $Tag has the fields of Tag_Union (see § 23.6).
+
 In line (2A), the `set` function is called with value 10, so tag becomes s64 and the int_a field becomes 10; the same goes for lines (2B-C).
 If the type of the supplied value is not present in the types array, we get a compile-time error like: `Assertion failed: Invalid value: bool` (see line (2D)).
