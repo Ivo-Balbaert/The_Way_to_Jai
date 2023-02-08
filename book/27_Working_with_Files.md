@@ -107,9 +107,9 @@ Sailor!
 ```
 
 If you need to create a folder from code, do it as in line (2). Similarly, you have delete_directory.  
-To test whether a file already exists, use `file_exists` as in line (3).
+To test whether a file already exists, use `file_exists` as in line (3).  
 Use `write_entire_file` (see line (4)) to write a string to a file, creating the file when it does not exist). This proc can also take a `*builder`, where `builder` is a String Builder.  
-`read_entire_file` (line (5)) reads the contents of a file and returns it as a string. The filename can also be stored in a variable instead of a constant. 
+`read_entire_file` (line (5)) reads the contents of a file and returns it as a string. The filename can also be stored in a variable instead of a constant.   
 Whenever a proc returns a bool variable indicating the success of the operation, you can test on it like this:
 * if success {  }
   else {  }
@@ -119,28 +119,29 @@ Whenever a proc returns a bool variable indicating the success of the operation,
 If the file read returns an error, the program outputs a message like:
 ```
 Could not open file "assets/example.txt": code 2, The system cannot find the file specified.
-d:/Jai/The_Way_to_Jai/examples/27/27.1_working_with_files.jai:34,5: Assertion failed: Error. Cannot read file.
-```
+d:/Jai/The_Way_to_Jai/examples/27/27.1_working_with_files.jai:34,5: Assertion failed: 
+Error. Cannot read file.
 
 Stack trace:
 c:/jai/modules/Preload.jai:350: default_assertion_failed
 c:/jai/modules/Basic/module.jai:72: assert
 d:/Jai/The_Way_to_Jai/examples/27/27.1_working_with_files.jai:34: main
 A breakpoint was hit, but no debugger is attached.
+```
 
-The `file_open` operation (line (6)) has the following signature:
-`file_open :: (name: string, for_writing := false, keep_existing_content := false, log_errors := true) -> File, bool`
-It's first return value is a file handle on Windows or a pointer to a file in Unix, of type `File` (defined in windows.jai / unix.jai).
+The `file_open` operation (line (6)) has the following signature:  
+`file_open :: (name: string, for_writing := false, keep_existing_content := false, log_errors := true) -> File, bool`  
+It's first return value is a file handle on Windows or a pointer to a file in Unix, of type `File` (defined in windows.jai / unix.jai).  
 If we want to add data to the file, we must first know its length, and then advance the cursor to that position in the file: lines (7) and following.
 
 In line (8), we add another string to the file; make sure in line (9) to close the file after this to write to disk.
 
-**use defer to close a file**
+**use defer to close a file**  
 If you open a file read-only, you can use `defer file_close(*file);` as in line (11B) immediately after the success check. 
 
 We then read the entire contents back in line (11).
-`file_read` has the following signature:
-`file_read :: (f: File, vdata: *void, bytes_to_read: s64) -> (success: bool, bytes_read: s64)`
+`file_read` has the following signature:  
+`file_read :: (f: File, vdata: *void, bytes_to_read: s64) -> (success: bool, bytes_read: s64)`  
 so first we define a `buffer` to read into.
 In line (12) we construct a string with the buffer data and then print it out. 
 
@@ -156,7 +157,8 @@ See *27.2_del_dirs.jai*:
 #import "File";
 #import "File_Utilities";
 
-HELP :: "Usage: % [to-be-deleted_directory] [start_directory]\nStart directory will be working directory if not set.\n";
+HELP :: "Usage: % [to-be-deleted_directory] [start_directory]\n
+Start directory will be working directory if not set.\n";
 
 main :: () {
     context.allocator = temp;
@@ -178,7 +180,7 @@ main :: () {
         if short_name == redacted {
             success := delete_directory(full_name);
             if !success {
-                print("We failed to delete directory %!\nIt was simply too powerful... ;____;\n", full_name);
+                print("Failed to delete directory %!\n", full_name);
                 exit(-1);
             }
             descend_into_directory = false;

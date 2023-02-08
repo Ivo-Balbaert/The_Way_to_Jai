@@ -128,9 +128,13 @@ This is done by executing the following commands in a terminal:
 Check with `jai -version`:  
 Version: beta 0.1.039, built on 17 September 2022.
 
-> 1) WSL on Windows with Ubuntu doesn't have this problem on a 64 bit machine.  
-> 2) For Simp or other OpenGL modules you need to install libgl-dev.  
-   
+> For Simp or other OpenGL modules you need to install libgl-dev.  
+
+### 2.2.7 Working in WSL on Windows
+WSL on Windows with Ubuntu doesn't have this problem on a 64 bit machine.  
+
+Make sure that the Jai compiler is inside the WSL file system. If it is not, compiling can be 10x slower! 
+
 ## 2.3 Editor help for coding Jai
 Writing a program's source code is easier when you have some support such as syntax highlighting in your code editor. Support exists for vim, Sublime Text 3 and VSCode, see: [Tooling Ecosystem](https://github.com/Jai-Community/Jai-Community-Library/wiki/References#tooling-ecosystem). 
 
