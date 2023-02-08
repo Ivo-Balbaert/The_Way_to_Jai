@@ -1059,14 +1059,17 @@ A for-expansion macro is a special kind of macro that uses `i` as counter and `i
 The macro is defined in line (1) with the signature:  
 `for_expansion :: (list: *ListNode, body: Code, flags: For_Flags) #expand`   
 `for_expansion` takes in three parameters: a pointer to the data structure one wants to use the for loop on, a `Code` datatype, and a `For_Flags` flags.
-It uses the same while loop as in § 15.1.3. Line (4) assures we break out of the loop if iter gets the null value: break when iter is empty (if this would not be here, the program would crash, try it out!).     
+It uses the same while loop as in § 15.1.3. Line (4) assures we break out of the loop if iter gets the null value: break when iter is empty (if this would not be here, the program would crash, try it out!).  
+
 Because we emulate a for-loop, we must give values for the variables  
-`it_index`  : which is of course the counter `i` (line (6))
+`it_index`  : which is of course the counter `i` (line (6))  
 and `it`    : which is `iter.data` (line (5))
 They both have to be prefixed with a back-tick, because they are outer variables to the macro.  
 
-The `#insert body;` in line (7) is responsible for printing out the data. `body` is the 2nd argument, and is of type Code. `body` denotes the body of the for-loop, and it is substituted into the expanded code. Its content is the `print` statement in line (10). So `#insert` is used inside macros to insert code in the expansion.  
-(There is also a variant directive **#insert,scope()**, which allows you to insert code in the macro itself. A macro often takes an argument suitably named `body: Code`, which is then used to insert in the expansion: `#insert body`.)
+The `#insert body;` in line (7) is responsible for printing out the data. `body` is the 2nd argument, and is of type Code. `body` denotes the body of the for-loop, and it is substituted into the expanded code. Its content is the `print` statement in line (10).  
+So `#insert` is used inside macros to insert code in the expansion.  
+(There is also a variant directive **#insert,scope()**, which allows you to insert code in the macro itself.  
+A macro often takes an argument suitably named `body: Code`, which is then used to insert in the expansion: `#insert body`.)
 
 The `For_Flags` enum_flags is found in module *Preload_.jai* with the following definition:
 ```c++
@@ -1088,6 +1091,7 @@ But we can do better! (see for_expansion macro Version 2). Just leave out the te
 > `for :looping1 v, n: data_structure`
 > `for :looping2 v, n: data_structure`
 > Our code would then become:
+
 See *26.8B_linked_list_for_expansion.jai*:
 ```c++
 #import "Basic";
@@ -1274,19 +1278,25 @@ List item 0 is {10, null, d5_6fd4_fcb0}
 */
 ```
 
-In lines (3) and following we define three Nodes a, b and c, give them values, link them together, and then link a LinkedList lst to them. We don't use New, so these Nodes are stack-allocated. 
-Now we want to be able to write a for-loop like the one in (9), printing out the node position and its value. If we compile this, we get the `Error: Undeclared identifier 'for_expansion'`. So Jai tells us we need to write a for_expansion macro to accomplish this.  
+In lines (3) and following we define three Nodes a, b and c, give them values, link them together, and then link a LinkedList lst to them. We don't use New, so these Nodes are stack-allocated.   
+
+Now we want to be able to write a for-loop like the one in (9), printing out the node position and its value. If we compile this, we get the `Error: Undeclared identifier 'for_expansion'`. So Jai tells us we need to write a for_expansion macro to accomplish this.    
+
 This can be done with almost exactly the same code as in example 26.8 (because of the different structure, we need to move our break statement). The loop starting in (4) iterates over all the nodes.  
-This example also shows that the for_expansion macro can be outside of main(). In fact, you could make a module for it and import that!
+
+This example also shows that the for_expansion macro can be outside of main(). In fact, you could make a module for it and import that!  
 If you want to experience how easy it is to debug a macro, just uncomment the lines that start with // Debug, and debug until you reach the break when `iter` has become a pointer with value null (here this is the case for c.next).  
 
-But we can do better! (see for_expansion macro Version 2). Just leave out the temporary variables `iter` and `i` and work only with it and it_index. Also note you only have to backtick the variables the first time you use these. Version 2 also prints out the pointers, so we see that a has a prev which is null, and c has a next that is null.
+But we can do better! (see for_expansion macro Version 2). Just leave out the temporary variables `iter` and `i` and work only with it and it_index.  
+Also note you only have to backtick the variables the first time you use these. Version 2 also prints out the pointers, so we see that a has a prev which is null, and c has a next that is null.
 
 Suppose we want to print out list backwards, like in line (5):  `for < list`
-Then we need `For_flags`, this is an enum defined in module _Preload_ with 2 possible values, POINTER (1) and REVERSE(2). This is done in Version 3A:
-We test on For_Flags.REVERSE to either start with list.first or list.last. Using ifx, we can assign the if or else value to \`it. (But we don't know the nodes count, so we hardcoded the last position as 2). We do the same in the while loop, going to next or prev and incrementing or decrementing `it_index`. With version 3A there is one compiled version for the normal for and the for <.
+Then we need `For_flags`, this is an enum defined in module _Preload_ with 2 possible values, POINTER (1) and REVERSE(2).  
+This is done in Version 3A:
+We test on For_Flags.REVERSE to either start with list.first or list.last. Using ifx, we can assign the if or else value to \`it. (But we don't know the nodes count, so we hardcoded the last position as 2).  
+We do the same in the while loop, going to next or prev and incrementing or decrementing `it_index`. With version 3A there is one compiled version for the normal for and the for <.
 
-**Exercise**
+**Exercise**  
 Use #if instead of ifx  (see for_expansion_version3B.jai) so that you get 2 different compiled versions, one for the for, and one for the reversed for (<).
 How many compiled versions do you have when using if instead of #ifx? 
 
@@ -1376,16 +1386,18 @@ We can of course give it another name like `player_loop`, and/or use the index b
 
 ## 26.9 The #modify directive
 The **#modify** directive can be used to insert some code between the header and body of a procedure or struct, to change the values of the polymorph variables, or to reject the polymorph for some types or combination of variables. #modify allows to inspect generic parameter types. It is a block of code that is executed at compile-time each time a call to that procedure is resolved. 
+
+It is executed following these steps:   
 1) the polymorph types (T, and so on) are resolved by matching.  
 2) then the body of the #modify is run. In there, the value of T is not constant; it can be changed to whatever you want.   
 3) then #modify returns a bool value:
-> true: this signals that $T is a type that is accepted at compile-time: the proc will compile with that type, or the struct is defined.
+> true: this signals that $T is a type that is accepted at compile-time: the proc will compile with that type, or the struct is defined.  
 > false: it generates a compile-time error: the proc will not compile, or the struct is not defined.
 
 Here are a number of examples:
 (Some are taken from how_to/170_modify)
 
-(1) Suppose we want to force a polymorph type to be a certain concrete type:
+(1) Suppose we want to force a polymorph type to be a certain concrete type:  
 See *26.16_modify1.jai*:
 ```c++
 #import "Basic";
@@ -1488,7 +1500,7 @@ See *26.18_modify3.jai*:
 #import "Basic";
 
 Holder :: struct (N: int, T: Type)
-#modify { if N < 8 N = 8;  return true; }
+#modify { if N < 8    N = 8;    return true; }
 {
     values: [N] T;
 }
@@ -1546,8 +1558,12 @@ main :: () {
 ```
 
 We see in line (3) that there is an overflow problem with the u8 array (285 doesn't fit into a u8).  
-The problem can be solved by we using #modify to generate a return type that is reasonably big if our input type is small, otherwise it leaves the return type the same as the input type. This is done in `sum2`:  
-- The return type is now R, by default returning T (line (5)), but it can be different. To examine T, we do a cast(*Type_Info) in (6). Then in (7) we get its type and see if it is an integer. If so, we do a `cast(*Type_Info_Integer)` in (8) to get more info, here the runtime_size in (9). If this is smaller than 4 bytes (for example for u8 here), we set R to a 4 byte type s32 or u32 in line (10), depending on whether it is signed or not. Now we get the correct result: see line (11).  We needed #modify here to give R a value.
+The problem can be solved by we using #modify to generate a return type that is reasonably big if our input type is small, otherwise it leaves the return type the same as the input type.  
+
+This is done in `sum2`:    
+The return type is now R, by default returning T (line (5)), but it can be different. To examine T, we do a cast(*Type_Info) in (6). Then in (7) we get its type and see if it is an integer. If so, we do a `cast(*Type_Info_Integer)` in (8) to get more info, here the runtime_size in (9).   
+If this is smaller than 4 bytes (for example for u8 here), we set R to a 4 byte type s32 or u32 in line (10), depending on whether it is signed or not.  
+Now we get the correct result: see line (11). We needed #modify here to give R a value.
 
 (6) Here is a #modify within which every numeric type is converted to a 64 bit type:
 
@@ -1594,10 +1610,10 @@ main :: () {
 
 A Bitmap struct instance is only valid when Width >= Height.
 
-**Exercises using #modify**
-(1) Make the call to random() work in Example 2 of _23.7_bake_constants.jai_, by specifying that T is s32 (see random_return_type.jai)
-(2) Write a proc `square` that squares a variable of a numeric type, but rejects any other type (see square_modify.jai)
-(3) Write a proc `struct_work` which only accepts a struct as type T when its name starts with "XYZ" (see struct_work.jai)
+**Exercises using #modify**  
+(1) Make the call to random() work in Example 2 of _23.7_bake_constants.jai_, by specifying that T is s32 (see random_return_type.jai)  
+(2) Write a proc `square` that squares a variable of a numeric type, but rejects any other type (see square_modify.jai)  
+(3) Write a proc `struct_work` which only accepts a struct as type T when its name starts with "XYZ" (see struct_work.jai)  
 
 ## 26.10 SOA (Struct of Arrays)
 
