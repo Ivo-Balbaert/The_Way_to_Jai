@@ -1,9 +1,11 @@
 # 22 Polymorphic Procedures
 
-In § 17.7 we discussed overloading procedures, which is a solution for using the same logic for several different types. But this gives rise to duplication of code (as we'll see in the next example), increasing code size and a source for bugs. But Jai offers a solution, many overloading procedures can be reduced to one **polymorphic procedure**, thereby solving the code duplication problem, while retaining the same advantages.  
+In § 17.7 we discussed overloading procedures, which is a solution for using the same logic for several different types. This gives rise to duplication of code (as we'll see in the next example), increasing code size and a source for bugs. But Jai offers a solution, many overloading procedures can be reduced to one **polymorphic procedure**, thereby solving the code duplication problem, while retaining the same advantages.  
 Polymorphic procedures are similar to C++ templates, Java/C# generics or parameterized functions in other languages. 
 
-## 22.1 First example
+## 22.1 What is polymorphism?
+
+### 22.1.2 A first example
 We want a procedure `convert` to convert a given argument to a bool.
 Our first solution is overloading procedures: 
 
@@ -102,7 +104,7 @@ Polymorphic procedures are used all over in the Jai library modules, look for ex
   `array_add :: (array: *[..] $T, item: T) #no_abc` from _Basic_ module (Array.jai)
 - the `bubble_sort` and `quick_sort` code in the _Sort_ module Sort.jai
 
-### 22.1.1 What is $T ?
+### 22.1.2 What is $T ?
 In the `convert` proc of program *22.1B_polyproc.jai*, the type itself is a variable, that we call T.  
 T is just a name for a generic type, it could also be S, R, U, V, or Targ and so on, or any name that starts with a capital letter.
 The $ before the T indicates that this is a compile-time type variable: it _defines_ T to be whatever type you called it with. T can also be used without the $ (see example 22.2_polyproc2.jai), but there must always be one defining instance $T.    
@@ -164,7 +166,7 @@ d:/Jai/The_Way_to_Jai/examples/22/22.2_polyproc2.jai:3,8: Info: ... in checking 
 }
 ```
 
-Here we have a procedure `add` defined in line (1), which specifies that p and q must be of the same type (represented as T), and that p defines that type. The proc also returns a value of that same type:
+Here we have a procedure `add` defined in line (1), which specifies that p and q must be of the same type (represented as T), and that p defines that type. The proc also returns a value of that same type:  
 `add :: (p: $T, q: T) -> T`
 
 In the call in line (2), i1 specifies that the type T is int. The signature of `add` implies that i2 must also be of type int. The same reasoning applies to line (3).
@@ -274,9 +276,11 @@ swap :: inline (a: $T, b: T) -> T #must, T #must {
     return b, a;
 }
 ```
-It uses a multiple return to swap the values, so it is called like `n2, m2 = swap(n2, m2);`. The #must after the return type T ensures that you use this form. Moreover, this is an inlined procedure for performance.
+It uses a multiple return to swap the values, so it is called like  
+`n2, m2 = swap(n2, m2);`.  
+The `#must` after the return type T ensures that you use this form. Moreover, this is an inlined procedure for performance.
 
-**Exercise**
+**Exercise**  
 Given two Vector3's {1, 4, 9} and {2, 4, 6}, use Swap from _Basic_ to swap their values (see swap_vectors.jai)
 
 ### 22.2.4 Example with structs
@@ -326,7 +330,7 @@ Now write a polymorphic version that has types $Ta for a and $Tb for b, returnin
 (6) Try to understand the error you get when compiling polymorph_err.jai
 (7) Write a polymorphic `repeat` proc, that takes an item of type T and a count. It adds the item count times. Test it out for several types (see repeat.jai)
 
-The following two § are not specific about polymorphism, but they do prepare the way for the `map` polymorphic example in § 22.7
+The following two sections are not specifically about polymorphism, but they do prepare the way for the `map` polymorphic example in § 22.7
 
 ## 22.3 The lambda notation =>
 See *22.5_lambdas.jai*:
@@ -349,7 +353,7 @@ main :: () {
 }
 ```
 
-In line (3) we see that the proc add100 is called with the following expression as 2nd parameter:  
+In line (3) we see that the proc `add100, which constructs and returns a dynamic array, is called with the following expression as 2nd parameter:  
 `(x) => x + 100`  
 This is a lambda: for each x it works on, it returns x + 100.  
 The proc `add100` has this signature (see line (1)):
@@ -361,8 +365,8 @@ Our lambda above conforms to that signature.
 In line (2), we loop over a (here array_a), apply our lambda as proc to each of its items, and adding these to the dynamic array result, which is returned after the loop.
 
 To make the code more readable, we could have defined lambda as a constant:  
-`lam :: (x) => x + 100;`    (see line (4))
-and call add100 like this:
+`lam :: (x) => x + 100;`    (see line (4)),  
+and call add100 like this:  
 `add100(array_a, lam)`      (see line (5))
 
 Anonymous functions are useful for passing as arguments to other procedures, or return them from a procedure. Such procs, like `add100` above, are sometimes called **higher-order functions**. 
@@ -370,8 +374,6 @@ Anonymous functions are useful for passing as arguments to other procedures, or 
 A procedure is also a type (see § 17.1.2), and therefore also a value (see § 9). This means that procs can be returned as a value from another proc, or they can be used as argument(s) in a proc, as we see here in line (3) where a lambda is used as an argument.
 
 > Unlike C++ or Rust, closures and capture blocks are not supported.
-
-> `add100` constructs and returns a dynamic array.
 
 ## 22.4 A procedure as argument of another proc
 See *22.8_proc_argument.jai*:
@@ -406,7 +408,7 @@ v is 2.143589, 100000000, 0.003906
 `do_three_times :: (proc: (*Vector3), arr: *Vector3)`
 It is a higher-order function that takes as 1st argument another procedure with signature `proc: (*Vector3)`. The `square_and_print` proc conforms to this signature. What `do_three_times` does is to call `square_and_print` 3 times on the Vector3. Because this is passed as a pointer, its values are changed.
 
-The procedure passed as argument can also be polymorphic:
+The procedure passed as argument can also be polymorphic,  
 See *22.11_polyproc_argument.jai*:
 ```c++
 #import "Basic";
@@ -451,11 +453,11 @@ x is 0
 `call_with` (see line (1)) is a polymorphic proc, that applies the 2nd function argument onto the 1st argument of type T.  
 Is is then called in line (2) with 5 and a lambda `x => { ... #this(x-1); }` that calls itself recursively with #this.
 
-**Exercise**
+**Exercise**  
 (1) Write a polymorphic proc that returns the count field of an input parameter. Then rewrite this proc as a lambda. Check it for static and dynamic arrays, and strings   (see poly_count.jai).
 
 ## 22.6 #bake_arguments, $ and $$
-The directive **#bake_arguments** lets us specify value(s) for argument(s) of a procedure, but possibly leaving some arguments unspecified. The result is a precompiled proc with specific (fewer) parameter values. Lets see an example:
+The directive **#bake_arguments** lets us specify value(s) for argument(s) of a procedure, but possibly leaving some arguments unspecified. The result is a precompiled proc with specific (fewer) parameter values. Let's see an example:
 
 See *22.6_baked_args.jai*:
 ```c++
@@ -500,10 +502,10 @@ main :: () {
 ```
 
 In line (1) we have a lambda `add`, in line (2) we 'bake in' the value 10 for argument a, so that we get a new proc called `add10`, which only needs one parameter for b.
-This function is called in line (4); it effectively adds 10 to a given number, so it has specialized the original proc by baking in some arguments.
-Similarly, in line (3) a new proc `mult1` is constructed by supplying a value for argument b in proc `mult`, and `mult1` is called in line (5).
-A `$` in front of an argument is an **auto-bake**: it 'bakes' that argument into that function automatically when called, which is illustrated in line (6). It means that the $argument is known at compile-time. If the argument is a variable, you get an error.
-A `$$` in front of an argument will 'bake' the value into the function when it is a constant; if not, it will behave like an ordinary function (see line (7)). So you could say that $$ before an argument means that the argument is optionally constant.
+This function is called in line (4); it effectively adds 10 to a given number, so it has specialized the original proc by baking in some arguments.  
+Similarly, in line (3) a new proc `mult1` is constructed by supplying a value for argument b in proc `mult`, and `mult1` is called in line (5).  
+A `$` in front of an argument is an **auto-bake**: it 'bakes' that argument into that function automatically when called, which is illustrated in line (6). It means that the $argument is known at compile-time. If the argument is a variable, you get an error.  
+A `$$` in front of an argument will 'bake' the value into the function when it is a constant; if not, it will behave like an ordinary function (see line (7)). So you could say that $$ before an argument means that the argument is optionally constant.  
 Auto-bakes can be used together with $T type variables.
 
 `#bake_arguments` procedures are pre-compiled functions, they are not closures.

@@ -1,4 +1,4 @@
-# 26 Meta-programming and macros
+# 26 Metaprogramming and macros
 
 A 'meta-program' is a piece of code that alters (or 'programs') an existing program (another piece of code).
 In Jai, this takes place solely at compile-time. The compiler gives you the source code in AST format (Abstract Syntax Tree) for you to modify.
@@ -16,7 +16,7 @@ Using type info to meta-program is also called _reflection_ or _introspection_ i
 
 We already talked about running code at compile time as early as § 3.2.4. Jai provides full compile-time code execution, meaning that all Jai code can also be executed while compiling.
 
-> Because all of this processing happens at compile-time, there is a natural overlap between this chapter and § 27.
+> Because all of this processing happens at compile-time, there is a natural overlap between this chapter and § 30.
 
 ## 26.1 The type table
 See *26.1_type_table.jai*:
@@ -140,7 +140,10 @@ a=1000, b=1001
 ```
 
 In line (1) we see how to run a procedure: `#run proc1();`
-Line (2) runs a proc and assigns its return value to a variable `result`, so that when the program really starts to run, `result` starts off with the assigned value. This way we can run an expensive proc at compile-time, so that its result can be used in run-time. A more concrete example of this is presented in line (3), where the value of the constant PI is being calculated at compile-time.  
+Line (2) runs a proc and assigns its return value to a variable `result`, so that when the program really starts to run, `result` starts off with the assigned value.  
+This way we can run an expensive proc at compile-time, so that its result can be used in run-time.  
+
+A more concrete example of this is presented in line (3), where the value of the constant PI is being calculated at compile-time.  
 In lines (4)-(5) two lambdas are called at compile-time. Line (6) shows the same for a simple code block. Make sure you understand the difference between the two outputs.
 
 #run can access and modify globals and by default, global variables will be reset back to the original default values when outputting the executable (see lines 7A-B).  If you don't want that, use `#no_reset` (see § 26.2.2).
@@ -213,10 +216,11 @@ The value of x is 6, of type u8.
 ```
 
 Here we have a proc `comprun` in which line (1) will run at compile-time (because of #run), and where line (2) will work at run-time.  
-The three lines following (3) only activate the #run 1 time, because all expressions with which it is called are of the same type u8. It only needs to build once. But at runtime the procedure is called and prints out 3 times.In line (4), comprun is called with a new type 'float', so it compiles again, which we can see because #run executes for the 2nd time. Line (5) doesn't trigger a re-compilation, because the parameter is also of type float. But line (6) re-compiles, because now a string is passed. (7) doesn't recompile, because there is already a compiled form for comprun with T == u8.
+The three lines following (3) only activate the #run 1 time, because all expressions with which it is called are of the same type u8. It only needs to build once. But at runtime the procedure is called and prints out 3 times.In line (4), comprun is called with a new type 'float', so it compiles again, which we can see because #run executes for the 2nd time.  
+Line (5) doesn't trigger a re-compilation, because the parameter is also of type float. But line (6) re-compiles, because now a string is passed. (7) doesn't recompile, because there is already a compiled form for comprun with T == u8.
 Note that the order of the #run's can vary, because compilation works multi-threaded.
 
-#run can also return basic struct values or multidimensional arrays. Complications can arise because of pointers inside structs, and values that are not retained between compile-time and run-time. In order to modify more complex data structures with #run,the #no_reset directive can be useful (see § 26.2.2).
+#run can also return basic struct values or multidimensional arrays. Complications can arise because of pointers inside structs, and values that are not retained between compile-time and run-time. In order to modify more complex data structures with #run, the #no_reset directive can be useful (see § 26.2.2).
 
 ### 26.2.1 The #compile_time directive
 With all these meta-programming functionalities, it can be important to know when you are running in compile-time and when you are 'really' running. Luckily there is a **#compile_time** directive, that is true at compile-time, and false at run-time. However it cannot be used as a constant.
@@ -238,6 +242,7 @@ main :: () {
 #run main(); // => #compile_time is true
 ```
 
+#compile_time is true when doing #run, comment this out to see it becoming false.
 Use this for example when you want a procedure to do something different at compile_time, as opposed to run-time.
 
 ### 26.2.2 The #no_reset directive
@@ -273,7 +278,7 @@ main :: () {
     print("%\n", arraynr); // (5) => [1, 2, 3, 4]
 }
 ```
-In contrast to what happened in program 26.2_run.jai, because `globvar` is preceded by #no_reset, it retains its value at runtime (see lines 1A-B).
+In contrast to what happened in program 26.2_run.jai, because `globvar` is preceded by #no_reset, it retains its value at runtime (see lines 1A-B).  
 As a 2nd example, although both arrays `array` and `arraynr` get values at compile-time in line (3), array has 0 values at runtime (see line (4)). To counter this behavior (see line (5)), prefix the array when defined with the **#no_reset** directive, as we did for `arraynr` in line (2).
 
 ### 26.2.3 Computing a struct at compile-time and retrieving at run-time
@@ -397,7 +402,7 @@ Note that the condition after #if must be a compile-time constant (can be checke
 > #if is tested at compile-time. When its condition returns true, that block of code is compiled, otherwise it is not compiled.
 
 Summarized:  
-If the condition that follows is false:
+> If the condition that follows is false:
 > if will not execute the block
 > #if will not compile the block
 
@@ -406,7 +411,7 @@ For one-liners, there is #ifx (see line (7)).
 
 Using this feature, code can be conditionally compiled and included in the resulting executable, depending on the target environment (development, test, release) or target platform (different OS's).
 
-Here is a way to use it in debugging to print out info you want to inspect;in production this code will not be compiled, only the else branch:
+Here is a way to use it in debugging to print out info you want to inspect; in production this code will not be compiled, only the else branch:
 ```
 // define a constant DEBUG :: TRUE; // change to false for production
 #if DEBUG {
@@ -455,6 +460,8 @@ See also jai\examples\system_info for how to display info of your OS and the har
 ## 26.4 Inserting code with #insert
 The **#insert** directive inserts a piece of compile-time generated code represented as a string (or code that has been represented as data in some other way) into a procedure or a struct.
 
+### 26.4.1 How does it work?
+
 See _26.6_insert.jai_:
 ```c++
 #import "Basic";
@@ -484,7 +491,7 @@ main :: () {
 
 The 1st way #insert can be used is illustrated in line (1): there `#insert` takes a string containing a line of code, and inserts it as code at that location in the source. Line (2) shows that it also can be used at an expression level.  Line (3) shows how a multi-line string can be inserted as a piece of code.
 
-Here is a more useful example, where #insert is used with multi-line strings:
+Here is a more useful example, where #insert is used with multi-line strings:  
 See _26.24_insert_multi.jai_:
 ```c++
 #import "Basic";
@@ -528,7 +535,7 @@ End of the report - count is: 5.
 
 You can see that it is real code, because variable `count` is incremented. Header, body, and footer are known at compile-time because of the $'s, so we can #insert them. This gives you some flexibility for constructing code.
 
-2nd way: Even the entire contents of a struct can be made through a `#insert -> string` construction. This takes the form:
+_2nd way_: Even the entire contents of a struct can be made through a `#insert -> string` construction. This takes the form:
 ```c++
 A_Type :: struct( ... ) {
     #insert -> string { ... }
@@ -582,10 +589,10 @@ The matrix contains:
 
 (This mechanism is also applied in the unroll for loop in § 26.5.2, and in the construction of an SOA struct, see § 26.10.2).
 
-### 26.4.1 Type Code and #code
+### 26.4.2 Type Code and #code
 A variable of type Code can be constructed by using the **#code** directive:  
-`#code { // a code block }`, like `#code { x += 7 }`. 
-This can also be one line, like this:  
+`#code { // a code block }`, like `#code { x += 7 }`   
+This can also be one line, as follows:  
 `code :: #code a := Vector3.{1,2,3};`  
 or:  
 `#code (a < b)`  
@@ -621,7 +628,9 @@ main :: () {
 ```
 
 In the same way as you can do a #insert -> string (see previous §), you can make a `#insert -> Code {  return #code  ...   }` (see line (1)).
-`#insert` can also take a variable c of type Code, e.g.: `#insert(c: Code);`. It is also often used in the body of a macro like this:  
+`#insert` can also take a variable c of type Code, e.g.: `#insert(c: Code);`.  
+
+It is also often used in the body of a macro like this:  
 ```c++ 
 some_macro :: (body: Code) #expand {
     ...
@@ -631,22 +640,25 @@ some_macro :: (body: Code) #expand {
 ```
 
 In lines (3A-B) we call a proc `what_type` (defined in line (1)) with a constant Code argument. The $c ensures that it is constant (see § 22.6)
-Making `what_type` a macro would also ensure that c is constant. For non-constant code arguments, you can use the proc `get_root_type` from the _Compiler_ module (see examples/code_type.jai).
+Making `what_type` a macro would also ensure that c is constant.  
+For non-constant code arguments, you can use the proc `get_root_type` from the _Compiler_ module (see examples/code_type.jai).
 
 (See also § 26.5 Macros, specifically `macroi` in the first example.)
 
-
-
 ## 26.5 Basics of macros
-A macro is also a way to insert code at compile-time at the call site, so it is similar to an inlined procedure. 
+A macro is also a way to insert code at compile-time at the call site, so it is similar to an inlined procedure.   
 Unlike the C/C++ programming language in which a macro is completely arbitrary, Jai macros are more controlled, better supported by the compiler, and come with much better typechecking. Moreover, they can be debugged with the same techniques we saw in § 20.
-They make some kinds of meta-programming easier. If they are well designed, they allow you to raise the level of code abstraction, by creating your own mini-language, specific to the problem space, and then you can solve your particular problem in that mini-language. Macros also allow you to cut down the repetition of not only specific actions (procedures are best for that), but of more abstract constructs. When they are not well designed, however, creating and using macros, results in unmaintainable messes (hard to read, to understand, to debug). So you should only resort to macros when it really makes sense in your program's context: they are a 'last-resort' thing to use.
+
+They make some kinds of meta-programming easier. If they are well designed, they allow you to raise the level of code abstraction, by creating your own mini-language, specific to the problem space, and then you can solve your particular problem in that mini-language.  
+
+Macros also allow you to cut down the repetition of not only specific actions (procedures are best for that), but of more abstract constructs.   When they are not well designed, however, creating and using macros, results in unmaintainable messes (hard to read, to understand, to debug).  
+So you should only resort to macros when it really makes sense in your program's context: they are a 'last-resort' thing to use.
 
 Jai's macros are so called _hygienic_:
 - they do not cause any accidental captures of identifiers from the environment;
 - they modify variables only when explicitly allowed;
 
-Syntactically, macros resemble a procedure: they are defined by adding the **#expand** directive to the end of the proc declaration before the curly brackets. 
+Syntactically, macros resemble a procedure: they are defined by adding the **#expand** directive to the end of the proc declaration before the curly brackets.   
 Let's see this in *26.7A_macros_intro.jai*:
 ```c++
 #import "Basic";
@@ -792,7 +804,8 @@ while getting this message at line (3): `Info: While expanding macro 'macro1' he
 The ` mechanism for looking up outer variables only works one level up.
 
 Line (5) shows that a macro can have parameters, just like any proc. This is a way to avoid the backtick syntax.
-`macro2` defined in line (6) refers to two outer variables b and c. In this case it returns 1, but just before leaving the macro, it prints something by using the `defer` keyword in line (6A). But notice what happens when we use `defer in line (6B): because of the backtick the defer now takes the scope of the caller (main() in this case) as its scope, and prints its message just before main() ending (see the attached complete output in both cases).
+`macro2` defined in line (6) refers to two outer variables b and c. In this case it returns 1, but just before leaving the macro, it prints something by using the `defer` keyword in line (6A).  
+But notice what happens when we use `defer` in line (6B): because of the backtick the defer now takes the scope of the caller (main() in this case) as its scope, and prints its message just before main() ending (see the attached complete output in both cases).
 `macro3` shows _inner_ or _nested_ macros: a macro can contain and call macros defined inside itself. But there is a limit as to how many macro calls you can generate inside another macro.  
 `factorial` is an example of a recursive macro; #if needs to be used here (instead of if), else you get the following `Error: Too many nested macro expansions. (The limit is 1000.)` 
 `maxfunc` is a procedure which calls a nested macro `macron`; this returns "Backtick return macro" as return value from `maxfunc`.  
@@ -1705,7 +1718,7 @@ The piece of source code that gets generated from a #insert can be retrieved fro
 Line (10) mentioned here is this line: #insert -> string.
 
 ## 26.12 How to get info on the nodes tree of a piece of code?
-In § 26.4.1 we saw how #code can make something of type Code out of a piece of code. Another way is to call the proc `code_of` on a piece of code. For some examples of code_of, see jai/examples/here_string_detector.jai and self_inspect.jai  
+In § 26.4.2 we saw how #code can make something of type Code out of a piece of code. Another way is to call the proc `code_of` on a piece of code. For some examples of code_of, see jai/examples/here_string_detector.jai and self_inspect.jai  
 The helper procedure `compiler_get_nodes` can take the result of `#code` or `code_of` and get the AST nodes out of it:
 ```
 compiler_get_nodes :: (code: Code) -> (root: *Code_Node, expressions: [] *Code_Node) #compiler;

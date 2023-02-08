@@ -132,7 +132,7 @@ Matching for $T will not work unless the target type matches PolyStruct, involvi
 Important is that x doesn't have to be of the PolyStruct type!
 It can simply incorporate a PolyStruct via e.g. `using ps: PolyStruct;` This enables also component based systems where each struct links via `using _c: SomeComponent;`
 
->Example:  
+Example:   
 Given the following polymorphic struct:
 ```c++
 Hash_Table :: struct (K: Type, V: Type, N: int) {
@@ -443,7 +443,7 @@ Hello from a Subscriber: "nothing"
 */
 ```
 
-**Some wise words of Jon Blow about polymorphism:**
+**Some wise words of Jonathan Blow about polymorphism:**
 " If lots of procedures in your program are polymorphic, you pay for this in compile time, and possibly also in understandability of the program. Polymorphism is powerful, but historically, when people start writing code that is over-generic, it becomes hard to understand and modify. In general, don't get carried away making things polymorphic if they do not need to be. "
 
 [23B - A showcase of inheritance](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/23B_A%20showcase%20of%20inheritance%20using%20structs%2C%20%23as%20and%20polymorphism.md)  

@@ -254,7 +254,7 @@ It can be used to build strings dynamically, as shown in line (11).
 Strings that have been built dynamically have to be de-allocated. This can be done with `free()`, as shown in line (12). An elegant alternative approach is to use the `tprint` twin proc of `sprint` (see § 21.4.1).
 
 ### 19.4.7 Storing code in strings
-In § 26.4.1 we'll see that _Code_ is a type on its own. One of Jai's fortes is meta-programming, that is: manipulating code at compile-time.  
+In § 26.4.2 we'll see that _Code_ is a type on its own. One of Jai's fortes is meta-programming, that is: manipulating code at compile-time.  
 Code can be stored in a string, but because code can contain lots of backslashes and quotes this can become very difficult to read.  
 A better solution is to store code as a constant string (::) or for many code lines as a multi-line string (see § 19.4.3).
 

@@ -3,7 +3,7 @@
 ## 9.1 First class Types
 Types are first-class values in Jai. This means that you can do the same things with a type than you can do with any other value. This gives you a first glimpse of the flexibility of the language.  
 All types in Jai have type **Type**, the type of Type is also Type.
-**Code** is also a type (see § 26.4.1).
+**Code** is also a type (see § 26.4.2).
 
 Besides the basic types mentioned in § 5 and § 6, Jai also has  other fundamental types, such as: string, pointer, proc (procedure), struct, array, and enum.
 
