@@ -403,7 +403,7 @@ Note that the condition after #if must be a compile-time constant (can be checke
 
 Summarized:  
 > If the condition that follows is false:
-> if will not execute the block
+> if will not execute the block  
 > #if will not compile the block
 
 Caution: there is no #else, just use else.  
@@ -1055,10 +1055,10 @@ main :: () {
 ```
 
 We take the linked-list example from § 12.6, the same struct ListNode and *ListNode variable lst.  
-A for-expansion macro is a special kind of macro that uses `i` as counter and `iter` as iteration variable (defined in line (2)).
+A for-expansion macro is a special kind of macro that uses `i` as counter and `iter` as iteration variable (defined in line (2)).  
 The macro is defined in line (1) with the signature:  
 `for_expansion :: (list: *ListNode, body: Code, flags: For_Flags) #expand`   
-`for_expansion` takes in three parameters: a pointer to the data structure one wants to use the for loop on, a `Code` datatype, and a `For_Flags` flags.
+`for_expansion` takes in three parameters: a pointer to the data structure one wants to use the for loop on, a `Code` datatype, and a `For_Flags` flags.    
 It uses the same while loop as in § 15.1.3. Line (4) assures we break out of the loop if iter gets the null value: break when iter is empty (if this would not be here, the program would crash, try it out!).  
 
 Because we emulate a for-loop, we must give values for the variables  
@@ -1613,8 +1613,15 @@ A Bitmap struct instance is only valid when Width >= Height.
 **Exercises using #modify**  
 (1) Make the call to random() work in Example 2 of _23.7_bake_constants.jai_, by specifying that T is s32 (see random_return_type.jai)  
 (2) Write a proc `square` that squares a variable of a numeric type, but rejects any other type (see square_modify.jai)  
-(3) Write a proc `struct_work` which only accepts a struct as type T when its name starts with "XYZ" (see struct_work.jai)  
-
+(3) Write a proc `struct_work` which only accepts a struct as type T when its name starts with "XYZ" (see struct_work.jai)      
+(4) We have two overloads of a proc ``submit_data`:  
+submit_data :: (data: $T)   
+submit_data :: (data: [] $T)  
+However because these are polymorphic, the compiler cannot decide when you have an array argument that it must take the 2nd version.  
+You get the error (verify this):
+Error: Procedure call matches multiple possible overloads:  
+Write a #modify on the 1st version so that the compiler can  make the difference between the version of submit_data that accepts a T, and the one that accepts an [] T.
+(see choose_array_overload.jai)
 ## 26.10 SOA (Struct of Arrays)
 
 SOA is a special kind of data-design, which makes memory-use much faster, and so enhances performance.
@@ -1726,7 +1733,7 @@ where the new SOA type is constructed with T equal to type Person and count equa
 **How to transform an AOS to an SOA?**
 In line (11) we define an array of Person objects. Line (12) shows that only a simple for loop over the AOS is needed to transfer the data to an SOA.
 
-> Other references (videos on youtube):
+> Other references (videos on youtube):  
     • Noel Llopis: Data-oriented design  
     • Chandler Carruth: Efficiency with Algorithms, Performance with Data Structures  
     • Mike Acton: Data-oriented design in C++  
