@@ -25,8 +25,8 @@ main :: () {
     else print("Error while writing file!\n");  // (4)
     // => Filewrite success!
 
-    // data1 :=  read_entire_file(TESTFILE);            // (5)
-    // data1, success :=  read_entire_file(TESTFILE);            
+    // text :=  read_entire_file(TESTFILE);            // (5)
+    // text, success :=  read_entire_file(TESTFILE);            
     // if !success {
     //     return;
     // }

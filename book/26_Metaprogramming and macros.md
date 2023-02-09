@@ -1622,8 +1622,8 @@ You get the error (verify this):
 Error: Procedure call matches multiple possible overloads:  
 Write a #modify on the 1st version so that the compiler can  make the difference between the version of submit_data that accepts a T, and the one that accepts an [] T.
 (see choose_array_overload.jai)
-## 26.10 SOA (Struct of Arrays)
 
+## 26.10 SOA (Struct of Arrays)
 SOA is a special kind of data-design, which makes memory-use much faster, and so enhances performance.
 It is done at compile-time using `#insert`. This mechanism automatically converts between SOA (Structure of Arrays) and AOS (Array of Structures), without breaking the supporting code. This means a completely different memory access pattern, and it allows for quickly changing data layouts with minor code edits.
 
@@ -1732,6 +1732,8 @@ where the new SOA type is constructed with T equal to type Person and count equa
 ```
 **How to transform an AOS to an SOA?**
 In line (11) we define an array of Person objects. Line (12) shows that only a simple for loop over the AOS is needed to transfer the data to an SOA.
+
+In § 27.2 we extend this example to work with Person data from a .csv file.
 
 > Other references (videos on youtube):  
     • Noel Llopis: Data-oriented design  

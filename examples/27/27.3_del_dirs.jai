@@ -17,11 +17,11 @@ main :: () {
     }
     
     you_are_here := get_working_directory();   /// (1)
-    redacted := args[1];
-    print("Working directory: %\nRemoving directories named '%'...\n", you_are_here, redacted);
+    folder_to_delete := args[1];
+    print("Working directory: %\nRemoving directories named '%'...\n", you_are_here, folder_to_delete);
     
-    delete_proc :: (using info: *File_Visit_Info, redacted : string) {
-        if short_name == redacted {
+    delete_proc :: (using info: *File_Visit_Info, folder_to_delete : string) {
+        if short_name == folder_to_delete {
             success := delete_directory(full_name);
             if !success {
                 print("We failed to delete directory %!\nIt was simply too powerful... ;____;\n", full_name);
@@ -30,12 +30,12 @@ main :: () {
             descend_into_directory = false;
         }
     }
-    complete := visit_files(you_are_here, true, redacted, delete_proc, visit_files = false, visit_directories = true);
+    complete := visit_files(you_are_here, true, folder_to_delete, delete_proc, visit_files = false, visit_directories = true);
     
     if !complete {
         print("There was an error while traversing the directory tree! Oh no!\n");
         exit(-2);
     } else {
-        print("Removed all directories named '%' from %!\n", redacted, you_are_here);
+        print("Removed all directories named '%' from %!\n", folder_to_delete, you_are_here);
     }
 }
