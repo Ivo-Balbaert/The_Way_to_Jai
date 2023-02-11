@@ -21,9 +21,9 @@ main :: () {
     builder: String_Builder;
     builder.allocator = temp;   // (6B)
     
-    print("Temporary_Storage uses % bytes\n", context.temporary_storage.occupied); // (3)
+    print("Temporary_Storage uses % bytes\n", context.temporary_storage.total_bytes_occupied); // (3)
     // => Temporary_Storage uses 344 bytes
     reset_temporary_storage(); // (4)
-    print("Temporary_Storage uses % bytes\n", context.temporary_storage.occupied); // (5)
+    print("Temporary_Storage uses % bytes\n", context.temporary_storage.total_bytes_occupied); // (5)
     // => Temporary_Storage uses 0 bytes
 }

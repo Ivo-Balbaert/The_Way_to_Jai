@@ -67,7 +67,7 @@ main :: () {
     print("Counting down 2\n");
     while counting := count2 > lift_off2 { // (7)
         print("% - ", count2);
-        if count2 == 5  break // or: break counting;
+        if count2 == 5  break counting;
         count2-=1;
     }
     print("Launch aborted!\n");
@@ -114,7 +114,7 @@ Starting in line (6), we see a loop over counter i which is enclosed with a loop
 > If a while loop uses a counter, change the counter by prefixing with defer.
 
 ### 15.1.2 Named while-loops
-In line (7) you see the same while loop as used for the counting down, but now the condition has been given a name (`counting`). This name can be used to break out of the loop when you have nested while loops (see § 15.3).
+In line (7) you see the same while loop as used for the counting down, but now the condition has been given a name (`counting`). This name must be used to break out of the loop when you have nested while loops (see § 15.3).
 
 ### 15.1.3 Printing out a recursive list
 In § 12.6 we constructed a linked-list with a recursive struct LinkedList. To print out its data, now we can do this through a loop mechanism, See *15.2_while_looping_through_a_linked_list.jai*. This has the same definition of LinkedList and variable lst as in example 13.3_linked_list.jai, so we omit this code here; the following code is used between c.next = null and the free statements:

@@ -67,8 +67,11 @@ Here is the struct's definition:
 Temporary_Storage :: struct {  
     data:     *u8;
     size:     s64;
-    occupied: s64;
+    current_page_bytes_occupied: s64;
+    total_bytes_occupied: s64;
     high_water_mark: s64;
+    last_set_mark_location: Source_Code_Location;
+    
     overflow_allocator := Allocator.{__default_allocator_proc, null};
     overflow_pages: *Overflow_Page;
     original_data: *u8;  
@@ -139,10 +142,10 @@ main :: () {
     builder: String_Builder;
     builder.allocator = temp;   // (6B)
     
-    print("Temporary_Storage uses % bytes\n", context.temporary_storage.occupied); // (3)
+    print("Temporary_Storage uses % bytes\n", context.temporary_storage.total_bytes_occupied); // (3)
     // => Temporary_Storage uses 344 bytes
     reset_temporary_storage(); // (4)
-    print("Temporary_Storage uses % bytes\n", context.temporary_storage.occupied); // (5)
+    print("Temporary_Storage uses % bytes\n", context.temporary_storage.total_bytes_occupied); // (5)
     // => Temporary_Storage uses 0 bytes
 }
 ```
@@ -185,7 +188,7 @@ arrdyn.allocator = temp;
 This can be done by using the `auto_release_temp` macro (defined in module _Basic_) to set the mark. Then you can allocate whatever you want temporarily, then release all the memory at once when the stack unwinds by setting the mark back to the original location with `auto_release_temp()`.
 
 ## 21.4.5 How much memory is allocated in temp?
-This is given by the field: `context.temporary_storage.occupied`.  
+This is given by the field: `context.temporary_storage.total_bytes_occupied`.  
 We see in line (5) that it goes back to 0 after the temp memory has been reset in (4).
 
 ## 21.5 Memory-leak detector

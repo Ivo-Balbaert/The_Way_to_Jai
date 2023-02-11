@@ -59,8 +59,8 @@ main :: () {
     print("Counting down 2\n");
     while counting := count2 > lift_off2 { // (7)
         print("% - ", count2);
-        if count2 == 5  break // or: break counting;
-        count2-=1;
+        if count2 == 5  break counting;
+        count2 -= 1;
     }
     print("Launch aborted!\n");
 

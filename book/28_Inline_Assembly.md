@@ -1,13 +1,17 @@
 # 28 Inline assembly
-This feature allows the inclusion of assembly code through the **#asm** directive. You would only do this for portions of the code where you need ultimate performance. That said, inline assembly is being used inside some of the more critical performance standard modules (see below). It's great advantage is also the integration with the Jai language, versus using an not-integrated external assembler.
+This feature allows the inclusion of assembly code in Jai code through the **#asm** directive. You would only do this for portions of the code where you need ultimate performance.  
+Its great advantage is also the integration with the Jai language, versus using a not-integrated external assembler.
+    
+Assembly language is mainly used to generate custom CPU instructions, support SIMD (Single Instruction, Multiple Data see: [Wikipedia SIMD](https://en.wikipedia.org/wiki/Single_instruction,_multiple_datainstructions)) for parallelizing data transformations, or take explicit control over the code generation to get the most optimized code.  
+At this stage only the x86-64 platform is supported. In the future, other instruction sets will be added.  
+Inline assembly does not support jumping, branching, NOP (No Operation instruction), or calling functions; use Jai for that.  
 
-Assembly language is mainly used to generate custom CPU instructions, support SIMD (Single Instruction, Multiple Data see: [Wikipedia SIMD](https://en.wikipedia.org/wiki/Single_instruction,_multiple_datainstructions)) for parallelizing data transformations, or take explicit control over the code generation to get the most optimized code.
-At this stage only the x86-64 platform is supported. Inline assembly does not support jumping, branching, NOP (No Operation instruction), or calling functions; use Jai for that.  
+The **#bytes** directive is used to put the bytes that follow #the directive into machine code.
 
-The **#bytes** directive is used like this: put the bytes that follow #bytes into machine code.
-
-The inner workings of Apollo Time in _Basic_ use inline assembly. Other inline assembly examples can be found in: _modules/Atomics_, *modules/Bit_Operations*, *modules/Runtime_Support*. 
-Module *Machine_X64.jai* contains useful routines for 64-bit Intel x86 machines.
+Inline assembly is being used inside some of the more critical performance standard modules, for example:
+* the inner workings of Apollo Time in _Basic_ use inline assembly. 
+* other inline assembly examples can be found in: _modules/Atomics_, *modules/Bit_Operations*, *modules/Runtime_Support*. 
+* module *Machine_X64.jai* contains useful routines for 64-bit Intel x86 machines.
 
 ## 28.1 Examples of using AVX and AVX2 SIMD operations
 These are some basic SIMD Vector Code for a few 32-bit floats together at the same time. .x means to adding 4 floats at the same time, while .y indicates adding 8 floats together at the same time.
