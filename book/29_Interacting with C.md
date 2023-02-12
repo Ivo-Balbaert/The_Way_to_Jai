@@ -48,13 +48,15 @@ The path to the foreign library is best expressed as relative to the program fil
 Then you declare the functions (their signatures) from that library you want to use, for example:
 ```
 LZ4_compressBound :: (inputSize: s32) -> s32    #foreign lz4;
-LZ4_compress_fast :: (source: *u8, dest: *u8, sourceSize: s32, maxDestSize: s32, acceleration: s32) -> s32  #foreign lz4;
+LZ4_compress_fast :: (source: *u8, dest: *u8, sourceSize: s32, maxDestSize: s32, acceleration: s32)  
+ -> s32  #foreign lz4;
 LZ4_sizeofState :: () -> s32    #foreign lz4;
 ```
 You can also give them another name to use in Jai code like this:
 ```
 compress_bound :: (inputSize: s32) -> s32 #foreign lz4 "LZ4_compressBound";
-compress_fast :: (source: *u8, dest: *u8, sourceSize: s32, maxDestSize: s32, acceleration: s32) -> s32 #foreign lz4 "LZ4_compress_fast";
+compress_fast :: (source: *u8, dest: *u8, sourceSize: s32, maxDestSize: s32, acceleration: s32)  
+ -> s32 #foreign lz4 "LZ4_compress_fast";
 size_of_state :: () -> s32 #foreign lz4 "LZ4_sizeofState";
 ```
 
