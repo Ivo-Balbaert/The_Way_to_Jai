@@ -16,10 +16,10 @@ _Some examples:_
 These statements look for C functions with respectively as names `rand`, `clock`, `strlen`, `array_count` and `printf,  with the same signature as shown, and import them from the C standard library `libc` (on Linux).    
 
 `rand :: () -> s64                            #foreign libc;`  
-`clock :: () -> s64                           #foreign libc;`
-`strlen := (s: string) -> int                 #foreign libc;`
-`array_count := (array: Any [] *) -> int      #foreign libc;`  
-`printf := (s: string, args: ..[] Any) -> int #foreign libc;`  
+`clock :: () -> s64                           #foreign libc;`  
+`strlen := (s: string) -> int                 #foreign libc;`  
+`array_count := (array: Any [] *) -> int      #foreign libc;`    
+`printf := (s: string, args: ..[] Any) -> int #foreign libc;`    
 
 Since these statements are used in Jai code, the signature must be in Jai syntax, using The corresponding Jai types for the original C types. The C library they come from is in these examples `libc`.  
 
