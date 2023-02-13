@@ -10,7 +10,7 @@ We learned about compiling a program with the `jai` command in § 3, while all c
 
 This chapter talks about building (compiling/linking while setting options) a Jai project through running another Jai program: the **meta-program**, which is usually called `build.jai` (it used to be called `first.jai`).  
 Most of the procedures we will need are define in module _Compiler_, so we'll import this module in the programs in this chapter. Most of these programs will also be run at compile-time with #run.  
-By convention a procedure called `build()` is run with `#run build()`, but you can also just run a code block with `#run {...}` (see 30.11_using_notes.jai).  
+By convention a procedure called `build()` is run with `#run build()`, but you can also just run a code block with `#run {...}` (see *30.11_using_notes.jai*).  
 
 Your meta-program gets a lot of very useful information about the target program, including:  
 * syntax trees representing every procedure
@@ -20,12 +20,13 @@ You can do a whole lot of stuff with this information and perform analyses that 
 
 Behind the scenes when you do a: `jai program.jai`, the compiler internally runs another meta-program at startup to compile the first workspace. This **default meta-program** does things such as setting up the working directory for the compiler, setting the default name of the output executable based on command-line arguments, and changing between debug and release build based on command-line arguments. It only accepts arguments preceded by a `-`. The source for this meta-program is in _modules/Default_Metaprogram.jai_. 
 
-Any procedure that has the **#compiler** directive is a proc that interfaces with the compiler as a library; it works with compiler internals.
+> Any procedure that has the **#compiler** directive is a proc that interfaces with the compiler as a library; it works with compiler internals.
 
 ## 30.1 Workspaces
 You've probably noticed that every successful compile output (let's say `jai program.jai`) contains the sentence:  
 `Stats for Workspace 2 ("Target Program"):`
-The 'Target Program' mentioned here is `program.jai`. For each program that is built by the compiler, a different **workspace** is used. A workspace represents a completely separate environment, inside which we can compile programs. When the compiler starts up, it makes a workspace for the first files that you tell it to compile on the command-line. 
+The 'Target Program' mentioned here is `program.jai`. For each program that is built by the compiler, a different **workspace** is used.  
+A workspace represents a completely separate environment, inside which we can compile programs. When the compiler starts up, it makes a workspace for the first files that you tell it to compile on the command-line. 
 
 See *30.1_workspaces.jai*:
 ```c++
@@ -86,9 +87,9 @@ main :: () {
 ```
 A few directives exist that can be handy when providing file location information, at run-time as well as during compiling:  
   **#file**         contains the complete path, filename included of the current file  
-  **#line**         gives the number of the line of code where this directive is used
-  **#filepath**     contains the path to the current file, without the filename; it can be a remote filepath.
-  **#location**     given a piece of Code, it can extract the full path to that code, as well as its line number.
+  **#line**         gives the number of the line of code where this directive is used  
+  **#filepath**     contains the path to the current file, without the filename; it can be a remote filepath.  
+  **#location**     given a piece of Code, it can extract the full path to that code, as well as its line number.  
   **#caller_location**  it gives the line number from where a procedure is called.  
 
 When using or setting file-paths in Jai, always use the forward slash / as path-separator, even on Windows!
@@ -129,12 +130,18 @@ The first step in the building process is always to create a new workspace w (se
 * Workspace 3: reserved for the building script (we could call it a script, although it's completely written in Jai);
 
 Then we want to configure the build options. We first get the current build options from the workspace with the procedure `get_build_options(w)`, which returns an instance of the struct `Build_Options`. This struct is defined in module _Compiler_, and contains some 45 options you can tweak about how the compilation works!  
+
 In this first example, we only set the field `output_executable_name` (line (3)).  
 After all necessary build options have been configured, we write them back to the workspace with the proc `set_build_options` (see line (4)).  
-Then we add a file which has to be compiled with the proc `add_build_file` (see line (5)). This takes a string with the complete source file path and the workspace. You can pass the complete path in any form you like, here the file was constructed with tprint for convenience, using the current path `#filepath` and name `main.jai`. In this simple case, `add_build_file("main.jai", w);` works as well. If you have other files to compile, add them one by one with `add_build_file("file.jai", w);`. The compiler will automatically build any files included with the `#load` directive.
+
+Then we add a file which has to be compiled with the proc `add_build_file` (see line (5)). This takes a string with the complete source file path and the workspace. You can pass the complete path in any form you like, here the file was constructed with tprint for convenience, using the current path `#filepath` and name `main.jai`.  
+
+In this simple case, `add_build_file("main.jai", w);` works as well. If you have other files to compile, add them one by one with `add_build_file("file.jai", w);`. The compiler will automatically build any files included with the `#load` directive.
+
 Without line (6), compilation of the build program `30.3_build.jai` produces the specified `program.exe`, but also an executable for the build program itself (in our case named `30.exe`). Normally, you're not interested in an executable for the build process itself. To disable its generation, use line (6):
 `set_build_options_dc(.{do_output=false});`
 _dc means During Compile, and we specify that we don't want any output.
+
 If you don't want to see the generated strings either in .build, you can add: `set_build_options_dc(.{write_added_strings=false});`
 This means no executable for the build program itself is generated and no statistics for its compilation are shown (Workspace 2).
 
@@ -204,7 +211,9 @@ main :: () {
 ```
 The **#placeholder** directive specifies to the compiler that a particular symbol will be defined/generated by the compile-time meta-program.  
 In the program code, the constant TRUTH is 'announced' in line (1), it only gets declared in the #run block with the proc `add_build_string` in line (2). Note how `#import "Compiler";` also can be done in the #run block.  
-`add_build_string` adds a string as a piece of code to the program. The first argument is a string, the second argument is the workspace (see § 30.1) you want to add it to. You can do all sorts of complex string manipulation to create complex meta-programming code, then add it to your build in string format. 
+`add_build_string` adds a string as a piece of code to the program.  
+
+The first argument is a string, the second argument is the workspace (see § 30.1) you want to add it to. You can do all sorts of complex string manipulation to create complex meta-programming code, then add it to your build in string format. 
 
 ## 30.4 The build options
 See *30.4_build_options.jai*:
@@ -288,12 +297,12 @@ Optimized builds take much longer (10x) time than debug builds, but are around 2
 
 This automatically turns OFF all runtime checks, and specifies a number of optimizations for LLVM code production.
 
-To enable bytecode inlining, use: `target_options.enable_bytecode_inliner = true;` 
+To enable bytecode inlining, use: `target_options.enable_bytecode_inliner = true;`   
 To stop making a .pdb file, use:  `target_options.emit_debug_info=.NONE;`
 
 ### 30.4.2 The output type
 Possible values are: .NO_OUTPUT; .DYNAMIC_LIBRARY; .STATIC_LIBRARY; .OBJECT_FILE; with as default .EXECUTABLE;
-(For examples of useage, see how_to/400_workspaces.jai and Jai\examples\output_types)
+(For examples of usage, see how_to/400_workspaces.jai and Jai\examples\output_types)
 
 ### 30.4.3 The output executable name
 This is only the filename of the executable, it includes no extension.
@@ -302,7 +311,7 @@ This is only the filename of the executable, it includes no extension.
 This is the path where the executable (and the other compiler artifacts, such as the .pdb) will be written.
 
 ### 30.4.3C The import path
-If you need to import modules from another folder than the standard jai\modules, use options.import_path as shown here.
+If you need to import modules from another folder than the standard *jai\modules*, use options.import_path as shown here.
 
 ### 30.4.4 The backend options
 Current options are .LLVM and .X64; X64 is the fastest backend.
@@ -322,7 +331,7 @@ This could be useful when writing for an embedded system.
 Normally code that isn't called at run-time (so called dead-code) is NOT compiled: the dead code is eliminated.  
 For example a proc that gives a compile error when called won't give any error if not called.  
 You can stop this dead-code elimination with this line in your build file:     
-`target_options.dead_code_elimination = .NONE;`
+`target_options.dead_code_elimination = .NONE;`  
 ALternatively, there is the `-no_dce` compiler command-line option (see § 2B).
 
 ### 30.4.8 Optimizing LLVM or X64 build
@@ -373,7 +382,8 @@ main :: () {}
 ```
 
 For suitable debug / release options, see § 30.8
-To build for production (release), you would do only `#run build_release();`, or use the command-line option `-run build_release()` while doing `jai build_debug_release.jai`
+To build for production (release), you would do only `#run build_release();`, or use the command-line option `-run build_release()` while executing  
+`jai build_debug_release.jai`
 
 ### 30.4.10 Preventing the output of compiler messages
 If you want a cleaner output, add this code line to the build:
@@ -384,12 +394,15 @@ This line disables most of the text output from the compiler.
 
 ## 30.5 Changing the default meta-program
 Here is how to substitute the default meta-program with your own:  
-Your own meta-program should be a module (let's call it Build, but any name is ok). This Build module must be in a folder Build (either in the default `jai/modules` folder or in a dedicated `modules_folder`) containing a file module.jai. This file has to contain a `build()` proc and a `#run build()` (it should not contain a `main` proc). You can start from 30.3_build.jai or _modules/Minimal_Metaprogram.jai_ to make your Build() module. You can then use your meta-program as follows: 
+Your own meta-program should be a module (let's call it Build, but any name is ok). This Build module must be in a folder Build (either in the default `jai/modules` folder or in a dedicated `modules_folder`) containing a file module.jai. This file has to contain a `build()` proc and a `#run build()` (it should not contain a `main` proc).  
+You can start from 30.3_build.jai or _modules/Minimal_Metaprogram.jai_ to make your Build() module. You can then use your meta-program as follows: 
 `jai main.jai -- meta Build`  
 if Build is in the default jai/modules folder, or  
 `jai main.jai -- import_dir "d:/Jai/my_modules" meta Build`  
 if Build is in a dedicated _d:/Jai/my_modules_.
-(--- instead of -- is also allowed. The compiler now accepts either -- or --- as the delimiter of hardcoded compiler arguments.)
+(--- instead of -- is also allowed.  
+
+The compiler accepts either -- or --- as the delimiter of hardcoded compiler arguments.)
 
 ## 30.6 Intercepting the compiler message loop
 As developer you can access the workings of the compiler through the compiler message loop.
@@ -432,7 +445,8 @@ message_loop :: () {
             }
             case .IMPORT; {            
                 message_import := cast(*Message_Import) message;          // (8)
-//               print("Imported '%', module_type %, with path '%'.\n", m.module_name, m.module_type, m.fully_pathed_filename); // (9)
+//               print("Imported '%', module_type %, with path '%'.\n", m.module_name, m.module_type, 
+m.fully_pathed_filename); // (9)
             }
             case .PHASE; {            
                 message_phase := cast(*Message_Phase) message;     // (10)
@@ -497,7 +511,9 @@ Stats for Workspace 3 (unnamed):
 
 You do that by getting a hook into the compiler loop with `compiler_begin_intercept(w);` (line (1)); it causes us to get compiler messages from this workspace.
 The hook is removed after the compiler access with `compiler_end_intercept(w);` (line (1B)).
+
 We process all compiler messages in the `message_loop();` procedure. This is a while true loop. In line (3), we do: `message := compiler_wait_for_message();` and print out the message. Because this is an infinite loop, we need to stop when the compiler signals the end of its work with the COMPLETE message; this is done in line (5).
+
 In the output, the same kind of messages appear over and over (like IMPORT, FILE, PHASE, TYPECHECKED, ... which is the `kind` of the message), and at the end we get {COMPLETE, 3} (The 3 always refers to workspace 3).
 
 What can we do with this functionality?
@@ -592,7 +608,7 @@ You can also run any other program after successful completion.
 Another use-case would be to run the program after successful completion of the compilation, or any other program for that matter.  
 
 ## 30.7 Building and running on successful compilation
-What if we want to build our project, and on successful completion, run it?
+What if we want to build our project, and run it on successful completion?
 
 See *30.6_build_and_run.jai*:
 ```c++
@@ -679,7 +695,7 @@ build :: () {
     
     options := get_build_options(w);
 
-    args := options.compile_time_command_line;    // (1)
+    args := options.compile_time_command_line;     // (1)
     print("\nargs: %\n", args);
     filename := args[2];
 
@@ -689,7 +705,7 @@ build :: () {
     set_build_options(options, w);
 
     compiler_begin_intercept(w);
-    add_build_file(sprint("%.jai", filename), w);   // (3)
+    add_build_file(sprint("%.jai", filename), w);  // (3)
     message_loop();
     compiler_end_intercept(w);
 
@@ -724,6 +740,7 @@ Here is the contents of main8.jai:
 main :: () {
   print("This program was built with a meta-program 30.14_build_inlining.jai\n");
 }
+```
 
 When we run `main8`, we get the output: `This program was built with a meta-program 30.14_build_inlining.jai`.
 
