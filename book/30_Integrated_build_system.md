@@ -458,9 +458,11 @@ m.fully_pathed_filename); // (9)
                 if message_phase.phase == .POST_WRITE_EXECUTABLE {
                     print("\n");
                     if message_phase.executable_write_failed {
-                        print("FAILED writing '%'! Linker exit code was %.\n", message_phase.executable_name, message_phase.linker_exit_code);
+                        print("FAILED writing '%'! Linker exit code was %.\n",  
+                        message_phase.executable_name, message_phase.linker_exit_code);
                     } else {
-                        print("Success writing '%'! Linker exit code was %.\n", message_phase.executable_name, message_phase.linker_exit_code);
+                        print("Success writing '%'! Linker exit code was %.\n",  
+                        message_phase.executable_name, message_phase.linker_exit_code);
                     }
                 }
             }
@@ -742,7 +744,7 @@ main :: () {
 }
 ```
 
-When we run `main8`, we get the output: `This program was built with a meta-program 30.14_build_inlining.jai`.
+When we run `main8`, we get the output: `This program was built with meta-program 30.14_build_inlining.jai`.
 
 ## 30.9 Building and running with a compiler command-line argument 
 In § 2B we told you that arguments given at the end of a `jai` command with `- ` are arguments for the meta-program. These arguments are called  _compiler command-line arguments_.
@@ -806,7 +808,10 @@ main :: () {}
 ```
 
 We define a new global variable `run_on_success` which will become true when we give a meta-program argument `- run`.
-In line (1) we get these argument(s) from the property `Build_Options.compile_time_command_line`. Starting in line (2), we loop over them and set `run_on_success` when finding `- run`. In line (3) we now test both success parameters before running the executable.  
+In line (1) we get these argument(s) from the property `Build_Options.compile_time_command_line`.  
+
+Starting in line (2), we loop over them and set `run_on_success` when finding `- run`. In line (3) we now test both success parameters before running the executable.  
+
 To get the same output as in the previous section, you now have to call the compiler with:  `jai 30.7_build_and_run2.jai - run` 
 
 ## 30.10 Choosing a debug / release build with a compiler command-line argument
@@ -889,7 +894,7 @@ Another use-case would be enforcing coding house rules, an example is shown in 3
 
 MISRA coding standards are a set of C and C++ coding standards, developed by the Motor Industry Software Reliability Association (MISRA). These are standards specific to the automotive industry,.
 
-See _30.9_house_rules.jai:
+See *30.9_house_rules.jai*:
 ```c++
 #import "Basic";
 #import "Compiler";
@@ -977,7 +982,7 @@ D:/Jai/The_Way_to_Jai/examples/30/main5.jai:4,3: Error: Too many levels of point
 ```
 
 (See other MISRA checks implemented in how_to/480.)
-Howto_490 shows how to get info on loaded files and imported modules at compile-time.
+How_to/490 shows how to get info on loaded files and imported modules at compile-time.
 
 ## 30.12 Generating optimized LLVM bitcode
 See *30.10_generate_llvm_bitcode.jai*:
@@ -1127,12 +1132,13 @@ See *30.11_using_notes.jai*:
 In line (2), all possible notes are checked after each TYPECHECKING phase:  
 `for note: decl.expression.notes { }`  
 If the note contains "fruit", the proc's name is added to the array `procs`.  
-The code starting in line (3) shows how to generate new code (in this case a `main` proc) after the TYPECHECKED_ALL_WE_CAN phase. `generate_code()` (called in line (4) and defined in line (6)) is a macro that produces a string which contains the code for a `main` proc, printing out the names of all procs with the note @fruit alphabetically. The sorting is done by first calling `bubblesort` from module _Sort_, which also calls a `compare` proc from module _String_.
+The code starting in line (3) shows how to generate new code (in this case a `main` proc) after the TYPECHECKED_ALL_WE_CAN phase. `generate_code()` (called in line (4) and defined in line (6)) is a macro that produces a string which contains the code for a `main` proc, printing out the names of all procs with the note @fruit alphabetically.
+
+The sorting is done by first calling `bubblesort` from module _Sort_, which also calls a `compare` proc from module _String_.
 A bool flag variable gen_code is used so that this generation is done only once.  
 Let's see the results. First run the meta-program:  
 `jai 30.11_using_notes.jai`  
-Then run the generated executable `notes.exe`:  
-notes  
+Then run the generated executable `notes.exe`:   
 which produces as output:  
 ```
 apple
@@ -1141,7 +1147,7 @@ cherry
 dog
 elephant
 ```
-(See also how_to/470, first.jai for code to check if a procedure has a certain note and the Jai Cookbook (https://github.com/onelivesleft/jai-cookbook) modules and tools folder.)
+(See also how_to/470, first.jai for code to check if a procedure has a certain note and the [Jai Cookbook](https://github.com/onelivesleft/jai-cookbook) modules and tools folder.)
 
 ## 30.14 Writing and loading dynamic libraries and #program_export
 (Example from Jai Community Wiki)
@@ -1217,8 +1223,9 @@ main :: () {
 ```
 
 The executable calls the proc `dll_func` from the dynamic library.
-Build both with:        ` jai 30.13_dynamic_libraries.jai`
-and see the result of:  `main7`
+Build both with:   
+` jai 30.13_dynamic_libraries.jai`
+and see the result of:  `main7`  
 which outputs:  `Hello Sailor`
 
 ## 30.15 Adding data to the executable
@@ -1249,8 +1256,10 @@ main :: () {
 ```
 
 In line (1) we join a number (43 to be exact, see the print of count) of hexadecimal byte strings (see § 19.3) and autocast this to an []u8. This is then added at compile-time through #run to the global data.
-As a result, this data will be baked in into the final executable.
-The same bytes are also stored in the file `pixel.png`. In line (2) we read in this file, autocast it, and also add it to global data to be baked into the executable.
+
+As a result, this data will be baked in into the final executable.    
+The same bytes are also stored in the file `pixel.png`. In line (2) we read in this file, autocast it, and also add it to global data to be baked into the executable.  
+
 .READ_ONLY is the 2nd argument which is a Data_Segment_Index.
 This baking can also be done in different data segments if needed.
 
@@ -1258,4 +1267,4 @@ Why bake data into your main program? Well, maybe you want to distribute a stand
 Maybe you want fast access to some of your data at startup, and can load the rest later.
 
 
-Some useful code examples of meta-programming during a build can be found at (https://github.com/onelivesleft/jai-cookbook).
+Some useful code examples of meta-programming during a build can be found in the [Jai Cookbook](https://github.com/onelivesleft/jai-cookbook).
