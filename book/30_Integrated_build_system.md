@@ -356,6 +356,9 @@ The -O3, -O2, -O1 optimization levels for LLVM can be changed by setting the cod
 `target_options.llvm_options.code_gen_optimization_level = 2`  
 will set the LLVM options to -O2.
 
+### 30.4.8B Setting machine-level asm options
+See 28.6.1
+
 All possible options can be found in module _Compiler_.
 You can set additional module import paths with the option `.import_path`, which is an array of strings.
 
@@ -446,7 +449,7 @@ message_loop :: () {
             case .IMPORT; {            
                 message_import := cast(*Message_Import) message;          // (8)
 //               print("Imported '%', module_type %, with path '%'.\n", m.module_name, m.module_type, 
-m.fully_pathed_filename); // (9)
+// m.fully_pathed_filename); // (9)
             }
             case .PHASE; {            
                 message_phase := cast(*Message_Phase) message;     // (10)

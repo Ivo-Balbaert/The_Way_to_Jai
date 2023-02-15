@@ -1,7 +1,7 @@
 # 31 Working with Threads
 
 Threads are a facility provided by the operating system. A different process can run in each thread. Jai exposes this facility: programs can launch multiple threads so that several processes can run in parallel, that is: simultaneously. To use this you need the _Thread_ module.                                        
-Jai provides platform-independent thread routines, as well as Mutexes, Threading primitives, Semaphores and a ThreadGroup functionality.
+Jai provides platform-independent thread routines, as well as mutexes, threading primitives, semaphores and a ThreadGroup functionality.
 Thread is a struct, defined in the module _Thread_.
 Each thread has its own Context. Because Temporary_Storage is in the Context, there's a separate storage space per thread, so you don't have to synchronize between threads, and it is fast.
 
@@ -41,49 +41,47 @@ log_level = NORMAL; temporary_storage = 21e_caf8_9b90; dynamic_entries = [{(null
 */
 ```
 
-You create a new thread by doing New and calling the `thread_init` procedure (see line (1)), creates a thread using heap allocation.
+You create a new thread by doing New and calling the `thread_init` procedure (see line (1)). This creates a thread using heap allocation.
 
 The `thread_init` proc has this signature:  
-`thread_init :: (thread: *Thread, proc: Thread_Proc, temporary_storage_size : s32 = 16384, starting_storage: *Temporary_Storage = null) -> bool`
+`thread_init :: (thread: *Thread, proc: Thread_Proc, temporary_storage_size : s32 = 16384, starting_storage: *Temporary_Storage = null) -> bool`  
 This proc does not start a thread, it just initializes the thread's data.
 
-The new thread has to do something, so `thread_init` is called with a proc as its 2nd parameter: this proc always has to have the signature as in line (5):
+The new thread has to do something, so `thread_init` is called with a proc as its 2nd parameter. This proc always has to have the same signature as in line (5):
 `thread_proc :: (thread: *Thread) -> s64`  
-A thread has to be shut down when it is no longer useful, we do this with a defer block as in line (2), calling `thread_deinit` and `free`.  
+A thread has to be shut down when it is no longer useful. We do this with a defer block as in line (2), calling `thread_deinit` and `free`.  
 
-Then we have to start up the new thread with the `thread_start` procedure in line (3); this proc has the signature: `thread_start :: (thread: *Thread);`.  
-Line (4) uses the proc `sleep_milliseconds(1000)` to suspend the main thread for 1s. This is needed here to see the output of both main and thread1, without it main closes off before thread1 has had the chance to print its own output.  
+To start up the new thread, use the `thread_start` procedure in line (3). This proc has the signature: `thread_start :: (thread: *Thread);`.  
+Line (4) uses the proc `sleep_milliseconds(1000)` to suspend the main thread for 1s. This is needed here to see the output of both `main` and `thread1`. Without it `main` closes off before `thread1` has had the chance to print its own output.  
 Line (5) shows that we can test whether a thread is still running with the `thread_is_done` procedure.  
 
-From the output we see that the `main` thread and the new thread `thread1` have a different `context`. Their contexts are using the same procedures, but they have a different thread_index and their temporary storage location is different.
+From the output we see that the `main` thread and the new thread `thread1` have a different `context`. Their contexts are using the same procedures, but they have a different `thread_index` and their temporary storage location is different.
 
 ## 31.2 Thread Groups
 ## 31.2.1 Concept and basic example
 When you need a bunch of threads to asynchronously respond to requests simultaneously, you can launch a so-called Thread_Group.  
 The following proc's are at your disposal:  
 * `init :: ()`  initializes a thread group
-  Here is its signature:
+  Here is its signature:  
   `init :: (group: *Thread_Group, num_threads: s32, group_proc: Thread_Group_Proc, enable_work_stealing := false);`
 
    The thread group can only execute one procedure, namely the one indicated by `group_proc`.  
    The `Thread_Group_Proc` procedure pointer is defined as:   
    `Thread_Group_Proc :: #type (group: *Thread_Group, thread: *Thread, work: *void) -> Thread_Continue_Status;`
 
-   work is passed into the Thread_Group through the add_work :: () function, but the actual work is specified in `Thread_Group_Proc`. 
-   The `Thread_Continue_Status` can have the following values: 
-    .STOP       causes the thread to terminate 
-    .CONTINUE   causes the thread to continue to run
+   work is passed into the Thread_Group through the `add_work` procedure, but the actual work is specified in `Thread_Group_Proc`.   
+   The `Thread_Continue_Status` can have the following values:   
+    .STOP       causes the thread to terminate   
+    .CONTINUE   causes the thread to continue to run  
 
 * `start :: ()` starts the running of the threads; it has the signature:  `start :: (group: *Thread_Group);`
-  
 * `shutdown :: ()` stops the running of the threads; call shutdown before your program exits.
-
 * `add_work :: ()` adds a unit of work, which will be given to one of the threads; here is its signature:  
   `add_work :: (group: *Thread_Group, work: *void, logging_name := "");`
 
 Let's see this in action in the following example:
 
-See _31.3_thread_groups.jai_:
+See *31.3_thread_groups.jai*:  
 (Example taken from the Jai Community Library wiki)
 ```c++
 #import "Basic";
@@ -186,7 +184,7 @@ exit program
 ## 31.2.2 Getting results from the thread group
 The basic example above didn't do any useful work. Let's see a more practical example:
 
-See _31.4_thread_group_response.jai_:
+See *31.4_thread_group_response.jai*:  
 (Example taken from the Jai Community Library wiki)
 ```c++
 
@@ -270,13 +268,16 @@ exit program
 ```
 
 This example follows the same pattern as in the previous one. 
-But now `thread_test` does some more work: it calculates a sum, which is returned in line (1), by setting the result field of the Work struct. The work is set up in lines (2) and following (it is defined through 10 Work structs), and send to the thread group in line (2B).  
+But now `thread_test` does some more work: it calculates a sum, which is returned in line (1), by setting the result field of the Work struct.  
+The work is set up in lines (2) and following (it is defined through 10 Work structs), and send to the thread group in line (2B).    
 In line (3), the `get_completed_work` proc gets the results back. 
-In the main thread, these results are totalized and printed out. We also see that pausing the main thread by 1 ms is enough to give the thread group the opportunity to do its work. Measuring the time it took with the technique from § 6B.2 gives: `The thread group took 0.015675 seconds`.
+In the main thread, these results are totalized and printed out. We also see that pausing the main thread by 1 ms is enough to give the thread group the opportunity to do its work.  
+Measuring the time it took with the technique from § 6B.2 gives: `The thread group took 0.015675 seconds`.
 
 ## 31.2.3 Determining the number of threads to use
-What is a suitable number of threads?**
-The number of threads `num_threads`should be <= to the number of CPUs. More than that will make our computer do much context-switching work, which is wasted. You could use the following routine to determine `num_threads` before launching init:  
+What is a suitable number of threads?  
+The number of threads `num_threads` should be smaller than or equal to the number of CPUs. More than that will make our computer do a lot of context-switching work, which is wasted. You could use the following routine to determine `num_threads` before launching init:  
+
 See _31.5_num_threads.jai_:
 ```c++
 #import "Basic";
@@ -295,10 +296,10 @@ main :: () {
     // init(*thread_group, num_threads, work_proc);
 }
 ```
-`get_number_of_processors()` from module _System_ reports the number of processors, but in fact these are hyper-threads, so we have to divide by 2 in line (2). Further we reserve one thread for the main processor (see (3)), and we start a minimum of 2 threads.
+`get_number_of_processors()` from module _System_ reports the number of processors, but in fact these are hyper-threads, so we have to divide by 2 in line (2). Also we reserve one thread for the main processor (see (3)), and we start a minimum of 2 threads.
 
 ## 31.2.4 Periodically checking which portion of the work is completed
-In the _thread_group_ example in module _Thread_  we also find a way to do this. Schematically, it runs as follows:
+In the _thread_group_ example in module _Thread_  we also see a way to do this. Schematically, it runs as follows:
 ```c++
    work_remaining := NUM_WORK_ITEMS;
    while work_remaining > 0 {
@@ -313,8 +314,10 @@ In the _thread_group_ example in module _Thread_  we also find a way to do this.
 ```
 
 ## 31.3 Mutexes
-A **mutex** (mutual exclusion object) is a program object that is created so that multiple program threads can take turns sharing the same resource, such as access to a file. They typically operate by _lock_ ing a critical code section, so that only the thread that has the lock can access the code in that section. After doing its work, the critical section is _unlock_ ed, so that other threads (that were queued in the meantime) can have access to that section too.  
+A **mutex** (mutual exclusion object) is a program object that is created so that multiple program threads can take turns sharing the same resource, such as access to a file. They typically operate by _lock_ ing a critical code section, so that only the thread that has the lock can access the code in that section.   After doing its work, the critical section is _unlock_ ed, so that other threads (that were queued in the meantime) can have access to that section too.  
+
 Jai has a _Mutex_ struct built-in in module _Thread_. The following example shows how to work with a mutex:  
+
 See _31.6_mutex1.jai_:
 ```c++
 #import "Basic";
@@ -346,6 +349,7 @@ Now several mutexes can be  defined having an order like 1, 2, 3. If the DEBUG m
 [The DEBUG parameter is temporarily disabled starting from version beta 0.1.055b, so the error checking doesn't work for now.]
 
 This is illustrated in the following program:  
+
 See _31.7_mutex_order.jai_:
 ```c++
 #import "Basic";
@@ -399,7 +403,8 @@ Doing A stuff!
 // If section // (4) is uncommented: 
 Doing B stuff!
 Attempt to lock mutexes out of order.
-While we had already locked 'B' at order 2 (d:/Jai/The_Way_to_Jai/examples/31/31.7_mutex_order.jai:32)...
+While we had already locked 'B' at order 2 
+(d:/Jai/The_Way_to_Jai/examples/31/31.7_mutex_order.jai:32)...
 We tried to lock 'C' at order 3 (d:/Jai/The_Way_to_Jai/examples/31/31.7_mutex_order.jai:36).
 Lock order must strictly decrease, so this is invalid.
 c:/jai/modules/Thread/primitives.jai:552,21: Assertion failed!
@@ -415,7 +420,8 @@ d:/Jai/The_Way_to_Jai/examples/31/31.7_mutex_order.jai:36: main
 In line (1) we define the DEBUG module parameter to be true. Line (2) and following initializes three mutexes with their order defined through their 3rd argument.In the following section, they are correctly locked and unlocked. In the section starting after line (4), the mutex order is incorrect. When uncomment, this section gives the following error:  
 ```
 Attempt to lock mutexes out of order.
-While we had already locked 'B' at order 2 (d:/Jai/The_Way_to_Jai/examples/31/31.7_mutex_order.jai:32)...
+While we had already locked 'B' at order 2 
+(d:/Jai/The_Way_to_Jai/examples/31/31.7_mutex_order.jai:32)...
 We tried to lock 'C' at order 3 (d:/Jai/The_Way_to_Jai/examples/31/31.7_mutex_order.jai:36).
 Lock order must strictly decrease, so this is invalid.
 c:/jai/modules/Thread/primitives.jai:552,21: Assertion failed! 
@@ -426,7 +432,9 @@ This also means that you **cannot have deadlocks** in your program! The reason i
 ## 31.4 Building a program using OpenGL, macros and threads
 > This example was made by Nuno Afonso, and discussed in his YouTube video series 'The Joy of Programming in Jai", part 11: Advanced Compilation.
 
-In this example, we start from 30.6_build_and_run.jai, to which we have only added 4 lines. While compiling, we are showing an SDL window with title "Compiling..." and a grey background. When the compiler emits the COMPLETE message, we change the window title to "Success!" and the background to green. To accomplish this, OpenGL is used to show the windows in a separate (GUI) thread from the main thread, using macros as well. See it in action: `jai 31.2_build_threads.jai`  
+In this example, we start from *30.6_build_and_run.jai*, to which only 4 lines were added. While compiling, we are showing an SDL window with title "Compiling..." and a grey background.   
+When the compiler emits the COMPLETE message, we change the window title to "Success!" and the background to green.  
+To accomplish this, OpenGL is used to show the windows in a separate (GUI) thread from the main thread, using macros as well. See it in action in the following example, started with `jai 31.2_build_threads.jai`.  
 
 See *31.2_build_threads.jai*:
 ```c++
@@ -485,8 +493,8 @@ main :: () {}
 
 In line (1) we load the file `build_gui.jai`, where all the graphical and thread magic happens. In line (2), the SDL window is shown. In line (3) we slow down the compiling process by waiting 10 ms between each compiler message. Line (4) makes the GUI thread wait even more. So don't think, why is the compiler now so slow? This effect is purely artificial, so that we can clearly view our windows.
 
-Here are screenshots of the windows:
-![Compiling](https://github.com/Ivo-Balbaert/The_Way_to_Jai/tree/main/images/compiling.png)
+Here are screenshots of the windows:  
+![Compiling](https://github.com/Ivo-Balbaert/The_Way_to_Jai/tree/main/images/compiling.png)  
 ![Success](https://github.com/Ivo-Balbaert/The_Way_to_Jai/tree/main/images/success.png)
 
 The loaded file `build_gui.jai` contains the following code:
@@ -552,16 +560,20 @@ render :: () {
 ```
 
 Line (1) and following imports the necessary modules_SDL_, _GL_  and _Thread_.  
-In line (2), we see a macro `show_gui`, which first activates OpenGL. Then in the parent (because of the `) scope where it is being called, a `show_gui` thread is created and started. Care is taken to shut down the threat at the end in the parent scope with `defer. At compilation, this macro becomes a proc `show_gui()`, which is the one which is called in line (2) in the main program 31.2_build_threads.jai
+In line (2), we see a macro `show_gui`, which first activates OpenGL. Then in the parent (because of the `) scope where it is being called, a `show_gui` thread is created and started. Care is taken to shut down the threat at the end in the parent scope with `defer.  
+
+At compilation, this macro becomes a proc `show_gui()`, which is the one which is called in line (2) in the main program 31.2_build_threads.jai
 (Both versions of show_gui() don't form a problem, they are overloading procs.)
+
 In the `show_gui` proc that is executed in the separate GUI thread, an SDL window is created in line (6), with a grey color (line (7)).  
+
 In an unending loop in (8), we test until success, which is a global variable in parent scope, becomes true. This is the case when the compiler sends the COMPLETE message. In that case, the window title changes, its color becomes green (line (10)), and the loop is stopped. After 2 sec the window is then closed. 
 
 ## 31.5 Minimal implementation of Go-style channels
-The following example presents a very simplistic single-threaded version of Go-style channels: 
-Pros:   the channels are bounded, synchronous, blocking, and optionally buffered.  
-        (To turn off buffering, set n=1).
-Cons:   locking (which is needed in a multithreaded situation) is not implemented.
+The following example presents a very simplistic single-threaded version of Go-style channels:   
+Pros:   the channels are bounded, synchronous, blocking, and optionally buffered.    
+Cons:   locking (which is needed in a multithreaded situation) is not implemented.  
+(To turn off buffering, set n=1).
 
 See *31.8_channels.jai*:
 ```c++
