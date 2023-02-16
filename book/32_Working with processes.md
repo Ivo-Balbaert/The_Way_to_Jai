@@ -48,6 +48,6 @@ write_to_process :: (process: *Process, data: [] u8) -> success: bool, bytes_wri
 This is done with the following procedure, which reads an array of bytes from a process:
   
 ```
-read_from_process :: (process: *Process, output_buffer: [] u8, error_buffer: [] u8, timeout_ms := -1) ->  
-success: bool, output_bytes: int, error_bytes: int;
+read_from_process :: (process: *Process, output_buffer: [] u8, error_buffer: [] u8, timeout_ms := -1)
+-> success: bool, output_bytes: int, error_bytes: int;
 ```
