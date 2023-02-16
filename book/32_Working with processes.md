@@ -8,7 +8,8 @@ The procedure that starts a process from within a program is named `run_command`
 
 ```
 run_command :: (args: .. string, working_directory := "", capture_and_return_output := false,  
-print_captured_output := false, timeout_ms := -1, arg_quoting := Process_Argument_Quoting.QUOTE_IF_NEEDED) ->  
+print_captured_output := false, timeout_ms := -1,  
+arg_quoting := Process_Argument_Quoting.QUOTE_IF_NEEDED) ->  
 (process_result: Process_Result, output_string := "", error_string := "", timeout_reached := false);
 ```
 
@@ -23,7 +24,9 @@ where only the 1st ..string argument is supplied.
 This is done with the procedure:  
 ```
 create_process :: (process: *Process, args: .. string, working_directory := "",  
-capture_and_return_output := false, arg_quoting := Process_Argument_Quoting.QUOTE_IF_NEEDED,    kill_process_if_parent_exits := true) -> success: bool;
+capture_and_return_output := false, arg_quoting := Process_Argument_Quoting.QUOTE_IF_NEEDED,  
+
+kill_process_if_parent_exits := true) -> success: bool;
 ```
 
 Because of the returned bool value, you can use it as follows:
