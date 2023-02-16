@@ -338,7 +338,8 @@ main :: () {
 }
 
 /*
-Mutex1 is {{DebugInfo = ffff_ffff_ffff_ffff; LockCount = 4294967294; RecursionCount = 1; OwningThread = 797c; LockSemaphore = null; SpinCount = 33556432; }}
+Mutex1 is {{DebugInfo = ffff_ffff_ffff_ffff; LockCount = 4294967294;  
+RecursionCount = 1; OwningThread = 797c; LockSemaphore = null;   SpinCount = 33556432; }}
 */
 ```
 Line (1) marks the start of the critical section. First in line (2), a lock is set. To not forget the unlock at the end of the section, use a defer like in (3). After that, start executing the atomic code of the section. 

@@ -16,7 +16,7 @@ Inline assembly is being used inside some of the more critical performance stand
 * other inline assembly examples can be found in: _modules/Atomics_, *modules/Bit_Operations*, *modules/Runtime_Support*. 
 * module *Machine_X64.jai* contains useful routines for 64-bit Intel x86 machines.
 
-## 28.2 How do Jai and inline assembler interact? - Declaring variables  
+## 28.2 How do Jai and inline assembly interact? - Declaring variables  
 Inside Jai code, we can start an inline assembler block like this:  
 ```c++
 #asm {
@@ -224,17 +224,18 @@ main :: () {
         mul z, x, y;
     }
 
-    print("x * y = % : %\n", z, x); 
+    print("x * y = % : %\n", z, x);  (10)
     // => x * y = 9588 : 9532886391493626018
 }
 ```
-
+ 
 In lines (1-2), registers a and c are allocated, and they get freed in line (3).
 In the 2nd block in line (4), we see how operator `===` is used: variable `t` is pinned to gpr 'a' (0/al/ax/eax/rax).  
 In the same way in (5), `u` is pinned to gpr 'c' (1/cl/cx/ecx/rcx), and in (6), 'v' is pinned to vec '9' (xmm9/ymm9/zmm9).  
 In line (7), this is written inline. This is the verbose version of the inferred operands we saw earlier, specifying the entire declaration explicitly if you want.
 
-In the 3rd block, we multiply x and y in asm, and put the result in z. Line (8) pins the high level var `x` to gpr 'a' as required by `mul`. Line (9) does the same for variable `z` to gpr 'd'.
+In the 3rd block, we multiply x and y in asm, and put the result in z. Line (8) pins the high level var `x` to gpr 'a' as required by `mul`. Line (9) does the same for variable `z` to gpr 'd'.  
+In line (10), z is uninitialized, so it contains its previous value.
 
 ## 28.6 Feature flags
 These were introduced in § 28.3.4. Feature flags can be specified on a global build level, or on a per-asm-block level, or both. Flags specified on both levels add up.
@@ -285,6 +286,28 @@ In it, we have a `pxor` instruction, which is the 256-bit .y version, since that
 The #asm AVX, AVX2 allows for SIMD operations (see [Advanced Vector Extensions](https://en.wikipedia.org/wiki/Advanced_Vector_Extensions).
 
 ## 28.7 Using AVX and AVX2 SIMD operations
+Because SIMD involves arrays, we first have to see how we can load an array into asm memory.
+## 28.7.1 Loading memory into registers
+
+See *28.9_loading_memory*:
+```c++
+#import "Basic";
+
+main :: () {
+    array: [32] u8;
+    pointer := array.data;
+    #asm {
+        mov a:, [pointer];       // (1) 
+        mov i:, 10;              // 
+        mov a,  [pointer + 8];   // (2)
+        mov a,  [pointer + i*1]; // (3)
+    }
+}
+```
+
+The instruction in line (1) effective declares register a to be the array.data pointer. We move the pointer to the next byte in line (2). Line (3) shows how to access individual bits.
+
+## 28.7.2 Working with SIMD
 Here is some basic SIMD Vector Code to process a few 32-bit floats together in parallel (at the same time).   
 
 See *28.6_simd.jai*:
@@ -365,7 +388,6 @@ No additional mov's or other instructions will be generated as a result of this.
 This is used in the following example:
 See *28.7_asm_and_macros.jai*:
 ```c++
-
 add_regs :: (c: __reg, d: __reg) #expand {  // (1)
   #asm {
      add c, d;
@@ -390,66 +412,112 @@ main :: () {
 
 In line (1) we define a macro `add_regs` that is called in line (3). It takes 2 parameters a and b, pushes them into 2 registers c and d of type `__reg` and adds them up. The result is printed out in line (4).
 
+## 28.9 Compile-time execution
+#asm blocks can also run at compile time, just like any other code. The code is compiled to machine code once and runs at native speed, so you can expect it to be just as fast.
 
-
-
-
-XYZ
-For memory operands in the form 'base + index * scale + displacement', see procedure memory() in how_to/900_inline_assembly.jai.
-
-===============================================================
-
-
-
-
-See the following examples: *28.8_other_examples.jai*
+See *28.8_compile_time_exec.jai*:
 ```c++
 #import "Basic";
 
-global_variable: int;
+do_some_work :: (a: int, b: int) -> int {
+    #asm {
+        add a, b;
+    }
+    return a;
+}
+
+A :: #run do_some_work(10, 13);
 
 main :: () {
-    // Multiply x and y to z
-    x: u64 = 197589578578;
-    y: u64 = 895173299817;
-    z: u64 = ---;
-    #asm {
-        x === a; // We pin the high level var 'x' to gpr 'a' as required by mul.
-        z === d; // We pin the high level var 'z' to gpr 'd' as required by mul.
-        mul z, x, y;
-    }
-    print(" z is %\n", z); // => z is 9588  (z is uninitialized, so contains its previous value)
+    print("A: %\n", A); // => A: 23 
+}
+```
 
-    // loading memory into registers
-    array: [32] u8;
-    pointer := array.data;
-    #asm {
-        mov a:, [pointer];      // a := array.data
-        mov i:, 10;             // declare i:=10
-        mov a,  [pointer + 8];
-        mov a,  [pointer + i*1];
+## 28.10 Other useful examples
+
+## 28.10.1 Manipulating an array through pointers
+This manipulates a memory operand with a vector index, known as a VSIB in assembly documentation.
+In the following example, we have a float array `orig_arr`, an indices mask 
+`gather_indices`, and the destination array `dest_arr`.
+To clearly see what's going on, we shuffled the indices a bit. In the #asm block, we take  
+the items from `orig_arr` in the order of `gather_indices`, and put them in `dest_arr`.
+
+See *28.10_vsib1.jai*:
+```c++
+#import "Basic";
+
+main :: () {
+    orig_arr := float.[ 1, 2, 3, 4, 5, 6, 7, 8 ];
+    gather_indices := u32.[ 0, 6, 5, 2, 3, 4, 1, 7 ];
+    dest_arr: [8] float;
+
+    orig_arr_ptr := orig_arr.data;
+    gather_indices_ptr := gather_indices.data;
+    dest_arr_ptr := dest_arr.data;
+
+    #asm AVX, AVX2 {
+        movdqu vindex:, [gather_indices_ptr];       // (1) 
+        pcmpeqd gather_mask:, gather_mask, gather_mask; // (2)
+        gatherdps gather_dest:, [orig_arr_ptr + vindex*4], gather_mask;
+        movdqu [dest_arr_ptr], gather_dest;         // (3)
     }
 
-    // Load Effective Address (LEA) Load and Read Instruction Example
+    print("gather result: %\n", dest_arr);          // (4)
+    // => gather result: [1, 7, 6, 3, 4, 5, 2, 8] 
+}
+```
+
+In line (1), we load the register we are going to use for indexing from the gather_indices array. In line (2), We get all 1's in our gather mask, we want to just let all lanes through.
+Note that we scale our indices by 4. That is because these are byte offsets and we need to step in multiples of the element size (32-bits), like any other memory operand. Also note that we don't use a displacement, but it is supported and behaves just like a normal memory operand.  
+In line (3), the destination array is filled, and in (4), Jai prints it out.
+   
+## 28.10.2 Load Effective Address (LEA) and Load and Read Instruction Example  
+See *28.11_load_effective_address.jai*:
+```c++
+#import "Basic";
+
+main :: () {
     rax := 5;
     rdx := 7;
     #asm {lea.q rax, [rdx];}
     #asm {lea.q rax, [rdx + rax*4];}
-    // NOTE: This does not work, 4*rax is wrong, must be rax*4
-    // #asm {lea.q rax, [rdx + 4*rax];} 
-    // => Error: Bad memory operand, syntax is [base + index * 1/2/4/8 +/- disp].
+    print("rax is % and rdx is %", rax, rdx);
+    // => rax is 35 and rdx is 7
+}
+```
 
-    // Fetch and add:
-    // fetch and add.
+## 28.10.3 Fetch and add macro to increment a variable
+See *28.12_fetch_and_add.jai*:
+```c++
+#import "Basic";
+
+global_variable := 108;
+
+main :: () {
     fetch_and_add :: (val: *int) #expand {
         #asm {
             mov incr: gpr, 1;
-            xadd.q [val], incr;
+            xadd.q [val], incr;     // (1)
         }
     }
     fetch_and_add(*global_variable);
+    print("global_variable is %\n", global_variable);
+    // => global_variable is 109
 }
 ```
+`global_variable` is incremented through the xadd.q instruction in line (1).
+
+### 28.10.4 Memory operands in the form 'base + index * scale + displacement'
+See procedure `memory :: ()` in how_to/900_inline_assembly.jai.
+
+## 28.10.5 Broadcasting, rounding and masking with EVEX
+See procedure `advanced_features :: ()` in how_to/900_inline_assembly.jai, last three examples.
+To execute this, your computer must support the AVX512F instruction set.
+
+
+
+
+
 
 
 
