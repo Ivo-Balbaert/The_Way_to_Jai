@@ -23,8 +23,7 @@ where only the 1st ..string argument is supplied.
 This is done with the procedure:  
 ```
 create_process :: (process: *Process, args: .. string, working_directory := "",  
-capture_and_return_output := false, arg_quoting := Process_Argument_Quoting.QUOTE_IF_NEEDED, kill_process_if_parent_exits := true)  
--> success: bool;
+capture_and_return_output := false, arg_quoting := Process_Argument_Quoting.QUOTE_IF_NEEDED,   kill_process_if_parent_exits := true) -> success: bool;
 ```
 
 Because of the returned bool value, you can use it as follows:
