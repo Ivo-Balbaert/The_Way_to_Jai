@@ -1231,7 +1231,7 @@ Build both with:
 and see the result of:  `main7`  
 which outputs:  `Hello Sailor`
 
-## 30.15 Adding data to the executable
+## 30.15 Adding binary data to the executable
 The compiler bakes type info data into the executable (see § 16.4.3). But you can also add your own data to it with the proc `add_global_data`.  
 The following code does just that.
 

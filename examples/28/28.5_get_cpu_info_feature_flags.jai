@@ -8,12 +8,9 @@ main :: () {
     if check_feature(cpu_info.feature_leaves, x86_Feature_Flag.AVX2) {  // (2)
         print("Yes, we have AVX2!"); // => Yes, we have AVX2!
         #asm AVX2 {
-    // Here the pxor gets the 256-bit .y version, since that is the default operand size with AVX. In an AVX512
-    // block, the default operand size would be the 512-bit .z.
             pxor v1:, v1, v1;
         }
     } else {
          print("AVX2 is not available on this processor, we have to run our fallback path...");
-    // AVX2 is not available on this processor, we have to run our fallback path...
     }   
 }

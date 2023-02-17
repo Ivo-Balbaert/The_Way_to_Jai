@@ -57,10 +57,15 @@ main :: () {
     
     new_context: Context;               // (2)
     new_context.allocator.proc = my_allocator_proc; // (2B)
-    new_context.allocator.data = null;  
+    // new_context.allocator = my_arena_allocator; // (2C) 
+    new_context.allocator.data = null; 
+
+    // change the logger:
+    // new_context.logger = my_cool_logger;  // (2D)
+    // new_context.logger_data = my_logger_data; 
 
     push_context new_context {          // (3)
-        // Do things within this new context.
+        // Do things within this new context, which has its own allocator and logger
         push_allocator(temp);           // (4)
     } // (4B)
     log(str);   // (5) => Hello, Sailor!
@@ -106,7 +111,9 @@ In the same way, you can plug in your own assertion_handler and logger (see modu
 The directive **#add_context** adds a declaration to a context.
 
 ## 25.2 push_context
-The current context can be assigned to a variable like in (2). If you want you can change the procedure used for allocating memory, like in line (2B). Then we can use the `push_context` proc like in (3) to do something within this new context. `push_context lets you push an entire fresh Context, changing the operational context for the duration of the code block that starts in (3). 
+The current context can be assigned to a variable like in (2). If you want you can change the procedure used for allocating memory, like in line (2B).  
+In line (2C) we changed it to an arena allocator (no implementation given here). Similarly in line (2D), we could change the logger.  
+Then we can use the `push_context` proc like in (3) to do something within this new context. `push_context lets you push an entire fresh Context, changing the operational context for the duration of the code block that starts in (3). 
 
 For example you could just declare a memory arena (see for example the Pool discussed in § 34.3) and use push_context to use it. All code in the push_context block now allocates with the arena, and you can free the arena memory whenever you want.  
 The new context stops after the closing } (line (4B)), and the initial context is restored.
