@@ -16,7 +16,7 @@ Inline assembly is being used inside some of the more critical performance stand
 * other inline assembly examples can be found in: _modules/Atomics_ (for example `lock_xchg` for atomic_swap ), *modules/Bit_Operations*, *modules/Runtime_Support*. 
 * module *Machine_X64.jai* contains useful routines for 64-bit Intel x86 machines.  
 
-_Current Assembly Limitations_  
+_Current Assembly Limitations_    
 There are no goto and no jump instructions in the current assembly. There are no call instructions, and you cannot call a function in the middle of an assembly block.
 
 ## 28.2 How do Jai and inline assembly interact? - Declaring variables  
@@ -289,7 +289,7 @@ main :: () {
 We call the proc in line (1), and test whether it is AVX2 capable in line (2). If so we add the flag to our #asm block.  
 In it, we have a `pxor` instruction, which is the 256-bit .y version, since that is the default operand size with AVX. In an AVX512 block, the default operand size would be the 512-bit .z.
 
-The #asm AVX, AVX2 allows for SIMD operations (see [Advanced Vector Extensions](https://en.wikipedia.org/wiki/Advanced_Vector_Extensions).
+The #asm AVX, AVX2 allows for SIMD operations (see [Advanced Vector Extensions](https://en.wikipedia.org/wiki/Advanced_Vector_Extensions).)
 
 ## 28.7 Using AVX and AVX2 SIMD operations
 Because SIMD involves arrays, we first have to see how we can load an array into asm memory.
@@ -297,10 +297,10 @@ Because SIMD involves arrays, we first have to see how we can load an array into
 ## 28.7.1 Assembly memory operands: Loading memory into registers
 In x86, there are several memory operands with the format `base + index * scale + displacement`. Just like in a traditional assembly, you can indicate a memory operand by wrapping it with brackets []. The ordering of the expression is rigid, and must be in the order base + index * scale + displacement. You cannot place the displacement first, or the base second, etc. This reduces ambiguity and confusion when fields can be ambiguous identifiers. The scale is limited to the number literals 8, 4 and 2.
 Here are some other rules:  
-*     base  - required, must be a gpr
-*     index - optional, usually a gpr but can also be a vec in some instructions 
-*     scale - only valid when there is an index, can be 1, 2, 4, or 8, when omitted it is default 1
-*     disp  - optional, a signed 8 or 32 bit integer byte offset
+* base  - required, must be a gpr
+* index - optional, usually a gpr but can also be a vec in some instructions 
+* scale - only valid when there is an index, can be 1, 2, 4, or 8, when omitted it is default 1
+* disp  - optional, a signed 8 or 32 bit integer byte offset
 
 See *28.9_loading_memory*:
 ```c++
