@@ -1,7 +1,7 @@
 # 34 Other useful modules.
 ## 34.1 Sorting
 This is covered by the _Sort_ module, which contains implementations of bubble sort and quicksort.
-(We already used bubble sort in program 30.11_using_notes.jai - § 30.12)
+We already used bubble sort in program 30.11_using_notes.jai - § 30.12  
 Here we present a simple example for using these procs.
 
 See *34.1_sorting.jai*:
@@ -20,7 +20,8 @@ main :: () {
 
     quick_sort(arrs, compare_strings);
     print("arrs quick-sorted is %\n", arrs); 
-    // => arrs quick-sorted is ["brown", "dog", "fox", "jumped", "lazy", "over", "quick", "the", "the"]
+    // => arrs quick-sorted is ["brown", "dog", "fox", 
+    "jumped", "lazy", "over", "quick", "the", "the"]
 
     arrf1 := float.[8, 108, 42, 5, 3.14, 17, -5, -272];
     arrs1 := string.["the", "quick", "brown", "fox", "jumped", "over", "the", "lazy", "dog"];

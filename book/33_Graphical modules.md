@@ -1,7 +1,10 @@
 # 33 Graphical (GUI) modules
 
-In § 31 we used OpenGL (through the modules _SDL_ and _GL_) to draw a simple screen and change its title. Here we discuss other modules from the compiler distribution that are used for graphics displaying. At the present time, Jai has bindings in the distribution for D3D12, Vulcan and OpenGL, and an untested Metal module.   
+In § 31 we used OpenGL (through the modules _SDL_ and _GL_) to draw a simple screen and change its title. Here we discuss other modules from the compiler distribution that are used for graphics displaying. 
+
 OpenGL is platform-independent, so we first need a library that can do all the operation-system specific work and give us a window and an OpenGL context to render in. Some of the more popular libraries that do this are GLUT, SDL, SFML and GLFW.
+
+At the present time, Jai has bindings in the distribution for ImGui, nvt, stb_image and other stb_ libraries, D3D12, OpenGL and Vulcan (successor of OpenGL), and an untested Metal module.   
 
 ## 33.1 The _GLFW_ module
 [GLFW](https://www.glfw.org/) is an open source, multi-platform library for OpenGL, OpenGL ES and Vulkan development on the desktop. It provides a simple API for creating an OpenGL context, creating windows, contexts and surfaces and receiving user input and events.
@@ -38,6 +41,7 @@ processInput :: (window: *GLFWwindow ) {  // (6B)
 }
 ```
  We first initialize GLFW with glfwInit (line (1)), after which we can configure GLFW using glfwWindowHint (line (2)). The first argument of glfwWindowHint tells us what option we want to configure, where we can select the option from a large enum of possible options prefixed with GLFW_. The second argument is an integer that sets the value of our option. A list of all the possible options and its corresponding values can be found at GLFW's window handling documentation.  
+ 
  Next we're required to create a window object. This window object holds all the windowing data and is required by most of GLFW's other functions. The glfwCreateWindow (see line (3)) function requires the window width and height as its first two arguments respectively. The third argument allows us to create a name for the window. We can ignore the last 2 parameters. The function returns a GLFWwindow object that we'll later need for other GLFW operations. After that we tell GLFW in line (4) to make the context of our window the main context on the current thread.
 
 We don't want the application to draw a single image and then immediately quit and close the window. We want the application to keep drawing images and handling user input until the program has been explicitly told to stop. For this reason we have to create a while loop, that we now call the render loop, that keeps on running until we tell GLFW to stop. The code starting in line (5) shows a very simple render loop.
@@ -55,7 +59,7 @@ When running this program a black window appears (created in line (1)) with a ti
 > The glfw3.dll and glfw3.lib (or similar files for other OS's) have to be copied in the same folder as the executable of program 33.1
 
 ## 33.2 The _SDL_ module
-SDL is the [Simple DirectMedia Layer](https://www.libsdl.org/)). It is a cross-platform development library designed to provide low level access to audio, keyboard, mouse, joystick, and graphics hardware via OpenGL and Direct3D.
+SDL is the [Simple DirectMedia Layer](https://www.libsdl.org/). It is a cross-platform development library designed to provide low level access to audio, keyboard, mouse, joystick, and graphics hardware via OpenGL and Direct3D.
 We saw a 1st example of its use in § 31.2
 
 The Jai _SDL_ module has SDL2 bindings. It contains the following test example:
@@ -126,7 +130,8 @@ main :: () {
 
     w := 640;
     h := 480;
-    window := SDL_CreateWindow("An SDL2 window", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, xx w, xx h, SDL_WINDOW_OPENGL|SDL_WINDOW_RESIZABLE);
+    window := SDL_CreateWindow("An SDL2 window", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,  
+    xx w, xx h, SDL_WINDOW_OPENGL|SDL_WINDOW_RESIZABLE);
 
     // Check that the window was successfully created
     if window == null {
@@ -241,7 +246,7 @@ main :: () {
 In line (1) the window is created. Line (2) starts the event-loop: the program is waiting for events to occur on the window and to act upon them. Each iteration in this loop draws a **frame** in line (2B). Line (3) clears temporary storage, so in the loop you'll want to store all your data in temp.
 To make SIMP draw objects with opacity, use: `Simp.set_shader_for_color(true);`
 
-### 33.5. A bouncing square
+### 33.5.2 A bouncing square
 By only adding some 10 lines of code to the previous example, we can draw a moving red square, that bounces of the sides of the window: 
 
 See *33.2B_bouncing_square.jai*:
@@ -422,7 +427,7 @@ The module also contains an example (_modules/Simp/examples_):
 This module contains platform-independent window creation routines.
 Showing a window is as easy as this code-snippet:
 
-See *33.6_window_creation.jai:
+See *33.6_window_creation.jai*:
 ```c++
 #import "Input";
 #import "Windows";
@@ -469,9 +474,4 @@ main :: () {
 ```
 
 
-Other modules in a Jai distribution:
-- ImGui
-- Metal
-- nvt
-- stb_image and stb_
-- Vulkan (successor of OpenGL)
+

@@ -398,7 +398,7 @@ Line (3) uses basic SIMD Vector Code for adding 8-bit integers together at the s
 Registers can't be passed to other procedures, but you can pass inline assembly registers to macro arguments.  
 No additional mov's or other instructions will be generated as a result of this. The names are simply bound to one another by the compiler and the same underlying register allocation is used.  
 
-This is used in the following example:
+This is used in the following example:  
 See *28.7_asm_and_macros.jai*:
 ```c++
 add_regs :: (c: __reg, d: __reg) #expand {  // (1)
@@ -485,7 +485,7 @@ In line (1), we load the register we are going to use for indexing from the gath
 Note that we scale our indices by 4. That is because these are byte offsets and we need to step in multiples of the element size (32-bits), like any other memory operand. Also note that we don't use a displacement, but it is supported and behaves just like a normal memory operand.  
 In line (3), the destination array is filled, and in (4), Jai prints it out.
    
-## 28.10.2 Load Effective Address (LEA) and Load and Read Instruction Example  
+## 28.10.2 Load Effective Address (LEA) and Load and Read Instruction 
 Here is a basic example to do load effective address. Note that in rax*4, the constant must go after the register. LEA is explained [here](https://www.felixcloutier.com/x86/lea). 
 
 See *28.11_load_effective_address.jai*:
