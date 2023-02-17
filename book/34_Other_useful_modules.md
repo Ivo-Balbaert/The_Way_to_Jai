@@ -21,7 +21,7 @@ main :: () {
     quick_sort(arrs, compare_strings);
     print("arrs quick-sorted is %\n", arrs); 
     // => arrs quick-sorted is ["brown", "dog", "fox", 
-    "jumped", "lazy", "over", "quick", "the", "the"]
+    // "jumped", "lazy", "over", "quick", "the", "the"]
 
     arrf1 := float.[8, 108, 42, 5, 3.14, 17, -5, -272];
     arrs1 := string.["the", "quick", "brown", "fox", "jumped", "over", "the", "lazy", "dog"];
@@ -41,8 +41,8 @@ quick_sort is also used in how_to/460.
 There is also the *Intro_Sort* module, which uses the insertion sort algorithm.
 
 ## 34.2 The Hash_Table module
-This is a really useful data structure, which most languages implement, Jai included. A hash table (sometimes called hash map) is a data structure that implements an associative array abstract data type. It's a structure that can map keys to values.
-Hash tables let us implement things like phone books or dictionaries; in them, we store the association between a value (like a dictionary definition of the word "lamp") and its key (the word "lamp" itself). We can use hash tables to store, retrieve, and delete data uniquely based on their unique key.
+This is a really useful data structure, which most languages implement, Jai included. A hash table (sometimes called hash map) is a data structure that implements an associative array abstract data type. It's a structure that can map keys to values.  
+Hash tables let us implement things like phone books or dictionaries; in them, we store the association between a value (like a dictionary definition of the word "lamp") and its key (the word "lamp" itself). We can use hash tables to store, retrieve, and delete data uniquely based on their unique key.  
 A hash table uses a _hash_ function to compute an index, also called a hash code,
  into an array of buckets or slots, where the associated value can be found.
 (For more info, see: [https://en.wikipedia.org/wiki/Hash_table])  
@@ -96,14 +96,14 @@ main :: () {
 ```
 
 A new hash table is created on the heap as in line (1). Key-value pairs are added to with with the proc `table_add`, and a pair is deleted with the proc `table_remove`.
-You can iterate over the table with a for-loop as in line (3).
+You can iterate over the table with a for-loop as in line (3).  
 For more detailed info see the examples in the module as well as in the examples folder.
 
 ## 34.3 The Pool module
 This module provides a memory allocator to quickly allocate memory blocks of many different sizes (including bigger sizes, the default size is 64Kb) on the heap, when you know that all those blocks will have approximately the same lifetime. Allocate memory from the pool when you need it, and you free the entire pool at once when the program no longer needs the memory. A Pool gives you a very-fast-allocating memory arena, for long-term use with well-defined ownership.
 
 ### 34.3.1 Using a Pool 
-Here is an example which shows how to use a Pool:
+Here is an example which shows how to use a Pool:  
 See *34.3_pool.jai*:
 ```c++
 #import "Basic";
@@ -219,7 +219,7 @@ main :: () {
 ```
 
 ### 34.3.3 Using a pool with a macro 
-Here is an example (taken from the Jai Wiki site) showing how to use 
+Here is an example (taken from the Jai Wiki site) showing how to use a pool in a macro.  
 See *34.5_macro_pool.jai*:
 ```c++
 #import "Basic";
@@ -356,4 +356,4 @@ Email sent!
 ```
 A few seconds later, the recipient will get the email in his/her mailbox.
 
-You can find a more sophisticated example in jai/examples/beta_key_mailer.
+You can find a more sophisticated example in *jai/examples/beta_key_mailer*.

@@ -3,7 +3,8 @@
 
 This is a console game. The program randomly chooses a number lower than a certain maximum (say 100). The player inputs an integer between 0 and 100. The program tells if the number is too low or too high, and when you have guessed the right number, in how many steps.  
 Here is an example of the interaction between program and player:  
-`ivo@DESKTOP-KN14QQK:~/jai*projects$ ./guessing_game  
+```
+ivo@DESKTOP-KN14QQK:~/jai*projects$ ./guessing_game  
 Guess a number between 1 and 100: 75  
 75 is too high  
 Guess a number between 1 and 100: 63  
@@ -16,12 +17,13 @@ Guess a number between 1 and 100: 47
 47 is the answer!  
 Finished in 5 guesses  
 Total input errors: 0  
+```
 
 We have two versions:  
 * a version working on Linux: it imports the _POSIX_ module for the `read` function in procedure `read_line` (which uses the `libdl` library): *50.1_guessing_game_linux.jai*
 * a version working on Windows: it imports the _Windows_ module for the `ReadConsoleA` function in procedure `read_line`: *50.1_guessing_game_windows.jai* This version uses a somewhat lower-level API than the Linux version, that's why it is a bit more involved.
 
-First we look at the Linux version. The logic for the Windows version is entirely the same, except for the read_line input part.
+First we look at the Linux version. The logic for the Windows version is entirely the same, except for the `read_line` input part.
 
 
 ## 50.1 Linux version
@@ -138,7 +140,7 @@ When done == true, the while loop in play stops :
 and line (3) returns. This prints "Finished in ", the number of guesses and eventual errors and stops the game.
 
 ## 50.2 Windows version
-Here is the Windows version:
+Here is the Windows version:  
 See *50.1_guessing_game_windows.jai*:
 ```c++
 #import "Basic";
@@ -249,5 +251,6 @@ We discuss only the different part, which is:
 --> (1.1.1) `read_line`
 
 This reads in a string, which must be converted to an integer before returning as the `guess`.
-It does this by calling the proc `ReadConsoleA` from the _kernel32.dll_ Windows system library, which reads input from stdin and stores it in a `buffer`. We then allocate a string `result` with the same amount of bytes as read in into the buffer. Then we copy the bytes read in from the buffer into the `result` string with `memcpy`.
+It does this by calling the proc `ReadConsoleA` from the _kernel32.dll_ Windows system library, which reads input from stdin and stores it in a `buffer`.  
+We then allocate a string `result` with the same amount of bytes as read in into the buffer. Then we copy the bytes read in from the buffer into the `result` string with `memcpy`.  
 At the start of our program (line (4)), we also have to get a handle for the standard input.

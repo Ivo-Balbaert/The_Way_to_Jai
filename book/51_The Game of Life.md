@@ -2,8 +2,12 @@
 This version of John Conway's Game of Life is written by Daniel Tan: [Game of Life](https://github.com/danieltan1517/game_of_life). He also recorded a [video](https://www.youtube.com/watch?v=wJJ6XU2Fv1w) of his version.
 
 This program is a so called cellular automation. The GitHub repo contains a good discussion of the rules of the program, so we won't repeat this here.
-The display of the evolving generations and the menu for changing game options needs some graphics programming. This is achieved here by using pure Jai modules:  
-*Window_Creation* (Platform-independent window creation routines), *Input* (keyboard and mouse input),  *Simp* (drawing graphics) and *GetRect* (to display widgets).
+The display of the evolving generations and the menu for changing game options needs some graphics programming.  
+This is achieved here by using pure Jai modules:  
+*Window_Creation* (Platform-independent window creation routines),  
+*Input* (keyboard and mouse input),  
+*Simp* (drawing graphics), and  
+*GetRect* (to display widgets).
 
 ## 51.1  A console print version 
 Let's first make a version which uses only print to display the living cells. This way we only need to concern ourselves with the life - algorithm.  
@@ -86,7 +90,7 @@ show_gol :: () {
 }
 ```
 
-We represent the game grid as a 2 dimensional matrix [M][M] s8. `next_generation` implements the rules of the game: it first calculates the next step in a temp matrix, which is then copied over to `gol_grid`. `show_gol` simply prints out that matrix.
+We represent the game grid as a 2 dimensional matrix [M][M] s8. `next_generation` implements the rules of the game: it first calculates the next step in a temp matrix, which is then copied over to `gol_grid`. `show_gol` simply prints out that matrix.  
 When running you see the oscillating horizontal and vertical "111" pattern typical for this configuration. Stop the program with "CTRL/C". 
 
 ## 51.2  A graphical version
@@ -243,9 +247,13 @@ render_gol :: (win: Window_Type, current_time: float64, mouse_pressed: bool) #ex
     cycles_y := 0;
     while sq_y > 0 && cycles_y < M {
       if gol_grid[i][j] == 1 {
-        immediate_quad(sq_x + offset, sq_y - offset, sq_x + sq_width - offset, sq_y - sq_width + offset, color_theme);
+        immediate_quad(sq_x + offset, sq_y - offset, 
+        sq_x + sq_width - offset, 
+        sq_y - sq_width + offset, color_theme);
       } else {
-        immediate_quad(sq_x + offset, sq_y - offset, sq_x + sq_width - offset, sq_y - sq_width + offset, dark);
+        immediate_quad(sq_x + offset, sq_y - offset, 
+        sq_x + sq_width - offset, 
+        sq_y - sq_width + offset, dark);
       }
       sq_y -= sq_width;
       j = (j + 1) & (M-1);
@@ -374,7 +382,7 @@ For example in this code snippet:
 if button(r, "Next") {
     next_generation();
     ui_interaction = true;
-  }
+}
 ```
 
 The call to `button(r, "Next")` draws a button with rectangle r and text "Next". This returns true when the button is clicked, so that the `next_generation()` procedure is called.
