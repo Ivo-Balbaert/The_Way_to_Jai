@@ -24,7 +24,7 @@ _Table of Contents_
    [8 - Modules - Structuring the code of a project](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/8_Modules_-_Structuring_the_code_of_a_project.md)      
    [9 - More about types](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/9_More_about_types.md)  
    [10 - What are pointers?](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/10_What_are_pointers.md)  
-   [11 - Memory allocations](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/11_Memory_allocations.md)  
+   [11 - Memory allocations](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/11_Allocating%20and%20freeing%20memory.md)  
    [12 - Basics of structs](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/12_Basics%20of%20structs.md)    
    [13 - Unions and enums](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/13_Unions%20and%20enums.md)     
    [14 - Branching with if else](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/14_Branching_with_if_else.md)  
