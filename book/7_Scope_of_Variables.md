@@ -75,7 +75,7 @@ main :: () {
 }
 ```
 
-A variable in a more inner block can shadow a variable with the same name from an outer block, that is: inside the inner block, the inner variable takes precedence: see the `outer` variable in line (1) which shadows the `outer` variable defined outside the block.
+A variable in an inner block can shadow a variable with the same name from an outer block, that is: inside the inner block, the inner variable takes precedence: see the `outer` variable in line (1) which shadows the `outer` variable defined outside the block.
 
 > Shadowing can be confusing, use it only when it is really necessary.
 
