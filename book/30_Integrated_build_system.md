@@ -1,4 +1,5 @@
 # 30 Integrated build system
+> Note: Because the build system is so powerful in Jai, this has become a huge chapter. In due time, it will be split into a number of digestible sections. 
 
 ## Intro: What is a meta-program?
 C/C++ compilers do not have a way to specify how to build a program, and are reliant on outside systems foreign to the language to build projects, such as Makefiles, Ninja, and CMake. All these build systems are clunky, need to use a different system for different operating systems, and building a large program can be incredibly messy. 

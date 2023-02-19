@@ -1,4 +1,5 @@
 # 26 Metaprogramming and macros
+> Note: Because metaprogramming is so powerful in Jai, this has become a huge chapter. In due time, it will be split into a number of digestible sections. 
 
 A 'meta-program' is a piece of code that alters (or 'programs') an existing program (another piece of code).
 In Jai, this takes place solely at compile-time. The compiler gives you the source code in AST format (Abstract Syntax Tree) for you to modify.
@@ -492,7 +493,8 @@ main :: () {
 }
 ```
 
-This is illustrated in line (1): there `#insert` takes a string containing a line of code, and inserts it as code at that location in the source. Line (2) shows that it also can be used at an expression level.  Line (3) shows how a multi-line string can be inserted as a piece of code.
+This is illustrated in line (1): there `#insert` takes a string containing a line of code, and inserts it as code at that location in the source. Line (2) shows that it also can be used at an expression level.  Line (3) shows how a multi-line string can be inserted as a piece of code.  
+And of course the string that you #insert is checked that it is valid Jai code while compiling.
 
 ### 26.4.2 Inserting compile-time generated strings with #insert
 Now we are going to combine #insert with #run:
@@ -633,8 +635,10 @@ The matrix contains:
 
 (This mechanism is also applied in the unroll for loop in § 26.5.2, and in the construction of an SOA struct, see § 26.10.2).
 
+The code we write in the string might not be valid
+
 ### 26.4.5 Type Code and #code
-Instead of using #insert with strings, we can also let it work directly with Code, which is better for type safety.
+Instead of using #insert with strings, we can also let it work directly with Code, which is better for type safety.  
 A variable of type Code can be constructed by using the **#code** directive:  
 `#code { // a code block }`, like `#code { x += 7 }`   
 This can also be one line, as follows:  
@@ -858,11 +862,12 @@ But notice what happens when we use `defer` in line (6B): because of the backtic
 
 `maxfunc` is a procedure which calls a nested macro `macron`; this returns "Backtick return macro" as return value from `maxfunc`.  
 
-**Exercise** (see *changer_macro.jai*)  
-Write a macro changer that takes 2 integer arguments and can access an outer variable x. x is multiplied with the 1st argument, and the 2nd argument is added to it.
-
 ### 26.5.1 Using a macro with #insert
 `macroi` in line (9) illustrates that we can use #insert (see § 26.4) inside a macro: it takes a code argument and inserts it 3 times in the main code.
+
+**Exercises**   
+1) Declare a variable n with value 42, and a constant of type Code that multiplies this by 3. Write a macro that inserts this line of code 4 times. Show the result (see *changer_macro1.jai*)
+2) Write a macro that takes 2 integer arguments and can access an outer variable x. x is multiplied with the 1st argument, and the 2nd argument is added to it. (see *changer_macro2.jai*)  
 
 ### 26.5.2 Using a macro with #insert to unroll a for loop
 Sometimes you might want to unroll loops to optimize a program's execution speed so that the program does less branching. Loops can be unrolled through a mixture of #insert directives and macros. In the example below, we unroll a basic for loop that counts from 0 to 10.
@@ -1802,13 +1807,15 @@ The piece of source code that gets generated from a #insert can be retrieved fro
 Line (10) mentioned here is this line: #insert -> string.
 
 ## 26.12 How to get info on the nodes tree of a piece of code?
-In § 26.4.5 we saw how #code can make something of type Code out of a piece of code. Another way is to call the proc `code_of` on a piece of code. For some examples of code_of, see jai/examples/here_string_detector.jai and self_inspect.jai  
+In § 26.4.5 we saw how #code can make something of type Code out of a piece of code. Another way is to call the proc `code_of` on a piece of code. For some examples of code_of, see jai/examples/here_string_detector.jai and self_inspect.jai
+
+### 26.12.1 The compiler_get_nodes procedure
 The helper procedure `compiler_get_nodes` can take the result of `#code` or `code_of` and get the AST nodes out of it:
 ```
 compiler_get_nodes :: (code: Code) -> (root: *Code_Node, expressions: [] *Code_Node) #compiler;
 ```
 
-(`Code_Node` is a struct defined in module _Compiler_)
+(`Code_Node` is a struct defined in module _Compiler_)  
 In the program below we analyze the nodes of the statement: `code :: #code a := Vector3.{1,2,3};`
 
 See *26.11_code_nodes.jai*:
@@ -1849,9 +1856,76 @@ Here are the types of all expressions in this syntax tree:
 To print out the nodes, we need to import the module _Program_Print_ (line (1)). We call `compiler_get_nodes` on our code statement in line (2), to get the root node and the exprs. `print_expression` 'prints' the code to a String Builder (line (3)).  
 In line (4) we can now iterate over `exprs` to show the `kind` of each sub-expression and their `node_flags` if any.
 
-`compiler_get_nodes` converts the Code to a syntax tree. As we see in line (2), it returns two values:  
+`compiler_get_nodes` converts the Code to a syntax tree (AST). As we see in line (2), it returns two values:  
 - the first is the root expression of the Code, which you can navigate recursively.   
 - the second is a flattened array of all expressions at all levels, just like you would get in a meta-program inside a Code_Type_Checked message. This makes it easy to iterate over all the expressions looking for what you want, without having to do some kind of recursive tree navigation.  
+
+### 26.12.2 Changing the AST of code at compile-time
+This example is taken from the article by forrestthewoods: [Learning Jai via Advent of Code](https://www.forrestthewoods.com/blog/learning-jai-via-advent-of-code/). It builds further upon exercise 'changer_macro1.jai', so you might want to try that first.  
+
+We saw in § 26.12.1 that at compile-time, Code can be converted to Abstract Syntax Tree nodes, manipulated, and converted back.
+Instead of simply inserting code at compile time, let's change it also!
+
+See *26.36_changing_ast.jai*:
+```c++
+#import "Basic";
+#import "Compiler";
+
+factorial :: (x: int) -> int {
+  if x <= 1 return 1;
+  return x * factorial(x-1);
+}
+    
+comptime_modify :: (code: Code) -> Code {
+  root, expressions := compiler_get_nodes(code);  // (1)
+  
+  for expr : expressions {                        // (2)
+    if expr.kind == .LITERAL {                    // (3)
+      literal := cast(*Code_Literal) expr;
+      if literal.value_type == .NUMBER {
+        fac := factorial(literal._s64); // compute factorial
+        literal._s64 *= fac;                      // (4)
+      }
+    }
+  }
+  modified : Code = compiler_get_code(root);      // (5)
+  return modified;
+}
+
+// modify and duplicate code
+do_stuff :: (code: Code) #expand {
+  new_code :: #run comptime_modify(code);
+  
+  #insert new_code;
+  #insert new_code;
+  #insert new_code;
+  #insert new_code;
+}
+
+x := 3;
+
+main :: () {
+    c :: #code { x *= 3; };
+    do_stuff(c);
+
+    // prints 3*18*18*18*18 = 314,928
+    print("%\n", x); // => 314928
+}
+```
+
+Again we submit the code `x *= 3` as parameter to a `do_stuff` macro, that inserts it 4 times. But now we modify the `code` to `new_code` before inserting:  
+`new_code :: #run comptime_modify(code);`  
+`comptime_modify` is the procedure we're going to #run at compile-time; it takes Code and returns Code.
+
+`compiler_get_nodes` is called upon `code` in line (1).  
+We know that it converts the Code to AST nodes. Then in line (2), we are going to walk this AST tree. We only look for the literal values in line (3), and narrow this to only numbers.
+
+We are going to multiply number literals by their factorial (in our example this is only the literal 3).  
+This we do in line (4):  
+3 becomes 3*factorial(3) which is 3*6 = 18,   
+thereby effectively modifying the node in place.  
+This has changed the AST `root` data. Now we must convert the  modified nodes in the AST back to Code, which is done with the 
+`compiler_get_code` procedure.
 
 Here is a snippet of code that searches for string literals in code, (possibly) changing them, and writing the changes back with the proc `compiler_get_code`:
 ```c++
@@ -1865,7 +1939,8 @@ for expressions {
 }
 modified := compiler_get_code(root);
 ```
-(for a complete working example, see how_to/630, 2nd example)
+
+(An example of this can be found in how_to/630, 2nd example)
 
 ## 26.13 The #type directive and type variants
 This directive tells the compiler that the next following syntax is a type literal, useful for defining procedure types and variant types. Variant types are like alias types (see § 9.1), but differ in the casting behavior.
