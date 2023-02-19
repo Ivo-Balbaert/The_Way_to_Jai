@@ -204,7 +204,7 @@ A for-loop over a string does not work.
 
 Here is a version of a factorial proc (see § 6B.2) that uses a reversed for loop:
 
-See *15.9_for_reverse.jai*:
+See *15.8_for_reverse.jai*:
 
 ```c++
 #import "Basic";
@@ -393,7 +393,9 @@ Direction contains the following values:
 
 In addition to the enum methods we discovered in § 13.6 that give us the range and the member names, we can also use a for-loop as shown in line (1) to get the enum's values with the `enum_values_as_s64` proc.  
 
-## 15.5 Looping over a struct's fields with type_info()
+## 15.5 Runtime reflection - Looping over a struct's fields with type_info()
+The info provided in Type_Info gives us the capability to do runtime reflection, in the following example we extract all kind of useful information from a struct:  
+
 See *15.7_struct_members.jai*:
 
 ```c++
@@ -407,7 +409,7 @@ Person :: struct @Version9 {                  // (1)
 }
 
 main :: ()  {
-    pinfo := type_info(Person);
+    pinfo := type_info(Person); // type is Type_Info_Struct
     print("The struct has name: %\n", pinfo.name);
     // => The struct has name: Person
     print("Person notes: %\n", type_info(Person).notes); // (2B)
@@ -416,6 +418,7 @@ main :: ()  {
     for pinfo.members {       // (3)
         print("% - ", it.name);  
         print("% - ", << it.type);
+        print("% - ", (<< it.type).type);   
         print("% - ", type_to_string(it.type));   
         print("% - ", (<< it.type).runtime_size);  
         print("% - ", it.offset_in_bytes);
@@ -428,9 +431,9 @@ main :: ()  {
     print("\n");
 }
 /*
-name - {STRING, 16} - string - 16 - 0 - [] - 0 -
-age - {INTEGER, 8} - s64 - 8 - 16 - [] - 0 -
-location - {STRUCT, 8} - Vector2 - 8 - 24 - ["NoSerialize"] - 0 - 
+name - {STRING, 16} - STRING - string - 16 - 0 - [] - 0 -
+age - {INTEGER, 8} - INTEGER - s64 - 8 - 16 - [] - 0 -
+location - {STRUCT, 8} - STRUCT - Vector2 - 8 - 24 - ["NoSerialize"] - 0 - 
 
 info age field: {name = "age"; type = 7ff6_5021_4000; offset_in_bytes = 16; 
 flags = 0; notes = []; offset_into_constant_storage = 0; } and has offset 16
@@ -439,6 +442,8 @@ flags = 0; notes = []; offset_into_constant_storage = 0; } and has offset 16
 ```
 We can use `type_info()` on a struct definition and then get the struct notes (see (2B). Furthermore you can loop over its members (as in line (3)) to get their names, their type, and if present, flags and attached notes.
 Also the `get_field` method (line (5)) gives you detailed information.
+
+This is an exceedingly powerful tool. It's built right into the language with full support for all types - primitives, enums, structs, procedures, and so on.
 
 ## 15.6 Serialization
 The methods discussed in the previous sections provide type info which can be used to _serialize_ structs into strings, and vice-versa _deserialize_ strings into structs. They enable us to write serialization procedures, commonly used e.g. in network replication of entities and save game data, see § 26.10.2

@@ -7,7 +7,7 @@ If you find mistakes, ambiguities, things that are not clear, please create an i
 The text is backed by some 300 complete working Jai examples and growing. They are all tested at each new version of the Jai compiler, so this text and code will never get outdated.
 
 Many thanks to Daniel Tan for setting up the [Jai-Community](https://jai.community/) and the [Jai Wiki](https://github.com/Jai-Community/Jai-Community-Library/wiki).
-Also thanks to mehlian and Jakub Arnold(@darthdeus) for their remarks and contributions.
+Also thanks to mehlian, seneca and Jakub Arnold(@darthdeus) for their remarks and contributions.
 
 [Code tested to compile/run with Jai version beta 0.1.057, built on 15 February 2023]
 

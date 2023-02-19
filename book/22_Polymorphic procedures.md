@@ -1,6 +1,7 @@
 # 22 Polymorphic Procedures
 
-In § 17.7 we discussed overloading procedures, which is a solution for using the same logic for several different types. This gives rise to duplication of code (as we'll see in the next example), increasing code size and a source for bugs. But Jai offers a solution, many overloading procedures can be reduced to one **polymorphic procedure**, thereby solving the code duplication problem, while retaining the same advantages.  
+In § 17.7 we discussed overloading procedures, which is a solution for using the same logic for several different types. This gives rise to duplication of code (as we'll see in the next example), increasing code size and a source for bugs.  
+But Jai offers a solution, many overloading procedures can be reduced to one **polymorphic procedure**, thereby solving the code duplication problem, while retaining the same advantages.  
 Polymorphic procedures are similar to C++ templates, Java/C# generics or parameterized functions in other languages. 
 
 ## 22.1 What is polymorphism?
@@ -100,6 +101,7 @@ Polymorphic functions will work correctly as long as the code inside them compil
 > Polymorphic functions are generated at compile-time, not at runtime by an interpreter or a JIT compiler, like for example in Julia. Because Jai is a strongly typed language, every call to a polymorphic function is also type-checked at compile-time.
 
 Polymorphic procedures are used all over in the Jai library modules, look for example at:
+- the `min` and `max` routines in module _Basic_.
 - the `array_add` method for dynamic arrays (§ 18.4), which has as signature:
   `array_add :: (array: *[..] $T, item: T) #no_abc` from _Basic_ module (Array.jai)
 - the `bubble_sort` and `quick_sort` code in the _Sort_ module Sort.jai

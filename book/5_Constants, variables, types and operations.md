@@ -317,7 +317,7 @@ Here are the errors that can occur when defining a variable incorrectly:
   _Reason_:
     A variable can't contain a value with a type different than its declared type.  
   _Solution_: 
-    Change the value like `counter1 = 43;`  
+    Change the value like `counter = 43;`  
 This shows that Jai is a **strongly typed** language.
 
 ## 5.5 - Multiple assignment

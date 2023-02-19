@@ -34,6 +34,10 @@ main :: () {
     print("result is %\n", result); // => result is 42   
     print("PIA is %\n", PIA); // => PIA is 3.141699
 
+    // PIA2 :: compute_pi(); // Error: Declaration claims to be 
+    // constant, but uses an expression that is not constant.
+    PIA2 := compute_pi();
+
     print("globvar at runtime is: %\n", globvar); // (7B) => globvar at runtime is: 0
 
     f1 :: ()  => 1000;

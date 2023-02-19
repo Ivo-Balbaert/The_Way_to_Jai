@@ -4,10 +4,19 @@
 A central concept in Jai is the **context**.  
 The context is specifically made to guide different parts of your program to use whatever services you desire. The default context comes with great defaults, but you can change them as needed. It helps programs and modules to coordinate, by establishing conventions they can use to perform various tasks.
 
+Here are some of the features the context contains:
+1 - default memory allocator
+2 - logging functions and style
+3 - temporary allocator
+4 - cross-platform stack trace
+5 - assertion handler
+6 - thread index
+
 The `context` struct is defined in module _Preload_ as:  
 ```c++
 Context_Base :: struct {
-    thread_index   : u32;
+    context_info:  *Type_Info_Struct;
+    thread_index   : u32;   // (6)
     allocator      := Allocator.{__default_allocator_proc, null};  // (1)
 
     logger         := default_logger;       // (2)
@@ -18,22 +27,23 @@ Context_Base :: struct {
     dynamic_entries: [16] Dynamic_Context_Entry;
     num_dynamic_entries: s32;
     stack_trace: *Stack_Trace_Node;         // (4)
-    assertion_failed := default_assertion_failed;
+    assertion_failed := default_assertion_failed; // (5)
     handling_assertion_failure := false;  
 
     default_logger           :: (message: string, data: *void, info: Log_Info) { runtime_support_default_logger :: (message: string, data: *void, info: Log_Info) #runtime_support; runtime_support_default_logger(message, data, info); }  
-    default_assertion_failed :: (loc: Source_Code_Location, message: string) { runtime_support_assertion_failed :: (loc: Source_Code_Location, message: string) #runtime_support; runtime_support_assertion_failed(loc, message); }  default_allocator        :: Allocator.{__default_allocator_proc, null};  // (5)
+    default_assertion_failed :: (loc: Source_Code_Location, message: string) { runtime_support_assertion_failed :: (loc: Source_Code_Location, message: string) #runtime_support; runtime_support_assertion_failed(loc, message); }  default_allocator        :: Allocator.{__default_allocator_proc, null};  // (5B)
 }
 ```
 
 The context is available at runtime and is globally known in the code. In most cases it will be contained completely in cache memory.
-It contains memory allocation ((5)) (so it is also a common shared piece of memory), logging functionality (2), assertion handler (what procedure you will call on a failed assert), thread index, maintains the indexes in dynamic arrays, hashes, and so on.   
+It contains memory allocation ((1)) (so it is also a common shared piece of memory), logging functionality (2), assertion handler (what procedure you will call on a failed assert), thread index, maintains the indexes in dynamic arrays, hashes, and so on.   
 It also contains temporary storage (3), so you can add things yourself to it.
 
-In Jai, each procedure takes a context-based allocation scheme in which the memory allocator is implicitly passed to all procs (unless otherwise specified with **#c_call**). The basic `alloc` procedure calls `context.allocator` to get its memory. The context can be overloaded with a custom allocator: this allows memory management to be coordinated between the compiler and the developer.
-You change the way memory is allocated by passing a different context to the function. 
+In Jai, each procedure takes a context-based allocation scheme in which the memory allocator is implicitly passed to all procs (unless otherwise specified with **#c_call**). The basic `alloc` procedure calls `context.allocator` to get its memory. The context can be overloaded with a custom allocator. This allows memory management to be coordinated between the compiler and the developer.
+You change the way memory is allocated or logging is done (for example when calling a library) by passing a different context to the function, as we'll see in the next example. 
 
-Some procs and types are annotated with the directive **#runtime_support, indicating they are defined in module Runtime_Support.
+> Some procs and types are annotated with the directive 
+>  **#runtime_support**, indicating they are defined in module Runtime_Support.)
 
 See *25.1_context.jai*:
 ```c++
@@ -55,19 +65,22 @@ main :: () {
     if context.this_is_the_way  print("This is the way to do it!\n");
     // => This is the way to do it!
     
-    new_context: Context;               // (2)
+    new_context: Context;                           // (2)
     new_context.allocator.proc = my_allocator_proc; // (2B)
-    // new_context.allocator = my_arena_allocator; // (2C) 
+    // new_context.allocator = my_arena_allocator;  // (2C) 
     new_context.allocator.data = null; 
 
     // change the logger:
-    // new_context.logger = my_cool_logger;  // (2D)
+    // new_context.logger = my_cool_logger;         // (2D)
     // new_context.logger_data = my_logger_data; 
 
     push_context new_context {          // (3)
-        // Do things within this new context, which has its own allocator and logger
+        // Do things within this new context, which can have 
+        // its  own allocator and logger
         push_allocator(temp);           // (4)
+        // call_subroutine();
     } // (4B)
+
     log(str);   // (5) => Hello, Sailor!
 
     print("Temp storage is %\n", context.temporary_storage); 
@@ -115,7 +128,7 @@ The current context can be assigned to a variable like in (2). If you want you c
 In line (2C) we changed it to an arena allocator (no implementation given here). Similarly in line (2D), we could change the logger.  
 Then we can use the `push_context` proc like in (3) to do something within this new context. `push_context lets you push an entire fresh Context, changing the operational context for the duration of the code block that starts in (3). 
 
-For example you could just declare a memory arena (see for example the Pool discussed in § 34.3) and use push_context to use it. All code in the push_context block now allocates with the arena, and you can free the arena memory whenever you want.  
+For example you could just declare a memory arena (see for example the Pool discussed in § 34.3) and use push_context to use it. All code in the push_context block (so also any subroutine() called) now allocates with the arena, and you can free the arena memory whenever you want.  
 The new context stops after the closing } (line (4B)), and the initial context is restored.
 
 ## 25.3 push_allocator

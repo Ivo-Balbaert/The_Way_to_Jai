@@ -3,7 +3,7 @@
 ## 2.1 Opening up the Jai compiler toolkit
 
 Until this moment Jai is still closed beta (Jan 2023).
-The group members can download the compiler as a zip file (size +- 220 Mb).
+The group members can download the compiler as a 'vanilla' zip file (size +- 220 Mb).
 Unzipping this file shows the following contents:
 
 ![Jai folder structure](https://github.com/Ivo-Balbaert/The_Way_to_Jai/tree/main/images/jai_folder.png)

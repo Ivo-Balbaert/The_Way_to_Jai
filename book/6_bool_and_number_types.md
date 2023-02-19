@@ -186,7 +186,8 @@ We talked about the different number types in § 5.1.2
 We encountered == and != in § 6.1.1.
 Numbers have a natural ordering, so they can also be compared with <, <=, > and >=.  
 An expression formed with these also results in a bool value:   
-`-1 < 42;  // equals true`
+`-1 < 42;  // equals true`  
+Module _Basic_ contains `min` and `max` routines.
 
 ### 6.2.2 - Arithmetic operators
 The usual +, -, * and /, % operators are defined for numbers, with abbreviations +=, -=, *= and /=:  `a *= 5;` is the same as `a = a * 5;`.  

@@ -4,7 +4,8 @@
 
 ### 1.1.1 Priorities
 
-Blow described his new language as a _better and modern day C_, and also as _C++ done right_. Its primary focus is high-performance **game programming** , but it is also suited for **general-purpose** and **low-level systems programming,** like C/C++, D or Rust. Jai is lower-level than Java or C#, and it is not an object-oriented language like these with classes and inheritance. Jai also allows programmers to get as low-level as they desire.
+Blow described his new language as a _better and modern day C_, and also as _C++ done right_, so it lies somewhere between C and C++.  
+Its primary focus is high-performance **game programming** , but it is also suited for **general-purpose** and **low-level systems programming,** like C/C++, D or Rust. Jai is lower-level than Java or C#, and it is not an object-oriented language like these with classes and inheritance. Jai also allows programmers to get as low-level as they desire.
 
 Jai is an **ahead of time (AOT) compiled, imperative, static** and **strongly-typed** language, with strong **meta-programming and compile-time code execution support**. Moreover it allows you to fine-tune execution optimizations.
 
@@ -36,7 +37,8 @@ In order to increase performance, Jai has NO:
 
 All this _results_ in:
 
-1. An increase in developer's productivity (20 – 50 %) and joy and fun in programming, making the developer cycle more enjoyable: editing code, compiling, testing is very streamlined, fluid and low-friction, easy to refactor.
+1. An increase in developer's productivity (20 – 50 %) and joy and fun in programming, making the developer cycle more enjoyable: editing code, compiling, testing is very streamlined, fluid and low-friction, easy to refactor.  
+Increasingly high-level languages haven't increased productivity.
 
 2. No problems with different build tools on different OS's.
 
@@ -52,7 +54,8 @@ Jai is specifically meant to be a game programming language, where a game is def
 
 So Jai should be useable and able to replace C++ for projects on the AAA scale. 
 
-Keep in mind that the language is _designed for good programmers_; it has no training wheels for beginners. For example: developers have to take care of manual memory management, handling memory is all important.
+Keep in mind that the language is _designed for good programmers_; it has no training wheels for beginners. For example: developers have to take care of manual memory management, handling memory is all important.  
+J Blow considered modern "memory safe" techniques too rigid for games. On the other hand, debug-mode run-time checks can detect most memory bugs.
 
 ### 1.1.2 Jai tries to be a better C/C++
 

@@ -39,6 +39,7 @@ main :: () {
     // text, success :=  read_entire_file(TESTFILE);            
     // if !success   return; 
     text, success := read_entire_file(TESTFILE);
+    // assert(success);
     // assert(success, "Error. Cannot read file.\n" );   // (5B)
     if success {
         print("File successfully read.\n");

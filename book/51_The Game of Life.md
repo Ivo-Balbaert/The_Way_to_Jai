@@ -125,7 +125,7 @@ main :: () {
     }
 
     mouse_pressed := false;
-    for event: Input.events_this_frame {     // (2) event handling
+    for event: Input.events_this_frame {    // (2) event handling
       if event.type == .QUIT then 
         break eventloop;
       getrect_handle_event(event);

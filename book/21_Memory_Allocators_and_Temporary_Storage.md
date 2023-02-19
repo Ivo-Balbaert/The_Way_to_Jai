@@ -20,6 +20,18 @@ Luckily Jai also has in-built special storage mechanisms for data structures, ca
 ### 21.1.2 Use defer when possible
 Whenever you allocate on the heap (alloc, New, NewArray, [..]Type, and so on), use `defer free(object)` immediately after creating it. But this works only when you use that object right there in your current procedure and then don't need it anymore, because defer calls the free at the end of the current proc.
 
+### 21.1.3 Different sorts of memory allocation
+According to Jon Blow, there are roughly four categories of lifetimes:
+1) Extremely short lived. Can be thrown away by end of function.  
+2) Short lived + well defined lifetime. Memory allocated "per frame".  
+3) Long lived + well defined owner. Uniquely owned by a subsystem.  
+4) Long lived + unclear owner. Heavily shared, unknown when it may be accessed or freed.  
+
+Most program allocations fall in category 1.   
+Category 4 allocations should be rare in well written programs.   
+Categories 2 and 3 are best served by arena allocators, like temporary storage (see § 21.3) or a Pool (see § 34.3).
+
+
 ## 21.2 Allocators
 In § 18.4 we discovered that the definition of a Resizable_Array contains a field `allocator : Allocator`.
 Allocators are specialized ways you can invoke to allocate memory for an object. They are specialized in the sense that they store data very efficiently, and they often have simpler mechanisms for freeing memory.  
@@ -60,7 +72,10 @@ This data is needed until the end of the program. It's no use freeing it, becaus
 ` this_allocation_is_not_a_leak(some_global_data);`  
 
 ## 21.3 Temporary storage
-Temporary storage is a special kind of Allocator. It is defined as a struct in the _Preload_ module, and module _Basic_ contains support routines to make working with temporary storage very easy. Its memory resides in the Context (see § 25).
+Temporary storage is a special kind of Allocator, more specifically a simple linear allocator / bump allocator.  
+An allocation is a simple increment into a block of memory. Objects can not be freed individually.  
+
+It is defined as a struct in the _Preload_ module, and module _Basic_ contains support routines to make working with temporary storage very easy. Its memory resides in the Context (see § 25).
 
 Here is the struct's definition:
 ```c++

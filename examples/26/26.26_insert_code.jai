@@ -7,6 +7,7 @@ what_type :: ($c: Code) {                   // (2)
 
 main :: () {
     x := 3;
+
     x *= x; 
     x *= x; 
     x *= x; 

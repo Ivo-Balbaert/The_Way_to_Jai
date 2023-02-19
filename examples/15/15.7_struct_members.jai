@@ -15,7 +15,8 @@ main :: ()  {
     // => The struct has name: Person
     for pinfo.members {       // (3)
         print("% - ", it.name);  
-        print("% - ", << it.type);  
+        print("% - ", << it.type);
+        print("% - ", (<< it.type).type);   
         print("% - ", type_to_string(it.type));  
         print("% - ", (<< it.type).runtime_size);  
         print("% - ", it.offset_in_bytes);
@@ -28,9 +29,9 @@ main :: ()  {
     print("\n");
 }
 /*
-name - {STRING, 16} - string - 16 - 0 - [] - 0 -
-age - {INTEGER, 8} - s64 - 8 - 16 - [] - 0 -
-location - {STRUCT, 8} - Vector2 - 8 - 24 - ["NoSerialize"] - 0 - 
+name - {STRING, 16} - STRING - string - 16 - 0 - [] - 0 -
+age - {INTEGER, 8} - INTEGER - s64 - 8 - 16 - [] - 0 -
+location - {STRUCT, 8} - STRUCT - Vector2 - 8 - 24 - ["NoSerialize"] - 0 - 
 
 info age field: {name = "age"; type = 7ff6_5021_4000; offset_in_bytes = 16; 
 flags = 0; notes = []; offset_into_constant_storage = 0; } and has offset 16
