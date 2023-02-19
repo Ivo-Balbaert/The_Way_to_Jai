@@ -1,5 +1,5 @@
 # Chapter 7 – Scope of Variables
-It is important to know how long a variable can be used and stays active, that is what its _lifetime_, or _scope_ is. When a variable is no longer active (it goes out of scope, its lifetime has ended), the memory it occupies can and must be freed (see § 7.1.2 and § 11).
+It is important to know how long a variable can be used and stay active, that is what its _lifetime_, or _scope_ is. When a variable is no longer active (it goes out of scope, its lifetime has ended), the memory it occupies can and must be freed (see § 7.1.2 and § 11).
 
 In fact, there is a hierarchy of scopes: if you use an identifier, and it's not defined inside the current scope, the compiler looks upward into parent scopes.
 
