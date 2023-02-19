@@ -35,7 +35,7 @@ This is a _boolean expression_ or _condition_, resulting in a bool value:
   - it is false in all other cases.
 
 For example:  true == true and 1 == 1.0 are both true.  
-The inequality operator **!=** reverses this, it returns true when the values are different:    `"Jai" != "Java"` gives true
+The inequality operator **!=** reverses this, it returns true when the values are different:    `"Jai" != "Java"` gives true.
 
 In Jai you cannot compare values of a different type, for example: 
 `0 == false: // => Error: Type mismatch. Type wanted: s64; type given: bool.`
