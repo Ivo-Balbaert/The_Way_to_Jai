@@ -29,7 +29,7 @@ A module can be one file, for example `Random.jai`, which can be imported with `
 When a module contains several files, you need to give the module its own folder with the same name, and in it a file `module.jai` is required.
 For example, the _Basic_ module has its own folder _/modules/Basic_. In it you'll find a file *Print.jai*, which contains the definition of `print`. It also contains other source files. The `module.jai` file often serves as a way to assemble all these source files, using `#load` to do this. 
 
-You can make your own module(s) in /jai/modules. But these could be deleted when a new version of Jai is installed, so better make a separate folder for your own modules, and make it known to Jai with `-import_dir` (see § 8.5).
+You can make your own module(s) in /jai/modules. But these could be deleted when a new version of Jai is installed, so a better solution is to make a separate folder for your own modules, and make it known to Jai with `-import_dir` (see § 8.5).
 
 When you look at the start of the `module.jai` for _Basic_, you can see that it loads the other .jai files in the folder:
 
