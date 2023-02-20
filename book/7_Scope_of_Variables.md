@@ -33,7 +33,7 @@ main :: () {
 }
 ```
 
-There are two different kinds of scope: _data scope_ and _imperative scope_:  
+There are two different kinds of scopes: _data scope_ and _imperative scope_:  
   A _data scope_ (also called _global scope_ or _application scope_, like in the lines before main) is outside of any procedures, including main. There's no actively running code in such a scope, you can't call a procedure to run. Data scope only contains declarations of variables like you have at the top level of a file. There's no notion of time in a data scope, and different declarations are unordered with respect to each other. In this scope global constants and variables can be defined, as well as enums, struct types and procedures.
   By default, all declarations in a source file go into the application scope; they are _exported_. In § 8B, we'll see a way to make exceptions to this rule.   
 
