@@ -123,6 +123,9 @@ a : int = 5;
 b := <<*a; // b also has the value 5
 ```
 
+Some languages (like Java) have _references_ instead of pointers. References are used to refer to an existing variable with another name whereas pointers are used to store the address of a variable. Jai has no references, only values and pointers.
+
+
 ## 10.2 Pointers to pointer
 We saw that a pointer has also an address, so nothing prevents you from having a pointer to a pointer. This can even be several levels of _indirection_ deep, as lines (8) and following show. 
 To get to the value of a three-level pointer, you have to dereference three times:  

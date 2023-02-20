@@ -49,7 +49,9 @@ main :: () {
     print("count is %\n", count); // => count is 27
 }
 ```
-The variable `count` defined in line (1) in Jai on the stack is visible inside the #asm block, where it is stored in a gpr. In line (2) 17 is added to it. Jai sees that and prints out the changed value 27. Inside the #asm block, count is a named gpr.  
+The variable `count` defined in line (1) in Jai on the stack is visible inside the #asm block, where it is stored in a gpr.  
+In line (2) 17 is added to it. In assembly, `add a,b` is the same as a += b (or a = a + b).  
+Jai sees that and prints out the changed value 27. Inside the #asm block, count is a named gpr.  
 
 We can also define variables in the asm block, and let them interact with Jai variables like this:
 
@@ -97,6 +99,9 @@ block_2 :: #asm { movdqu y:, block_1.x; }
 ```
 Cross block #asm referencing keeps your registers alive across the procedure. LLVM optimizations could potentially spill them if required.
 
+**Exercise**
+Declare a `result` variable of type int. Write an #asm block that adds 42 and 13, and stores the sum in `result`. Verify by printing `result`.
+(see *asm1.jai*)
 
 ## 28.3 Some background info
 

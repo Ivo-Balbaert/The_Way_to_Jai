@@ -195,7 +195,7 @@ Broadcaster :: struct {
 ```
 
 ## 12.4 Struct literals
-Look at the lines (0), (7) and (8): print knows how to print out a struct, and the result is of the form: `{field_value1, ..., field_valuen}`, like {"Robert", 42, {64.139999, -21.92}}. 
+Look at the lines (0), (7) and (8): print knows how to print out a struct, and the result is of the form: `{field_value1, ..., field_valuen}`, like {"Robert", 42, {64.139999, -21.92}}. Printing structs just works, even for nested structs. 
 
 `print` can also make use of the `formatStruct` proc, which gives additional functionality for printing out structs (see line (10)).
 
@@ -745,6 +745,37 @@ main :: () {
 
 Type Holder in line (1) has a 16 bit relative pointer field a, which points to a float. Field a points to field b (line (2)), which indeed is a float.  
 (3) is a declaration assigning the relative pointer a to another pointer, but its type is a full pointer, not a relative pointer. This is necessary, because when we copy the relative pointer to the stack, the resulting pointer would overflow and not be valid, because there is no way to reach that data structure from the stack. By converting it to a full pointer, we are able to point to the original value 42.42, as shown in line (4).
+
+Here is a 2nd example with a recursive struct Node. `next` is a relative pointer to the next Node:
+
+See *12.15_struct_relative_pointer2.jai*
+```c++
+#import "Basic";
+
+Node :: struct {
+    next: *~s16 Node;
+    value: float;
+}
+
+main :: () {
+    a := Node.{null, 1337};
+    b := Node.{null, 42};
+    a.next = *b;
+
+    value := a.next.value;  // (1)
+    print("rel: %  value: %\n", a.next, value);
+    rel_ptr := a.next;
+
+    abs_ptr := cast(*Node) rel_ptr;  // (2)
+    print("abs: %  value: %\n", abs_ptr, abs_ptr.value);
+    // example output:
+    // => rel: r-8 (c6_799d_f7e0)  value: 42
+    // => abs: c6_799d_f7e0  value: 42
+}
+```
+
+We can directly dereference a relative pointer as seen in line (1). It can also be converted to an absolute pointer, as shown in line (2).
+Relative pointers can be useful for packing data, because they need less memory.
 
 ## 12.15 Anonymous structs
 An **anonymous struct** can be defined as follows:

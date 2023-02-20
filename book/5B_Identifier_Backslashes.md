@@ -1,4 +1,4 @@
-# Chapter 5B - Identifier Backslashes
+# 5B - Identifier Backslashes
 
 This feature is illustrated here (See *5B.ident_back.jai* :)
 

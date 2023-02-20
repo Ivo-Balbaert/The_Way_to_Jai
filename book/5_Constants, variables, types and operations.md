@@ -292,7 +292,7 @@ In line (2) we see a #char literal in a variable f, which has type s64.
 In line (2B) we see a variable varv of type void, which also prints out void.  
 
 >Schematically:  
->  ::	defines a constant, it is a compile-time assignment 
+>  ::	defines a constant, it is a compile-time assignment , also called compile-time constant
 >  :=	defines a variable, it is a run-time assignment
 
 ## 5.4 - Errors when defining variables

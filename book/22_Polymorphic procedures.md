@@ -117,7 +117,8 @@ However, a definition like $T can only appear once in a polymorphic function, ot
 > This behavior can be shown with the info_flags POLYMORPH_MATCH and POLYMORPH_DEDUPLICATE defined in the _Compiler_ module.
 
 **About performance**
-There is no performance-hit with polymorphism, because it doesn't need dynamic type checking as in some languages. The function produced by a polymorphic call is just as low-level as a non-polymorphic one. The resulting code will be exactly the same, because after polymorph resolution, when we solve for $T and whatever else, the next step is just to bake out a full copy of the procedure with those types fully known. This can be demonstrated by comparing a dump of the byte code (see #dump § 20.2.3) of a normal proc and its polymorphic version, called with the same parameters.
+There is no performance-hit with polymorphism, because it doesn't need dynamic type checking as in some languages: there is no dynamic dispatch or run-time overhead.  
+The function produced by a polymorphic call is just as low-level as a non-polymorphic one. The resulting code will be exactly the same, because after polymorph resolution, when we solve for $T and whatever else, the next step is just to bake out a full copy of the procedure with those types fully known. This can be demonstrated by comparing a dump of the byte code (see #dump § 20.2.3) of a normal proc and its polymorphic version, called with the same parameters.
 
 ## 22.2 Some other examples
 ### 22.2.1 T used more than once, and also used as a return type
@@ -283,7 +284,20 @@ It uses a multiple return to swap the values, so it is called like
 The `#must` after the return type T ensures that you use this form. Moreover, this is an inlined procedure for performance.
 
 **Exercise**  
-Given two Vector3's {1, 4, 9} and {2, 4, 6}, use Swap from _Basic_ to swap their values (see swap_vectors.jai)
+1) Given these two procs:  
+```c++
+array_add1 :: (arr: [..]$T, value: T)  {}
+array_add2 :: (arr: [..]T, value: $T)  {}
+```
+and this variable:  `nums: [..] int;`
+predict what the following calls will display:  
+```c++
+array_add1(nums, "not an int");
+array_add2(nums, "not an int"); 
+```
+(see *poly_errors.jai*)
+
+2) Given two Vector3's {1, 4, 9} and {2, 4, 6}, use Swap from _Basic_ to swap their values (see *swap_vectors.jai*)
 
 ### 22.2.4 Example with structs
 See *22.9_polyproc5.jai*:

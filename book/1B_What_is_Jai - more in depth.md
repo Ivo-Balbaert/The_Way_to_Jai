@@ -4,7 +4,7 @@
 
 ### 1.1.1 Priorities
 
-Blow described his new language as a _better and modern day C_, and also as _C++ done right_, so it lies somewhere between C and C++.  
+Blow described his new language as a _better and modern day C_, and also as _C++ done right_, so it lies somewhere between C and C++: **Jai is C+**
 Its primary focus is high-performance **game programming** , but it is also suited for **general-purpose** and **low-level systems programming,** like C/C++, D or Rust. Jai is lower-level than Java or C#, and it is not an object-oriented language like these with classes and inheritance. Jai also allows programmers to get as low-level as they desire.
 
 Jai is an **ahead of time (AOT) compiled, imperative, static** and **strongly-typed** language, with strong **meta-programming and compile-time code execution support**. Moreover it allows you to fine-tune execution optimizations.
@@ -122,13 +122,36 @@ The name "Jai" means victory (जय) in Hindi, Indian languages, or also "Just 
 
 ## 1.5 Specific Jai features
 
-These are some unique, essential, killer features of Jai:
+**Big ideas:**
+- Context (see § 25)
+- Directives  (see Appendix C)
+- Run-time Type Reflection (see § 15.5, § 16, § 17.14, § 26)
+- Full compile-time code execution (see § 26.2)
 
-- Reflection (introspection) and run-time type information
-- Low-level memory management tools for memory allocation and freeing
-- Explicit control over optimization and performance characteristics
-- Full compile-time code execution
-- Integrated build process
+**Medium ideas:**
+- Polymorphic Procedures (see § 22)
+- Polymorphic Structs (see § 23)
+- Build System (see § 30)
+- A sane Module System (see § 8, 8B, 12.12)
+
+**Small ideas:**
+- Initialization by Default (see § 5.3)
+- No printf Formatters (see § 5.7)
+- Type Distinction (see § 26.13)
+- Universal Declaration Syntax :: and :=
+- First Class Relative Pointers (see § 10.6, 12.14, 19.4.9)
+- No References, just values and pointers. 
+- No Const 
+- Maybe by Reference (see § 17.3)
+- Data-only Pseudo-inheritance (see § 12.7-9, 23B)
+- Custom Iterators (see § 26.6-8)
+
+These are some unique, essential, killer features of Jai:
+- Fast Compile Times
+- Reflection (introspection) and run-time type information (see § 15.5, § 16, § 17.14, § 26)
+- Low-level memory management tools for memory allocation and freeing (see § 4D, 11, 19.4.6, 21, )
+- Explicit control over optimization and performance characteristics (see Appendix D - Performance)
+- Integrated build process (see § 30)
 
 ## 1.6 Some wrong ideas in software development
 

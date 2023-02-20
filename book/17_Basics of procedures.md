@@ -202,8 +202,9 @@ Passing a pointer to n in (2) allows the proc `passing_pointer` to change the va
 
 **What happens if you don't pass by pointer explicitly?**  
 Arguments of size <= 8 bytes (basic types such as s64, u8, Type, any pointer, or any enum) are always passed by value (copy).  
-Bigger sized values which is any type > 8 bytes, including Any, string, struct, and so on, are most probably passed by reference (pointer), but anyhow they cannot be changed. To change their data, make a local copy and change that. 
-To ensure you get a pointer for some reason (to modify the contents of the struct) you can explicitly pass a pointer.
+Bigger sized values which is any type > 8 bytes, including Any, string, struct, and so on, are most probably passed by reference (pointer), but anyhow they cannot be changed. To change their data, make a local copy and change that.
+(We say 'probably', because it is up to the compiler to decide pass by value or pass by reference, for better optimization.) 
+To ensure you get a pointer for some reason (for example to modify the contents of the struct) you can explicitly pass a pointer.
 
 ## 17.4 Default values for arguments
 See *17.4_default_args.jai*:

@@ -46,7 +46,7 @@ This is a common way to structure a module, or indeed a main file of any substan
 The following section details how it works.
 
 ## 8.2 Loading files with #load
-Besides the #import to take in a module, you also would want to be able to take in one (or more) Jai source code file(s) and add these to your project. Like modules, we use the `#load` directive to do this.  
+Besides the #import to take in a module, you also would want to be able to take in one (or more) Jai source code file(s) and add these to your project. Like modules, we use the `#load` directive to do this, which is comparable to C's #include.  
 
 The `#load` directive effectively copies in the contents from the loaded source file into the current file. Think of loading a file as copy/pasting the code directly into the calling file. While building this current file, all code from the loaded files will be automatically build with it.  
 Have a look at this example:
@@ -106,14 +106,26 @@ or simply serve to differentiate between two modules with the same name, like we
 
 ### 8.3.2 Handling naming conflicts
 Suppose you have two structs in two different files/libraries with the same name, causing a name conflict. You can prefix one or both of the imports to prevent naming conflicts.
+Suppose both modules Lib1 and Lib2 contain a procedure `proc1`, then you can name both imports:
 
 ```c++
 lib1 :: #import "Lib1";
 lib2 :: #import "Lib2";
 
-a: lib1.Object; // create struct "Object" from lib1
-b: lib2.Object; // create struct "Object" from lib2
+a: lib1.proc1(); // call proc "proc1()" from Lib1
+b: lib2.proc1(); // call proc "proc1()" from Lib2
 ```
+
+If you prefer, you can use just one named import:
+```c++
+#import "Lib1";
+lib2 :: #import "Lib2";
+
+a: proc1();      // call proc "proc1()" from Lib1
+b: lib2.proc1(); // call proc "proc1()" from Lib2
+```
+
+Same mechanism for a struct with the same name in both Lib1 and Lib2.
 
 ## 8.4 Import a file, a dir or a string
 If you only want to import a specific file from a module, you can do it with `#import, file` like this:  

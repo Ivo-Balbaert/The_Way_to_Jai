@@ -1,6 +1,8 @@
 # 30 Integrated build system
 > Note: Because the build system is so powerful in Jai, this has become a huge chapter. In due time, it will be split into a number of digestible sections. 
 
+**A built-in build system**
+
 ## Intro: What is a meta-program?
 C/C++ compilers do not have a way to specify how to build a program, and are reliant on outside systems foreign to the language to build projects, such as Makefiles, Ninja, and CMake. All these build systems are clunky, need to use a different system for different operating systems, and building a large program can be incredibly messy. 
 In Jai, all you would ever need to compile your code is the Jai language and compiler itself, there are no external dependencies.
@@ -94,6 +96,18 @@ A few directives exist that can be handy when providing file location informatio
   **#caller_location**  it gives the line number from where a procedure is called.  
 
 When using or setting file-paths in Jai, always use the forward slash / as path-separator, even on Windows!
+
+**Exercise**
+In § 17.1.2 Exercise (5) we made a naive implementation of the assert statement.   
+But now we can show in our code where an assertion fails with `#location`.  
+Moreover with the metaprogramming tools of § 26 (`compiler_get_nodes` used in `code_to_string`, see § 26.15),  we can make the difference between displaying a proc call and its value in displaying an assert, like this:  
+```c++
+assert_eq(42, factorial(3));
+  left: 42  expr: 42
+  right: 6  expr: factorial(3)
+  loc: {"d:/Jai/testing/assert_eq.jai", 30, 15}
+```
+(see *assert_eq.jai*)
 
 ## 30.3 A minimal build file
 ### 30.3.1 Compiling with add_build_file

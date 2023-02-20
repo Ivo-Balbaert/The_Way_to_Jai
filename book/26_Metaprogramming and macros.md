@@ -1031,7 +1031,8 @@ Why use a macro? Because you want to #insert at compile-time the piece of code o
 
 
 ## 26.6 Using a for-expansion macro to define a for loop
-As easy as it is to for-loop over an array, this is not defined for other composite data-structures, such as the linked list we discussed in § 12.6. But this can be done with a macro, by defining a so-called *for_expansion*:
+As easy as it is to for-loop over an array, this is not defined for other composite data-structures, such as the linked list we discussed in § 12.6. Jai has a slick mechanism, which makes writing a custom iterator for a custom data container very easy.
+This can be done with a macro, by defining a so-called *for_expansion*:
 
 See *26.8_linked_list_for_expansion.jai*:
 ```c++
@@ -1434,6 +1435,21 @@ In the code above we have an array `players` of type `Player`. In lines (3) and 
 as in line (5).  
 We can of course give it another name like `player_loop`, and/or use the index besides the value, and/or make different for_expansion routines. This we can write like in line (6):  
 ` for :player_loop   player, ix: players {}`
+
+**Exercise**
+Here is a definition of a polymorphic struct:  
+```c++
+FixedVector :: struct($T: Type, N: int) {
+  values : [N]T;
+  count : int; // number of items already stored in values
+}
+```
+
+Make an instantiation of this struct for int items and N == 10.
+Write a `push` proc add a new value to this struct. Then write a `for_expansion` macro to loop over it and print out the values.
+Write a 2nd version that skips values equal to 5.
+(See *for_expansion_fixed_vector.jai*)
+
 
 ## 26.9 The #modify directive
 The **#modify** directive can be used to insert some code between the header and body of a procedure or struct, to change the values of the polymorph variables, or to reject the polymorph for some types or combination of variables. #modify allows to inspect generic parameter types. It is a block of code that is executed at compile-time each time a call to that procedure is resolved. 
@@ -1927,6 +1943,12 @@ thereby effectively modifying the node in place.
 This has changed the AST `root` data. Now we must convert the  modified nodes in the AST back to Code, which is done with the 
 `compiler_get_code` procedure.
 
+To summarize, in this example we:
+* declared the code x *= 3;
+* compile-time modified the compiler parsed AST to x *= 18;
+* inserted x *= 18; four times
+All this in pure Jai code!
+
 Here is a snippet of code that searches for string literals in code, (possibly) changing them, and writing the changes back with the proc `compiler_get_code`:
 ```c++
 root, expressions := compiler_get_nodes(code);
@@ -1945,17 +1967,35 @@ modified := compiler_get_code(root);
 ## 26.13 The #type directive and type variants
 This directive tells the compiler that the next following syntax is a type literal, useful for defining procedure types and variant types. Variant types are like alias types (see § 9.1), but differ in the casting behavior.
 
-For example:
+Here is a simple example:  
+See *26.38_proc_type_pointer.jai*:
+```c++
+#import "Basic";
+
+main :: () {
+    my_proc :: (v: int) -> int { return v + 5; }
+    my_proc_type :: #type (int) -> int;        // (1)
+    assert(type_of(my_proc) == my_proc_type);  // (1B)
+
+    an_int : int = 42;
+    a_proc_ptr : my_proc_type = my_proc;       // (2)
+    another_int := a_proc_ptr(an_int);         // (3)
+    print("%", another_int); // => 47
+}
+```
+`my_proc_type` is the type of `my_proc`, as indicated in line (1), and confirmed by the assert in line (1B). With this type, we can define a procedure pointer (line (2)), which can be used to call the proc (line (3)).
+
+Here is a more complex example used in interaction with C code:  
 ```c++
 IL_LoggingLevel :: u16;
-IL_Logger_Callback :: #type(level: IL_LoggingLevel, text: *u8, ctx: *void) -> void #c_call;
+IL_Logger_Callback :: #type (level: IL_LoggingLevel, text: *u8, ctx: *void) -> void #c_call;
 ```
 The code above defines the procedure `IL_Logger_Callback` as a proc with as type the given signature.
 
 #type is useful for resolving ambiguous type grammar, for example the following declaration does not compile: `proctest: Type : (s32) -> s32;`
 but adding #type it does:     `proctest: Type : #type (s32) -> s32;`
   
-It can also be used to define **type variants**, as in the following example, with syntax #type,distinct or #type,isa:
+It can also be used to define **type variants**, as in the following example, with syntax `#type,distinct` or `#type,isa`:
 
 See *26.21_type_variants.jai*:
 ```c++
@@ -1999,6 +2039,57 @@ The type of Handle is Type (see (4)), but if we dig deeper in line (5) we see th
 Another variant of the isa type is shown in lines (2A-B). These types will implicitly cast to their isa type, but variants with the same isa type will not implicitly cast to each other.
 Taking type_info(), and dereferencing the `variant_of` field shows the underlying type and size (lines 5B, 6 and 7).
 
+The different possibilities and limits are nicely illustrated in the following example:
+
+See *26.37_type_distinction.jai*:
+```c++
+#import "Basic";
+
+// cpp: using HandleA = u32;
+// rust: type HandleA = u32;
+HandleA :: u32;
+
+// cpp: no equivalent
+// rust: no equivalent
+HandleB :: #type,distinct u32;
+
+// Functions
+do_stuff_u :: (h: u32) { /* ... */ }
+do_stuff_a :: (h: HandleA) { /* ... */ }
+do_stuff_b :: (h: HandleB) { /* ... */ }
+
+main :: () {
+    // Variables
+    u : u32 = 7;
+    a : HandleA = 42;
+    b : HandleB = 1776;
+
+    // HandleA converts to u32, HandleB does not
+    // Assignment
+    u = a;
+    a = u;
+    // a = b; // compile error
+    // b = a; // compile error
+    // u = b; // compile error
+    // b = u; // compile error
+
+    // procedure takes u32, but also HandleA
+    do_stuff_u(u);
+    do_stuff_u(a);
+    //do_stuff_u(b); // compile error
+
+    // procedure takes HandleA, but also u32
+    do_stuff_a(u);
+    do_stuff_a(a);
+    // do_stuff_a(b); // compile error
+
+    // procedure takes HandleB only
+    // do_stuff_b(u); // compile error
+    // do_stuff_b(a); // compile error
+    do_stuff_b(b);
+}
+```
+
 ## 26.14 Getting the name of a variable at compile time
 See *26.23_get_variable_name.jai*:
 ```c++
@@ -2027,7 +2118,7 @@ With these kinds of techniques you manipulate code from a macro within the progr
 There is also a `print_type_to_builder` proc for printing type info to a string builder (see how_to/935).
 
 ## 26.15 Converting code to string
-See _26.23_get_variable_name.jai_:
+See *26.27_convert_code_string.jai*:
 ```c++
 #import "Basic";
 
@@ -2224,3 +2315,6 @@ Its code also uses a `#insert -> string` which loops over the fields of the unio
 
 In line (2A), the `set` function is called with value 10, so tag becomes s64 and the int_a field becomes 10; the same goes for lines (2B-C).
 If the type of the supplied value is not present in the types array, we get a compile-time error like: `Assertion failed: Invalid value: bool` (see line (2D)).
+
+**Some wise words**
+Excessive compile-time code is more complex and harder to understand. With great power comes great responsibility.

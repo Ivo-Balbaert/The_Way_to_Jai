@@ -50,9 +50,30 @@ main :: () {
 This way we get the size passed as a generic parameter. If the applied lambda doesn't change the type T of the items, we can replace R by T as well.
 
 ## 23.3 Polymorphic structs
-We can also use generic parameters to pass to a struct, in this example to define a 2D array as a struct field:
+We can also use generic parameters to pass to a struct. Here is an example where we use polymorphism to define an array as a struct field, passing the item type T and the number of items N:  
 
-See *23.3_poly_struct.jai*:
+See *23.10_poly_structs1.jai*:
+```c++
+#import "Basic";
+
+Vec :: struct($T: Type, $N: s64) {   // (1)
+  values : [N]T;
+}
+
+main :: () {
+    // a simple vector of 3 floats
+    Vec3 :: Vec(float, 3);          // (2)
+    v1 := Vec3.{.[1,2,3]};
+
+    // a big vector of 1024 ints 
+    BigVec :: Vec(int, 1024);       // (3)
+}
+```
+The struct is defined in line (1). When making a polymorph struct type Vec3 in line (2), T becomes float and N 3. In line (3) for type BigVec, T becomes int and N 1024.
+
+In the following example we use polymorphism to define a 2D array as a struct field:
+
+See *23.3_poly_structs2.jai*:
 ```c++
 import "Basic";
 
@@ -443,7 +464,7 @@ Hello from a Subscriber: "nothing"
 */
 ```
 
-**Some wise words of Jonathan Blow about polymorphism:**
+**Some wise words of Jonathan Blow about polymorphism**
 " If lots of procedures in your program are polymorphic, you pay for this in compile time, and possibly also in understandability of the program. Polymorphism is powerful, but historically, when people start writing code that is over-generic, it becomes hard to understand and modify. In general, don't get carried away making things polymorphic if they do not need to be. "
 
 [23B - A showcase of inheritance](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/23B_A%20showcase%20of%20inheritance%20using%20structs%2C%20%23as%20and%20polymorphism.md)  
