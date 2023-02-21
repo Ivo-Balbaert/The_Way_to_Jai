@@ -904,7 +904,8 @@ This build compiles faster with as much debugging information as possible, but h
 `build_release` shows the recommended release options:  
 * backend = .LLVM 
 * optimization_level = .RELEASE
-* set_optimization_level(target_options, 2, 0); // same as clang -O2
+* set_optimization_level(target_options, 2, 0); // same as clang -O2  
+(for a complete overview of release options, check Appendix D: Performance.)
 
 The LLVM compiler backend is slower than the X64 backend, because it does a lot more optimizations. An optimized build does not have debug information built into it, and takes longer to compile. This build makes the compiler produce the best possible optimized code. 
 

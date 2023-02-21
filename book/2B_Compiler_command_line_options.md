@@ -13,10 +13,10 @@ It is also allowed to add the options after the source-file name, like this:
 `jai -help` shows you all the command-line options that exist:
 
 
-A complete jai command using all possibilities for giving arguments looks like this:
+A complete jai command using all possibilities for giving arguments looks like this:  
 `jai <options> program.jai - <user metaprogram args> -- meta <custom metaprogram>` 
 
-`<user metaprogram args>` are also called compiler command-line arguments (see § 30.8).
+`<user metaprogram args>` are also called compiler command-line arguments (see § 30.8).  
 Every argument after `-` is ignored by the compiler itself, and is passed to the user-level meta-program for its own use.
 Any argument not starting with a -, and before a `- ` by itself, is the name of a file to compile.
 
