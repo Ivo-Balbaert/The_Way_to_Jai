@@ -1,7 +1,7 @@
 # Chapter 17 - Basics of procedures
 
 Until now we've only used the `main :: ()` proc in our own code, but we already used a lot of procedures from the standard modules library. In this section, we'll start defining our own procedures and explore all functionality to do so.
-We know that we can create local code blocks (see § 7.1.2), and that we can repeat a code block within a or for loop. But it is also very useful to be able to call a code block by name, which is exactly what a **procedure** or **proc** (more often called **functions** in other languages) is.   
+We know that we can create local code blocks (see § 7.1.2), and that we can repeat a code block within a for loop. But it is also very useful to be able to call a code block by name, which is exactly what a **procedure** or **proc** (more often called **functions** in other languages) is.   
 Another definition could be: a proc is a callable set of statements that together perform a task, with optional parameters and return value(s).
 
 ## 17.1 Declaring and calling a proc

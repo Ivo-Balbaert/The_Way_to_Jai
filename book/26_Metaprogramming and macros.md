@@ -2316,5 +2316,43 @@ Its code also uses a `#insert -> string` which loops over the fields of the unio
 In line (2A), the `set` function is called with value 10, so tag becomes s64 and the int_a field becomes 10; the same goes for lines (2B-C).
 If the type of the supplied value is not present in the types array, we get a compile-time error like: `Assertion failed: Invalid value: bool` (see line (2D)).
 
+## 26.18 Create code for a list of types
+The following program combines polymorphism, a macro, #insert -> string and #code to do something with each type from a list of types:
+
+See *26.39_creating_types.jai*:
+```c++
+#import "Basic";
+
+create_code_for_each_type :: (code: Code, $types: ..Type) #expand {
+  #insert -> string {
+    builder: String_Builder;
+    for types {
+      print_to_builder(*builder, "{\n");
+      print_to_builder(*builder, "  T :: %1;\n", it);
+      print_to_builder(*builder, "  #insert, scope() code;\n");
+      print_to_builder(*builder, "}\n");
+    }
+    return builder_to_string(*builder);
+  }
+}
+
+main :: () {
+  // this code snippet creates a variable of type T, and prints its (default) value
+  snippet :: #code {
+    t: T;
+    print("value: '%'\n", t);
+  };
+
+  create_code_for_each_type(snippet, float32, bool, int, string);
+}
+
+/*
+value: '0'
+value: 'false'
+value: '0'
+value: ''
+*/
+```
+
 **Some wise words**
 Excessive compile-time code is more complex and harder to understand. With great power comes great responsibility.

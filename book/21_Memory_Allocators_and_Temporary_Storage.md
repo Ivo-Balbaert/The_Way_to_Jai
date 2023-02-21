@@ -1,6 +1,8 @@
 # 21 – Memory Allocators and Temporary Storage
 
 ## 21.1 General remarks
+The default allocator is `rpmalloc` and so doesn't depend on the libc `malloc` of the operating system.
+
 ### 21.1.1 Overview of allocation and freeing methods
 Previously (see § 11) we saw how to use alloc / New and free for using heap memory:  
 - alloc(n) is used to allocate n bytes of (by default) heap memory (like malloc in C), free to release it 
@@ -66,6 +68,8 @@ A struct Node could be allocated like:
 `New(Node, allocator = Alloc1);`
 
 You can also write your own allocators.
+
+(For an in-depth discussion see *how_to/800_allocators.jai*.)
 
 **Global data**  
 This data is needed until the end of the program. It's no use freeing it, because after the program exits, the memory is automatically reclaimed by the OS. You can make the memory debugger (see § 21.4) not count global data as a leak by using the following proc:  
@@ -258,3 +262,88 @@ The Visual Memory Debugger tool in module _Basic_ can communicate the collected 
 Try this out on program 18.5_array_for.jai, without and with free (see leak_array_for.jai).
 
 `push_allocator` can be used with temp, see § 25.2.
+
+## 21.6 Check which allocator owns an allocation
+The following program does just that, which could be useful while debugging.
+
+See *21.3_allocators_check.jai*:
+```c++
+// An example that uses several different allocators, then asks them all
+// who owns which memory.
+//
+// Note that this is probably not the kind of thing you want to do at runtime
+// in the steady state, as it may not be very fast, but it could be a very helpful
+// debugging facility.
+//
+
+#import "Basic";
+#import "Pool";
+#import "Flat_Pool";
+#import "rpmalloc";
+
+main :: () {
+    pool: Pool;
+    flat: Flat_Pool;
+
+    a := context.default_allocator;
+    b := Allocator.{pool_allocator_proc, *pool};
+    c := Allocator.{flat_pool_allocator_proc, *flat};
+    d := Allocator.{rpmalloc_allocator_proc, null};
+
+    // rpmalloc needs explicit init right now, but others don't.
+    d.proc(.STARTUP, 0, 0, null, null);  
+    
+    ma := alloc(1000, allocator=a);
+    mb := alloc(1000, allocator=b);
+    mc := alloc(1000, allocator=c);
+    md := alloc(1000, allocator=d);
+
+    report_who_owns(ma, a, b, c, d);
+    report_who_owns(mb, a, b, c, d);
+    report_who_owns(mc, a, b, c, d);
+    report_who_owns(md, a, b, c, d);
+}
+
+report_who_owns :: (memory: *void, allocators: .. Allocator) {
+    someone_owns_this := false;
+    
+    print("Querying all allocators for address: %\n", memory);
+    
+    for allocators {
+        caps, name := get_capabilities(it);
+        assert((caps & .IS_THIS_YOURS) != 0);  
+        
+        yours := cast(bool) it.proc(.IS_THIS_YOURS, 0, 0, memory, it.data);
+        print("[%] says \"%\"\n", yours, name);
+
+        someone_owns_this ||= yours;
+    }
+
+    assert(someone_owns_this);
+}
+
+/*
+Querying all allocators for address: 217_186a_0080
+[true] says "stripped-down rpmalloc 1.4.4 intended as Default_Allocator"
+[false] says "modules/Pool"
+[false] says "modules/Flat_Pool"
+[false] says "rpmalloc 1.4.4"
+Querying all allocators for address: 217_186b_0088
+[true] says "stripped-down rpmalloc 1.4.4 intended as Default_Allocator"
+[true] says "modules/Pool"
+[false] says "modules/Flat_Pool"
+[false] says "rpmalloc 1.4.4"
+Querying all allocators for address: 217_18aa_0000
+[false] says "stripped-down rpmalloc 1.4.4 intended as Default_Allocator"
+[false] says "modules/Pool"
+[true] says "modules/Flat_Pool"
+[false] says "rpmalloc 1.4.4"
+Querying all allocators for address: 217_28aa_0080
+[false] says "stripped-down rpmalloc 1.4.4 intended as Default_Allocator"
+[false] says "modules/Pool"
+[false] says "modules/Flat_Pool"
+[true] says "rpmalloc 1.4.4"
+*/
+```
+
+The program works with four different allocators a-d. It allocates 1000 bytes with each of them (ma-md). For each allocation, it then queries all allocators to check which allocator owns that allocation.
