@@ -339,10 +339,12 @@ The `backtrace_on_crash` option is by default .ON
 Array bounds operations, castings and null pointer checks can be turned ON or FATAL/NONFATAL (for cast checks) at runtime to increase robustness of your program, they are so by default. If you are very sure, you can turn them OFF to increase performance
 
 ### 30.4.7 runtime_storageless_type_info
+Example: `target_options.runtime_storageless_type_info = true;`      
 With this option, you can specify whether type_table info is available at runtime (see § 26.1). By default its value is _false_, but if you set its value to _true_, the type table info is not available at runtime, which reduces the executable's size. You’re than basically saying "I don’t want all that data", but you still can use Type_Info and the `type_info` function
 This could be useful when writing for an embedded system.
 
 ### 30.4.7B Dead code elimination
+`target_options.dead_code_elimination = .ALL;`
 Normally code that isn't called at run-time (so called dead-code) is NOT compiled: the dead code is eliminated.  
 For example a proc that gives a compile error when called won't give any error if not called.  
 You can stop this dead-code elimination with this line in your build file:     
@@ -418,7 +420,6 @@ You can start from 30.3_build.jai or _modules/Minimal_Metaprogram.jai_ to make y
 if Build is in the default jai/modules folder, or  
 `jai main.jai -- import_dir "d:/Jai/my_modules" meta Build`  
 if Build is in a dedicated _d:/Jai/my_modules_.
-(--- instead of -- is also allowed.  
 
 The compiler accepts either -- or --- as the delimiter of hardcoded compiler arguments.)
 

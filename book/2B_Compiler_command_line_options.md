@@ -1,16 +1,29 @@
 # 2B - Compiler command-line options
 
-The structure of a typical jai command is as follows:  
-`jai -option1 -option2 file_to_compile.jai - arguments for meta-program`
+The structure of a minimal jai command is as follows:  
+`jai -option1 -option2 program.jai`  
+It can contain 0 or more options.
 
-Every argument after `-` is ignored by the compiler itself, and is passed to the user-level meta-program for its own use.
-Any argument not starting with a -, and before a - by itself, is the name of a file to compile.
-
-Example:     `jai -x64 program.jai - info for -the compile_time execution`
+**Examples:**
+`jai program.jai`  : no options, defaults to LLVM backend.
+`jai -x64 -release program.jai`  
 It is also allowed to add the options after the source-file name, like this:  
  `jai program.jai -x64`
 
-`jai -help` shows you all the command-line flags that exist:
+`jai -help` shows you all the command-line options that exist:
+
+
+A complete jai command using all possibilities for giving arguments looks like this:
+jai <options> program.jai - <user metaprogram args> -- meta <custom metaprogram> 
+
+<user metaprogram args> are also called compiler command-line arguments (see § 30.8).
+Every argument after `-` is ignored by the compiler itself, and is passed to the user-level meta-program for its own use.
+Any argument not starting with a -, and before a `- ` by itself, is the name of a file to compile.
+
+**Examples:**
+`jai 30.7_build_and_run2.jai - run`  : see § 30.9
+`jai program.jai -- import_dir "d:/Jai/my_modules" meta Build` : see § 30.5
+
 
 **Backends**:  
  `-x64`              Use the x64 backend by default (unless overridden by a meta-program).
@@ -76,3 +89,5 @@ which outputs the following additional options:
 Developer options: `-no_jobs, -randomize, -seed some_number, -extra, -chaos`
 
 These options are deliberately minimal compared to other programming languages. As we'll see later Jai provides a very sophisticated system to build your application and setting these options from Jai code itself (see § 30). It favors _configuration from code_ which is the same and all platforms and lets you use the Jai programming language you know. This is in sharp contrast to many other programming language environments, where you have separate complicated build systems often using a separate language, that also often changes depending on which platform you are on.
+
+> Note: This is different from getting command-line arguments to a program itself (see § 19B).
