@@ -610,9 +610,9 @@ main :: () {
 }
 ```
 
-The `Accumulator.accumulation` field and `global_var` in lines (1) and (2) are 64 bit cache-aligned. Line (3) shows that indeed the address of `global_var` is divisible by 64. An instance of a struct like defined in (1B) is also 64 bit-aligned, see (4B).
-`#align` is often accompanied by the directive **#no_padding** as in (1C), meaning no additional empty bytes are added to align with word-size.
-(For a good explanation see [Structure Padding in C](https://www.javatpoint.com/structure-padding-in-c))
+The `Accumulator.accumulation` field and `global_var` in lines (1) and (2) are 64 bit cache-aligned. Line (3) shows that indeed the address of `global_var` is divisible by 64. An instance of a struct like defined in (1B) is also 64 bit-aligned, see (4B).  
+`#align` is often accompanied by the directive **#no_padding** as in (1C), meaning no additional empty bytes are added to align with word-size (this only seems to work when each member has **#align 1** added).
+(For a good explanation of what padding is, see [Structure Padding in C](https://www.javatpoint.com/structure-padding-in-c))
 
 ## 12.12 Making definitions in an inner module visible with using
 Create a module TestInside with this content:
