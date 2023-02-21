@@ -5,7 +5,7 @@ The structure of a minimal jai command is as follows:
 It can contain 0 or more options.
 
 **Examples:**
-`jai program.jai`  : no options, defaults to LLVM backend.
+`jai program.jai`  : no options, defaults to LLVM backend.  
 `jai -x64 -release program.jai`  
 It is also allowed to add the options after the source-file name, like this:  
  `jai program.jai -x64`
@@ -14,14 +14,14 @@ It is also allowed to add the options after the source-file name, like this:
 
 
 A complete jai command using all possibilities for giving arguments looks like this:
-jai <options> program.jai - <user metaprogram args> -- meta <custom metaprogram> 
+`jai <options> program.jai - <user metaprogram args> -- meta <custom metaprogram>` 
 
-<user metaprogram args> are also called compiler command-line arguments (see § 30.8).
+`<user metaprogram args>` are also called compiler command-line arguments (see § 30.8).
 Every argument after `-` is ignored by the compiler itself, and is passed to the user-level meta-program for its own use.
 Any argument not starting with a -, and before a `- ` by itself, is the name of a file to compile.
 
-**Examples:**
-`jai 30.7_build_and_run2.jai - run`  : see § 30.9
+**Examples:**  
+`jai 30.7_build_and_run2.jai - run`  : see § 30.9  
 `jai program.jai -- import_dir "d:/Jai/my_modules" meta Build` : see § 30.5
 
 
