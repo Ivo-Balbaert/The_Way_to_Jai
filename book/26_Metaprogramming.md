@@ -126,8 +126,8 @@ main :: () {
     v: Vector3;
     v = .{cast(float) #run sin(R22 * .5), 1, 0};
     TAU :: 6.0;
-    // v2 = .{sin(TAU * .5), 1, 0}; // Error: All values provided in a struct literal must be constant, 
-    // but argument 1 is not.
+    // v2 = .{sin(TAU * .5), 1, 0}; // Error: All values provided in a struct literal must 
+    // be constant, but argument 1 is not.
 }
 
 /* Output when compiling:
