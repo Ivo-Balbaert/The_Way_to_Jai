@@ -694,6 +694,245 @@ For non-constant code arguments, you can use the proc `get_root_type` from the _
 
 (See also § 26.5 Macros, specifically `macroi` in the first example.)
 
+## 26.5 The #modify directive
+The **#modify** directive can be used to insert some code between the header and body of a procedure or struct, to change the values of the polymorph variables, or to reject the polymorph for some types or combination of variables. #modify allows to inspect generic parameter types. It is a block of code that is executed at compile-time each time a call to that procedure is resolved. 
+
+It is executed following these steps:   
+1) the polymorph types (T, and so on) are resolved by matching.  
+2) then the body of the #modify is run. In there, the value of T is not constant; it can be changed to whatever you want.   
+3) then #modify returns a bool value:
+> true: this signals that $T is a type that is accepted at compile-time: the proc will compile with that type, or the struct is defined.  
+> false: it generates a compile-time error: the proc will not compile, or the struct is not defined.
+
+Here are a number of examples:
+(Some are taken from how_to/170_modify)
+
+(1) Suppose we want to force a polymorph type to be a certain concrete type:  
+See *26.16_modify1.jai*:
+```c++
+#import "Basic";
+
+proc1 :: (a : $T)    // (1)
+#modify {
+    T = s64;         // (3)
+    return true;
+}
+{
+    print("a is %, of type %\n", a, T);
+}
+
+main :: () {
+    var_s8  : s8  = 1;
+    var_s16 : s16 = 2;
+    var_u32 : u32 = 3;
+    var_s64 : s64 = 4;
+
+    proc1(var_s8);   // (2) => a is 1, of type s64
+    proc1(var_s16);  // => a is 2, of type s64
+    proc1(var_u32);  // => a is 3, of type s64
+    proc1(var_s64);  // => a is 4, of type s64
+
+    var_bool: bool = true;
+    // proc1(var_bool);  // (4) Error: Type mismatch. Type wanted: int; type given: bool.
+    proc1(xx var_bool);  // (5) => a is 1, of type s64
+}
+```
+
+`proc1` defined in line (1) has a generic type T. When it is called, for example in lines (2) and following, T is resolved respectively to s8, s16, u32 and s64. But before proc1's body is compiled, the body of #modify runs. In it (line (3)), we see that T is set to s64, and true is returned, so proc1 can be compiled for T == s64. When it runs, we see that the type is s64.  
+Converting these types to s64 works implicitly. But what if it does not convert, like for a bool in line (4)? We get a compile error. However, you can put an auto-cast xx on the argument to make it work (see (5)).
+
+(2) Here is an example with multiple generic types, showing how they can be compared and changed:
+```c++
+proc2 :: (a: $A, b: $B, c: $C) 
+#modify {
+    if B == A then B = C;
+    return true;
+}
+{ proc body }
+```
+
+(3) The following example shows how #modify can call a procedure, that has to have this signature: take the polymorph type(s) as parameters and return a bool. It checks whether the resolved type T is an integer, enum or pointer. Only then can `proc` be completely compiled.  
+
+See *26.17_modify2.jai*:
+```c++
+#import "Basic";
+
+do_something :: (T: Type) -> bool {
+    t := cast(*Type_Info) T;  
+    if t.type == .INTEGER  return true;
+    if t.type == .ENUM     return true;
+    if t.type == .POINTER  return true;
+    return false;
+}
+
+proc :: (dest: *$T, value: T)
+#modify { return do_something(T); }
+{     
+    dest := value;
+    print("dest is %", dest); // => dest is 42
+}
+
+main :: () {
+    a : *int;
+    proc(a, 42);   
+}
+```
+
+(3B) The next example shows how to require a polymorphic procedure (which is also a macro) to take parameters of a specific type. 
+
+See *26.32_modify_require.jai*:
+```c++
+#import "Basic";
+
+ModifyRequire :: (t: Type, kind: Type_Info_Tag) #expand {   // (1)
+    `return (cast(*Type_Info)t).type == kind, tprint("T must be %", kind);
+}
+
+poly_proc :: (t: $T) #modify ModifyRequire(T, .ENUM) {}     // (2)
+
+SomeEnum :: enum {
+    ASD;
+    DEF;
+}
+
+main :: () {
+    poly_proc(SomeEnum.ASD);  // (3)
+    // poly_proc(123); // (4)  Compile `Error: #modify returned false: T must be ENUM`
+}
+```
+
+`poly_proc` defined in line (2) calls in #modify the routine `ModifyRequire`. This is a macro, defined in line (1). The 1st parameter returned is the boolean condition, the 2nd is a message to be displayed when #modify returns false, as is the case in line (4). Line (3) passes an enum, which is ok.
+
+(4) In this example we define a struct `Holder` with parameters that holds an array of size N of items of type T. But we don't want the size N to be smaller than 8, we can control this in the #modify:
+
+See *26.18_modify3.jai*:
+```c++
+#import "Basic";
+
+Holder :: struct (N: int, T: Type)
+#modify { if N < 8    N = 8;    return true; }
+{
+    values: [N] T;
+}
+
+main :: () {
+    a: Holder(9, float);
+    b: Holder(3, float);
+    print("b is %\n", b); // => b is {[0, 0, 0, 0, 0, 0, 0, 0]}
+    assert(b.N >= 8); 
+}
+```
+
+(5) In this example we are going to add all items of numeric type arrays (see line (2) and following) with the `sum` proc, defined in line (1).
+
+See *26.19_modify4.jai*:
+```c++
+#import "Basic";
+
+sum :: (array: [] $T) -> T {        // (1)
+    result: T;
+    for array  result += it;
+    return result;
+}
+
+sum2 :: (a : [] $T) -> $R           // (4)
+#modify {
+    R = T;                          // (5)
+    ti := cast(*Type_Info) T;       // (6)
+    if ti.type == .INTEGER {        // (7)
+        info := cast(*Type_Info_Integer) T; // (8)
+        if info.runtime_size < 4 {  // (9)
+            if info.signed R = s32; // (10) 
+            else           R = u32;
+        }
+    }
+    return true;
+}
+{ 
+    result : R = 0;
+    for a result += it;
+    return result;
+}
+
+main :: () {
+    floats := float.[1, 4, 9, 16, 25, 36, 49, 64, 81];  // (2)
+    ints   := int  .[1, 4, 9, 16, 25, 36, 49, 64, 81];
+    u8s    := u8   .[1, 4, 9, 16, 25, 36, 49, 64, 81];
+
+    print("sum of floats is %\n", sum(floats)); // => sum of floats is 285
+    print("sum of ints   is %\n", sum(ints));   // => sum of ints is 285
+    print("sum of u8s    is %\n", sum(u8s));       // (3) => sum of u8s is 29
+
+    print("sum2 of u8s %\n", sum2(u8s));    // (11) => sum2 of u8s 285
+}
+```
+
+We see in line (3) that there is an overflow problem with the u8 array (285 doesn't fit into a u8).  
+The problem can be solved by we using #modify to generate a return type that is reasonably big if our input type is small, otherwise it leaves the return type the same as the input type.  
+
+This is done in `sum2`:    
+The return type is now R, by default returning T (line (5)), but it can be different. To examine T, we do a cast(*Type_Info) in (6). Then in (7) we get its type and see if it is an integer. If so, we do a `cast(*Type_Info_Integer)` in (8) to get more info, here the runtime_size in (9).   
+If this is smaller than 4 bytes (for example for u8 here), we set R to a 4 byte type s32 or u32 in line (10), depending on whether it is signed or not.  
+Now we get the correct result: see line (11). We needed #modify here to give R a value.
+
+(6) Here is a #modify within which every numeric type is converted to a 64 bit type:
+
+```c++
+#modify {
+if T == {
+    case s8;  T = s64;
+    case s16; T = s64;
+    case s32; T = s64;
+    case s64; // No change!
+    
+    case u8;  T = u64;
+    case u16; T = u64;
+    case u32; T = u64;
+    case u64; // No change!
+    
+    case float32; T = float64;
+    case float64; // No change!
+    
+    case; return false, "Unsupported argument type to multiply_add.";
+    }
+return true;
+}
+```
+Note how you can append an error message string to the return false case. It will appear like this: `Error: #modify returned false: Unsupported argument type to multiply_add.`
+
+(7) Here is an example where a polymorph struct is rejected based on a constraint between multiple variables:
+
+See *26.20_modify5.jai*:
+```c++
+#import "Basic";
+
+Bitmap :: struct (Width: s16, Height: s16)
+#modify { return Width >= Height, "Width of a Bitmap must be >= Height."; }
+{
+    pixels: [Width*Height] u32;
+}
+
+main :: () {
+    monster: Bitmap(128, 64); // valid Bitmap
+    // gateway: Bitmap(512, 1024); // Error: #modify returned false: Width of a Bitmap must be >= Height.
+}
+```
+
+A Bitmap struct instance is only valid when Width >= Height.
+
+**Exercises using #modify**  
+(1) Make the call to random() work in Example 2 of _23.7_bake_constants.jai_, by specifying that T is s32 (see random_return_type.jai)  
+(2) Write a proc `square` that squares a variable of a numeric type, but rejects any other type (see square_modify.jai)  
+(3) Write a proc `struct_work` which only accepts a struct as type T when its name starts with "XYZ" (see struct_work.jai)      
+(4) We have two overloads of a proc ``submit_data`:  
+submit_data :: (data: $T)   
+submit_data :: (data: [] $T)  
+However because these are polymorphic, the compiler cannot decide when you have an array argument that it must take the 2nd version.  
+You get the error (verify this):
+Error: Procedure call matches multiple possible overloads:  
+Write a #modify on the 1st version so that the compiler can  make the difference between the version of submit_data that accepts a T, and the one that accepts an [] T.
+(see choose_array_overload.jai)
+
 
 **Some wise words**
 Excessive compile-time code is more complex and harder to understand. With great power comes great responsibility.

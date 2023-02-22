@@ -62,8 +62,8 @@ main :: () {
   soa_person: SOA(Person, 5);       // (9)
   print("soa_person is: %\n", soa_person);
   for i: 0..soa_person.count-1 {    // (10)
-    print("Person[%]: name= %, age= %, is_cool= %\n", i, soa_person.name[i], soa_person.age[i], 
-    soa_person.is_cool[i]);
+    print("Person[%]: name= %, age= %, is_cool= %\n", i, soa_person.name[i], 
+    soa_person.age[i], soa_person.is_cool[i]);
   } // => see in /* */ after program
   print("soa_person is: %\n", soa_person);
   // => soa_person is: {["", "", "", "", ""], [0, 0, 0, 0, 0], [false, false, false, false, false]}
@@ -109,7 +109,7 @@ where the new SOA type is constructed with T equal to type Person and count equa
         is_cool[5];
     }
 ```
-**How to transform an AOS to an SOA?**
+**How to transform an AOS to an SOA?**  
 In line (11) we define an array of Person objects. Line (12) shows that only a simple for loop over the AOS is needed to transfer the data to an SOA.
 
 In § 27.2 we extend this example to work with Person data from a .csv file.
