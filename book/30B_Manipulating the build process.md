@@ -1,4 +1,4 @@
-# 30B Manipulating the build processIntegrated build system
+# 30B Manipulating the build process
 
 ## 30.6 Intercepting the compiler message loop
 As developer you can access the workings of the compiler through the compiler message loop.
