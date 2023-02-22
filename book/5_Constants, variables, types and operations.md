@@ -494,6 +494,10 @@ Hallo Wereld!
 As we see from line (4) onward, we can print any Unicode string.
 In general, print out any Unicode character like this: `print("\u03C0");`
 
+### 5.7.4 - Printing to standard error
+This can be done with:  
+`print("Error", to_standard_error = true);`
+
 ## 5.8 - General naming conventions
 The following naming conventions are more or less standard:
 - snake_case for identifiers (procedures, variables, macros, ...): birth_date, is_constant()

@@ -196,3 +196,4 @@ Blow's videos about the design and making of Jai are very popular: They get view
 2022 Nov 13:    300 people on Discord  
 2022 Dec 12:    328 people enrolled in the closed beta  
 2023 Jan 2:     349 people enrolled in the closed beta  
+2023 Feb 21: Reddit subscribers: 1762
