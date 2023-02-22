@@ -521,7 +521,7 @@ Now let's make the same for-loop for a double linked-list:
 ## 26.7 A for-expansion macro for a double linked-list
 Let's now define a more general linked list as having a first and a last Node (see line (1)), whereby Node is recursively defined(see line (2)) as having a value, a previous and a next Node. Another advantage is that the type of the value (and Node) is polymorph written as T.
 
-See *26.9_doubly_linked_list.jai*:
+See *26.9_double_linked_list.jai*:
 ```c++
 #import "Basic";
 // Debug :: #import "Debug";
@@ -608,7 +608,8 @@ main :: () {
         print("List item % is %\n", it_index, << it);      
     }
 
-    // no need to free the variables a,b and c as in the following line, because they are allocated on the stack:
+    // no need to free the variables a,b and c as in the following line, 
+    // because they are allocated on the stack:
     // free(*a); free(*b); free(*c); free(*list);
     // if they were create with New(), then the line above would be necessary
 
