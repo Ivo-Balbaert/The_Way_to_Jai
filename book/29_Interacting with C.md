@@ -319,3 +319,7 @@ In Windows, we use the `GetComputerNameA` proc from the kernel32 system-library 
 In Linux, we use the `gethostname` proc from the libc system-library (2B).
 
 Due to the #if, only the code specified for the current OS will be compiled: ine line (3), the OS-specific version of `get_computer_name` is called. In line (4), we see the different computer names that happen to be the names of my Windows- and Ubuntu machines.
+
+## 29.9 The Bindings_Generator module
+When you want to use a C++ library in your Jai project, getting Jai to work with it implies writing Jai signatures for all definitions in C++ .h header files. This is often an immense and painstaking work. Luckily, the standard distribution comes with a *Bindings_Generator* module, which automates this work by generating Jai wrappers (FFI bindings) from the C/++ source files. This might perhaps not generate all you need, but hey, most languages don’t even have a bindings generator.    
+To understand this, we first must learn how a build file works (see § 30). Then we will apply this for a simple for a simple example Cpp library in § 30B - 30.16.
