@@ -10,7 +10,7 @@ It can contain 0 or more options.
 It is also allowed to add the options after the source-file name, like this:  
  `jai program.jai -x64`
 
-`jai -help` shows you all the command-line options that exist:
+`jai -help` or `jai -?` shows you all the command-line options that exist:
 
 
 A complete jai command using all possibilities for giving arguments looks like this:  
@@ -24,6 +24,9 @@ Any argument not starting with a -, and before a `- ` by itself, is the name of 
 `jai 30.7_build_and_run2.jai - run`  : see § 30.9  
 `jai program.jai -- import_dir "d:/Jai/my_modules" meta Build` : see § 30.5
 
+The jai-command help text can be found in module  *Default_Metaprogram*. This module also translates the options into build-options (see § 30.4) used by the compiler. 
+
+Here are the possible options:  
 
 **Backends**:  
  `-x64`              Use the x64 backend by default (unless overridden by a meta-program).
@@ -77,7 +80,7 @@ they are passed from the default meta-program to your compile-time execution env
 **Miscellaneous**:  
  `-no_cwd`  Turn off the compiler's initial change of working directory. This is a temporary option, provided because the policy around working directories is new and is still being worked out.
 
- `-plug name`    Import module 'name' into the meta-program and use it as a plugin.  
+ `-plug name`  or `-plugin name`  Import module 'name' into the meta-program and use it as a plugin.  
  `-version`      Print the version of the compiler.
 
  `-report_poly`  Print the Polymorph Report when compilation is done.  

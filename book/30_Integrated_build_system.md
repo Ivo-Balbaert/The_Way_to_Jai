@@ -1,5 +1,4 @@
 # 30 Integrated build system
-> Note: Because the build system is so powerful in Jai, this has become a huge chapter. In due time, it will be split into a number of digestible sections. 
 
 **A built-in build system**
 
@@ -11,8 +10,8 @@ In Jai, all you would ever need to compile your code is the Jai language and com
 
 We learned about compiling a program with the `jai` command in § 3, while all command-line options were reviewed in § 2B.  
 
-This chapter talks about building (compiling/linking while setting options) a Jai project through running another Jai program: the **meta-program**, which is usually called `build.jai` (it used to be called `first.jai`).  
-Most of the procedures we will need are define in module _Compiler_, so we'll import this module in the programs in this chapter. Most of these programs will also be run at compile-time with #run.  
+This chapter talks about building (compiling/linking while setting options) a Jai project through running another Jai program: the **meta-program**, which is usually called `build.jai` (or sometimes `first.jai`).  
+Most of the procedures we will need are defined in module _Compiler_, so we'll import this module in the programs in this chapter. Most of these programs can also be run at compile-time with #run.  
 By convention a procedure called `build()` is run with `#run build()`, but you can also just run a code block with `#run {...}` (see *30.11_using_notes.jai*).  
 
 Your meta-program gets a lot of very useful information about the target program, including:  
@@ -21,14 +20,14 @@ Your meta-program gets a lot of very useful information about the target program
 * information about which declaration each identifier binds to
 You can do a whole lot of stuff with this information and perform analyses that would not be possible in most programming languages.
 
-Behind the scenes when you do a: `jai program.jai`, the compiler internally runs another meta-program at startup to compile the first workspace. This **default meta-program** does things such as setting up the working directory for the compiler, setting the default name of the output executable based on command-line arguments, and changing between debug and release build based on command-line arguments. It only accepts arguments preceded by a `-`. The source for this meta-program is in _modules/Default_Metaprogram.jai_. 
+Behind the scenes when you compile a normal Jai program with: `jai main.jai`, the compiler internally runs another meta-program at startup to compile the first workspace. This **default meta-program** does things such as setting up the working directory for the compiler, setting the default name of the output executable based on command-line arguments, and changing between debug and release build based on command-line arguments. It only accepts arguments preceded by a `-`. The source for this meta-program is in *modules/Default_Metaprogram.jai*.  
 
 > Any procedure that has the **#compiler** directive is a proc that interfaces with the compiler as a library; it works with compiler internals.
 
 ## 30.1 Workspaces
-You've probably noticed that every successful compile output (let's say `jai program.jai`) contains the sentence:  
+You've probably noticed that every successful compile output (let's say `jai main.jai`) contains the sentence:  
 `Stats for Workspace 2 ("Target Program"):`
-The 'Target Program' mentioned here is `program.jai`. For each program that is built by the compiler, a different **workspace** is used.  
+The 'Target Program' mentioned here is `main.jai`. For each program that is built by the compiler, a different **workspace** is used.  
 A workspace represents a completely separate environment, inside which we can compile programs. When the compiler starts up, it makes a workspace for the first files that you tell it to compile on the command-line. 
 
 See *30.1_workspaces.jai*:
@@ -421,4 +420,16 @@ if Build is in the default jai/modules folder, or
 `jai main.jai -- import_dir "d:/Jai/my_modules" meta Build`  
 if Build is in a dedicated _d:/Jai/my_modules_.
 
-The compiler accepts either -- or --- as the delimiter of hardcoded compiler arguments.)
+If you want to use other plugins, look at the *Default_Metaprogram* module where it calls the plugin callbacks, and call them at the same time in your own metaprogram.
+
+
+(The compiler accepts either -- or --- as the delimiter of hardcoded compiler arguments.)
+
+To summarize:  
+1) You can either use the Default_Metaprogram:  
+`jai main.jai -optional_flags`  
+Default_Metaprogram takes care of translating the option flags into build options (see § 30.4)  
+2) Or you can write your own build program `build.jai`(which is a metaprogram), so in this case you don't use Default_Metaprogram:  
+`jai build.jai`   
+3) Or (as explained in § 30.5) you can also replace the Default_Metaprogram by your own Build module as follows:  
+`jai main.jai -- meta Build`  

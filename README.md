@@ -50,7 +50,8 @@ _Table of Contents_
    [31 - Working with threads](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/31_Working%20with%20threads.md)  
    [32 - Working with processes](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/32_Working%20with%20processes.md)  
    [33 - Graphical(GUI) modules](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/33_Graphical%20modules.md)    
-   [34 - Other useful modules](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/34_Other_useful_modules.md)  
+   [35 - External modules](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/34_Other_useful_modules.md)    
+   [36 - Plugins](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/34_Other_useful_modules.md)  
 
    [50 - The guessing game](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/50_The%20guessing%20game.md)      
    [51 - The game of life](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/51_The%20Game%20of%20Life.md)    
