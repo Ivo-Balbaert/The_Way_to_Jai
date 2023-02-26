@@ -996,9 +996,10 @@ All files of this cpp_library example are contained in the subfolder *cpp_librar
 
 When generating FFI bindings for more complex C++ libraries (like ImGui), the build file is often called *generate.jai*, so the bindings generation is done with the command: `jai generate.jai`.
 
-Here is another example of a build file from a more complex project: `https://github.com/shiMusa/Jai-Plot/blob/main/first.jai`
+Here is an example of a build file from a more complex project: `https://github.com/shiMusa/Jai-Plot/blob/main/first.jai`
 
-
+Here is another example of generating bindings to the raylib library:  
+`https://git.koikoder.com/shared/jai_raylib_module`
 
 
 Some useful code examples of meta-programming during a build can be found in the [Jai Cookbook](https://github.com/onelivesleft/jai-cookbook).

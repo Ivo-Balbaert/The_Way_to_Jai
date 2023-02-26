@@ -425,11 +425,11 @@ If you want to use other plugins, look at the *Default_Metaprogram* module where
 
 (The compiler accepts either -- or --- as the delimiter of hardcoded compiler arguments.)
 
-To summarize:  
+> To summarize:  
 1) You can either use the Default_Metaprogram:  
 `jai main.jai -optional_flags`  
 Default_Metaprogram takes care of translating the option flags into build options (see § 30.4)  
-2) Or you can write your own build program `build.jai`(which is a metaprogram), so in this case you don't use Default_Metaprogram:  
+2) Or you can write your own build program `build.jai`(which is a metaprogram, and adds the file `main.jai` which must be compiled), so in this case you don't use Default_Metaprogram:    
 `jai build.jai`   
 3) Or (as explained in § 30.5) you can also replace the Default_Metaprogram by your own Build module as follows:  
 `jai main.jai -- meta Build`  
