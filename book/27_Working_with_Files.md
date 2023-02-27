@@ -294,10 +294,29 @@ Then we add each of these Person structs to a dynamic array persons, so that we 
 
 We turn this into an SOA (struct of arrays), by using the technique explained in § 26.10.2
 
-## 27.3 Deleting sub-folders
+## 27.3 How to copy some files from one folder to another
+This is very easy to do, see *27.3_copy_files.jai*:  
+```c++
+#import "Basic";
+#import "File_Utilities";
+
+main :: () {
+    base := "D:\\Jai\\testing";
+    src_folder := tprint("%\\%", base, "foldera");
+    dest_folder := tprint("%\\%", base, "folderb");
+    files := string.["example.txt", "linked_list.jai", "people.csv"];
+    for files {
+		file_src := tprint("%/%", src_folder, it);
+		file_dest := tprint("%/%", dest_folder, it);
+		copy_file(file_src, file_dest);
+    }
+}
+```
+
+## 27.4 Deleting sub-folders
 The following program provides a way to recursively delete directories with a specific name.
 
-See *27.3_del_dirs.jai*:
+See *27.4_del_dirs.jai*:
 ```c++
 #import "Basic";
 #import "File";
