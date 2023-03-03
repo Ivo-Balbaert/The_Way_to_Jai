@@ -1100,16 +1100,16 @@ Here is an example of a build file from a more complex project: `https://github.
 Here is another example where bindings are generated for the C++ raylib library:  
 `https://git.koikoder.com/shared/jai_raylib_module`
 
-We'll do it step by step.
+We'll go through it step by step.
 
 *Step 1* Create a folder *jai_raylib* to contain the whole project.
 
-*Step 2 - Download and extract the C library*
+*Step 2 - Download and extract the C library*  
 Download the [Raylib C library](https://github.com/raysan5/raylib/releases) appropriate for your machine.
 Extract it to a subfolder *vendor* in the folder created in Step 1.  
 (This includes only the header files in /include and the compiles C files in /lib, namely raylib.dll and the .lib files.)
 
-*Step 3 - Create the build-and-generate bindings file*
+*Step 3 - Create the build-and-generate bindings file*  
 This file is called *build.jai* in folder *jai_raylib*.
 
 See *The_Way_to_Jai\examples\30\jai_raylib\build.jai*:
@@ -1225,7 +1225,7 @@ main :: () {
 
 This imports our C library and bindings, and calls some Raylib functions to create a window.
 
-*Step 4 -  Compile the build file*
+*Step 4 -  Compile the build file*  
 This is done with the command: `jai build.jai`, which gives as output:  
 ```
 generating 990 global scope members...
@@ -1237,14 +1237,8 @@ OK! generated 'local_modules/raylib_win64/module.jai'
 ```
 This also creates the executable *raylib_module_example* from main.jai inside the *.build* folder (contained in the zip file).
 
-*Step 5 -  Test the bindings*
+*Step 5 -  Test the bindings*  
  When we run *raylib_module_example*, we see that a window is created using Raylib: 
-
-
-
-
-
-
 
 To re-generate the bindings on build (for example for another Raylib version), first delete the Raylib module. 
 

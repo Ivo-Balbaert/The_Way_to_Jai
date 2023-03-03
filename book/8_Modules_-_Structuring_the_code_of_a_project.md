@@ -78,7 +78,7 @@ To illustrate this, `part1.jai` contains the declaration of the variable a_part1
 > Code from a #load-ed file has access to the global scope. Code from a #import-ed module has not!
 
 ## 8.3 Named imports
-There are a couple of important reasons to give a name to an import, instead of just doing `#import "Math";` for example.
+There are a couple of important reasons to give a name to an import, instead of just doing `#import "Math";`.
 ### 8.3.1 Definition
 Sometimes you want to qualify a procedure name with the module name it came from (perhaps because that name has already been used, so it is a duplicate) you can do a named import as follows:	 
 `Math :: #import "Math";`
@@ -109,23 +109,29 @@ Suppose you have two structs in two different files/libraries with the same name
 Suppose both modules Lib1 and Lib2 contain a procedure `proc1`, then you can name both imports:
 
 ```c++
-lib1 :: #import "Lib1";
-lib2 :: #import "Lib2";
+Lib1 :: #import "Lib1";
+Lib2 :: #import "Lib2";
 
-a: lib1.proc1(); // call proc "proc1()" from Lib1
-b: lib2.proc1(); // call proc "proc1()" from Lib2
+a: Lib1.proc1(); // call proc "proc1()" from Lib1
+b: Lib2.proc1(); // call proc "proc1()" from Lib2
 ```
 
 If you prefer, you can use just one named import:
 ```c++
 #import "Lib1";
-lib2 :: #import "Lib2";
+Lib2 :: #import "Lib2";
 
 a: proc1();      // call proc "proc1()" from Lib1
-b: lib2.proc1(); // call proc "proc1()" from Lib2
+b: Lib2.proc1(); // call proc "proc1()" from Lib2
 ```
 
-Same mechanism for a struct with the same name in both Lib1 and Lib2.
+Or you can exclude `proc1` from being visible when imported from `Lib1` like this:  
+```c++
+Lib1 :: #import "Lib1";
+using,except(proc1) Lib1;
+```
+
+The same mechanism applies for a struct with the same name in both Lib1 and Lib2.
 
 ## 8.4 Import a file, a dir or a string
 If you only want to import a specific file from a module, you can do it with `#import, file` like this:  

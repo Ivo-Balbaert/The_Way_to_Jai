@@ -1,11 +1,13 @@
 # 35 External graphical modules.
 
 ## 35.1 Raylib
-[raylib](https://www.raylib.com/) is a simple and easy-to-use library to enjoy videogames programming. It supports multiple target platforms, it has been tested in the following ones but, technically, any platform that supports C language and OpenGL graphics (or similar) can run raylib or it can be very easily ported to.
+[raylib](https://www.raylib.com/) is a simple and easy-to-use library for videogames programming. It supports multiple target platforms. Any platform that supports C language and OpenGL graphics (or similar) can run raylib or it can be very easily ported to.
 
 The Jai community has made several versions of a module for binding to raylib:  
 * [Raylib-Jai](https://github.com/shiMusa/Raylib-Jai) - auto-generated bindings for Raylib 4
 * [Raylib-Jai examples](https://github.com/kujukuju/raylib-jai) - with direct Jai ports of the [raylib examples](https://www.raylib.com/examples.html).
+* [jai_raylib_module](https://git.koikoder.com/shared/jai_raylib_module) - Generate a Raylib module for Jai
+(discussed in § 30.17).
 
 We use the kujukuju module here.
 In order to use Raylib, we need `raylib.dll`.  

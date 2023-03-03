@@ -574,3 +574,22 @@ If you prefer the shorter lambda style, see lines (4) andd following.
 > `map` constructs and returns a static array.
 > In § 23.2 we'll see another version of map.
 
+## 22.8 Creating a dynamic array
+Here is a procedure for making an empty dynamic array with a given item type, memory allocator and capacity:  
+
+See *22.12_make_dynamic_array.jai*:
+```c++
+#import "Basic";
+
+make_dynamic_array :: ($T: Type, allocator: Allocator, capacity := 8) -> [..]T {
+    arr: [..]T;
+    arr.allocator = allocator;
+    array_reserve(*arr, capacity);
+    return arr;
+}
+
+main :: () {
+    arrdyn := make_dynamic_array(int, temp);
+    print("%\n", arrdyn); // => []
+}
+```

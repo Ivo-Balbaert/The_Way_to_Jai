@@ -379,6 +379,30 @@ Removing directories named '.build'...
 Removed all directories named '.build' from D:\Jai\testing!
 ```
 
+## 27.5 Working with Paths
+See *27.5_paths.jai*:
+```c++
+#import "Basic";
+#import "String";
+#import "System";
+
+main :: () {
+    exe_path := get_path_of_running_executable();  // (1)
+    print("exe path is: %\n", exe_path);
+    // exe path is: D:/Jai/The_Way_to_Jai/examples/27/27.exe
+
+    path := path_strip_filename(exe_path);         // (2)
+    print("path is %\n", path);
+    // => path is D:/Jai/The_Way_to_Jai/examples/27/
+
+    set_working_directory(path);                   // (3)
+}
+```
+
+The path of the compiled executable can be obtained with `get_path_of_running_executable` from module _System_ (see line (1)).  
+To only retain the path, use `path_strip_filename` from module _String_. This module contains many `path` routines for example to extract the filename or extension, and a proc `is_absolute_path` to check if you have a complete system path.  
+The proc `set_working_directory` (line (3)) comes from module _Basic_, which also contains `get_working_directory`.
+
 *File_Utilities* also contains all kinds of procs for working with paths.
 
 Look also at jai/examples/beta_key_mailer for more examples on how to work with files.

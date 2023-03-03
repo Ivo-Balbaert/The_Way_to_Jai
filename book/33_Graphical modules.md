@@ -195,7 +195,7 @@ d3d12 contains a minimal example `example.jai`, as well as jai\examples\d3d11_ex
 
 
 ## 33.5 The _Simp_ module
-Simp is a simple 2D API framework for drawing graphics with OpenGL as backend, completely written in Jai.
+Simp is a simple 2D API framework for drawing graphics with OpenGL as backend, completely written in Jai. It is high-level and easy-to-use, and is built on a modern API.
 
 ### 33.5.1 A simple window
 Here is Simp's minimum code to open and close a window:
@@ -244,7 +244,7 @@ main :: () {
 ```
 
 In line (1) the window is created. Line (2) starts the event-loop: the program is waiting for events to occur on the window and to act upon them. Each iteration in this loop draws a **frame** in line (2B). Line (3) clears temporary storage, so in the loop you'll want to store all your data in temp.
-To make SIMP draw objects with opacity, use: `Simp.set_shader_for_color(true);`
+To make Simp draw objects with opacity, use: `Simp.set_shader_for_color(true);`
 
 ### 33.5.2 A bouncing square
 By only adding some 10 lines of code to the previous example, we can draw a moving red square, that bounces of the sides of the window: 
@@ -320,8 +320,12 @@ main :: () {
 }
 ```
 In line (1) we define starting coordinates x and y for the left bottom point of the square. dx and dy are the increments, with which x and y are incremented each frame. To control its speed, we define a velocity parameter, to multiply dx and dy before adding them, see line (3).  
-The square is drawn with `immediate_quad` from Simp, see line (4).  
-Tp make the square bounce of the window boundary, we reverse the sign of dx and dy when the boundary is exceeded.
+The square is drawn with `immediate_quad` from Simp, see line (4).
+
+> Note:
+> A quad in graphics programming is a four-sided polygon that can be used to represent a surface or a texture. Quads are often preferred over triangles because they can be subdivided into smaller quads for more detail. Quads can also be organized into quadtrees, which are data structures that divide a two-dimensional space into four regions recursively. Quadtrees can help with collision detection, image compression and rendering efficiency.
+
+To make the square bounce off the window boundary, we reverse the sign of dx and dy when the boundary is exceeded.
 
 The module Simp also contains some examples (_modules/Simp/examples_):
 - _example.jai_: this shows a window with a texture background and a colored rotating square in the centre;
@@ -473,5 +477,197 @@ main :: () {
 }
 ```
 
+## 33.8 The *Input* module
+This module from the standard distribution provides platform-independent input handler routines, for keyboard and mouse input.  
+The distribution contains an example (*Input/examples/input_test.jai*) showing which keys are pressed or held, and the mouse position.
+
+## 33.9 How to load a font with Simp
+A font is defined in a file with an extension `.ttf`.
+The functionalities for working with fonts are contained in the file `font.jai` from module *Simp*.
 
 
+See *33.8_load_font.jai*:
+```c++
+#import "Basic";
+#import "Simp";
+
+window_height: s32 = 720;
+my_font: *Dynamic_Font;    // (1)
+
+main :: () {
+    pixel_height := window_height / 24;
+    my_font = get_font_at_size("assets/fonts/", "Anonymous Pro.ttf", pixel_height); // (2)
+    assert(my_font != null);
+}
+```
+
+`my_font` is a pointer to a `Dynamic_Font` struct, which is defined in `font.jai`.
+The font "Anonymous Pro" is loaded through the procedure `get_font_at_size` into `my_font` from the .ttf file in subfolder *assets/fonts/*.
+
+Once you have a font, you use it to initialize and draw some `text` (which is a string) on the screen:  
+```c++
+text := sprint("Score: %", num_invaders_destroyed);
+text_w := prepare_text(my_font, text);
+draw_prepared_text(my_font, window_width/30, window_height-my_font.character_height, .{.5, .8, .2, 1});
+```
+
+## 33.10 How to load a texture with Simp
+An image `texture` can be applied to a surface to make the color of the surface vary from point to point, like painting a copy of an image onto the surface.  
+
+A texture is defined in an image file, that has for example an extension `.png`.
+The functionalities for working with textures are contained in the file `texture.jai` from module *Simp*. For example: the definition for the `Texture` struct, the proc `texture_load_from_file` and so on.
+
+See *33.9_load_texture.jai*:
+```c++
+#import "Basic";
+#import "Simp";
+
+ship_map: Texture;
+
+make_texture :: (filename: string) -> Texture, bool {
+    result: Texture;
+    success := texture_load_from_file(*result, filename);
+    return result, success;
+}
+
+main :: () {
+    ship_map = make_texture("assets/textures/ship.png");
+}
+```
+
+The loading of a texture needs bitmap functionality, which is defined in `bitmap.jai`.
+
+
+## 33.11 How to play a sound with module *Sound_Player*
+The following example shows how to accomplish this:
+(Playing a sound only works while showing a window, but we omit event-handling code here (stop the program with CTRL+C).)
+
+See *33.10_play_sound.jai*:
+```c++
+#import "Basic";
+#import "File";
+#import "Input";
+#import "Random";
+#import "Simp";
+#import "Sound_Player";
+#import "Wav_File";
+#import "Window_Creation";
+
+OGG :: "ogg";
+WAV :: "wav";
+sound_alien_dies:          *Mixer_Sound_Data;
+sound_player :             *Sound_Player;
+last_time    : float64;
+
+load_sound :: (basename: string) -> *Mixer_Sound_Data {
+    name := tprint("assets/sounds/%", basename);
+    data := load_audio_file(name);
+
+    if !data {
+        print("Error: Could not load sound file: %\n", name);
+        exit(1);
+    }
+
+    return data;
+}
+
+load_audio_file :: (name : string) -> *Mixer_Sound_Data {
+    data : *Mixer_Sound_Data = null;
+
+    file_data, success := read_entire_file(name);
+    if !success return data;
+
+    has_extension :: (name: string, extension: string) -> bool {
+        if name.count < extension.count  return false;
+        test := name;
+        advance(*test, name.count - extension.count);
+        return test == extension;
+    }
+
+    if has_extension(name, WAV) {
+        data = New(Mixer_Sound_Data);
+        data.name = copy_string(name);
+        data.buffer = file_data;
+
+        format, samples, success2, extra := get_wav_header(data.buffer);
+        if !success2 {
+            log_error("Unable to parse '%' as wav.\n", data.full_path);
+            return data;
+        }
+
+        if format.wFormatTag == WAVE_FORMAT_PCM {
+            data.type                     = .LINEAR_SAMPLE_ARRAY;
+            data.nchannels                = cast(u16) format.nChannels;
+            data.nsamples_times_nchannels = samples.count/2;
+        } else if format.wFormatTag == WAVE_FORMAT_DVI_ADPCM {
+            data.type             = .ADPCM_COMPRESSED;
+            data.wSamplesPerBlock = extra.wSamplesPerBlock;
+            data.nBlockAlign      = format.nBlockAlign;
+            data.nchannels = cast(u16) format.nChannels;
+            data.nsamples_times_nchannels = extra.wSamplesAccordingToFactChunk * data.nchannels;
+        } else {
+            assert(false);
+        }
+
+        data.samples       = cast(*s16) samples.data;
+        data.sampling_rate = cast(u32) format.nSamplesPerSec;
+    } else if has_extension(name, OGG) {
+        data = New(Mixer_Sound_Data);
+        data.name   = copy_string(name);
+        data.buffer = file_data;
+        data.type   = .OGG_COMPRESSED;
+    } else { // Unsupported format. 
+    }
+
+    return data;
+}
+
+play_sound :: (data: *Mixer_Sound_Data, perturb: bool = true) -> *Sound_Stream {
+    stream := make_stream(sound_player, data);
+
+    if stream {
+        stream.sound_data = data;
+    }
+
+    if perturb && stream {
+        stream.user_volume_scale = random_get_within_range(0.7, 1);
+        stream.desired_rate = random_get_within_range(0.7, 1.22);
+    }
+
+    stream.repeat_end_position = cast(int)(data.sampling_rate * 234.475); 
+    return stream;
+}
+
+main :: () {
+    window := create_window(250, 250, "Sound");  
+
+    sound_player = New(Sound_Player);    // (1)
+    sound_player.update_history = true;
+    // sound_alien_dies          = load_sound("alien_dies.wav");  // (2A)
+    sound_alien_dies       = load_sound("lux_aeterna.ogg"); // (2B)     
+
+    stream := play_sound(sound_alien_dies, false);  // (3)
+    if stream {
+        stream.flags |= .REPEATING;
+        stream.repeat_end_position = cast(int)(sound_alien_dies.sampling_rate * 234.475);  
+        stream.category = .MUSIC;
+    }
+
+    success := init(sound_player, xx window, true, true);
+    assert(success);    
+
+    while true {              // (4)             
+        dt : float;
+        now := get_time();
+        if last_time == 0 { dt = 0; } 
+        else { dt = cast(float)(now - last_time); }
+        last_time = now;
+ 
+        pre_entity_update(sound_player);
+        for sound_player.streams  it.marked = true;
+        post_entity_update(sound_player, dt);
+    }
+}
+```
+
+In line (1) we create a `Sound_Player` struct instance. (2A-B) load the sound from a .wav or .ogg file respectively. Line (3) starts playing the sound in a new thread. We need a loop (line (4)), otherwise the program stops immediately.

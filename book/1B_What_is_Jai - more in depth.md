@@ -82,7 +82,10 @@ With C3: [Comparisons with other languages - C3 Documentation (c3-lang.org)](htt
 ## 1.3 Jai's performance
 Jai is build with concepts that guarantee high performance, but not a lot of effort has gone yet into optimizing the resulting binary code.
 
-On Dec 28 2022, Daniel Tan published a first benchmark, comparing his pure Jai state-of-the-art chess engine Ceij with the C++ engine Stockfish (https://github.com/Jai-Community/Jai-Community-Library/wiki/Snippets-and--Benchmarks#benchmarks). He found that the Jai version was some 20% slower than C++. When replacing some SIMD assembly code routines with pure C code, Ceij proved to be only 5% slower than Stockfish.
+On Dec 28 2022, Daniel Tan published a first benchmark, comparing his pure Jai state-of-the-art chess engine Ceij with the C++ engine Stockfish (https://github.com/Jai-Community/Jai-Community-Library/wiki/Snippets-and--Benchmarks#benchmarks). He found that the Jai version was some 20% slower than C++. When replacing some SIMD assembly code routines with pure C code, Ceij proved to be only 5% slower than Stockfish.  
+After hand-optimizing the #asm blocks, the code is now at the same exact speed as Stockfish.  
+Conclusion: Jai code written well can be just as fast as C code.  
+
 
 ## 1.4 Some steps in Jai's history
 
