@@ -26,6 +26,9 @@ Jai has searched in this search path for a file named TestScope.jai, and if it d
 
 A module can be one file, for example `Random.jai`, which can be imported with `#import "Random";`.  
 
+So it is typical to see a number of #imports being done. We place them at the start of the code file, but you can place them anywhere, also at the bottom of the file if this is your personal preference.  
+Also take care to weed out the #import's you do not need. While this isn't an important problem, it does increase compilation time and size a bit.
+
 When a module contains several files, you need to give the module its own folder with the same name, and in it a file `module.jai` is required.
 For example, the _Basic_ module has its own folder _/modules/Basic_. In it you'll find a file *Print.jai*, which contains the definition of `print`. It also contains other source files. The `module.jai` file often serves as a way to assemble all these source files, using `#load` to do this. 
 

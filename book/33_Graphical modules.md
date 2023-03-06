@@ -246,7 +246,73 @@ main :: () {
 In line (1) the window is created. Line (2) starts the event-loop: the program is waiting for events to occur on the window and to act upon them. Each iteration in this loop draws a **frame** in line (2B). Line (3) clears temporary storage, so in the loop you'll want to store all your data in temp.
 To make Simp draw objects with opacity, use: `Simp.set_shader_for_color(true);`
 
-### 33.5.2 A bouncing square
+### 33.5.2 A colored triangle
+Let's see how to draw a triangle with some nice color effect.
+
+See *33.11_colored_triangle.jai*:
+```c++
+#import "Basic";
+#import "Input";
+#import "Math";
+Simp :: #import "Simp";
+#import "Window_Creation";
+
+RED   :: Vector4.{1, 0, 0, 1};   // (1)
+GREEN :: Vector4.{0, 1, 0, 1};
+BLUE  :: Vector4.{0, 0, 1, 1};
+
+main :: () {
+    window_width  := 800;   
+    window_height := 600;
+
+    p0 := make_vector3(0, 0, 0);
+    p1 := make_vector3(xx window_width, 0, 0);
+    p2 := make_vector3(cast(float) window_width/2, xx window_height, 0);
+    
+    win := create_window(window_width, window_height, "Triangle");   
+    Simp.set_render_target(win);
+    Simp.set_shader_for_color(true);                           // (2)
+
+    quit := false;
+    while !quit {                          
+        Simp.clear_render_target(0.2, 0.3, 0.3, 1);
+        update_window_events();
+
+        for events_this_frame {
+            if it.type == .QUIT    quit = true;
+        }
+
+        Simp.immediate_triangle(p0, p1, p2, RED, GREEN, BLUE);  // (1)
+
+        Simp.swap_buffers(win);
+        sleep_milliseconds(10);
+        reset_temporary_storage();   
+    }
+}
+```
+
+Simp's coordinate system looks like this:
+     y  ^
+        |
+        |
+        |----------->  x
+
+(z runs perpendicular to this plane, we don't use this coordinate here and set it arbitrarily to 1)
+Line (1) draws our triangle. This needs three Vector3 instances, which are the coordinates of the vertices of the triangle:
+
+       (window_width/2, window_height)
+                  o
+
+           o              o
+        (0, 0)       (window_width, 0)
+
+It also needs three color Vector4 instances, which are of the form:  
+        `(red, green, blue, opacity)`    
+red equal to 0 means no red, equal to 1 means fully red, and so on.
+
+Line (2) is needed for drawing the colors, and creating the nice shading effect, seen in ![Colored triangle with Simp](https://github.com/Ivo-Balbaert/The_Way_to_Jai/tree/main/images/colored_triangle.png).  
+
+### 33.5.3 A bouncing square
 By only adding some 10 lines of code to the previous example, we can draw a moving red square, that bounces of the sides of the window: 
 
 See *33.2B_bouncing_square.jai*:
@@ -264,7 +330,7 @@ main :: () {
     render_width  := 800;
     render_height := 600;
 
-    win := create_window(window_width, window_height, "Xiangqi");    
+    win := create_window(window_width, window_height, "Bouncing Square");    
     Simp.set_render_target(win);
     Simp.set_shader_for_color(true);
 
