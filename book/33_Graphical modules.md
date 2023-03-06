@@ -291,7 +291,8 @@ main :: () {
 }
 ```
 
-Simp's coordinate system looks like this:
+Simp's coordinate system looks like this:  
+
      y  ^
         |
         |
