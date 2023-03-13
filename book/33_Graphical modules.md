@@ -1125,3 +1125,15 @@ main :: () {
 ```
 
 In line (1) we create a `Sound_Player` struct instance. (2A-B) load the sound from a .wav or .ogg file respectively. Line (3) starts playing the sound in a new thread. We need a loop (line (4)), otherwise the program stops immediately.
+
+## 33.12 How to disable a Windows app from opening the console
+In all the previous examples in this chapter, when we started the windows executable, a window appears combined with a (black) console window. But when you want to run your app in production, you don't want the console!  
+There is an easy way to do this, just add the following lines to your app:  
+```c++
+#run {
+    Windows_Resources :: #import "Windows_Resources";
+    Windows_Resources.disable_runtime_console();
+};
+```  
+
+Just add them above main :: (), for example in `33.2A_simp_window.jai`. After compiling with this, only the window screen will appears (see `33.2C_simp_window.jai`).
