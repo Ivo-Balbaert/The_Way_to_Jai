@@ -281,5 +281,5 @@ main :: () {
 
 In § 10.1 we saw that a pointer on a 64 bit OS is 8 bytes in size, which is quite large.  
 Jai allows you to use smaller, so called **relative pointers**, respectively of 4, 2 and 1 byte(s) in size, which can be used to point to an object at a place in the memory vicinity. They are signed integers that indicate the target of a pointer, relative to the memory location where the pointer is stored. Because they are signed, they can point backward and forward. So a *~s16 is like a *float, but it can only point at floats within 32kB upward or downward in memory from where it is stored.  
-Assigning relative pointers to normal pointers is often unsound as we show in line (4).
+Assigning relative pointers to normal pointers is not possible, because bounds checks are implemented for relative pointers (see line (4)).
 Relative pointers are limited in range, so they can only point to nearby things. That's why they are typically used with structs to point from one member field to another (see § 12.14). These types of pointers are serializable, and they can be cast to a non-relative pointer whenever needed.  

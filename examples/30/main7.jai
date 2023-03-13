@@ -1,6 +1,6 @@
 #import "Basic";
 
-dll_func :: () #foreign dynlib;
+dll_func :: () #foreign dynlib #c_call;
 dynlib :: #library "dynlib";
 
 main :: () {

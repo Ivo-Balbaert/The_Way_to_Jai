@@ -2,7 +2,7 @@
 #import "File_Utilities";
 
 main :: () {
-    base := "D:\\Jai\\testing";
+    base := "D:\\Jai\\The_Way_to_Jai\\examples\\27";
     src_folder := tprint("%\\%", base, "foldera");
     dest_folder := tprint("%\\%", base, "folderb");
     files := string.["example.txt", "linked_list.jai", "people.csv"];

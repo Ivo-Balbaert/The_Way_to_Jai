@@ -62,7 +62,8 @@ Eight types exist according to their size (number of bytes) and whether they are
 
 `int` defaults to `s64`
 
-**float** : literals are of the form `3.141592` or `5.98e24`, with a `.` for separating the decimal part, and an `e` for indicating the power of 10 (exponent).  
+**float** : literals are of the form `3.141592` or `5.98e24`, with a `.` for separating the decimal part, and an `e` for indicating the power of 10 (exponent).
+So you have to write 1.0e-6 instead of 1e-6.  
 Two floating point number types exist according to their size, they are both signed:
 
 	`float32` - 4 byte (32 bit), single-precision
@@ -434,7 +435,7 @@ The number of %'s and supplied values must be the same. If not you get a warning
 
 The format string requires 2 arguments, but 3 arguments are given.
 In this case only the first two values are displayed.
-If you want to print a literal %, replace the second % with %% as in line (4). Although it is nearly always discarded, print returns the number of bytes printed, as shown in line (4B).
+If you want to print a literal %, replace the second % with %% as in line (4). To separate 2 arguments, you can always puy a 0 between the %, like so: `%0%` accepts two arguments. Although it is nearly always discarded, print returns the number of bytes printed, as shown in line (4B).
 
 ### 5.7.2 - The write procedures
 See *5.8_write.jai*:

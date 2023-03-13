@@ -13,8 +13,6 @@ main :: () {
 
     a := New(int);
     << a = 5;
-    ptrb = a;       // (4)
-    print("ptrb is %\n", ptrb); // => ptrb is r1998 (d1_f31c_0080)
-    // print("ptrb points to %\n", << ptrb); 
-    // => The program crashed because of an access violation reading location 0x352ff00080
+    // ptrb = a;       // (4)
+    // Relative pointer bounds check failed. (Delta is 1161905375038, valid range is from -32767 to 32767, inclusive). Site is d:/Jai/testing/10.3_relative_pointers.jai:16. Panic.
 }

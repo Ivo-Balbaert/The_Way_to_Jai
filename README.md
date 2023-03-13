@@ -9,7 +9,7 @@ The text is backed by some 300 complete working Jai examples and growing. They a
 Many thanks to Daniel Tan for setting up the [Jai-Community](https://jai.community/) and the [Jai Wiki](https://github.com/Jai-Community/Jai-Community-Library/wiki).
 Also thanks to mehlian, seneca and Jakub Arnold(@darthdeus) for their remarks and contributions.
 
-[Code tested to compile/run with Jai version beta 0.1.057, built on 15 February 2023]
+[Code tested to compile/run with Jai version beta 0.1.058, built on 12 March 2023]
 
 _Table of Contents_
 

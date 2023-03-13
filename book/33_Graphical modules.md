@@ -195,7 +195,8 @@ d3d12 contains a minimal example `example.jai`, as well as jai\examples\d3d11_ex
 
 
 ## 33.5 The _Simp_ module
-Simp is a simple 2D API framework for drawing graphics with OpenGL as backend, completely written in Jai. It is high-level and easy-to-use, and is built on a modern API.
+Simp is a simple 2D API framework for drawing graphics with OpenGL as backend, completely written in Jai. It is high-level and easy-to-use, and is built on a modern API.  
+In this section, a number of simple examples are shown. They come from the many graphical Jai experiments by [Tsoding](https://github.com/tsoding).
 
 ### 33.5.1 A simple window
 Here is Simp's minimum code to open and close a window:
@@ -215,7 +216,7 @@ main :: () {
   render_width  : s32 = 1920;
   render_height : s32 = 1080;
 
-  win := create_window(window_width, window_height, "Xiangqi");   // (1)
+  win := create_window(window_width, window_height, "Simp_Window");   // (1)
   Simp.set_render_target(win);
   quit := false;
   while !quit {                 // (2)
@@ -299,7 +300,7 @@ Simp's coordinate system looks like this:
         |----------->  x
 
 (z runs perpendicular to this plane, we don't use this coordinate here and set it arbitrarily to 1)
-Line (1) draws our triangle. This needs three Vector3 instances, which are the coordinates of the vertices of the triangle:
+Line (1) draws our triangle. This needs three Vector3 instances, which are the coordinates of the vertices (points indicated by o) of the triangle:
 
        (window_width/2, window_height)
                   o
@@ -313,7 +314,70 @@ red equal to 0 means no red, equal to 1 means fully red, and so on.
 
 Line (2) is needed for drawing the colors, and creating the nice shading effect, seen in ![Colored triangle with Simp](https://github.com/Ivo-Balbaert/The_Way_to_Jai/tree/main/images/colored_triangle.png).  
 
-### 33.5.3 A bouncing square
+
+### 33.5.3 Drawing a circle using triangles
+A circle can be approximately made by drawing a number of triangles with top vertex in the center of the circle, and the other vertices on the circumference of the circle. The more triangles, the more accurate the circle looks like.
+Here is how it is coded:
+
+See *33.12_drawing_circle.jai*:
+```c++
+#import "Basic";
+#import "Input";
+#import "Math";
+Simp :: #import "Simp";
+#import "Window_Creation";
+
+RED   :: Vector4.{1, 0, 0, 1};   
+CIRCLE_RESOLUTION :: 30;         // number of triangles used to draw circle
+
+immediate_circle :: (center: Vector2, radius: float, color: Vector4) {  // (1)
+    STEP_ANGLE :: 2*PI/CIRCLE_RESOLUTION;  // (2)
+    for 0..CIRCLE_RESOLUTION-1 {           // (3) 
+        p0 := center;
+        p1 := center + make_vector2(cos(STEP_ANGLE*it), sin(STEP_ANGLE*it))*radius;
+        p2 := center + make_vector2(cos(STEP_ANGLE*(it + 1)), sin(STEP_ANGLE*(it + 1)))*radius;
+        Simp.immediate_triangle(
+            make_vector3(p0, 0), make_vector3(p1, 0), make_vector3(p2, 0),
+            color, color, color);
+    }
+}
+
+main :: () {
+    window_width  := 800;   
+    window_height := 600;
+
+    win := create_window(window_width, window_height, "Triangle");   
+    Simp.set_render_target(win);
+    Simp.set_shader_for_color(true);   // (2)
+
+    quit := false;
+    while !quit {                          
+        Simp.clear_render_target(0.2, 0.3, 0.3, 1);
+        update_window_events();
+
+        for events_this_frame {
+            if it.type == .QUIT    quit = true;
+        }
+
+       immediate_circle(make_vector2(cast(float) window_width/2, cast(float) window_height/2), 100, RED);  
+
+        x, y, success := get_mouse_pointer_position();   // (3)
+        immediate_circle(make_vector2(xx x, xx (window_height - y)), 15, RED);
+
+        Simp.swap_buffers(win);
+        sleep_milliseconds(10);
+        reset_temporary_storage();   
+    }
+}
+```
+
+Analogously to `immediate_triangle` and `immediate_quad` from Simp, we define our own `immediate_circle` procedure (see line (1)). In it, we calculate the angle from the number of circles used (the resolution). Then in a for-loop (line (2)), we calculate the three vertices from the triangle as Vector2's, and then draw the triangle. Experiment with the resolution from 5 to 100 to see the effect.  
+By adding just two lines starting at (3), we can draw a circle at the mouse cursor which follows every move of the mouse. This is done by using the `get_mouse_pointer_position` proc from module *Window_Creation*.
+
+**Exercise:**
+See the color effect you get when using three colors to draw the circle, as in § 33.5.2
+
+### 33.5.4 A bouncing square
 By only adding some 10 lines of code to the previous example, we can draw a moving red square, that bounces of the sides of the window: 
 
 See *33.2B_bouncing_square.jai*:
@@ -397,6 +461,206 @@ To make the square bounce off the window boundary, we reverse the sign of dx and
 The module Simp also contains some examples (_modules/Simp/examples_):
 - _example.jai_: this shows a window with a texture background and a colored rotating square in the centre;
 - _multiple_windows.jai_: this shows 2 windows next to each other, the 1st is the window from the previous example, the 2nd window has a text with a color-changing background;  
+
+### 33.5.5 A Chess Board
+Here is the code to draw a board:  
+
+See *33.13_drawing_board.jai*:
+```c++
+#import "Basic";
+#import "Input";
+#import "Math";
+Simp :: #import "Simp";
+#import "Window_Creation";
+
+window_width  :: 800;
+window_height :: 600;
+
+background_color :: Vector4.{x=1, y=.0, z=.0, w=1};
+grid_color       :: Vector4.{x=.2, y=.2, z=.2, w=1};
+
+grid_cols        :: 8;
+grid_rows        :: 8;
+grid_cell_width  :: grid_width / grid_cols;
+grid_cell_height :: grid_height / grid_rows;
+grid_percent     :: 0.5;
+
+grid_width    :: window_width;
+grid_height   :: window_width;
+grid_x        : float : 0.0;
+grid_y        : float : window_height*grid_percent - grid_height*grid_percent;
+
+immediate_cell_quad :: (col: s64, row: s64, color: Vector4) {
+    x : float = grid_x + xx (col*grid_cell_width);
+    y : float = grid_y + xx (row*grid_cell_height);
+    w : float = grid_cell_width;
+    h : float = grid_cell_height;
+    Simp.immediate_quad(x, y, x + w, y + h, color);
+}
+main :: () {
+    win := create_window(window_width, window_height, "Chess Board");    
+    Simp.set_render_target(win);
+    Simp.set_shader_for_color(true);
+
+    quit := false;
+    while !quit {                         
+        Simp.clear_render_target(0.2, 0.3, 0.3, 1);
+        update_window_events();
+
+        for event : events_this_frame {
+            if event.type == {
+                case .QUIT; { quit = true; break; }
+
+                case .KEYBOARD; if event.key_pressed {
+                    if event.key_code == {
+                        case .ESCAPE;    quit = true; break;
+                    }
+                }
+            }
+        }
+
+        for col: 0..grid_cols-1 {           // (1)
+            for row: 0..grid_rows-1 {
+                color := ifx (col + row)%2 == 0 then background_color else grid_color; // (2)
+                immediate_cell_quad(col, row, color);
+            }
+        }
+
+        sleep_milliseconds(10);
+        Simp.swap_buffers(win);
+        reset_temporary_storage();    
+    }
+}
+```
+
+The actual drawing takes place in the for-loop starting in (1). Here we:  
+- iterate over all columns and rows  
+- choose the color, depending on if it is a cell or if it is background (line (2))
+- draw the cell
+
+### 33.5.6 A moving shape
+Starting from the code in the previous §, we change the colors so that the board appears more like a background.  
+To draw a shape, we change a few adjacent cells to another color (shape_color), and call `immediate_cell_quad` four times (see line (1)).
+```c++
+immediate_cell_quad(0, 1, shape_color);
+immediate_cell_quad(1, 1, shape_color);
+immediate_cell_quad(2, 1, shape_color);
+immediate_cell_quad(2, 2, shape_color);
+```
+To show the falling movement, the y coordinate is set to a variable row, which starts at the top (grid_rows - 2), and diminishes when time goes by (implemented in snippets (2A-B)).  
+Implementing left-right movement is done in the event-handler (see lines (3) where we check for arrow-left and arrow-right keys):   
+```c++
+case .ARROW_LEFT;  col -= 1;      // (3)
+case .ARROW_RIGHT; col += 1;
+```  
+so we now have to replace the x coordinate by col.
+
+
+See *33.14_moving_shape.jai*:
+```c++
+#import "Basic";
+#import "Input";
+#import "Math";
+Simp :: #import "Simp";
+#import "Window_Creation";
+
+window_width  :: 800;
+window_height :: 600;
+
+shape_color      :: Vector4.{x=.2, y=.8, z=.2, w=1};
+background_color :: Vector4.{x=.1, y=.1, z=.1, w=1};
+grid_color       :: Vector4.{x=.2, y=.2, z=.2, w=1};
+
+grid_cols        :: 8;
+grid_rows        :: 8;
+grid_cell_width  :: grid_width / grid_cols;
+grid_cell_height :: grid_height / grid_rows;
+grid_percent     :: 0.5;
+
+grid_width    :: window_width;
+grid_height   :: window_width;
+grid_x        : float : 0.0;
+grid_y        : float : window_height*grid_percent - grid_height*grid_percent;
+
+step_interval    :: 1.5;
+DT_MAX : float : 0.15;
+
+immediate_cell_quad :: (col: s64, row: s64, color: Vector4) {
+    x : float = grid_x + xx (col*grid_cell_width);
+    y : float = grid_y + xx (row*grid_cell_height);
+    w : float = grid_cell_width;
+    h : float = grid_cell_height;
+    Simp.immediate_quad(x, y, x + w, y + h, color);
+}
+
+main :: () {
+    last_time := get_time();
+    step_timeout := step_interval;
+
+    win := create_window(window_width, window_height, "Tetris Start");    
+    Simp.set_render_target(win);
+    Simp.set_shader_for_color(true);
+
+    col := 0;
+    row := grid_rows - 2;
+    quit := false;
+
+    while !quit {      
+        now := get_time();  // (2A)
+        delta: float64 = now - last_time;
+        current_dt := cast(float) delta;
+        if current_dt > DT_MAX  current_dt = DT_MAX;
+        last_time = now;
+
+        step_timeout -= current_dt;  // (2B)
+        if step_timeout < 0 {
+            step_timeout = step_interval;
+            row -= 1;                // <-- here the shape falls
+        }
+
+        Simp.clear_render_target(0.2, 0.3, 0.3, 1);
+        update_window_events();
+
+        for event : events_this_frame {
+            if event.type == {
+                case .QUIT; { quit = true; break; }
+
+                case .KEYBOARD; if event.key_pressed {
+                    if event.key_code == {
+                        case .ESCAPE;    quit = true; break;
+                        case .ARROW_LEFT;  col -= 1;      // (3)
+                        case .ARROW_RIGHT; col += 1;
+                    }
+                }
+            }
+        }
+
+        step_timeout -= current_dt;  // (2B)
+        if step_timeout < 0 {
+            step_timeout = step_interval;
+            row -= 1;
+        }
+
+        // background grid:
+        for col: 0..grid_cols-1 {          
+            for row: 0..grid_rows-1 {
+                color := ifx (col + row)%2 == 0 then background_color else grid_color; 
+                immediate_cell_quad(col, row, color);
+            }
+        }
+
+        // (1) drawing an  L shape
+        immediate_cell_quad(col, row, shape_color);
+        immediate_cell_quad(col + 1, row, shape_color);
+        immediate_cell_quad(col + 2, row, shape_color);
+        immediate_cell_quad(col + 2, row + 1, shape_color);
+
+        sleep_milliseconds(10);
+        Simp.swap_buffers(win);
+        reset_temporary_storage();    
+    }
+}
+```
 
 ## 33.6 The _Getrect_ module
 This is a simple UI module which works together with Simp.
@@ -582,7 +846,8 @@ draw_prepared_text(my_font, window_width/30, window_height-my_font.character_hei
 An image `texture` can be applied to a surface to make the color of the surface vary from point to point, like painting a copy of an image onto the surface.  
 
 A texture is defined in an image file, that has for example an extension `.png`.
-The functionalities for working with textures are contained in the file `texture.jai` from module *Simp*. For example: the definition for the `Texture` struct, the proc `texture_load_from_file` and so on.
+The functionalities for working with textures are contained in the file `texture.jai` from module *Simp*. For example: the definition for the `Texture` struct, the proc `texture_load_from_file` and so on.  
+Here is the minimal code to load a texture:
 
 See *33.9_load_texture.jai*:
 ```c++
@@ -591,18 +856,140 @@ See *33.9_load_texture.jai*:
 
 ship_map: Texture;
 
-make_texture :: (filename: string) -> Texture, bool {
+load_texture :: (filename: string) -> Texture {
     result: Texture;
     success := texture_load_from_file(*result, filename);
-    return result, success;
+    assert(success);
+    return result;
 }
 
 main :: () {
-    ship_map = make_texture("assets/textures/ship.png");
+    ship_map = load_texture("assets/textures/ship.png");
 }
 ```
 
 The loading of a texture needs bitmap functionality, which is defined in `bitmap.jai`.
+
+Let's extend the previous example so that the ship texture is shown as a tile in a whole window:  
+
+See *33.15_drawing_texture.jai*:
+```c++
+#import "Basic";
+#import "Math";
+#import "Window_Creation";
+#import "System";
+#import "File";
+#import "Input";
+#import "GL";
+#import "Simp";
+#import "Random";
+
+WINDOW_SCALE :: 0.5;
+WINDOW_WIDTH :: 1920;
+WINDOW_HEIGHT :: 1080;
+
+TILE_SIZE :: 32;
+
+ARENA_WIDTH :: 40;
+ARENA_HEIGHT :: 30;
+
+Sprite :: struct {
+    texture: *Texture;
+    offset := Vector2.{0, 0};
+    centered := true;
+}
+
+Entity :: struct {
+    using position: Vector2;
+    using sprite: Sprite;
+}
+
+Tile :: struct {
+    #as using entity: Entity;
+}
+
+tiles: [..]Tile;
+tile_texture: Texture;
+
+init_textures :: () {
+    tile_texture = load_texture("assets/textures/ship.png");
+}
+
+load_texture :: (filename: string) -> Texture {
+    result: Texture;
+    success := texture_load_from_file(*result, filename);
+    assert(success);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    
+    return result;
+}
+
+spawn_tile :: (id: int, x: int, y: int) {
+    tile := Tile.{ x = xx x, y = xx y, 
+                   sprite = .{ texture = *tile_texture, }
+                 };
+    array_add(*tiles, tile);
+}
+
+render_sprite :: (position: Vector2, using sprite: Sprite) {
+    size := Vector2.{xx texture.width, xx texture.height};
+    center_offset := ifx centered then size / 2 else Vector2.{0, 0};
+    pos := position - center_offset + offset;
+    
+    set_shader_for_images(texture);
+    immediate_begin();
+
+    v0 := Vector2.{pos.x, pos.y};
+    v1 := Vector2.{pos.x + size.x, pos.y};
+    v2 := Vector2.{pos.x + size.x, pos.y + size.y};
+    v3 := Vector2.{pos.x, pos.y + size.y};
+
+    uv0 := Vector2.{0,0};
+    uv1 := Vector2.{1,0};
+    uv2 := Vector2.{1,1};
+    uv3 := Vector2.{0,1};
+
+    immediate_quad(v0, v1, v2, v3, uv0 = uv0, uv1 = uv1, uv2 = uv2, uv3 = uv3);
+    immediate_flush();
+}
+
+main :: () {
+    width := cast(int) (WINDOW_WIDTH * WINDOW_SCALE);
+    height := cast(int) (WINDOW_HEIGHT * WINDOW_SCALE);
+
+    window := create_window(window_name = "Load a texture", width = width, height = height);
+    set_render_target(window);
+    window_width, window_height := get_render_dimensions(window);
+
+    init_textures();
+
+    for y: 0..ARENA_HEIGHT-1 {
+        for x: 0..ARENA_WIDTH-1 {
+            spawn_tile(xx random_get_within_range(0, 5), x * TILE_SIZE, y * TILE_SIZE);
+        }
+    }
+
+    quit := false;
+    while (!quit) {
+        update_window_events();
+        // Render 
+        clear_render_target(0.15, 0.08, 0.08, 1.0);
+        // Sprites
+        for tiles render_sprite(it.position, it.sprite);
+
+        for events_this_frame {
+            if it.type == {
+                case .QUIT; quit = true;
+            }
+        }
+        swap_buffers(window);
+    }
+}
+```
+
+The window is shown in ![A screen with tiles](https://github.com/Ivo-Balbaert/The_Way_to_Jai/tree/main/images/tiles.png).  
 
 
 ## 33.11 How to play a sound with module *Sound_Player*

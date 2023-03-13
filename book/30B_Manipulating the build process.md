@@ -796,33 +796,36 @@ See *dynlib.jai*:
 ```c++
 #import "Basic";
 
-#program_export dll_func :: ()
-{
-    print("Hello Sailor");
+#program_export dll_func :: () #c_call {
+    new_context: Context;  
+    push_context new_context {
+        print("Hello Sailor");
+    }
 }
 ```
 
 Notice the **#program_export** directive to indicate that a function is exported to a dynamic library.
-(Add #c_call and push a fresh context here if you plan on calling this from another language.)
+Adding #c_call and push a fresh context here are needed also if you plan on calling this from another language besides Jai.
 
-After the dynamic library and in a separate workspace, 30.13_dynamic_libraries.jai builds an executable *main7* from the following code:
+After the dynamic library `dynlib`and in a separate workspace `main7`, 30.13_dynamic_libraries.jai builds an executable *main7* from the following code:
 
 See *main7.jai*:
 ```c++
 #import "Basic";
 
-dll_func :: () #foreign dynlib;
+dll_func :: () #foreign dynlib #c_call;
 dynlib :: #library "dynlib";
 
 main :: () {
     dll_func();
 }
 ```
+(Using #c_call is still needed until now to eliminate context mismatch.)
 
 The executable calls the proc `dll_func` from the dynamic library.
 Build both with:   
 ` jai 30.13_dynamic_libraries.jai`
-and see the result of:  `main7`  
+and see the result of:  `./main7`  
 which outputs:  `Hello Sailor`
 
 ## 30.15 Adding binary data to the executable

@@ -261,6 +261,7 @@ build :: () {
     target_options.array_bounds_check = .ON; // values: .OFF / .ON / .ALWAYS
     target_options.cast_bounds_check  = .FATAL; 
     target_options.null_pointer_check = .ON;
+    target_options.relative_pointer_bounds_check = .ON
     target_options.enable_bytecode_inliner = true; 
     
     target_options.runtime_storageless_type_info = true;
@@ -335,7 +336,8 @@ The `stack_trace` option is by default true. For a release build, set `target_op
 The `backtrace_on_crash` option is by default .ON
 
 ### 30.4.6 Checks at runtime
-Array bounds operations, castings and null pointer checks can be turned ON or FATAL/NONFATAL (for cast checks) at runtime to increase robustness of your program, they are so by default. If you are very sure, you can turn them OFF to increase performance
+Array bounds operations, castings and null pointer checks can be turned ON or FATAL/NONFATAL (for cast checks) at runtime to increase robustness of your program, they are so by default. If you are very sure, you can turn them OFF to increase performance.
+Bounds checks for relative pointers are enabled by default in debug builds and disabled in release builds. You can change that using Build_Options.relative_pointer_bounds_check.
 
 ### 30.4.7 runtime_storageless_type_info
 Example: `target_options.runtime_storageless_type_info = true;`      
@@ -360,12 +362,12 @@ The LLVM backend options contains many compiler options for optimizing code, tur
 .enable_loop_unrolling = false;
 .enable_slp_vectorization = false; 
 .enable_loop_vectorization = false; 
-.reroll_loop = false; 
+// .reroll_loop = false;  // disabled since LLVM 15  (??)
 .verify_input = false; 
 .verify_output = false;
 .merge_functions = false;
-.disable_inlining = true;
-.disable_mem2reg = false;
+// .disable_inlining = true;    // disabled since LLVM 15  (??)
+// .disable_mem2reg = false;    // disabled since LLVM 15  (??)
 ```
 
 The -O3, -O2, -O1 optimization levels for LLVM can be changed by setting the code_gen_optimization_level field to 3, 2, 1 respectively. For example:  

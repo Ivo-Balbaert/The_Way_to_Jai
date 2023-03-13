@@ -149,7 +149,7 @@ main :: () {
     // {name = "z"; type = 7ff6_21db_41b0; offset_in_bytes = 8; flags = 0; notes = []; 
     // offset_into_constant_storage = 0; }]; status_flags = 0; nontextual_flags = 0; 
     // textual_flags = 0; polymorph_source_struct = null; initializer = null; 
-    // constant_storage_size = 0; constant_storage_buffer = null; }
+    // constant_storage.count = 0; constant_storage.data = null; }
     print("The type of typ2 is %\n", typ2.type); // => The type of typ2 is STRUCT
     tis := << cast(*Type_Info_Struct) Vector3;   // (5)
     print("Info from tis: %\n", tis);

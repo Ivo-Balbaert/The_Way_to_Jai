@@ -11,7 +11,7 @@ main :: () {
     render_width  := 800;
     render_height := 600;
 
-    win := create_window(window_width, window_height, "Xiangqi");    // (1)
+    win := create_window(window_width, window_height, "Simp_Window");    // (1)
     Simp.set_render_target(win);
     Simp.set_shader_for_color(true);
 

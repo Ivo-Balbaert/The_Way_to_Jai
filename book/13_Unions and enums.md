@@ -314,3 +314,14 @@ main :: () {
 **enum_range** gives you the range in integer values from low to high.
 **enum_values_as_s64** gives you the values as an array
 **enum_names** gives you the member names as an array.
+
+## 13.7 Notes on enums
+Enum declarations also can contain notes, directly on the enum, just as with structs.  
+
+Example:
+
+```c++
+An_Enum :: enum_flags @Hi @There {
+    x :: 1;
+}
+```
