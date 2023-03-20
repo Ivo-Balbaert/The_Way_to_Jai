@@ -283,12 +283,6 @@ It uses a multiple return to swap the values, so it is called like
 `n2, m2 = swap(n2, m2);`.  
 The `#must` after the return type T ensures that you use this form. Moreover, this is an inlined procedure for performance.
 
-Relative pointer types are matchable via polymorph variables; for example, you can say:
-```c++
-    f :: (x: []~$P $T) { ... }
-```
-If, in the above example, an array is passed that does not use relative pointers, P will match as void.
-
 **Exercise**  
 1) Given these two procs:  
 ```c++

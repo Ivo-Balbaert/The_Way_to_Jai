@@ -295,16 +295,6 @@ main :: () {
     free(a); free(b); free(c); free(lst);
 }
 ```
-
-A more memory-efficient linked list could be defined with relative pointers (see § 10.6 and 12.14):
-
-```
-LinkedList :: struct {
-    data: s64; 
-    next:  *~s32 LinkedList;
-}
-```
-
 ### 12.6.2 Double Linked List
 This can be defined as:
 
@@ -708,74 +698,6 @@ In line (1) we define a struct with a Type parameter:
 `Entity :: struct (Payload: Type)`
 In line (2), we make an Entity instance with an anonymous struct as Payload. This is confirmed in `proc`, when printing out the type of x in line (4).  
 `proc` is also very flexible as to which type it can take as parameter. It is an early example of polymorphism, which we will explore much deeper in § 22.
-
-## 12.14 Structs with relative pointers
-Relative pointers (first discussed in § 10.6) are particularly suited when they point to an object in the memory vicinity, as is the case between member fields of a struct instance.
-
-See *12.11_struct_relative_pointer.jai*
-```c++
-#import "Basic";
-
-Holder :: struct {
-    a: *~s16 float;     // (1)
-    b: float;
-}
-
-make_holder :: (value: float) -> *Holder {
-    holder := New(Holder);
-    holder.a = *holder.b;   // (2)
-    holder.b = value;
-    
-    return holder;
-}
-
-main :: () {
-    holder := make_holder(42.42);
-    print("holder is: %\n", holder); // => holder is: 200_3893_57a0
-    print("type_of(holder.a) is: %\n", type_of(holder.a));
-    // => type_of(holder.a) is: *~s16 float32
-
-    pointer_from_stack := holder.a;  // (3) 
-    print("type_of(pointer_from_stack) is: %\n", type_of(pointer_from_stack));
-    // =>  type_of(pointer_from_stack) is: *float32
-    print("Dereferencing pointer_from_stack: %\n", << pointer_from_stack);
-    // (4) => Dereferencing pointer_from_stack: 42.419998
- }
-```
-
-Type Holder in line (1) has a 16 bit relative pointer field a, which points to a float. Field a points to field b (line (2)), which indeed is a float.  
-(3) is a declaration assigning the relative pointer a to another pointer, but its type is a full pointer, not a relative pointer. This is necessary, because when we copy the relative pointer to the stack, the resulting pointer would overflow and not be valid, because there is no way to reach that data structure from the stack. By converting it to a full pointer, we are able to point to the original value 42.42, as shown in line (4).
-
-Here is a 2nd example with a recursive struct Node. `next` is a relative pointer to the next Node:
-
-See *12.15_struct_relative_pointer2.jai*
-```c++
-#import "Basic";
-
-Node :: struct {
-    next: *~s16 Node;
-    value: float;
-}
-
-main :: () {
-    a := Node.{null, 1337};
-    b := Node.{null, 42};
-    a.next = *b;
-
-    value := a.next.value;  // (1)
-    print("rel: %  value: %\n", a.next, value);
-    rel_ptr := a.next;
-
-    abs_ptr := cast(*Node) rel_ptr;  // (2)
-    print("abs: %  value: %\n", abs_ptr, abs_ptr.value);
-    // example output:
-    // => rel: r-8 (c6_799d_f7e0)  value: 42
-    // => abs: c6_799d_f7e0  value: 42
-}
-```
-
-We can directly dereference a relative pointer as seen in line (1). It can also be converted to an absolute pointer, as shown in line (2).
-Relative pointers can be useful for packing data, because they need less memory.
 
 ## 12.15 Anonymous structs
 An **anonymous struct** can be defined as follows:

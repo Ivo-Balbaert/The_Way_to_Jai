@@ -747,7 +747,7 @@ elephant
 (See also how_to/470, first.jai for code to check if a procedure has a certain note and the [Jai Cookbook](https://github.com/onelivesleft/jai-cookbook) modules and tools folder.)
 
 ## 30.14 Writing and loading dynamic libraries and #program_export
-(Example from Jai Community Wiki)
+(Example from Jai Community Wiki; see also examples/dll)
 
 The following code builds a dynamic library *dynlib.dll* on Windows and *dynlib.so* on Linux. 
 
@@ -769,8 +769,16 @@ build :: ()
         compiler_begin_intercept(w);
         add_build_file("dynlib.jai", w);
         while true {                // is needed!
-             message := compiler_wait_for_message();
-             if !message || message.kind == .COMPLETE  break;
+            message := compiler_wait_for_message();
+            if !message break;
+            if message.kind == .COMPLETE {
+                mc := cast(*Message_Complete) message;
+                if mc.error_code != .NONE {
+                    print("DLL compilation failed; exiting without compiling the main program.\n");
+                    return;
+                }
+                break;
+            }
         }
         compiler_end_intercept(w);
     }
@@ -794,39 +802,32 @@ Line (1) is needed for building a dynamic library, which uses the following code
 
 See *dynlib.jai*:
 ```c++
-#import "Basic";
-
-#program_export dll_func :: () #c_call {
-    new_context: Context;  
-    push_context new_context {
-        print("Hello Sailor");
-    }
+#program_export 
+dll_func :: () #no_context {
+    write_string("Hello Sailor!\n");
 }
 ```
 
 Notice the **#program_export** directive to indicate that a function is exported to a dynamic library.
-Adding #c_call and push a fresh context here are needed also if you plan on calling this from another language besides Jai.
+Adding #c_call and push a fresh context here are needed also if you plan on calling this from another language than Jai.
 
 After the dynamic library `dynlib`and in a separate workspace `main7`, 30.13_dynamic_libraries.jai builds an executable *main7* from the following code:
 
 See *main7.jai*:
 ```c++
-#import "Basic";
-
-dll_func :: () #foreign dynlib #c_call;
-dynlib :: #library "dynlib";
+dynlib :: #library,no_static_library "dynlib";
+dll_func :: () #no_context #elsewhere dynlib;
 
 main :: () {
     dll_func();
 }
 ```
-(Using #c_call is still needed until now to eliminate context mismatch.)
 
 The executable calls the proc `dll_func` from the dynamic library.
 Build both with:   
 ` jai 30.13_dynamic_libraries.jai`
-and see the result of:  `./main7`  
-which outputs:  `Hello Sailor`
+and see the result of:  `main7`  
+which outputs:  `Hello Sailor!`
 
 ## 30.15 Adding binary data to the executable
 The compiler bakes type info data into the executable (see § 16.4.3). But you can also add your own data to it with the proc `add_global_data`.  

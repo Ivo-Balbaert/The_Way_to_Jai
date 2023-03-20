@@ -37,6 +37,17 @@ main :: () {
     // => count is 5, and data is f8_01ba_f828.
     print("%\n", type_of(numbers)); // (3) => [5] s64
     print("%\n", type_of([4]int) == type_of([5]int)); // (4) => true because both are Type
+
+    // Error when defined as follows:   
+    // numbers2: []int = .[1, 3, 5, 7, 9];   // (4B)
+    // numbers2[2] = 42;
+    /*
+    The program crashed because of an access violation writing location 0x7ff69f8aa118.
+    This address is in the read only section .rdata of the program.
+    A common mistake is to write to a constant string or array, 
+    which is put by the compiler in a read only section of the program.
+    */
+
     // empty array literal:
     emp := string.[]; // (5)
     print("% - %\n", emp.count, emp.data); // => 0 - null
@@ -75,6 +86,8 @@ Line (1B) shows that indicating the type as prefix is necessary.
 Every array has a `count` and `data` field (see § 18.4.2 and 18.5): the count gives the number of items in the array, and data is a pointer to the 1st item.  
 As we see from line (3), it's type is `[5] s64`, [] is the typical array notation, 5 is the count (or size), and s64 is the items type, which is equivalent to int.  
 This type shows that the array literal is in fact a **static array**. Line (4) shows that [4]int and [5]int have the same type Type. Empty array literals will have their count pointer not set to 0; their data pointer is guaranteed to be null.  
+When trying to define an array literal as in (4B), note that you cannot change any items, because it is stored as read-only!  
+
 In line (6) we see a typed declaration of a static array, which is then initialized to an array literal. The definition can include the complete type, but this can also be inferred. In line (7) we see that an array can simply be printed out as a whole.  
 Lines (8) and (9) tell us that we can read out the i-th item as `arr[i]`, and change its value with `arr[i] = new_val`.
 In line (10) an array literal is created with the values of an enum.
@@ -384,13 +397,6 @@ Array_View_64 :: struct {
     count     : s64;  // Signed so that if we do for 0..count-1 it works...   
     data      : *u8;
 } // takes up 16 bytes
-```
-There are also smaller array views that use relative pointers (see § 10.6), mostly used inside structs like this: 
-``` 
-Package :: struct {
-    window: []~s16 float;
-    floats: [10] float;
-}
 ```
 
 Array views are also bounds-checked, but at run-time: see line (5). The program crashes and a stack trace is printed.

@@ -15,7 +15,15 @@ build :: ()
         add_build_file("dynlib.jai", w);
         while true {                // is needed!
              message := compiler_wait_for_message();
-             if !message || message.kind == .COMPLETE  break;
+             if !message break;
+             if message.kind == .COMPLETE {
+                mc := cast(*Message_Complete) message;
+                if mc.error_code != .NONE {
+                    print("DLL compilation failed; exiting without compiling the main program.\n");
+                    return;
+                }
+                break;
+            }
         }
         compiler_end_intercept(w);
     }

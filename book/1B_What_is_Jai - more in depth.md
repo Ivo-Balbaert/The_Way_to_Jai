@@ -142,7 +142,6 @@ The name "Jai" means victory (जय) in Hindi, Indian languages, or also "Just 
 - No printf Formatters (see § 5.7)
 - Type Distinction (see § 26.13)
 - Universal Declaration Syntax :: and :=
-- First Class Relative Pointers (see § 10.6, 12.14, 19.4.9)
 - No References, just values and pointers. 
 - No Const 
 - Maybe by Reference (see § 17.3)

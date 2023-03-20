@@ -456,7 +456,8 @@ The square is drawn with `immediate_quad` from Simp, see line (4).
 > Note:
 > A quad in graphics programming is a four-sided polygon that can be used to represent a surface or a texture. Quads are often preferred over triangles because they can be subdivided into smaller quads for more detail. Quads can also be organized into quadtrees, which are data structures that divide a two-dimensional space into four regions recursively. Quadtrees can help with collision detection, image compression and rendering efficiency.
 
-To make the square bounce off the window boundary, we reverse the sign of dx and dy when the boundary is exceeded.
+To make the square bounce off the window boundary, we reverse the sign of dx and dy when the boundary is exceeded (line (2)).
+
 
 The module Simp also contains some examples (_modules/Simp/examples_):
 - _example.jai_: this shows a window with a texture background and a colored rotating square in the centre;
@@ -1136,4 +1137,4 @@ There is an easy way to do this, just add the following lines to your app:
 };
 ```  
 
-Just add them above main :: (), for example in `33.2A_simp_window.jai`. After compiling with this, only the window screen will appears (see `33.2C_simp_window.jai`).
+Just add them above main :: (), for example in `33.2A_simp_window.jai`. After compiling with this, only the window screen will appears (see *33.2C_simp_window.jai*).

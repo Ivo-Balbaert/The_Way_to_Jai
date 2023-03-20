@@ -68,8 +68,6 @@ Here are the possible options:
 
  `-no_check_bindings`  	Disable checking of module bindings when running modules/Check. If modules/Check is not run due to -no_check, this does nothing.
 
- `-no_dedup`        Disable the new bytecode deduplication, if your program is crashing due to any problem in this new code.
-
  `-no_backtrace_on_crash`    Do not catch OS-level exceptions and print a stack trace when your program crashes. Causes less code to be imported on startup. Depending on your OS (for example, on Windows), crashes may look like silent exits.
 
 **MetaProgram**  

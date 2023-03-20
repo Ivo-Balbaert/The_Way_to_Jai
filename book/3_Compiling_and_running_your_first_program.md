@@ -222,7 +222,10 @@ This is just a nice trick, and by no means a commonly used way of doing things.
 
 ### 3.3.5 Some remarks
 
-  1) Source code file names are written usually in lowercase, separated by _ if needed, like *hello_sailor.jai* or *struct_literals.jai*. Never use space characters in a Jai filename! In chapters with multiple code files, we'll number them like *3.1_hello_sailor.jai*.
+  1) Source code file names are written usually in lowercase, separated by _ if needed, like *hello_sailor.jai* or *struct_literals.jai*. Never use space characters in a Jai filename!  
+  > Note:
+  > If you really need to work with a source file containing spaces (like in *space invaders.jai*), you can use "" on Windows to compile the source like this: `jai "space invaders.jai"`  
+  In chapters with multiple code files, we'll number them like *3.1_hello_sailor.jai*.
 
   2) You might have noticed that the displayed string is immediately followed by the operating system (OS)-prompt. You can separate them with a blanc line by adding a newline character _\n_ to the string like this:  `print("Hello, Sailor from Jai!\n");`  
   Compile and check it.

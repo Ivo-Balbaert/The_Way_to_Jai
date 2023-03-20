@@ -261,34 +261,6 @@ A better solution is to store code as a constant string (::) or for many code li
 ### 19.4.8 Strings as array views
 Because strings are essentially array views, you can manipulate .count and .data just as with array views, like in line (13) and following.
 
-### 19.4.9 Relative strings
-(See *19.6_relative_strings.jai*)
-
-```c++
-#import "Basic";
-
-Package :: struct {             
-    strings: [3] string~s8;   // (1) 
-    string_data: [100] u8;
-}
-
-S :: struct {
-    str : string~s8;
-    utf8 : [5]u8;
-}
-
-main :: ()  {
-    s : S;                    // (2)
-    s.utf8 = .[0xE3, 0x8B, 0xA1, 0, 0];
-    write_relative_pointer(s8, *s.str.data, *s.utf8);
-    s.str.count = 3;
-    print("'%'\n", s.str);    // => '㋡'
-}
-```
-
-Just like relative pointers (see § 10.6), we can define strings in an array field of a struct relative to each other, see line (1). The options are: string ~s8, string ~s16, string ~s32, string ~s64. Lines (2) and following show how to make a Unicode character string (containing 3 characters) from a []u8 (example taken from Jai-Community Wiki - Snippets).
-(For other examples, see how_to 300_relative pointers.)
-
 ## 19.5 String builder
 See *19.3_string_builder.jai*:
 

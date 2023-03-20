@@ -337,7 +337,6 @@ The `backtrace_on_crash` option is by default .ON
 
 ### 30.4.6 Checks at runtime
 Array bounds operations, castings and null pointer checks can be turned ON or FATAL/NONFATAL (for cast checks) at runtime to increase robustness of your program, they are so by default. If you are very sure, you can turn them OFF to increase performance.
-Bounds checks for relative pointers are enabled by default in debug builds and disabled in release builds. You can change that using Build_Options.relative_pointer_bounds_check.
 
 ### 30.4.7 runtime_storageless_type_info
 Example: `target_options.runtime_storageless_type_info = true;`      
