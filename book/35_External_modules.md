@@ -20,7 +20,7 @@ See *35.1_raylib_sample.jai*:
 #import "Math";
 
 main :: () {
-    InitWindow(800, 450, "JAI Sample");
+    InitWindow(800, 450, "JAI Raylib Sample");
     defer CloseWindow();
 
     SetTargetFPS(60);

@@ -37,7 +37,7 @@ main :: () {
     last_time := get_time();
     step_timeout := step_interval;
 
-    win := create_window(window_width, window_height, "Tetris Start");    
+    win := create_window(window_width, window_height, "Moving Shape");    
     Simp.set_render_target(win);
     Simp.set_shader_for_color(true);
 

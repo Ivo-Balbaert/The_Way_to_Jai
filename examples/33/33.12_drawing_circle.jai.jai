@@ -24,7 +24,7 @@ main :: () {
     window_width  := 800;   
     window_height := 600;
 
-    win := create_window(window_width, window_height, "Triangle");   
+    win := create_window(window_width, window_height, "Circle");   
     Simp.set_render_target(win);
     Simp.set_shader_for_color(true);   // (2)
 

@@ -130,7 +130,7 @@ main :: () {
 
     w := 640;
     h := 480;
-    window := SDL_CreateWindow("An SDL2 window", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,  
+    window := SDL_CreateWindow("An GL_SDL window", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,  
     xx w, xx h, SDL_WINDOW_OPENGL|SDL_WINDOW_RESIZABLE);
 
     // Check that the window was successfully created
@@ -346,7 +346,7 @@ main :: () {
     window_width  := 800;   
     window_height := 600;
 
-    win := create_window(window_width, window_height, "Triangle");   
+    win := create_window(window_width, window_height, "Circle");   
     Simp.set_render_target(win);
     Simp.set_shader_for_color(true);   // (2)
 
@@ -598,7 +598,7 @@ main :: () {
     last_time := get_time();
     step_timeout := step_interval;
 
-    win := create_window(window_width, window_height, "Tetris Start");    
+    win := create_window(window_width, window_height, "Moving Shape");    
     Simp.set_render_target(win);
     Simp.set_shader_for_color(true);
 
@@ -677,7 +677,7 @@ Input :: #import "Input";
 #import "Window_Creation";
 
 main :: () {
-  win := create_window(800, 600, "Window");
+  win := create_window(800, 600, "Buttons");
   window_width, window_height := get_render_dimensions(win);
   set_render_target(win);
   ui_init();

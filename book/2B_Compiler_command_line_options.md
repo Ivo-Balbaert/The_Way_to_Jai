@@ -23,6 +23,7 @@ Any argument not starting with a -, and before a `- ` by itself, is the name of 
 **Examples:**  
 `jai 30.7_build_and_run2.jai - run`  : see § 30.9  
 `jai program.jai -- import_dir "d:/Jai/my_modules" meta Build` : see § 30.5
+jai example.jai -plug My_Plugin --- import_dir ../../ : see § 36
 
 The jai-command help text can be found in module  *Default_Metaprogram*. This module also translates the options into build-options (see § 30.4) used by the compiler. 
 
@@ -79,6 +80,7 @@ they are passed from the default meta-program to your compile-time execution env
  `-no_cwd`  Turn off the compiler's initial change of working directory. This is a temporary option, provided because the policy around working directories is new and is still being worked out.
 
  `-plug name`  or `-plugin name`  Import module 'name' into the meta-program and use it as a plugin.  
+
  `-version`      Print the version of the compiler.
 
  `-report_poly`  Print the Polymorph Report when compilation is done.  

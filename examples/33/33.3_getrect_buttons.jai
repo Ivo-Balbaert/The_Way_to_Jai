@@ -7,7 +7,7 @@ Input :: #import "Input";
 val: s32 = 0;
 
 main :: () {
-  win := create_window(800, 600, "Window");
+  win := create_window(800, 600, "Buttons");
   window_width, window_height := get_render_dimensions(win);
   set_render_target(win);
   ui_init();

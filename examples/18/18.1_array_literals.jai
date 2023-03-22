@@ -18,6 +18,21 @@ main :: () {
     // => count is 5, and data is f8_01ba_f828.
     print("%\n", type_of(numbers)); // (3) => [5] s64
     print("%\n", type_of([4]int) == type_of([5]int)); // (4) => true because both are Type
+    numbers[2] = 42;
+    print("%", numbers); // => [1, 3, 42, 7, 9]
+
+    // Error when defined as follows:
+    // numbers2: []int = .[1, 3, 5, 7, 9];
+    // numbers2[2] = 42;
+    /*
+    The program crashed because of an access violation writing location 0x7ff69f8aa118.
+    This address is in the read only section .rdata of the program.
+    A common mistake is to write to a constant string or array, 
+    which is put by the compiler in a read only section of the program.
+    */
+
+
+
     // empty array literal:
     emp := string.[]; // (5)
     print("% - %\n", emp.count, emp.data); // => 0 - null
