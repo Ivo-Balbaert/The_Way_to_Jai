@@ -54,4 +54,6 @@ _Table of Contents_
    [36 - Plugins](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/36_Plugins.md)    
 
    [50 - The guessing game](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/50_The%20guessing%20game.md)      
-   [51 - The game of life](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/51_The%20Game%20of%20Life.md)    
+   [51 - The game of life](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/51_The%20Game%20of%20Life.md)   
+   [52 - The Pong game](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/51_The%20Pong%20game.md)    
+ 
