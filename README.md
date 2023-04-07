@@ -55,5 +55,9 @@ _Table of Contents_
 
    [50 - The guessing game](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/50_The%20guessing%20game.md)      
    [51 - The game of life](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/51_The%20Game%20of%20Life.md)   
-   [52 - The pong game](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/52_The%20Pong%20game.md)    
+   [52 - The pong game](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/52_The%20Pong%20game.md)  
+
+   [65 - Applications written in Jai](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/65_Applications%20written%20in%20Jai.md)  
+
+     
  
