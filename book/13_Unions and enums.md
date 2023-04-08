@@ -308,12 +308,19 @@ main :: () {
     names := enum_names(Direction);
     print("\nThe values as strings are: %\n", names);
     // => The values as strings are: ["EAST", "NORTH", "WEST", "SOUTH"]
+
+    x: Direction;
+    y: Direction.loose;
+    log("%", type_of(x)); // => Direction
+    log("%", type_of(y)); // => s64
 }
 ```
 
 **enum_range** gives you the range in integer values from low to high.
 **enum_values_as_s64** gives you the values as an array
 **enum_names** gives you the member names as an array.
+
+The **loose** property of an Enum makes it possible to look for the underlying type.
 
 ## 13.7 Notes on enums
 Enum declarations also can contain notes, directly on the enum, just as with structs.  

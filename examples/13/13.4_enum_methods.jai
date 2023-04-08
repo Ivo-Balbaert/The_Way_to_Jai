@@ -18,4 +18,9 @@ main :: () {
     names := enum_names(Direction);
     print("\nThe values as strings are: %\n", names);
     // => The values as strings are: ["EAST", "NORTH", "WEST", "SOUTH"]
+
+    x: Direction;
+    y: Direction.loose;
+    log("%", type_of(x)); // Direction
+    log("%", type_of(y)); // s64
 }

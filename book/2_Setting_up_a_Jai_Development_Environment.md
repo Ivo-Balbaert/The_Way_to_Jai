@@ -147,17 +147,33 @@ Writing a program's source code is easier when you have some support such as syn
 3) **Notepad++**: [jai_npp](https://github.com/cookednick/jai_npp)
  Syntax highlighting  
 
-4) **Sublime Text 3**: [RobinWragg/JaiTools](https://github.com/RobinWragg/JaiTools)
- Syntax highlighting, autocompletion, and Goto Symbol/Anything for the Jai language 
+4) **Sublime Text 3**:  
+Download Sublime Text 3 from [here](https://www.sublimetext.com/) and install.
 
-5) **Visual Studio Code**: (see § 2.2.2)
+Installing the [JaiTools package](https://packagecontrol.io/packages/JaiTools) provides a simple build system.  
+Activate the build system like this:
+- Choose from the Menu:  Tools / Build System / New Build System. Copy the following in the build file, and save it as *jai.sublime-build*:  
+```
+{
+	"cmd": ["jai", "$file"],
+	"selector" : "source.jai",
+	"file_regex" : "^(.*):(\\d+)\\,(\\d+)\\: Error\\: (.*)$"
+}
+```
+Now you can build the current file with ctrl-B, and navigate to compilation errors via F4.
+
+Also, add the Jai folder to your project via Menu / Projects/ Add Jai folder to project.
+
+Here is the source code of this plugin: [RobinWragg/JaiTools](https://github.com/RobinWragg/JaiTools). It provides syntax highlighting, autocompletion, and Goto Symbol/Anything for the Jai language. 
+
+1) **Visual Studio Code**: (see § 2.2.2)
 Iain King: [The Language - Visual Studio Marketplace - v0.0.85](https://marketplace.visualstudio.com/items?itemName=onelivesleft.the-language) – 
 
-6) **Visual Studio**: [Jai Revolution](https://inductive.no/jai/jai-revolution/) 
+1) **Visual Studio**: [Jai Revolution](https://inductive.no/jai/jai-revolution/) 
    plugin for Visual Studio 2013 / 2015 from Inductive AS, published 2015
 	Syntax highlighting (cannot be installed in VS 2017).
 
-7) **Language server**:	[Pyromuffin/jai-lsp](https://github.com/Pyromuffin/jai-lsp) or [Sl3dge78/jai-lsp](https://github.com/Sl3dge78/jai_lsp)
+2) **Language server**:	[Pyromuffin/jai-lsp](https://github.com/Pyromuffin/jai-lsp) or [Sl3dge78/jai-lsp](https://github.com/Sl3dge78/jai_lsp)
 
 Works with Vim, Emacs, VSCode, and should work with other editors that implement an lsp client.
 
