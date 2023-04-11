@@ -756,7 +756,44 @@ Write a `push` proc add a new value to this struct. Then write a `for_expansion`
 Write a 2nd version that skips values equal to 5.
 (See *for_expansion_fixed_vector.jai*)
 
-## 26.9 The #modify directive
+## 26.9 Iterating over a range with a step
+This is also easily done with a for_expansion macro, as shown in the following example:
+
+See *26.40_step_iterator.jai*:
+```c++
+#import "Basic";
+
+Step_Iterator :: struct {
+    min:  int;
+    max:  int;
+    step: int;
+}
+
+step_iterator :: (min: int, max: int, step: int) -> Step_Iterator {
+    return .{ min, max, step };
+}
+
+for_expansion :: (iterator: Step_Iterator, body: Code, flags: For_Flags) #expand {
+    iteration_count := -1;
+    for i: iterator.min..iterator.max {
+        iteration_count += 1;
+        if iteration_count % iterator.step != 0 continue;
+
+        `it       := i;
+        `it_index := void;
+
+        #insert body;
+    }
+}
+
+main :: () {
+    for step_iterator(0, 10, 2) {
+        print("% - ", it); // => 0 - 2 - 4 - 6 - 8 - 10 - 
+    }
+}
+```
+
+## 26.10 The #modify directive
 The **#modify** directive can be used to insert some code between the header and body of a procedure or struct, to change the values of the polymorph variables, or to reject the polymorph for some types or combination of variables. #modify allows to inspect generic parameter types. It is a block of code that is executed at compile-time each time a call to that procedure is resolved. 
 
 It is executed following these steps:   

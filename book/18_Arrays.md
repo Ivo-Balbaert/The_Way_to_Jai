@@ -616,7 +616,9 @@ Another example is the _add_numbers_ proc (called in line (3) and following), wh
 **C's biggest mistake**
 C's biggest mistake is: treating arrays as pointers. When passing an array to a function in C, only the pointer is passed, so that the size information is lost. This results in many bugs, see Walter Bright's article: ["C’s biggest mistake" (dec 2009)](www.drdobbs.com/architecture-and-design/cs-biggest-mistake/228701625).  
 In Jai, arrays do not automatically cast to pointers as in C. Rather, they are like fat or wide pointers that contain a pointer to the start of the array, and the size of the array. Internally, they are a struct (pointer + size). 
-This prevents the many possible bugs resulting from the way C handles this. In Jai the procedure can test that it doesn’t change the array out of bounds, because it knows its size through arr.count. 
+This prevents the many possible bugs resulting from the way C handles this. In Jai the procedure can test that it doesn’t change the array out of bounds, because it knows its size through *arr.count*.
+
+
 
 ## 18.9. An array of pointers
 See *18.9_array_pointers.jai*:

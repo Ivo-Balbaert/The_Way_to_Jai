@@ -347,3 +347,5 @@ Querying all allocators for address: 217_28aa_0080
 ```
 
 The program works with four different allocators a-d. It allocates 1000 bytes with each of them (ma-md). For each allocation, it then queries all allocators to check which allocator owns that allocation.
+
+Here is how you could write a simple [scratch allocator](https://github.com/onelivesleft/jai-string/tree/main/Scratch) by Iain King, which only ever allocates two pieces of memory: the buffer we are reading from and the buffer we are writing to. This could be useful when you want to perform a series of string operations, one after another; for example: replacing HTML character markers with the actual characters.

@@ -721,6 +721,30 @@ main :: () {
 In § 12.8 we discussed the usage of the #as directive to implicitly cast a subtype to a supertype. In the above example in line (1) this is declared for B as a subtype of A.  
 Line (2) shows how an instance of B can pass seamlessly for an instance of A. In line (3) we see that the same is true when using the namespace.  
 
+## 17.13.3 Struct arguments are immutable
+You cannot change struct arguments to a procedure. This is shown in line (2) in the following example:
+
+See *17.19_parameter_reference.jai*:
+```c++
+#import "Basic";
+#import "Math";
+
+perlin :: (p: Vector2) -> Vector2 {
+    p_ := p;                                                           // (1) 
+    // p *= 2.;  // => Error: Can't assign to an immutable argument.   // (2)
+    p_ *= 2;
+    return p_;
+}
+
+main :: () {
+   v1 := Vector2.{1.2, 3.14};  
+   v2 := perlin(v1);
+   print("v2 is %", v2); // => v2 is {2.4, 6.28}
+}
+```
+
+Instead, you can work with temporary copies like in (1), which can be changed and then returned.
+
 **Exercises**  
 (1) Use struct Person from § 17.3. Add fields name and location, which is a Vector2 used from module _Math_. Define a proc `move_person`, which can change a person's location. Test it out!
 (see structs_and_procs.jai)

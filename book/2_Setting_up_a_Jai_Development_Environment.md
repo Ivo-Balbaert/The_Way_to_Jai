@@ -166,18 +166,24 @@ Also, add the Jai folder to your project via Menu / Projects/ Add Jai folder to 
 
 Here is the source code of this plugin: [RobinWragg/JaiTools](https://github.com/RobinWragg/JaiTools). It provides syntax highlighting, autocompletion, and Goto Symbol/Anything for the Jai language. 
 
-1) **Visual Studio Code**: (see § 2.2.2)
+5) **Visual Studio Code**: (see § 2.2.2)
 Iain King: [The Language - Visual Studio Marketplace - v0.0.85](https://marketplace.visualstudio.com/items?itemName=onelivesleft.the-language) – 
 
-1) **Visual Studio**: [Jai Revolution](https://inductive.no/jai/jai-revolution/) 
-   plugin for Visual Studio 2013 / 2015 from Inductive AS, published 2015
-	Syntax highlighting (cannot be installed in VS 2017).
-
-2) **Language server**:	[Pyromuffin/jai-lsp](https://github.com/Pyromuffin/jai-lsp) or [Sl3dge78/jai-lsp](https://github.com/Sl3dge78/jai_lsp)
+6) **Language server**:	[Pyromuffin/jai-lsp](https://github.com/Pyromuffin/jai-lsp) or [Sl3dge78/jai-lsp](https://github.com/Sl3dge78/jai_lsp)
 
 Works with Vim, Emacs, VSCode, and should work with other editors that implement an lsp client.
+The jai_lsp version works together with [this](https://github.com/Sl3dge78/jai-lsp-vscode) VS Code extension, which has to be installed with the .vsix file.
+Both GitHub folders contain instructions for setting up the client and the server.  
+(I haven't been able to get the jai_lsp to work on Windows (11); it probably needs an update and testing.)
 
-At this time I recommend the VSCode plugin, because it probably has the most functionality.
+An old plugin for Visual Studio exists
+7) **Visual Studio**: [Jai Revolution](https://inductive.no/jai/jai-revolution/) 
+   plugin for Visual Studio 2013 / 2015 from Inductive AS, published 2015
+	Syntax highlighting (cannot be installed in VS 2017).
+Hopefully a new version will come when Jai is released.
+
+
+At this time I recommend the VSCode plugin, because it probably has the most functionality. The Sublime-Text plugin is also nice.
 ### 2.3.2  Using the Visual Studio Code plugin
 
 Visual Studio Code (VSCode) is one of the most popular programmer’s editors today and can be installed from: [VSCode](https://code.visualstudio.com/), it offers lots of basic functionality (code folding, brace pairing, numbering lines, and so on) and a myriad number of extensions.
