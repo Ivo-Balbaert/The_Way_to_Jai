@@ -1138,3 +1138,33 @@ There is an easy way to do this, just add the following lines to your app:
 ```  
 
 Just add them above main :: (), for example in `33.2A_simp_window.jai`. After compiling with this, only the window screen will appears (see *33.2C_simp_window.jai*).
+
+## 33.13 How to attach an icon to a Windows executable
+If you want your program executable to appear in Explorer with a specific image or icon instead of the default one, add the following to your build file:  
+
+( We assume the following:  
+- `exe_name` contains the name of the executable
+- the icon is stored in a file icon.png in folder assets ) 
+
+1) Import the following modules:
+```
+#import "Windows_Resources";
+#import "Ico_File";
+```
+
+2) In the `build` proc after compiling is complete, add this code:
+
+```
+ico_data := create_ico_file_from_bitmap_filename("assets\\icon.png");
+defer free(ico_data);
+if !ico_data then 
+    print("Could not load image for icon: assets/icon.png\n");
+else set_icon_by_data(exe_name, ico_data);
+
+manifest_options: Manifest_Options;
+manifest_options.dpi_aware = false;
+add_manifest_to_executable(exe_name, manifest_options);
+```
+
+Because this feature is specific for Windows, you might place this code in a ` #if OS == .WINDOWS { }` section.
+
