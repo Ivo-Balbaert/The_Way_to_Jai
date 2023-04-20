@@ -1166,5 +1166,5 @@ manifest_options.dpi_aware = false;
 add_manifest_to_executable(exe_name, manifest_options);
 ```
 
-Because this feature is specific for Windows, you might place this code in a ` #if OS == .WINDOWS { }` section.
+Because this feature is specific for Windows, you might want to place this code in a ` #if OS == .WINDOWS { }` section.
 

@@ -442,9 +442,7 @@ build_debug :: (w: Workspace) {
     print("Choosing debug options...\n");
     target_options := get_build_options(w);
     target_options.backend =.X64; 
-    target_options.optimization_level = .DEBUG;
-    target_options.array_bounds_check = .ON;
-    target_options.output_executable_name = "main3";   
+    set_optimization(*target_options, Optimization_Type.DEBUG, true);
     set_build_options(target_options, w);
 }
 
@@ -452,9 +450,7 @@ build_release :: (w: Workspace) {
     print("Choosing release options...\n");
     target_options := get_build_options(w);
     target_options.backend = .LLVM;
-    target_options.optimization_level = .RELEASE;
-    set_optimization_level(*target_options, 2, 0);
-    target_options.output_executable_name = "main3";   
+    set_optimization(*target_options, Optimization_Type.VERY_OPTIMIZED);   
     set_build_options(target_options, w);
 }
 
@@ -470,18 +466,17 @@ Calling `main3` now shows: main3
 `This program was built with meta-program 30.8_debug_release_build.jai`
 
 `build_debug` shows the recommended debug options:  
-* backend = .X64  
-* optimization_level = .DEBUG
-* array_bounds_check = .ON
+*     target_options.backend =.X64; 
+*     set_optimization(*target_options, Optimization_Type.DEBUG, true);
 
 The X64 backend is faster than the LLVM backend, but for most programs the difference is negligible.
 
 This build compiles faster with as much debugging information as possible, but has some overhead in order to help debug. An executable built in debug mode will, for example, tell the programmer on which line of code the program crashed on, and check for array out of bounds errors. As expected from debug builds, the code is not as optimized as a release build.
 
 `build_release` shows the recommended release options:  
-* backend = .LLVM 
-* optimization_level = .RELEASE
-* set_optimization_level(target_options, 2, 0); // same as clang -O2  
+*     target_options.backend = .LLVM;
+*     set_optimization(*target_options, Optimization_Type.VERY_OPTIMIZED);   
+
 (for a complete overview of release options, check Appendix D: Performance.)
 
 The LLVM compiler backend is slower than the X64 backend, because it does a lot more optimizations. An optimized build does not have debug information built into it, and takes longer to compile. This build makes the compiler produce the best possible optimized code. 
@@ -596,8 +591,8 @@ See *30.10_generate_llvm_bitcode.jai*:
     target_options := get_build_options(w);
     target_options.output_executable_name = "exec";
     target_options.intermediate_path = #filepath;
-    set_optimization_level(*target_options, 2, 0);      // (1)
-    target_options.llvm_options.output_bitcode = true;  // (2)
+    set_optimization(*target_options, Optimization_Type.OPTIMIZED);  // (1)
+    target_options.llvm_options.output_bitcode = true;               // (2)
     set_build_options(target_options, w);
 
     compiler_begin_intercept(w);
@@ -935,8 +930,8 @@ build :: () {
     set_build_options_dc(.{do_output=false});
 
 	options := get_build_options();
-    do_debug := (options.optimization_level == .DEBUG);
-    success := build_cpp_dynamic_lib("cpp_library", "cpp_library.cpp", debug=do_debug);
+    set_optimization(*options, Optimization_Type.DEBUG, true);
+    success := build_cpp_dynamic_lib("cpp_library", "cpp_library.cpp", debug=true);
     if !success {
         compiler_set_workspace_status(.FAILED);
         return;

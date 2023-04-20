@@ -64,7 +64,7 @@ _Compiler  time: 0.587162 seconds._
 	Front-end time + llvm time = Compiler time (for llvm backend)
 
 ## 4.5 Linking
-The backend compiler produces several compiler artifacts in the hidden _.build_ folder (.obj, .exp and .lib files). It is the task of the linker (_link.exe_ from MSVC on Windows, _lld-linux_ on Linux) to combine these object files and (sometimes) OS specific libraries statically into one output executable (.exe on Windows).  
+The backend compiler produces several compiler artifacts in the hidden _.build_ folder (.obj, .exp and .lib files). It is the task of the linker (_link.exe_ from MSVC on Windows, _lld-linux_ on Linux, _lld-macos_ on MacOs ) to combine these object files and (sometimes) OS specific libraries statically into one output executable (.exe on Windows).  
 The time this takes is for example reported as:   
 _Link      time: 0.328986 seconds._
 
@@ -89,7 +89,7 @@ Total     time: 0.425573 seconds.
 One of the big advantages of LLVM is that it is _platform independent_: it can produce executable binary code for a wide variety of platforms, amongst them game consoles.  
 Specifically at this time, Jai supports:  
     • 	x86 architecture only (limited Nintendo Switch support).  
-    • 	OS / Platforms: Windows, Ubuntu Linux, limited Mac support, at least one gaming console
+    • 	OS / Platforms: Windows, (Ubuntu) Linux, MacOs support, at least one gaming console
 
 ## 4.7 Debug and release build
 While developing, you’ll work with normal _debug builds_ which is the default, because you want to have as much info as possible when something goes wrong. For example a .pdb file with debugging info is produced, stack trace info will be shown, and optimizations which can hide erroneous behavior must be disabled.

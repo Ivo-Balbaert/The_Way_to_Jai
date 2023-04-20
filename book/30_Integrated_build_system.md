@@ -243,8 +243,9 @@ build :: () {
     }
     target_options := get_build_options(w);
 
-    target_options.optimization_level = .DEBUG;    
-    target_options.backend = .LLVM;               
+    target_options.backend = .LLVM;  
+    set_optimization(*target_options, Optimization_Type.DEBUG, true);   // (0A)
+    // set_optimization(*target_options, Optimization_Type.OPTIMIZED);  // (0B)
 
     target_options.output_type = .EXECUTABLE;      
     target_options.output_executable_name = "my_program";
@@ -293,24 +294,35 @@ A few of the most important build options are shown in the program above and dis
 ```
 Build_Options for Workspace 3 are: {
     output_type = EXECUTABLE;
+    output_flags = 0;
     Commonly_Propagated = {
-        optimization_level = DEBUG;
         write_added_strings = true;
         runtime_storageless_type_info = true;
         shorten_filenames_in_error_messages = false;
+        use_visual_studio_message_format = false;
 ...
 ```
 ### 30.4.1 The optimization level
-This can be either `.DEBUG` or `.RELEASE`, for example:   
-`target_options.optimization_level = .RELEASE;`
-
-For a highly optimized build, having the same effect as `clang -O2`, you would use:
+This is set with the procedure `set_optimization`, for example:   
+`set_optimization(*target_options, Optimization_Type.DEBUG, true);`     
+for debug, or:  
+`set_optimization(*target_options, Optimization_Type.OPTIMIZED);`   
+for release.
+The Optimization_Type enum values defined in module `Compiler` are:  
 ```c++
-set_optimization_level(*target_options, 2, 0); 
+    DEBUG                :: 0;
+    VERY_DEBUG           :: 1;
+    OPTIMIZED            :: 2;
+    VERY_OPTIMIZED       :: 3;
+    OPTIMIZED_SMALL      :: 4;
+    OPTIMIZED_VERY_SMALL :: 5; 
 ```
-Optimized builds take much longer (10x) time than debug builds, but are around 2x as fast as an un-optimized build.
 
+Optimized builds take much longer (10x) time than debug builds, but are around 2x as fast as an un-optimized build.
 This automatically turns OFF all runtime checks, and specifies a number of optimizations for LLVM code production.
+
+**Remark**
+Most (if not all) optimization settings included in `30.4_build_options.jai` are automatically turned on or off by using `set_optimization` with the appropriate `Optimization_Type` enum values. They are added here only so that we can discuss them. In a normal program `set_optimization` is sufficient, you would not have to add additional optimization settings.
 
 To enable bytecode inlining, use: `target_options.enable_bytecode_inliner = true;`   
 To stop making a .pdb file, use:  `target_options.emit_debug_info=.NONE;`

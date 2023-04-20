@@ -10,7 +10,7 @@ Unzipping this file shows the following contents:
 
 Here is what these folders contain:
 
-- _bin_: this contains the Jai compiler executables (jai.exe for Windows, jai-linux for Linux, see $ 4.1-4.4) and the LLVM linker lld (see section § 4.5).
+- _bin_: this contains the Jai compiler executables (jai.exe for Windows, jai-linux for Linux, jai-macos for MacOs, see $ 4.1-4.4) and the LLVM linker lld (see section § 4.5).
 - *how_to*: this contains some examples with explanatory comments.
 - _examples_: this contains some more advanced example programs.
 - _modules_: this contains Jai’s standard library, we'll discuss this in the rest of the book, in particular in § 6B, 19, 27, 31-34.  
@@ -24,22 +24,22 @@ You can use the extracted folder structure as-is, no installation is needed!
 Unpack the zip file in a temporary folder using:
 
     - On Windows: RIGHT-CLICK the file and select Extract All... 
-    - On Linux (or WSL2 in Windows): use tar -xvf in a terminal
+    - On Linux/MacOs (or WSL2 in Windows): use tar -xvf in a terminal
 
 Now copy the _jai_ subfolder in its entirety to its destination (let's call this the _Jai root folder_), as follows:
 
     - On Windows: for example on the C-drive to c:\jai 
-    - On Linux (or WSL2 in Windows): for example to /usr/local/bin/jai or /opt/jai or $HOME/jai 
+    - On Linux/MacOs (or WSL2 in Windows): for example to /usr/local/bin/jai or /opt/jai or $HOME/jai 
     (assuming $HOME is /home/your_username)
-      Rename jai-linux to jai:  mv jai-linux jai
+      Rename jai-linux or jai-macos to jai:  mv jai-linux jai (same for Jai-macos)
       You also have to make jai and the link program executable with the following commands 
       (perhaps sudo is needed):
           chmod +x jai
-          chmod +x lld-linux
+          chmod +x lld-linux (or chmod +x lld-macos)
 
 Now open a terminal in your Jai root folder, and type the command:  
     - On Windows: `jai -version`
-    - On Linux (or WSL2 in Windows): `./jai -version`
+    - On Linux/MacOs (or WSL2 in Windows): `./jai -version`
 it will show the following output (for your actual version):
 
 _Version: beta 0.1.036, built on 17 August 2022._
@@ -57,13 +57,13 @@ To achieve this, do the following:
         • choose System Variables, Path, click button New, add c:\jai
         • click OK on all open windows 
 
-    - On Linux (or WSL2 in Windows): make a symbolic link like ln -s /path/to/jai/bin/jai /usr/bin/jai
+    - On Linux/MacOs (or WSL2 in Windows): make a symbolic link like ln -s /path/to/jai/bin/jai /usr/bin/jai
         (for example: ln -s $HOME/jai/bin/jai /usr/bin/jai)
 
         Or add this line to your /etc/profile or $HOME/.profile:
         export PATH="$HOME/jai/bin/:$PATH"
 
-        After creating the link, you can run Jai on Linux simply with: `jai`
+        After creating the link, you can run Jai on Linux/MacOs simply with: `jai`
 
 Test this out by moving in a terminal to another folder than the Jai root folder and typing in the command: `jai -version`. You should see the same output as in the previous section.
     
@@ -189,9 +189,9 @@ At this time I recommend the VSCode plugin, because it probably has the most fun
 Visual Studio Code (VSCode) is one of the most popular programmer’s editors today and can be installed from: [VSCode](https://code.visualstudio.com/), it offers lots of basic functionality (code folding, brace pairing, numbering lines, and so on) and a myriad number of extensions.
 There is a VS Code plugin for Jai named _The Language_, which provides basic IDE functionality: [The Language](https://marketplace.visualstudio.com/items?itemName=onelivesleft.the-language).
 
-VSCode is very helpful for editing you source code. Compiling is usually done from the command-line (cmd on Windows or a terminal in Linux), but you can do it also from within VSCode by opening up a New Terminal.
+VSCode is very helpful for editing you source code. Compiling is usually done from the command-line (cmd on Windows or a terminal in Linux/MacOS), but you can do it also from within VSCode by opening up a New Terminal.
 
-> Hint: Whenever you want to search for a procedure (say for example parse_int) in the Jai modules, open VS-code in that folder, select Edit / Find in Files (or the equivalent in your code editor) and fill in `parse_int ::` in the search field. This will only find the definition of parse_int, not all the cases where it is called. In a Linux terminal you can also use `grep -rn 'parse_int ::'`.
+> Hint: Whenever you want to search for a procedure (say for example parse_int) in the Jai modules, open VS-code in that folder, select Edit / Find in Files (or the equivalent in your code editor) and fill in `parse_int ::` in the search field. This will only find the definition of parse_int, not all the cases where it is called. In a Linux/MacOS terminal you can also use `grep -rn 'parse_int ::'`.
 
 ### 2.3.3 How to edit, build and run a Jai program in VS-Code through CodeRunner
 

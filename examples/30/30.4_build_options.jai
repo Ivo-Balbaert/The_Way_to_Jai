@@ -9,9 +9,9 @@ build :: () {
     }
     target_options := get_build_options(w);
 
-    target_options.optimization_level = .DEBUG;   
-
     target_options.backend = .LLVM;               
+    set_optimization(*target_options, Optimization_Type.DEBUG, true);   // (0A)
+    // set_optimization(*target_options, Optimization_Type.OPTIMIZED);  // (0B)
 
     target_options.output_type = .EXECUTABLE;      
     target_options.output_executable_name = "my_program";
@@ -51,7 +51,6 @@ Build_Options for Workspace 3 are: {
     output_type = EXECUTABLE;
     output_flags = 0;
     Commonly_Propagated = {
-        optimization_level = DEBUG;
         write_added_strings = true;
         runtime_storageless_type_info = true;
         shorten_filenames_in_error_messages = false;
