@@ -763,7 +763,6 @@ The module also contains an example (_modules/Simp/examples_):
 This module contains platform-independent window creation routines.
 Showing a window is as easy as this code-snippet:
 
-See *33.6_window_creation.jai*:
 ```c++
 #import "Input";
 #import "Windows";
@@ -780,7 +779,7 @@ main :: () {
 
 Adding handling a QUIT event:
 
-See *33.6_window_creation.jai*:
+See *33.6_window_creation_events.jai*:
 ```c++
 #import "Input";
 #import "Windows";
