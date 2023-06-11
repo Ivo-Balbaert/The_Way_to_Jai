@@ -19,15 +19,15 @@ main :: () {
 
 // global proc:
 proc :: () {
-    x := 1;
-    inner_proc();
-    print("x is now %\n", x); // => x is now 1
-
     inner_proc :: () {
             print("This is an inner proc\n"); // => This is an inner proc
             //  Error: Attempt to use a variable from an outer stack frame. (Closures are not supported.)
             // x = 42; // (5) this does not work! cannot access variable of inner_proc scope!
     }
+
+    x := 1;
+    inner_proc();
+    print("x is now %\n", x); // => x is now 1
 }
 
 proc2 :: () {

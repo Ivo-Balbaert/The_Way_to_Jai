@@ -129,15 +129,15 @@ main :: () {
 
 // global proc:
 proc :: () {
-    x := 1;
-    inner_proc();
-    print("x is now %\n", x); // => x is now 1
-
     inner_proc :: () {
             print("This is an inner proc\n"); // => This is an inner proc
             //  Error: Attempt to use a variable from an outer stack frame. (Closures are not supported.)
             // x = 42; // (5) this does not work! cannot access variable of inner_proc scope!
     }
+
+    x := 1;
+    inner_proc();
+    print("x is now %\n", x); // => x is now 1
 }
 
 proc2 :: () {
@@ -155,8 +155,10 @@ arg1 is Jonathan and arg2 is Blow
 ```
 
 Any proc, in particular main, can contain _local_ procs (also called _inner_ or _nested_ procs), like add and display in lines (1) and (2). They can be called from within the enclosing proc, as lines (3)-(4) show. The same goes for `inner_proc` inside procedure `proc`.  
-There is one important limitation: an inner proc cannot access outer variables! If we uncomment line (5), we get the:  **Error: Attempt to use a variable from an outer stack frame. (Closures are not supported.)**  
-Also a procedure doesn't even see the inner procs defined inside other procs (see line (6)).
+Here are some limitation:   
+* an inner proc cannot access outer variables! If we uncomment line (5), we get the:  **Error: Attempt to use a variable from an outer stack frame. (Closures are not supported.)**  
+* also a procedure doesn't even see the inner procs defined inside other procs (see line (6)).
+* `inner_proc` must be defined before it is called, you cannot forward-reference constant declarations inside procedure bodies.
 > A local proc is only known in the procedure where it is defined, it lives inside the scope of that proc. If you call it from outside its scope (like in proc2) you get the error: Error: Undeclared identifier
 ### What is the purpose and advantage of local procs?
 Using local procs for things like helper functions promotes code hygiene: there are less global procs to worry about. Only make procs global when they are really used in several places.

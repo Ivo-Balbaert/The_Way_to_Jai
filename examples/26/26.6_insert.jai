@@ -7,6 +7,8 @@ my_code :: #string END_STRING
 END_STRING;
 
 main :: () {
+    add :: (n: int, m: int) -> int { return n + m; };
+
     a := 1;
     b := 2;
     #insert "c := a + b;";   // (1)
@@ -15,8 +17,6 @@ main :: () {
     d :: "add(42, 8);";      // (2)
     x := 1 - #insert d;
     print("x = %\n", x);     // => x = -49
-
-    add :: (n: int, m: int) -> int { return n + m; };
 
     #insert my_code;         // (3) 
     print("a, b, c are % % % \n", a, b, c);    // => a, b, c are 101 102 1003

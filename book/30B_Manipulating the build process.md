@@ -520,6 +520,21 @@ build :: () {
 }
 
 misra_checks :: (message: *Message) {
+    check_pointer_level_misra_17_5 :: (decl: *Code_Declaration) {
+        type := decl.type;
+        pointer_level := 0;
+    
+        while type.type == .POINTER {
+            pointer_level += 1;
+            p := cast(*Type_Info_Pointer) type;
+            type = p.pointer_to;
+        }
+        if pointer_level > 2 {
+            location := make_location(decl);
+            compiler_report("Too many levels of pointer indirection.\n", location);
+        }
+    }
+
     if message.kind != .TYPECHECKED return;
     code := cast(*Message_Typechecked) message;
     for code.declarations {
@@ -540,21 +555,6 @@ misra_checks :: (message: *Message) {
                 sub_decl := cast(*Code_Declaration) it;
                 check_pointer_level_misra_17_5(sub_decl); 
             }
-        }
-    }
-
-    check_pointer_level_misra_17_5 :: (decl: *Code_Declaration) {
-        type := decl.type;
-        pointer_level := 0;
-    
-        while type.type == .POINTER {
-            pointer_level += 1;
-            p := cast(*Type_Info_Pointer) type;
-            type = p.pointer_to;
-        }
-        if pointer_level > 2 {
-            location := make_location(decl);
-            compiler_report("Too many levels of pointer indirection.\n", location);
         }
     }
 }
@@ -667,6 +667,17 @@ See *30.11_using_notes.jai*:
 #import "Sort";
 
 #run {
+  generate_code :: () -> string #expand {       // (6)
+    bubble_sort(procs, compare);                // (7)
+    builder: String_Builder;
+    append(*builder, "main :: () {\n");
+    for proc: procs {
+      print_to_builder(*builder, "  %1();\n", proc);
+    }
+    append(*builder, "}\n");
+    return builder_to_string(*builder);
+  }
+
   w := compiler_create_workspace();
 
   options := get_build_options(w);
@@ -707,17 +718,6 @@ See *30.11_using_notes.jai*:
   }
   compiler_end_intercept(w);
   set_build_options_dc(.{do_output=false});
-
-  generate_code :: () -> string #expand {       // (6)
-    bubble_sort(procs, compare);                // (7)
-    builder: String_Builder;
-    append(*builder, "main :: () {\n");
-    for proc: procs {
-      print_to_builder(*builder, "  %1();\n", proc);
-    }
-    append(*builder, "}\n");
-    return builder_to_string(*builder);
-  }
 }
 ```
 
