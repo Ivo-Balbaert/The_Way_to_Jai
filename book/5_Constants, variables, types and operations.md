@@ -361,6 +361,14 @@ main :: () {
     print("n4 is % and m4 is %\n", n4, m4);     // => n4 is 0 and m4 is 0
     n4, m4 = 1, 2; 
     print("n4 is % and m4 is %\n", n4, m4);     // => n4 is 1 and m4 is 2
+
+    // advanced compound assignment:
+    b := 5;
+    a, b=, c := 1, 2, 3;                       // (4)
+    print("a is % b is % c is %\n", a, b, c);  //  => a is 1 b is 2 c is 3
+    a, d:, c = 4, 5, 6;                        // (5)
+    print("a is % c is % d is %\n", a, c, d);  // => a is 4 c is 6 d is 5
+
 }
 ```
 
@@ -370,6 +378,9 @@ A compound assignment like in line (2)
 is not allowed, but you can write: `n3, m3 := 12, 13;`  
 The right-hand sides in such a _multiple assignment_ can also contain expressions, even calculated at compile-time with #run.  
 If wanted, declaration and assignment can be on separate lines.
+Modification assignments and declarations can be combined in one assignment:  
+In line (4), b is modified, a and c are declared.  
+In line (5), d is declared, a and c are modified.
 
 ## 5.6 - Swapping values
 See *5.5_swapping.jai*:
@@ -380,8 +391,8 @@ See *5.5_swapping.jai*:
 main :: () {
     n := 2;
     m := 3;
-  // n, m = m, n;                        
-    print("n is % and m is %\n", n, m); // (1) => n is 3 and m is 3
+    n, m = m, n;                        
+    print("n is % and m is %\n", n, m); // (1) => n is 3 and m is 2
 
     s, p := "abc", 13;
   // this gives an error:
@@ -389,9 +400,9 @@ main :: () {
 }
 ```
 
-A swap like n, m = m, n; is allowed, but doesn't work in Jai like you would expect (see line (1)): both variables get the same value. It works like this: `x, y = y, x` does `x = y; y = x;` and not like in Python for example. The reason is when one gets too picky about what order things happen in, this causes problems for compiler optimizations.    
-Also when n and m are of different types an error results, because then the variables would have to change type, which is not allowed.
-But see § 17.10 for a swap procedure and § 22.2.3 for built-in versions.  
+A compound assignment like n, m = m, n; is allowed, and results in a swap of the values.  
+When n and m are of different types an error results, because then the variables would have to change type, which is not allowed.
+(See § 17.10 for a swap procedure and § 22.2.3 for built-in versions.)
 
 ## 5.7 - More about printing
 print is a native routine.                                                              

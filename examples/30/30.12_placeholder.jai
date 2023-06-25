@@ -5,7 +5,7 @@
 #run {
    #import "Compiler";
    options := get_build_options();
-   add_build_string("TRUTH :: true;");  // (2)
+   add_build_string("TRUTH :: true;", -1);  // (2)
 }
 
 main :: () {

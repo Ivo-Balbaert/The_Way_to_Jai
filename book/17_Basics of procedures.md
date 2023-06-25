@@ -322,7 +322,8 @@ The returned values are assigned to an equal number of variables in the left-han
 It is not necessary to assign all return values, as in (2B) where we ignore the 2nd return value. 
 It is better to return things by value; this avoids having extra stack copies like in C.
 
-**The _ token**  
+**The _ identifier**  
+The name `_` represents values you do not care about. You can use this in cases when you would otherwise make up a temporary junk variable name. _ always exists and does not have to be declared.  
 If you would like to discard one or more of the return values, use `_` instead of a variable as in Go, like this:
 `result, ok, _ := to_integer(text);`  
 Here we discard the 3rd return value, which is a `remainder` string in which we are not interested.

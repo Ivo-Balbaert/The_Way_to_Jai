@@ -569,7 +569,7 @@ can be divided into:
 
 ## 12.11 Struct alignment
 By aligning certain member fields of structs to 64 bit, we can make memory allocation cache-aligned on 64 bit systems. This can also be done for global variables.  
-The **#align** directive takes care of aligning struct member fields relative to the start of the struct. If the start is 64 bit aligned, and a member field has #align 64, then this field will also be 64 bit aligned. The same goes for `#align 32` and `#align 16`.
+The **#align** directive takes care of aligning struct member fields relative to the start of the struct. If the start is 64 bit aligned, and a member field has #align 64, then this field will also be 64 bit aligned. The same goes for `#align 32` and `#align 16`. It also works for declarations on the stack.
 The start of the struct must be #align-ed correctly, otherwise it won't work. 
 This enhances memory efficiency and reduces cache misses for cache-sensitive data-structures. Use it when you want to do SIMD (see § 28) or you need something with a bigger alignment. 
 It is used in the following example:

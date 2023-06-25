@@ -258,7 +258,7 @@ main :: () {
     d &= ~SOUTH;   // (1) mask the SOUTH flag
     print("d is %\n", d); // => d is EAST | NORTH | WEST
 
-    e: Direction = Direction.WEST | .EAST;   // (1)
+    e: Direction = .WEST | .EAST;   // (1)
     f: Direction = .WEST;
     g: Direction = 1; 
     h: Direction = Direction.WEST + 1;

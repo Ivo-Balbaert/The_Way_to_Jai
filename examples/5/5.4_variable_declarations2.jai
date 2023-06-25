@@ -22,7 +22,7 @@ main :: () {
     s, t := 2 + 3, 2 * 3;
     print("s is % and t is %\n", s, t);
     s1, t1 := #run(2 + 3), #run(2 * 3);
-    print("s1 is % and t1 is %\n", s1, t1);           // => s is 5 and t is 6
+    print("s1 is % and t1 is %\n", s1, t1);     // => s is 5 and t is 6
 
   // i, j : int;
   // i, j = n1 + 1, m1 + 1;
@@ -34,6 +34,13 @@ main :: () {
     print("n4 is % and m4 is %\n", n4, m4);     // => n4 is 0 and m4 is 0
     n4, m4 = 1, 2; 
     print("n4 is % and m4 is %\n", n4, m4);     // => n4 is 1 and m4 is 2
+
+   // advanced compound assignment:
+    b := 5;
+    a, b=, c := 1, 2, 3;                       // (4)
+    print("a is % b is % c is %\n", a, b, c);  //  => a is 1 b is 2 c is 3
+    a, d:, c = 4, 5, 6;                        // (5)
+    print("a is % c is % d is %\n", a, c, d);  // => a is 4 c is 6 d is 5
 }
 
 /* Output:
@@ -45,4 +52,6 @@ s is 5 and t is 6
 s1 is 5 and t1 is 6
 n4 is 0 and m4 is 0
 n4 is 1 and m4 is 2
+a is 1 b is 2 c is 3
+a is 4 c is 6 d is 5
 */
