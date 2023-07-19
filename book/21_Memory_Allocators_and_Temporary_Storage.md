@@ -265,6 +265,7 @@ Try this out on program 18.5_array_for.jai, without and with free (see leak_arra
 
 ## 21.6 Check which allocator owns an allocation
 The following program does just that, which could be useful while debugging.
+(// v 0.1.072: assert in line 52 doesn't work anymore for rpmalloc ?? )
 
 See *21.3_allocators_check.jai*:
 ```c++
