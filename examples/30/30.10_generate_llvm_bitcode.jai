@@ -10,7 +10,7 @@
     target_options := get_build_options(w);
     target_options.output_executable_name = "exec";
     target_options.intermediate_path = #filepath;
-    set_optimization_level(*target_options, 2, 0);      // (1)
+    set_optimization(*target_options, Optimization_Type.OPTIMIZED);  // (1)
     target_options.llvm_options.output_bitcode = true;  // (2)
     set_build_options(target_options, w);
 

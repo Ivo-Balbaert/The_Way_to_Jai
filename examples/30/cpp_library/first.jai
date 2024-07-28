@@ -8,8 +8,8 @@ build :: () {
     set_build_options_dc(.{do_output=false});
 
 	options := get_build_options();
-    do_debug := (options.optimization_level == .DEBUG);
-    success := build_cpp_dynamic_lib("cpp_library", "cpp_library.cpp", debug=do_debug);
+    set_optimization(*options, Optimization_Type.DEBUG, true);
+    success := build_cpp_dynamic_lib("cpp_library", "cpp_library.cpp", debug=true);
     if !success {
         compiler_set_workspace_status(.FAILED);
         return;

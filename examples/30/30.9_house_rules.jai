@@ -31,6 +31,21 @@ build :: () {
 }
 
 misra_checks :: (message: *Message) {
+    check_pointer_level_misra_17_5 :: (decl: *Code_Declaration) {
+        type := decl.type;
+        pointer_level := 0;
+    
+        while type.type == .POINTER {
+            pointer_level += 1;
+            p := cast(*Type_Info_Pointer) type;
+            type = p.pointer_to;
+        }
+        if pointer_level > 2 {
+            location := make_location(decl);
+            compiler_report("Too many levels of pointer indirection.\n", location);
+        }
+    }
+
     if message.kind != .TYPECHECKED return;
     code := cast(*Message_Typechecked) message;
     for code.declarations {
@@ -51,21 +66,6 @@ misra_checks :: (message: *Message) {
                 sub_decl := cast(*Code_Declaration) it;
                 check_pointer_level_misra_17_5(sub_decl); 
             }
-        }
-    }
-
-    check_pointer_level_misra_17_5 :: (decl: *Code_Declaration) {
-        type := decl.type;
-        pointer_level := 0;
-    
-        while type.type == .POINTER {
-            pointer_level += 1;
-            p := cast(*Type_Info_Pointer) type;
-            type = p.pointer_to;
-        }
-        if pointer_level > 2 {
-            location := make_location(decl);
-            compiler_report("Too many levels of pointer indirection.\n", location);
         }
     }
 }

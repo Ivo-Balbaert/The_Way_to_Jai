@@ -4,6 +4,17 @@
 #import "Sort";
 
 #run {
+  generate_code :: () -> string #expand {       // (6)
+    bubble_sort(procs, compare);                // (7)
+    builder: String_Builder;
+    append(*builder, "main :: () {\n");
+    for proc: procs {
+      print_to_builder(*builder, "  %1();\n", proc);
+    }
+    append(*builder, "}\n");
+    return builder_to_string(*builder);
+  }
+
   w := compiler_create_workspace();
 
   options := get_build_options(w);
@@ -44,15 +55,12 @@
   }
   compiler_end_intercept(w);
   set_build_options_dc(.{do_output=false});
-
-  generate_code :: () -> string #expand {       // (6)
-    bubble_sort(procs, compare);                // (7)
-    builder: String_Builder;
-    append(*builder, "main :: () {\n");
-    for proc: procs {
-      print_to_builder(*builder, "  %1();\n", proc);
-    }
-    append(*builder, "}\n");
-    return builder_to_string(*builder);
-  }
 }
+
+/*
+apple
+banana
+cherry
+dog
+elephant
+*/

@@ -24,13 +24,13 @@ macro2 :: () -> int #expand {   // (6)
 }
 
 macro3 :: () #expand {
-    print("This is macro3\n");
-    `c = 108;
-    nested_macro();
-
     nested_macro :: () #expand {
       print("This is a nested macro\n");
     }
+
+    print("This is macro3\n");
+    `c = 108;
+    nested_macro();
 }
 
 factorial :: (n: int) -> int #expand {
@@ -41,20 +41,20 @@ factorial :: (n: int) -> int #expand {
 }
 
 macfunc :: () -> string {
+    macron :: () -> int #expand {
+        defer print("Defer inside macron\n");  // (7)
+        if `a < `b {
+            `return "Backtick return macron\n"; 
+        }
+        return 1;
+    }
+
     a := 0;
     b := 100;
     print("In maxfunc just before calling macron\n"); 
     c := macron();
     print("In maxfunc just before returning\n");  // never printed!
     return "none";
-
-  macron :: () -> int #expand {
-      defer print("Defer inside macron\n");  // (7)
-      if `a < `b {
-          `return "Backtick return macron\n"; 
-       }
-       return 1;
-  }
 }
 
 macroi :: (c: Code) #expand {   // (9)

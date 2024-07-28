@@ -36,7 +36,7 @@ The following examples in this section are meant to show the basic syntax, they 
 
 The syntax is shown in `macro0` defined in line (1) below, which does nothing. A macro is called like any proc: `macro0()`.
 
-See *26.7_macros_basics.jai*:
+See *26.7B_macros_basics.jai*:
 ```c++
 #import "Basic";
 #import "Math";
@@ -64,13 +64,13 @@ macro2 :: () -> int #expand {   // (6)
 }
 
 macro3 :: () #expand {
-    print("This is macro3\n");
-    `c = 108;
-    nested_macro();
-
     nested_macro :: () #expand {
       print("This is a nested macro\n");
     }
+
+    print("This is macro3\n");
+    `c = 108;
+    nested_macro();
 }
 
 factorial :: (n: int) -> int #expand {
@@ -81,20 +81,20 @@ factorial :: (n: int) -> int #expand {
 }
 
 macfunc :: () -> string {
+    macron :: () -> int #expand {
+        defer print("Defer inside macron\n");  // (7)
+        if `a < `b {
+            `return "Backtick return macron\n"; 
+        }
+        return 1;
+    }
+
     a := 0;
     b := 100;
     print("In maxfunc just before calling macron\n"); 
     c := macron();
     print("In maxfunc just before returning\n");  // never printed!
     return "none";
-
-  macron :: () -> int #expand {
-      defer print("Defer inside macron\n");  // (7)
-      if `a < `b {
-          `return "Backtick return macron\n"; 
-       }
-       return 1;
-  }
 }
 
 macroi :: (c: Code) #expand {   // (9)
@@ -162,7 +162,7 @@ Line (5) shows that a macro can have parameters, just like any proc. This is a w
 `macro2` defined in line (6) refers to two outer variables b and c. In this case it returns 1, but just before leaving the macro, it prints something by using the `defer` keyword in line (6A).  
 But notice what happens when we use `defer` in line (6B): because of the backtick the defer now takes the scope of the caller (main() in this case) as its scope, and prints its message just before main() ending (see the attached complete output in both cases).  
 
-`macro3` shows _inner_ or _nested_ macros: a macro can contain and call macros defined inside itself. But there is a limit as to how many macro calls you can generate inside another macro.    
+`macro3` shows _inner_ or _nested_ macros: a macro can contain and call macros defined inside itself. But the inner macro must be defined before it is called. There is also a limit as to how many macro calls you can generate inside another macro.    
 `factorial` is an example of a recursive macro; #if needs to be used here (instead of if), else you get the following `Error: Too many nested macro expansions. (The limit is 1000.)`  
 
 `maxfunc` is a procedure which calls a nested macro `macron`; this returns "Backtick return macro" as return value from `maxfunc`.  
@@ -214,13 +214,13 @@ See *26.13_local_procs.jai*:
 #import "Basic";
 
 proc :: () {
-    x := 1;
-    inner_proc();
-    print("x is now %\n", x); // => x is now 42
-
     inner_proc :: () #expand {
         `x = 42;
     }
+
+    x := 1;
+    inner_proc();
+    print("x is now %\n", x); // => x is now 42
 }
 
 main :: () {
@@ -756,7 +756,44 @@ Write a `push` proc add a new value to this struct. Then write a `for_expansion`
 Write a 2nd version that skips values equal to 5.
 (See *for_expansion_fixed_vector.jai*)
 
-## 26.9 The #modify directive
+## 26.9 Iterating over a range with a step
+This is also easily done with a for_expansion macro, as shown in the following example:
+
+See *26.40_step_iterator.jai*:
+```c++
+#import "Basic";
+
+Step_Iterator :: struct {
+    min:  int;
+    max:  int;
+    step: int;
+}
+
+step_iterator :: (min: int, max: int, step: int) -> Step_Iterator {
+    return .{ min, max, step };
+}
+
+for_expansion :: (iterator: Step_Iterator, body: Code, flags: For_Flags) #expand {
+    iteration_count := -1;
+    for i: iterator.min..iterator.max {
+        iteration_count += 1;
+        if iteration_count % iterator.step != 0 continue;
+
+        `it       := i;
+        `it_index := void;
+
+        #insert body;
+    }
+}
+
+main :: () {
+    for step_iterator(0, 10, 2) {
+        print("% - ", it); // => 0 - 2 - 4 - 6 - 8 - 10 - 
+    }
+}
+```
+
+## 26.10 The #modify directive
 The **#modify** directive can be used to insert some code between the header and body of a procedure or struct, to change the values of the polymorph variables, or to reject the polymorph for some types or combination of variables. #modify allows to inspect generic parameter types. It is a block of code that is executed at compile-time each time a call to that procedure is resolved. 
 
 It is executed following these steps:   
