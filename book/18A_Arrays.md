@@ -785,5 +785,5 @@ In line (1) we declare an array of 10 Vec2 structs, a commonly used data-structu
 
 In line (4), another version of `array_add` is used, which allows to add something to a dynamic array and returns a pointer to that item, which must be assigned to a variable. This is most often used for structs, the data of the struct can then be filled in afterwards.
 
-[18B - Ordered remove in Arrays](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/18B_Ordered%20remove%20in%20arrays.md)  
-[18C - Copy a struct with memcpy](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/18C_Copying%20a%20struct%20with%20memcpy.md)    
+[18B - Ordered remove in Arrays](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/18B_Ordered_remove_in_arrays.md)  
+[18C - Copy a struct with memcpy](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/18C_Copying_a_struct_with_memcpy.md)    

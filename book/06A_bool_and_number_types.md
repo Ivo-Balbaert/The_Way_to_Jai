@@ -430,4 +430,4 @@ It contains amongst others:
 * a set of common mathematical objects, such as Vector2, Vector3, Vector4, Quaternion, Matrix2, Matrix3 and Matrix4, Plane, which are all structs  
 
 
-[6B - Times and dates](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/6B_Times_and_dates.md)   
+[6B - Times and dates](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/06B_Times_and_dates.md)   

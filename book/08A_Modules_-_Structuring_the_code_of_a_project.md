@@ -255,4 +255,4 @@ The following message is printed out (at compile-time):
 Verify that the other message appears when you set VERBOSE to false in `8.2_main.jai`.
 
   
-[8B - The #scope directives](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/8B_The_scope_directives.md)
+[8B - The #scope directives](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/08B_The_scope_directives.md)

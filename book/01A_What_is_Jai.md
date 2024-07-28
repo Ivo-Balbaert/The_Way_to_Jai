@@ -30,4 +30,4 @@ Why is Jai ground-breaking? Jai is so important because it is an effort to build
 
 Don’t worry if some concepts are not yet clear! We will experience these characteristics first hand as we grow more and more acquainted with Jai in the coming chapters. 
 
-[1B - What is Jai - more in depth](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/1B_What_is_Jai%20-%20more%20in%20depth.md)   
+[1B - What is Jai - more in depth](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/01B_What_is_Jai_-_more_in_depth.md)   

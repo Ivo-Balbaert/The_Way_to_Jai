@@ -221,4 +221,4 @@ In the next chapter; we're going to compile our first Jai program, and learn som
 
 If you're curious about which other command-line options exist for the compiler, see section 2B.
 
-[2B - Compiler command-line options](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/2B_Compiler_command_line_options.md)  
+[2B - Compiler command-line options](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/02B_Compiler_command_line_options.md)  
