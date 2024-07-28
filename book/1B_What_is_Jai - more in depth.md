@@ -184,7 +184,6 @@ There is a Jai Community wiki at:
 A Discord channel called [SB (Secret Beta)](https://discord.gg/wB52e2ND)
 and a Discord channel for the [Twitch streams](https://discord.com/invite/vVfYxhU).
 
-
 ## 1.8 Jai's popularity
 
 Blow's videos about the design and making of Jai are very popular: They get viewing numbers ranging from a few K to 55 K, even 229 K for the very first video.

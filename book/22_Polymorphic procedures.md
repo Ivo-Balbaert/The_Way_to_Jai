@@ -569,7 +569,7 @@ main :: () {
 The code above presents an example of a polymorphic procedure `map` with several polymorphic types (called T and R): `map :: (array: [] $T, f: (T) -> $R) -> [] R`
 It is also an example of a **higher-order function**, because the 2nd argument of map is itself a proc: `f: (T) -> $R`.  
 The proc `square` in line (2) fulfills that signature. `map` is called in line (3) with `square` as a 2nd parameter. That proc is applied to each element of the array, returning a new array as result. 
-If you prefer the shorter lambda style, see lines (4) andd following. 
+If you prefer the shorter lambda style, see lines (4) and following. 
 
 > `map` constructs and returns a static array.
 > In § 23.2 we'll see another version of map.
