@@ -98,7 +98,7 @@ When, after a thorough test process, you decide that your application is product
 
 Alternatively and advisably (because you can fine-tune the process much more), you can define this in the Jai build-system itself (see § 30.4).
 
-[4B - Options for giving code at the command-line](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/4B_Options%20for%20giving%20code%20at%20the%20command-line.md)    
-[4C -The Preload module](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/4C_The%20Preload%20module.md)    
-[4D - Memory management](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/4D_Memory%20management.md)    
-[4E - What happens when Jai starts up?](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/4E_What%20happens%20when%20Jai%20starts%20up.md)    
+[4B - Options for giving code at the command-line](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/04B_Options_for_giving_code_at_the_command-line.md)    
+[4C -The Preload module](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/04C_The_Preload_module.md)    
+[4D - Memory management](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/04D_Memory_management.md)    
+[4E - What happens when Jai starts up?](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/04E_What_happens_when_Jai_starts_up.md)    

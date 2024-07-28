@@ -512,8 +512,8 @@ The memory of C strings has to be freed, as shown in line (1) with `free`.
 The while loop around line (2) shows how to get the length of a C string by dereferencing and incrementing the pointer. When c_string points to the ending 0 value, its value is evaluated as false and the while loop terminates.
 
 
-[19B - Get command-line arguments](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/19B_Get%20command-line%20arguments.md)  
+[19B - Get command-line arguments](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/19B_Get_command-line_arguments.md)  
 [19C - Get console input](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/19C_Get_console_input.md)   
-[19D - Comparing field names of structs](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/19D_Comparing%20field%20names%20of%20structs.md)  
+[19D - Comparing field names of structs](https://github.com/Ivo-Balbaert/The_Way_to_Jai/blob/main/book/19D_Comparing_field_names_of_structs.md)  
 
 
