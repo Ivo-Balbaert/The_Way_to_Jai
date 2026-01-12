@@ -1,5 +1,5 @@
 # 4D - Memory management
-In Jai, developers have complete control over where and when memory is allocated. Jai does an excellent job of packing values in memory so they are close together, which increases runtime performance.   
+In Jai, developers have complete control over where and when memory is allocated. Jai does an excellent job of _packing_ values in memory so they are close together, which increases runtime performance.   
 Optimal memory use places data **contiguous in memory**, that means memory is assigned in consecutive blocks (having consecutive addresses) that are adjacent to each other.
   
 The compiler knows how much memory each type uses. It also knows the type of each variable. A variable's memory is allocated at type declaration, for example: variable `counter` of type int will allocate 8 bytes. It will occupy one word on a 64 bit machine. 

@@ -46,7 +46,7 @@ This is simply a _procedure_ with name `main`.
 (Jai calls **procedures** what most other languages call **functions**.)
 Not only is the main procedure a starting point, it also envelops the complete program execution from start to end.  
 :: means that `main` is in fact a constant, we'll see what that means later (see § 5.2.2).  
-() is the parameter list, which is empty for main. We also don't see a -> after ) This means main has no return value, unlike C.  
+() is the parameter list, which is empty for main. We also don't see a -> after the ). This means main has no return value, unlike C.  
 Then come the curly braces { } which contain the code to execute line by line.
 
 > An error you might get into in the beginning is writing main () :: {}. You get an Error: ... This does not make sense! ;-)
@@ -102,7 +102,7 @@ The linker then combines all these files and helper libraries in one executable 
 
 Compilation/linking produces a single executable as output: Jai follows the _single compilation unit model_.  
 You can execute this by typing:  `hello_sailor` (or even `3` when the source file is named `3.1_hello_sailor.jai`). On Linux it is `./hello_sailor`
-But as expected, nothing is displayed.
+But as expected with only an empty `main` procedure, nothing is displayed.
 
 ### 3.3.2 Printing output
 
@@ -156,7 +156,7 @@ Now compilation succeeds and an executable is created!
 When we now run the _hello_sailor_ executable as shown above, we see the expected output:  
 _Hello, Sailor from Jai!_
 
-Congratulations: you made your first working Jai program!.
+Congratulations: you made your first working Jai program!
 
 Here is a screenshot where the program is edited, compiled and run from within VSCode:
 
@@ -165,25 +165,26 @@ Here is a screenshot where the program is edited, compiled and run from within V
 
 The phase when the Jai program binary file executes is called **run-time**. 
 Compile-time and run-time are very distinct:
- 1. first you compile a program in a time period which is **compile-time** 
- 2. then you execute or run it, which is during **run-time**.
+ 1. first you compile a program in a time period which is **compile-time** or **build-time**with the command `jai program.jai` (leaving out possible options).
+ 2. then you execute or run the executable with `./program`, which is during **run-time**.
+ NOTE: The `jai` command only compiles the program, it does not execute it.
    
 During compile-time, your code is carefully examined, and if needed a _compiler error_ is shown and the compilation stops without producing an executable. If you get a _warning_ (these are rare), compilation is not stopped. An executable binary is produced only when the compiler and linker can finish without errors.
 
-At run-time, a program can still be stopped (it crashes or panics) when a certain abnormal condition is encountered producing a _run-time error_, such as for example during bounds-checking on arrays or strings (when an index is used that lies outside the size of the array/string) or a divide-by-zero condition.
+At run-time, a program can still stop executing (it crashes or panics) when a certain abnormal condition is encountered producing a _run-time error_, such as for example during bounds-checking on arrays or strings (when an index is used that lies outside the size of the array/string) or a divide-by-zero condition.
 
 Due to its extensive meta-programming capabilities, Jai can even 
-_run a program during compile-time_!
+_run a program during compile-time_! Let's see that in action.
 
 ### 3.3.4 Running code during compile-time
 
-Make a new source file called *3.2_hello_sailor_comptime.jai* and add the following line after (or before) main: `#run main();`, so that we get:
+Make a new source file called for example *3.2_hello_sailor_comptime.jai* and add the following line after (or before) main: `#run main();`, so that we get:
 
 ```c++
 #import "Basic";
 
 main :: () {
-   print("Hello, Sailor from Jai!\n");
+   print("Hello, Sailor from Jai!");
 }
 
 #run main();
@@ -194,14 +195,18 @@ Now compile the program as before and carefully look at the output:
    Hello, Sailor from Jai!
    
    Running linker: ...
+
+   Hello, Sailor from Jai!
 ```
 
 You see the same extensive output starting with _Running linker_ as previously.
-But before the linking starts (Running linker, which is **_during compile-time_** !), you see our printed output.
+But **before** the linking starts (Running linker, which is **_during compile-time_** !), you see our printed output.
 This means `main()` has already been executed at compile-time!
-This is because of the **#run** command. This so-called **directive** tells the compiler to run the procedure called after `#run` during compile-time.
+This is because of the **#run** command. This so-called **directive** tells the compiler to run the procedure called after `#run` during compile-time. All directives start with an `#`. 
+Now you realize that `#import` is also a directive.
 
 In case of `#run main()`, you run the whole program during compile-time (see § 26.2 for more info on `#run`).
+Remark: When running the program in VSCode with the predefined setting as defined in §2.3.3, you see the same output printed a 2nd time. This is because in this command (`jai $fileName -exe a; ./a`) the program is also executed in run-time with `./a`.
 
 _On Linux_ we can use the **#!** mechanism so that we can run the Jai source file as a kind of script at compile-time. Add the following line at the start of *3.2_hello_sailor_comptime.jai*:  
 `#! /path/to/jai/bin/jai`  
@@ -215,7 +220,7 @@ This displays:
 **Hello, sailor from Jai!**
 Running linker: /home/ivo/jai//bin/lld-linux ...  
 ...  
-This is just a nice trick, and by no means a commonly used way of doing things.
+This is just a nice trick, and not a common used way of doing things.
 
 > Jai uses a lot of directives and we'll discuss them in several coming chapters. You could consider them as special instructions for the compiler. They all start with the **#** character.
 
@@ -245,14 +250,14 @@ Error: Semicolon expected after expression.
 ```
 This is very clear: it gives you the line (4) on which the error occurred, and even the exact column (37)!  
 You'll find that Jai has strong compiler checks and helpful error messages following the motto: _better resolve errors at compile-time than having to deal with bugs at run-time_.  
-Also the Jai compiler stops at the first error it encounters and only reports that, and no executable is generated. This means that after correcting the error, the next  compilation might flag new error(s)! You must continue correcting them until the compilation succeeds.
+Also the Jai compiler stops at the first error it encounters and only reports that, and no executable is generated. This means that after correcting the error, the next  compilation might flag new error(s)! You must continue correcting them until compilation succeeds.
 
-Sometimes the compiler signals a _Warning_ instead of an _Error_; a warning means that something strange is detected in the code, but the executable is generated.
+Sometimes the compiler signals a _Warning_ instead of an _Error_; a warning means that something strange is detected in the code, but the executable is nonetheless generated.
 
 ### 3.3.7 Exiting a program
 Normally a Jai program will stop after execution of the last statement in `main()`.
 In exceptional circumstances, a program can encounter a run-time error and crash, which means that the OS has terminated the program. 
-Jai also provides the `exit` procedure to stop the program at any condition it encounters or reaches, see for example the following program (see 3.3_exit.jai):
+Jai also provides the `exit` procedure to stop the program. This can be used always, but more specifically when an abnormal condition is encountered, see for example the following program (see 3.3_exit.jai):
 
 ```c++
 #import "Basic";
@@ -263,7 +268,7 @@ main :: () {
   print("After exiting\n"); // <= this will never print!
 }
 ```
-Statements coming after `exit` will never be executed.
+Code written after `exit` will never be executed.
 `exit` must pass an integer to the OS, so that a script which invoked our Jai program could act upon the returned value.  
 Typical is:  
    0: everything is OK  
@@ -271,11 +276,12 @@ Typical is:
 
 *Exercises:*   
 Experiment to understand the error messages.
-
 1- Leave out the closing } of main  
 2- Leave out the () parameter list in main  
 3- Try changing the order of the #import, main procedure and #run statement.    
+
 You'll notice that the order in which definitions and procedures appear in a Jai source file doesn’t matter: `#import` can come as last, `main :: () { }` as first or last or somewhere in between, and so on. This is because the compiler does several passes (see § 4.1).  
 *TIP*: In general it is useful to find `main` quickly, so by convention `main` is usually placed at the end (bottom) of the source file.  
+
 4- Write a Jai program that prints "One" and  "Two!" on consecutive lines, and then "Three!" on the same line (See *mini.jai*).  
 5- Investigate whether the compiler really needs source files to have the extension .jai (See *mini.txt_).

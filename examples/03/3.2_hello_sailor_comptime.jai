@@ -1,3 +1,6 @@
+// The following can be commented out to execute the program as a script at compile-time in Linux
+// #! $HOME/jai/bin/jai  // <= not needed on Windows!
+
 #import "Basic";
 
 main :: () {
@@ -5,3 +8,10 @@ main :: () {
 }
 
 #run main();
+
+/*
+Hello, Sailor from Jai!
+...
+Running linker
+...
+*/

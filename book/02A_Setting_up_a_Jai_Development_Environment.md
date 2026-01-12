@@ -2,16 +2,16 @@
 
 ## 2.1 Opening up the Jai compiler toolkit
 
-Until this moment Jai is still closed beta (Jan 2023).
-The group members can download the compiler as a 'vanilla' zip file (size +- 220 Mb).
+Until this moment Jai is still closed beta (Jan 2029).
+The group members can download the compiler as a 'vanilla' zip file (size +- 447 Mb).
 Unzipping this file shows the following contents:
 
 ![Jai folder structure](https://github.com/Ivo-Balbaert/The_Way_to_Jai/tree/main/images/jai_folder.png)
 
 Here is what these folders contain:
 
-- _bin_: this contains the Jai compiler executables (jai.exe for Windows, jai-linux for Linux, jai-macos for MacOs, see $ 4.1-4.4) and the LLVM linker lld (see section § 4.5).
-- *how_to*: this contains some examples with explanatory comments.
+- _bin_: this folder contains the Jai compiler executables (jai.exe for Windows, jai-linux for Linux, jai-macos for MacOs, see $ 4.1-4.4) and the LLVM linker lld (see section § 4.5).
+- *how_to*: this section contains some examples with explanatory comments.
 - _examples_: this contains some more advanced example programs.
 - _modules_: this contains Jai’s standard library, we'll discuss this in the rest of the book, in particular in § 6B, 19, 27, 31-34.  
 We'll discuss the purpose of _editor_support_  (see § 20.5 for natvis) and _redist_ later (see 2.2.4).
@@ -40,7 +40,7 @@ Now copy the _jai_ subfolder in its entirety to its destination (let's call this
 Now open a terminal in your Jai root folder, and type the command:  
     - On Windows: `jai -version`
     - On Linux/MacOs (or WSL2 in Windows): `./jai -version`
-it will show the following output (for your actual version):
+it will show something like the following output (for your actual version):
 
 _Version: beta 0.1.036, built on 17 August 2022._
 
@@ -50,14 +50,14 @@ But of course you'll want to be able to use Jai from any directory, let's see ho
 
 To achieve this, do the following:
 
-    - On Windows: add the path to where jai.exe lives (for example c:\jai\bin) to the PATH system 
-    environment variable; here is how to do that:
-        • open Explorer, right-click This PC, Properties, then the System settings window appears
+    - On Windows: add the path to where jai.exe lives (for example c:\jai\bin) to the PATH system environment variable; here is how to do that:
+        • open Explorer, right-click This PC, Properties, then the System About window appears
         • click Advanced system settings, then button Environment variables
-        • choose System Variables, Path, click button New, add c:\jai
+        • choose System Variables, Path, click button New, add c:\jai\bin
         • click OK on all open windows 
 
-    - On Linux/MacOs (or WSL2 in Windows): make a symbolic link like ln -s /path/to/jai/bin/jai /usr/bin/jai
+    - On Linux/MacOs (or WSL2 in Windows): make a symbolic link like 
+         ln -s /path/to/jai/bin/jai /usr/bin/jai
         (for example: ln -s $HOME/jai/bin/jai /usr/bin/jai)
 
         Or add this line to your /etc/profile or $HOME/.profile:
@@ -136,7 +136,10 @@ WSL on Windows with Ubuntu doesn't have this problem on a 64 bit machine.
 Make sure that the Jai compiler is inside the WSL file system. If it is not, compiling can be 10x slower! 
 
 ## 2.3 Editor help for coding Jai
-Writing a program's source code is easier when you have some support such as syntax highlighting in your code editor. Support exists for vim, Sublime Text 3 and VSCode, see: [Tooling Ecosystem](https://github.com/Jai-Community/Jai-Community-Library/wiki/References#tooling-ecosystem). 
+Writing a program's source code is easier when you have some support such as syntax highlighting in your code editor. Support exists for vim, emacs, Sublime Text 3, Notepad++, Kakoune and VSCode. Also an editor written entirely in Jai exists, called Focus.
+ see: [Tooling Ecosystem](https://github.com/Jai-Community/Jai-Community-Library/wiki/References#tooling-ecosystem). 
+
+Remark: in Windows we'll always use a Terminal window, which integrates the latest Powershell commands. 
 
 ### 2.3.1 Overview of different editors
 
@@ -167,23 +170,27 @@ Also, add the Jai folder to your project via Menu / Projects/ Add Jai folder to 
 Here is the source code of this plugin: [RobinWragg/JaiTools](https://github.com/RobinWragg/JaiTools). It provides syntax highlighting, autocompletion, and Goto Symbol/Anything for the Jai language. 
 
 5) **Visual Studio Code**: (see § 2.2.2)
-Iain King: [The Language - Visual Studio Marketplace - v0.0.85](https://marketplace.visualstudio.com/items?itemName=onelivesleft.the-language) – 
+Iain King: [The Language - Visual Studio Marketplace - v0.0.86](https://marketplace.visualstudio.com/items?itemName=onelivesleft.the-language) – 
 
-6) **Language server**:	[Pyromuffin/jai-lsp](https://github.com/Pyromuffin/jai-lsp) or [Sl3dge78/jai-lsp](https://github.com/Sl3dge78/jai_lsp)
 
-Works with Vim, Emacs, VSCode, and should work with other editors that implement an lsp client.
+6) **Language server**:	
+[Pyromuffin/jai-lsp](https://github.com/Pyromuffin/jai-lsp) or 
+[Sl3dge78/jai-lsp](https://github.com/Sl3dge78/jai_lsp) or
+[Jai LSP by Patrik Smělý](https://github.com/SogoCZE/Jails)
+
+Works with Vim, Emacs, VSCode, and should work with other editors that implement an lsp client. 
 The jai_lsp version works together with [this](https://github.com/Sl3dge78/jai-lsp-vscode) VS Code extension, which has to be installed with the .vsix file.
 Both GitHub folders contain instructions for setting up the client and the server.  
-(I haven't been able to get the jai_lsp to work on Windows (11); it probably needs an update and testing.)
 
-An old plugin for Visual Studio exists
+An old plugin for Visual Studio exists:
 7) **Visual Studio**: [Jai Revolution](https://inductive.no/jai/jai-revolution/) 
    plugin for Visual Studio 2013 / 2015 from Inductive AS, published 2015
-	Syntax highlighting (cannot be installed in VS 2017).
-Hopefully a new version will come when Jai is released.
-
+	Syntax highlighting. 
+  It cannot be installed in VS 2017. Hopefully a new version will come when Jai is released.
 
 At this time I recommend the VSCode plugin, because it probably has the most functionality. The Sublime-Text plugin is also nice.
+
+
 ### 2.3.2  Using the Visual Studio Code plugin
 
 Visual Studio Code (VSCode) is one of the most popular programmer’s editors today and can be installed from: [VSCode](https://code.visualstudio.com/), it offers lots of basic functionality (code folding, brace pairing, numbering lines, and so on) and a myriad number of extensions.
@@ -191,7 +198,7 @@ There is a VS Code plugin for Jai named _The Language_, which provides basic IDE
 
 VSCode is very helpful for editing you source code. Compiling is usually done from the command-line (cmd on Windows or a terminal in Linux/MacOS), but you can do it also from within VSCode by opening up a New Terminal.
 
-> Hint: Whenever you want to search for a procedure (say for example parse_int) in the Jai modules, open VS-code in that folder, select Edit / Find in Files (or the equivalent in your code editor) and fill in `parse_int ::` in the search field. This will only find the definition of parse_int, not all the cases where it is called. In a Linux/MacOS terminal you can also use `grep -rn 'parse_int ::'`.
+> Hint: Whenever you want to search for a procedure (say for example parse_int) in the Jai _modules_, open VSCode in that _modules_ folder, select Edit / Find in Files (or the equivalent in your code editor) and fill in `parse_int ::` in the search field. This will only find the definition of parse_int, not all the cases where it is called. In a Linux/MacOS terminal you can also use `grep -rn 'parse_int ::'`.
 
 ### 2.3.3 How to edit, build and run a Jai program in VS-Code through CodeRunner
 
@@ -201,20 +208,21 @@ Then in File, Preferences, Settings:
     If necessary, set the Path to Jai executable.
     Search for:  Run code configuration:
 		Custom command:  
-        `jai $fileName -exe a.exe & a`
+      in Terminal:  `jai $fileName -exe a; ./a`
 	
 This is the same as editing in settings.json:
-		 `"code-runner.executorMap": { "jai": "jai $fileName -exe a.exe && a",` 
-			...
+		 `"code-runner.executorMap": { "jai": "jai $fileName -exe a; ./a",` 
 	
+Make sure you check in Preferences, Settings:  Code-runner: Run in Terminal
 Now you can RIGHT-click on the code window and select the 1st command: `Run Code`, and it will execute this command, which will compile and then run the generated executable a.exe.
+Alternatively, you can use the key combination CTRL+ALT+N.
 We'll show an image of this in chapter 3.
 
 ### 2.4 The compiler command
 
-Now open up a terminal and type `jai` and ENTER. You get the following message:
+Now open up a Terminal and type `jai` and ENTER. You get the following message:
 
-_You need to provide an argument telling the compiler what to compile!  Sorry._
+_You need to provide an argument telling the compiler what to compile!  Sorry. Pass -help for help._
 
 `jai` is a compiler, so it needs at a minimum the path to some source code (file) to compile! 
 In the next chapter; we're going to compile our first Jai program, and learn some more about the compiler.
