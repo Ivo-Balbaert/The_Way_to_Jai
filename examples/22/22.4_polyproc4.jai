@@ -1,9 +1,9 @@
 #import "Basic";
 
 my_swap :: (a: *$T, b: *T) {  // (1)
-    tmp := <<a;   
-    <<a = <<b;
-    <<b = tmp;
+    tmp := a.*;   
+    a.* = b.*;
+    b.* = tmp;
 }
 
 main :: () {
@@ -17,13 +17,9 @@ main :: () {
     my_swap(*a2, *b2);  // (3)
     print("Post-swap: a2 is %, b2 is %\n", a2, b2);
 
-    // using the swapping procedures from Basic:
-    n, m := 2, 3;
-    Swap(*n, *m);       // (4)
-    print("n is % and m is %\n", n, m); 
-
+    // using the swapping procedure from module Basic:
     n2 := 2; m2 := 3;
-    n2, m2 = swap(n2, m2);  // (5)
+    swap(*n2, *m2);  // (5)
     print("n2 is % and m2 is %\n", n2, m2);   
 }
 

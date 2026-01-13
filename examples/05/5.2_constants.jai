@@ -17,5 +17,6 @@ main :: () {
 
     print("%\n", type_of(MASS_EARTH));     // (5) => float32
     print("%\n", is_constant(MASS_EARTH)); // (6) => true
-    print("%\n", is_constant("Hello"));  // => true
+    print("%\n", is_constant(COMP_CALC));  // (7) => true
+    print("%\n", is_constant("Hello"));    // => true
 }

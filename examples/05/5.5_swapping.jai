@@ -10,12 +10,9 @@ main :: () {
   // this gives an error:
   // s, p = p, s; // => Error: Type mismatch. Type wanted: string; type given: s64.  
 
-  // There are swapping procedures in Basic:
-    Swap(*n, *m);
-    print("n is % and m is %\n", n, m); // => n is 2 and m is 3
-
+  // There is a swapping procedure in module Basic:
     n2 := 2; m2 := 3;
-    n2, m2 = swap(n2, m2);
+    swap(*n2, *m2);
     print("n2 is % and m2 is %\n", n2, m2); // => n2 is 3 and m2 is 2       
 }
 

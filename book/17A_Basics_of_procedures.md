@@ -574,7 +574,7 @@ main :: () {
 ```
 
 Swapping two values through a procedure means returning the values in reverse order. A version for ints is shown in line (1), a version for Any type in line (2).
-In § 22.2.3 we'll discuss two built-in polymorphic versions of swap.
+In § 22.2.3 we'll discuss a built-in polymorphic version of swap.
 
 ## 17.11 A println procedure
 See *17.10_println.jai*:

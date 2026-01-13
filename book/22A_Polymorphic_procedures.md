@@ -262,26 +262,15 @@ This example shows in line (1) a procedure my_swap which takes two pointers each
 `my_swap :: (a: *$T, b: *T)`  
 At the call in line (2), a version of the proc is compiled for T == *int, at line (3), a version of the proc is compiled for T == *string.
 
-A swap is a common thing, that's why module _Basic_ has two versions of it, both polymorphic:  
-(1)  This version called Swap is identical to our my_swap; it is called in line (4):
+A swap is a common thing, that's why module _Basic_ has a polymorphic version of it:  
 ```
-Swap :: (a: *$T, b: *T) {   
-    tmp := << a;
-    << a = << b;
-    << b = tmp;
+swap :: inline (a: *$T, b: *T) {
+    // This is for when only want to mention each expression once instead of twice, because the names are long...
+    a.*, b.* = b.*, a.*;
 }
 ```
-It uses pointers and << to a temporary value tmp; it is called in line (5).
-
-(2)  A version called swap:
-```
-swap :: inline (a: $T, b: T) -> T #must, T #must {
-    return b, a;
-}
-```
-It uses a multiple return to swap the values, so it is called like  
-`n2, m2 = swap(n2, m2);`.  
-The `#must` after the return type T ensures that you use this form. Moreover, this is an inlined procedure for performance.
+It is called like: `swap(*n2, *m2);`.  
+This is an inlined procedure for performance.
 
 **Exercise**  
 1) Given these two procs:  
