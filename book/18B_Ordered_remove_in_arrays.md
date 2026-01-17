@@ -5,7 +5,7 @@ Solution: use the _array_ordered_remove_by_index_ proc
 
 See *18B_ordered_remove.jai*:
 
-```c++
+```jai
 #import "Basic";
 
 main :: () {

@@ -8,7 +8,7 @@ The following example shows that this can also be done for the size of the array
 `x: [$N] $T`
 
 See *23.1_array_polymorph.jai*:
-```c++
+```jai
 #import "Basic";
 
 describe_array :: (x: [$N] $T) {                // (1)
@@ -28,7 +28,7 @@ We can use this to generalize our earlier map example 22.7_map.jai:
 `map :: (array_a: [$N] $T, f: (T)-> T ) -> [N] T`
 
 See *23.2_map2.jai*:
-```c++
+```jai
 #import "Basic";
 
 map :: (array_a: [$N] $T, f: (T)-> T ) -> [N] T {
@@ -53,7 +53,7 @@ This way we get the size passed as a generic parameter. If the applied lambda do
 We can also use generic parameters to pass to a struct. Here is an example where we use polymorphism to define an array as a struct field, passing the item type T and the number of items N:  
 
 See *23.10_poly_structs1.jai*:
-```c++
+```jai
 #import "Basic";
 
 Vec :: struct($T: Type, $N: s64) {   // (1)
@@ -74,7 +74,7 @@ The struct is defined in line (1). When making a polymorph struct type Vec3 in l
 In the following example we use polymorphism to define a 2D array as a struct field:
 
 See *23.3_poly_structs2.jai*:
-```c++
+```jai
 import "Basic";
 
 TwoD :: struct (M: int, N: int) {           // (1)
@@ -99,7 +99,7 @@ The polymorph arguments M and N have to be compile-time constants. They can have
 
 Here is how we can write the double linked list from § 12.6.2 more generally:
 
-```c++
+```jai
 LinkedList :: struct (T: Type) {  
     first: *Node(T); 
     last:  *Node(T);
@@ -118,7 +118,7 @@ T is a generic type, it can be any type given when a struct instance is made, fo
 In the following struct definition (see line (1)):
 
 See *23.4_restrict_type.jai*:
-```c++
+```jai
 #import "Basic";
 
 PolyStruct :: struct(T: Type) {     // (1)
@@ -155,7 +155,7 @@ It can simply incorporate a PolyStruct via e.g. `using ps: PolyStruct;` This ena
 
 Example:   
 Given the following polymorphic struct:
-```c++
+```jai
 Hash_Table :: struct (K: Type, V: Type, N: int) {
   keys: [N] K;
   values: [N] V;
@@ -163,7 +163,7 @@ Hash_Table :: struct (K: Type, V: Type, N: int) {
 ```
 
 all of the following procedure declarations are correct:
-```c++
+```jai
 proc1 :: (table: Hash_Table($K, $V, $N), key: K, value: V) { } 
 proc2 :: (table: $T/Hash_Table, key: T.K, value: T.V) { }
 proc3 :: (table: $T, key: T.K, value: T.V) { }
@@ -179,7 +179,7 @@ This allows you to do duck typing.
 
 See *23.6_interface.jai*:
 (Example from how_to/160_type_restrictions)
-```c++
+```jai
 #import "Basic";
 
 Color :: enum u8 { RED; YELLOW; GREEN; ORANGE; MAUVE; };  
@@ -229,7 +229,7 @@ See also the use of a polymorphic struct when constructing an SOA data design in
 We already discussed #this in § 17.9. In § 22.5 we talked about #bake_arguments, where you can bake in the value of a parameter at compile time. There is also a **#bake_constants** directive, where you can bake in a polymorphic type with a concrete type. In other words: a polymorphic procedure is precompiled for a specific type.  
 
 See *23.7_bake_constants.jai*:
-```c++
+```jai
 #import "Basic";
 #import "Math";
 
@@ -288,7 +288,7 @@ In example 3 in lines (9-10), we bake in multiple types as named arguments, and 
 (Example taken from how_to_/050_this)
 
 See *23.5_bake_constants_struct.jai*:
-```c++
+```jai
 #import "Basic";
 
 printer :: (x: $T) {                // (1)
@@ -328,7 +328,7 @@ Most higher-level languages have a concept of interface (also called trait) whic
 We can do something similar in Jai with the polymorphic concepts we have learned so far:
 
 See *23.8_impl_interface.jai*:
-```c++
+```jai
 #import "Basic";
 
 SomeTrait :: struct(                                   // (1)
@@ -392,7 +392,7 @@ Much more complete implementations of traits in Jai have already been made, but 
 The `Broadcaster` is a typical design pattern and allows to send `Events` to it's subscribers by in turn calling their callbacks.
 
 See *23.9_broadcaster.jai*:
-```c++
+```jai
 // The Broadcaster is a typical design pattern and allows to send Events 
 // to it's subscribers by in turn calling their callbacks
 #import "Basic";

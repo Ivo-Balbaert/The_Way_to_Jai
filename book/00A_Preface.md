@@ -27,12 +27,12 @@ Keep the examples close by when you are going through the text, to see the entir
 
 Here are some conventions we'll use in the text:
 
-```c++
+```jai
 Code will be shown in a grey background.
 ```
 
 like this:
-```c++
+```jai
 #import "Basic";
 
 main :: () {

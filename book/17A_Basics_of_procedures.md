@@ -9,7 +9,7 @@ A block of code that is called several times is a good candidate to be wrapped u
 
 See *17.1_proc_definitions.jai*:
 
-```c++
+```jai
 #import "Basic";
 
 square :: (x: float) -> float { return x * x; };          // (1)
@@ -55,7 +55,7 @@ But a proc call causes a change in the execution flow, so it's inherently slower
 
 We see that the declaration of a procedure looks like this:
 
-```c++
+```jai
 proc_name :: (arg1: type1, arg2: type2) -> return_type {
     // proc body code
     return …;
@@ -107,7 +107,7 @@ Procedures defined at the same top-level as main are called global procs. They c
 
 See *17.2_local_procs.jai*:
 
-```c++
+```jai
 #import "Basic";
 
 main :: () {
@@ -166,7 +166,7 @@ Using local procs for things like helper functions promotes code hygiene: there 
 ## 17.3 Difference between passing a copy and passing a pointer
 See *17.3_passing.jai*:
 
-```c++
+```jai
 #import "Basic";
 
 passing_copy :: (m: int) {
@@ -211,7 +211,7 @@ To ensure you get a pointer for some reason (for example to modify the contents 
 ## 17.4 Default values for arguments
 See *17.4_default_args.jai*:
 
-```c++
+```jai
 #import "Basic";
 
 proc1 :: (a: int = 0) { // (1)
@@ -267,7 +267,7 @@ Then test the program out to see if you were right.
 ## 17.6 Multiple return values and #must  
 See *17.5_multiple_return.jai*:
 
-```c++
+```jai
 #import "Basic";
 
 proc1 :: () -> int, int {   // (1)
@@ -355,7 +355,7 @@ As an example of a procedure with named arguments, default values and multiple r
 
  Here is an example code snippet for how this proc can be used:
 
- ```c++
+ ```jai
 file, success :=  file_open("temp_dir/file1.txt",  for_writing=true, keep_existing_content=true);
 if !success {      // (1)
     print("Could not open file temp_dir/file1.txt for writing.\n");
@@ -377,7 +377,7 @@ Procedures are said to _overload_ each other when they have the same name, but d
 
 See *17.6_overloading.jai*:
 
-```c++
+```jai
 #import "Basic";
 
 proc1 :: (n: u8) -> u8 {
@@ -437,7 +437,7 @@ You've probably spotted the problem: nearly every procedure will have possibly (
 ## 17.8 Inlining procs
 See *17.7_inlining.jai*:
 
-```c++
+```jai
 test_local :: (x: int) { /*... */}
 test_local_inline :: inline (x:int) { /*...*/ }
 
@@ -470,7 +470,7 @@ In *inlining_ex.jai*, at each of the lines (1) - (7), decide whether the call to
 ## 17.9 Recursive procs and #this
 See *17.8_recursive.jai*:
 
-```c++
+```jai
 # import "Basic";
 
 factorial :: (n: int) -> int {
@@ -547,14 +547,14 @@ The #this in line (4) points to the address of `main`. Lines (5) and (6) show th
 ### 17.9.2 Recursive structs and #this
 #this can also be used to declare recursive structs, see *17.16_recursive_this.jai*:
 
-```c++
+```jai
 
 ```
 The highly-recursive struct Self_Referential from (1) can be rewritten as in (2) with #this. At the start, both pointers are null, see (3). When we point both fields to itself, we see in (4) that they have the same address.
 ## 17.10 Swapping values
 See *17.9_swap.jai*:
 
-```c++
+```jai
 #import "Basic";
 
 swap :: (x: int, y: int) -> (int, int) {    // (1)
@@ -579,7 +579,7 @@ In § 22.2.3 we'll discuss a built-in polymorphic version of swap.
 ## 17.11 A println procedure
 See *17.10_println.jai*:
 
-```c++
+```jai
 #import "Basic";
 
 main :: () {
@@ -614,7 +614,7 @@ The code shows two overloaded versions. Both have the keyword **inline**, to avo
 ## 17.12 Autocasting a parameter with xx
 See *17.11_autocast.jai*:
 
-```c++
+```jai
 #import "Basic";
 
 test_xx :: (f: float) {
@@ -643,7 +643,7 @@ Just like with any other types, we can pass struct variables or pointers to them
 ## 17.13.1 Using the namespace of a struct in procedures
 See *17.11_using_structs_procs.jai*:
 
-```c++
+```jai
 #import "Basic";
 
 Vector2 :: struct {
@@ -692,7 +692,7 @@ In the code above we have 4 versions of a `print_position_` proc, which take an 
 ## 17.13.2 The #as directive in proc arguments
 See *17.13_using_as_structs.jai*:
 
-```c++
+```jai
 #import "Basic";
 
 A :: struct {
@@ -728,7 +728,7 @@ Line (2) shows how an instance of B can pass seamlessly for an instance of A. In
 You cannot change struct arguments to a procedure. This is shown in line (2) in the following example:
 
 See *17.19_parameter_reference.jai*:
-```c++
+```jai
 #import "Basic";
 #import "Math";
 
@@ -763,7 +763,7 @@ As we did in § 16 with structs and enums, we can also get reflection info on a 
 
 See *17.14_reflection_procedure.jai*:
 
-```c++
+```jai
 #import "Basic";
 
 add :: (x: int, y: int) -> int {
@@ -792,7 +792,7 @@ The complete output shows the signature of the `add` procedure, obtained by refl
 ## 17.14.2 The #procedure_name directive
 This directive returns the statically-known at-compile-time name of a procedure, See *17.15_procedure_name.jai*:
 
-```c++
+```jai
 #import "Basic";
 
 add :: (x: int, y: int) -> int {
@@ -811,7 +811,7 @@ You can mark a function as deprecated with the **#deprecated** directive. Callin
 You can add string messages after deprecated procedures as warnings to tell someone to use a different procedure or different set of instructions to accomplish what you want.
 
 See *17.18_deprecated.jai*:
-```c++
+```jai
 #import "Basic";
 
 old_function :: () #deprecated "please use new_function :: () instead" {}
@@ -833,7 +833,7 @@ Look, this is an older version of this function, and in a short time this functi
 All procedures that we have encountered until now had a name, they were named procs. But in certain cases it can be useful to work with unnamed procs, so-called **anonymous functions** or **lambdas**. 
 
 See *17.17_anonymous_procs.jai*:
-```c++
+```jai
 #import "Basic";
 
 main :: () {

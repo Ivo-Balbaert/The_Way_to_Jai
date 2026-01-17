@@ -11,7 +11,7 @@ In this chapter we'll see which data-structures from built-in modules are used f
 ## 16.1 Definition of Any, .type and .type.type
 We encountered the Any type in § 9.5, it is defined as follows (see module _Preload_):   
 
-```c++
+```jai
 Any_Struct :: struct {  
     type: *Type_Info;
     value_pointer: *void;
@@ -27,7 +27,7 @@ Any is a type-safe version of a void pointer.
 Here are some ways to extract info of an Any variable:  
 
 See *16.1_Any_type.jai*:
-```c++
+```jai
 #import "Basic";
 
 main :: () {
@@ -65,7 +65,7 @@ But what is this Type_Info ?
 `Type_Info` contains metadata for all types that appear in your program, not just for Any! It can be casted to more specific structs for additional info.
 This is its definition:
 
-```c++
+```jai
 Type_Info :: struct {
     type:           Type_Info_Tag; 
     runtime_size:   s64;
@@ -76,7 +76,7 @@ The `type` field is of type `Type_Info_Tag`, the 2nd field is the size in bytes.
 
 `Type_Info_Tag` itself is an enum, basically an enumeration of all supported type categories:
 
-```c++
+```jai
 Type_Info_Tag :: enum u32 {
     INTEGER              :: 0;
     FLOAT                :: 1;
@@ -101,7 +101,7 @@ Type_Info_Tag :: enum u32 {
 It literally enumerates all types than can occur in Jai.  
 For nearly every type, there is a struct which comprises a Type_Info struct, as well as some other useful info for that specific type, like if it is signed or not for an integer. Here is an example:
 
-```c++
+```jai
 Type_Info_Integer :: struct {
     using #as info: Type_Info;
     signed: bool;
@@ -111,7 +111,7 @@ Type_Info_Integer :: struct {
 ## 16.3 The type_info() proc
 
 See *16.2_type_info_proc.jai*:
-```c++
+```jai
 #import "Basic";
 #import "Math";
 
@@ -177,7 +177,7 @@ A field `enum_type_flags` in Type_Info_Enum can give you more info on the enum, 
 
 See *16.3_enum_specified.jai*:
 
-```c++
+```jai
 #import "Basic";
 #import "Math";
 
@@ -213,7 +213,7 @@ This in fact checks whether a struct is a subclass of another struct.
 In § 12.8 we introduced the `using #as` clause, which allows to define a struct as a subclass of another struct, so in program _12.6_#using_as.jai_ Employee was a subclass of Person.
 
 See *16.4_check_#as.jai*:
-```c++
+```jai
 #import "Basic";
 #import "Math";
 
@@ -258,7 +258,7 @@ The former code shows how we can do this ourselves, but this has proven to be so
 
 See *16.5_is_subclass_of*:
 
-```c++
+```jai
 #import "Basic";
 #import "Compiler";
 

@@ -11,7 +11,7 @@ We want a procedure `convert` to convert a given argument to a bool.
 Our first solution is overloading procedures: 
 
 See *22.1A_manyproc.jai*:
-```c++
+```jai
 #import "Basic";
 
 convert :: (arg: s32) {
@@ -64,7 +64,7 @@ Wouldn't it be nice if we could reduce this to just one version?
 Jai's polymorphic procedures allow you to do just that:  
 
 See *22.1B_polyproc.jai*:
-```c++
+```jai
 #import "Basic";
 
 convert :: (arg: $T) {
@@ -123,7 +123,7 @@ The function produced by a polymorphic call is just as low-level as a non-polymo
 ## 22.2 Some other examples
 ### 22.2.1 T used more than once, and also used as a return type
 See *22.2_polyproc2.jai*:
-```c++
+```jai
 #import "Basic";
 
 add :: (p: $T, q: T) -> T {     // (1)
@@ -183,7 +183,7 @@ Another way to show what procedure would be called in a particular case is to us
 
 ### 22.2.2 T as the type of an array's items
 See *22.3_polyproc3.jai*:
-```c++
+```jai
 #import "Basic";
 
 arr_sum :: (a: [] $T) -> T {   // (1)
@@ -218,7 +218,7 @@ At the call in line (2), a version of the proc is compiled for T == int, at line
 
 ### 22.2.3 Example with pointers: Swapping
 See *22.4_polyproc4.jai*:
-```c++
+```jai
 #import "Basic";
 
 my_swap :: (a: *$T, b: *T) {  // (1)
@@ -274,13 +274,13 @@ This is an inlined procedure for performance.
 
 **Exercise**  
 1) Given these two procs:  
-```c++
+```jai
 array_add1 :: (arr: [..]$T, value: T)  {}
 array_add2 :: (arr: [..]T, value: $T)  {}
 ```
 and this variable:  `nums: [..] int;`
 predict what the following calls will display:  
-```c++
+```jai
 array_add1(nums, "not an int");
 array_add2(nums, "not an int"); 
 ```
@@ -290,7 +290,7 @@ array_add2(nums, "not an int");
 
 ### 22.2.4 Example with structs
 See *22.9_polyproc5.jai*:
-```c++
+```jai
 #import "Basic";
 
 Ice_Cream_Info :: struct {
@@ -339,7 +339,7 @@ The following two sections are not specifically about polymorphism, but they do 
 
 ## 22.3 The lambda notation =>
 See *22.5_lambdas.jai*:
-```c++
+```jai
 #import "Basic";
 
 add100 :: (a: []int, proc: (int) -> int) -> []int {  // (1)
@@ -382,7 +382,7 @@ A procedure is also a type (see § 17.1.2), and therefore also a value (see § 9
 
 ## 22.4 A procedure as argument of another proc
 See *22.8_proc_argument.jai*:
-```c++
+```jai
 #import "Basic";
 #import "Math";
 
@@ -415,7 +415,7 @@ It is a higher-order function that takes as 1st argument another procedure with 
 
 The procedure passed as argument can also be polymorphic,  
 See *22.11_polyproc_argument.jai*:
-```c++
+```jai
 #import "Basic";
 
 apply_int :: (f: (x: int) -> int, x: int, count: int) -> int {
@@ -437,7 +437,7 @@ main :: () {
 
 ## 22.5 A recursive lambda as argument of a polymorphic proc
 See *22.10_poly_lambda.jai*:
-```c++
+```jai
 #import "Basic";
 
 main :: () {
@@ -465,7 +465,7 @@ Is is then called in line (2) with 5 and a lambda `x => { ... #this(x-1); }` tha
 The directive **#bake_arguments** lets us specify value(s) for argument(s) of a procedure, but possibly leaving some arguments unspecified. The result is a precompiled proc with specific (fewer) parameter values. Let's see an example:
 
 See *22.6_baked_args.jai*:
-```c++
+```jai
 #import "Basic";
 
 add :: (a, b) => a + b;                 // (1)
@@ -522,7 +522,7 @@ This is different from default values (see § 17.4), because a proc made with #b
 Using polymorphic arguments, we can construct functional-programming like map functions, that take for example an array and a function as arguments.
 
 See *22.7_map.jai*:
-```c++
+```jai
 #import "Basic";
 
 map :: (array: [] $T, f: (T) -> $R) -> [] R {   // (1)
@@ -567,7 +567,7 @@ If you prefer the shorter lambda style, see lines (4) and following.
 Here is a procedure for making an empty dynamic array with a given item type, memory allocator and capacity:  
 
 See *22.12_make_dynamic_array.jai*:
-```c++
+```jai
 #import "Basic";
 
 make_dynamic_array :: ($T: Type, allocator: Allocator, capacity := 8) -> [..]T {

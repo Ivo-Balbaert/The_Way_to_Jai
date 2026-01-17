@@ -91,7 +91,7 @@ Jai has no explicit character type. The **#char** directive on a single characte
 ### 5.1.3 Using print to display a value
 See *5.1_literals.jai*:
 
-```c++
+```jai
 #import "Basic";
 
 main :: () {
@@ -126,7 +126,7 @@ If you use the print procedure with only 1 parameter, then this parameter must b
 
 The error text shows that the 1st argument needs to be a string, or that it is meant to be a format string, so that you can specify what you want to print.
 
-```c++
+```jai
  	print ("I greet you: %\n", "Hello, Sailor!");  // => I greet you: Hello, Sailor!
 ```
 
@@ -148,7 +148,7 @@ Do this in only one place, and then use that name in all places in code where th
 
 Here is an example program: See *5.2_constants.jai*
 
-```c++
+```jai
 #import "Basic";
 
 // global scope:
@@ -203,7 +203,7 @@ The names start with a lowercase letter, and multiple parts of a name are connec
 ### 5.3.1 - How to declare variables
 See *5.3_variable_declarations.jai*:
 
-```c++
+```jai
 #import "Basic";
 
 global_var := 108;  // (1)
@@ -335,7 +335,7 @@ This shows that Jai is a **strongly typed** language.
 ## 5.5 - Multiple assignment
 See *5.4_variable_declarations2.jai*:
 
-```c++
+```jai
 #import "Basic";
 
 main :: () {
@@ -396,7 +396,7 @@ In line (5), d is declared, a and c are modified.
 ## 5.6 - Swapping values
 See *5.5_swapping.jai*:
 
-```c++
+```jai
 #import "Basic";
 
 main :: () {
@@ -421,7 +421,7 @@ print is a native routine, which means it is define in module Basic, file Print.
 ### 5.7.1 - Printing more than one value
 See *5.6_printing.jai*:
 
-```c++
+```jai
 #import "Basic";
 
 main :: () {
@@ -434,12 +434,10 @@ main :: () {
     print("%2 %1 %2\n", n, m); // => 42 7 42
     // print("% %", n, m, counter); // =>  Warning: Incorrect number of arguments supplied to 'print': The format string requires 2 arguments, but 3 arguments are given.
 
-    // printing % with %% (??):
-    // 2026 Jan 13 - %% gives error:
     value := 50;
-    print("Everything is on sale for %1 off!\n", value); // (4)
+    print("Everything is on sale for %1\% off!\n", value); // (4)
     // => Everything is on sale for 50% off!
-    bytes_printed := print("Everything is on sale for %1 off!\n", value); // (4B)
+    bytes_printed := print("Everything is on sale for %1\% off!\n", value); // (4B)
     // => Everything is on sale for 50% off!
     print("%", bytes_printed); // => 35
 }
@@ -452,23 +450,21 @@ main :: () {
 The substitution % symbols can also take a number to indicate the position. In this way, you can change the order in which values are displayed in the format string, or use the same value more than once (see lines (2) and (3)).
 	
 The number of %'s and supplied values must be the same. If not you get a warning:
-```c++
+```jai
  print("% %", n, m, counter); // =>  Warning: Incorrect number of arguments supplied to 'print':  
 ```
 
 The format string requires 2 arguments, but 3 arguments are given.
 In this case only the first two values are displayed.
 
-If you want to print a literal %, replace the second % with %% as in line (4). To separate 2 arguments, you can always puy a 0 between the %, like so: `%0%` accepts two arguments. 
-=> Error: Incorrect number of arguments supplied to 'print': 
-The format string requires 3 arguments, but 1 argument is given.
+If you want to print a literal %, replace the second % with \% as in line (4). To separate 2 arguments, you can always puy a 0 between the %, like so: `%0%` accepts two arguments. 
 
 Although it is nearly always discarded, print returns the number of bytes printed, as shown in line (4B).
 
 ### 5.7.2 - The write procedures
 See *5.8_write.jai*:
 
-```c++
+```jai
 main :: () {
   write_string("Hello, World!\n");               // => Hello, World!
   write_strings("Hello", ",", " World!", "\n");  // => Hello, World!
@@ -488,7 +484,7 @@ Jai has some lower-level write procedures which are defined in modules _Preload_
 ### 5.7.3 - Printing Unicode
 See *5.9_printing_unicode.jai*:
 
-```c++
+```jai
 #import "Basic";
 
 main :: () {

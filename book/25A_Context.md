@@ -13,7 +13,7 @@ Here are some of the features the context contains:
 6 - thread index
 
 The `context` struct is defined in module _Preload_ as:  
-```c++
+```jai
 Context_Base :: struct {
     context_info:  *Type_Info_Struct;
     thread_index   : u32;   // (6)
@@ -46,7 +46,7 @@ You change the way memory is allocated or logging is done (for example when call
 >  **#runtime_support**, indicating they are defined in module Runtime_Support.)
 
 See *25.1_context.jai*:
-```c++
+```jai
 #import "Basic";
 
 #add_context this_is_the_way := true;   // (1)
@@ -158,7 +158,7 @@ In line (4) of the code of `Context_Base`, we see a field called `stack_trace`. 
 The stack trace is also called the program's **function call stack**, which is a better description, namely: it is a report of the active stack frames at a certain point in time during the execution of a program. It works cross-platform and contains a logging of all function calls, and where they occurred in the program. You'll often see stack traces in the output of program crashes, and they are used for debugging purposes.
 
 See *25.2_stack_trace.jai*:
-```c++
+```jai
 #import "Basic";
 
 my_print_stack_trace :: (node: *Stack_Trace_Node) {     // (1)
@@ -234,7 +234,7 @@ Stack traces are useful for writing instrumentation code such as a profiler or m
 
 ## 25.8 The print style
 See *25.3_print_style.jai*:
-```c++
+```jai
 #import "Basic";
 
 main :: () {
@@ -267,7 +267,7 @@ Analogous things can be done for formatting floats, structs and arrays in a spec
 This is a nice trick to determine whether a variable is allocated on the stack or on a heap, using the fact that subsequent variables in the stack get addresses that decrement.
 
 See *25.4_check_stack.jai*:
-```c++
+```jai
 #import "Basic";
 
 #add_context stack_base: *void;     // (1)

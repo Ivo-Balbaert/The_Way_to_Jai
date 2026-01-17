@@ -9,7 +9,7 @@ But you can be assured that strings in Jai are simple and performant, unlike in 
 ## 19.1 What are strings?
 (See *19.1_strings.jai*)
 
-```c++
+```jai
 #import "Basic";
 
 main :: ()  {
@@ -143,7 +143,7 @@ In line (1) and (2) we see that a simple string a has fields count and data, jus
 
 Indeed, a string is defined in module _Preload_ as:
 
-```c++
+```jai
 Newstring    :: struct {
     count     : s64;  
     data      : *u8;
@@ -172,7 +172,7 @@ The following operations on bytes, defined in _Basic_, can be useful on occasion
 
 See *19.2_bytes.jai*:
 
-```c++
+```jai
 #import "Basic";
 #import "String"; // for is_any
 
@@ -194,7 +194,7 @@ main :: () {
 ## 19.3 Backslash codes, escape characters and Unicode characters
 The backslash characters (also called escape sequences) use the backslash to indicate a special character:
 
-```c++
+```jai
     \e    Escape
     \n     Newline    
     \r     Carriage Return
@@ -264,7 +264,7 @@ Because strings are essentially array views, you can manipulate .count and .data
 ## 19.5 String builder
 See *19.3_string_builder.jai*:
 
-```c++
+```jai
 #import "Basic";
 
 main :: () {
@@ -319,7 +319,7 @@ These operations are defined in the _Basic_ and in the _String_ module. Here we 
 
 See *19.4_string_operations.jai*:
 
-```c++
+```jai
 #import "Basic";
 #import "String";
 
@@ -420,7 +420,7 @@ To accomplish this use `sprint` or `tprint` (see line 2C), or work with a String
 
 ### 19.6.2 String comparisons
 Here are the signatures of the most important ones:
-```c++
+```jai
 equal :: (a: string, b: string) -> bool #must; // comparison is case sensitive
 equal_nocase :: (a: string, b: string) -> bool #must;
 compare :: (a: string, b: string) -> int #must;   // works like strcmp in C
@@ -434,7 +434,7 @@ See some of them in action in lines (3) and following.
 
 ### 19.6.3 Joining and splitting
 Here are the signatures of the most important ones:
-```c++
+```jai
 join :: (inputs: .. string, separator := "", before_first := false, after_last := false) -> string;
 split :: (str: string, separator: string) -> [] string;
 split_from_left  :: (s: string, byte: u8) -> (found: bool, left: string, right: string);
@@ -451,7 +451,7 @@ A number of path routines also exist (like path_decomp, path_filename, path_exte
 
 ### 19.6.4 Searching
 Here are some important signatures:
-```c++
+```jai
 find_index_from_left  :: (s: string, byte: u8) -> s64;
 find_index_from_left  :: (s: string, substring: string) -> s64;
 + versions _from_right
@@ -459,7 +459,7 @@ find_index_from_left  :: (s: string, substring: string) -> s64;
 
 ### 19.6.5 Changing
 Some important procs are:
-```c++
+```jai
 trim_left, trim_right, trim
 replace_chars :: (s: string, chars: string, replacement: u8);
 replace :: (s: string, old: string, new: string) -> (result: string, occurrences: int);
@@ -476,7 +476,7 @@ On the other hand Jai programs will have to work together with C programs/librar
 To make it easier to communicate with C, constant Jai strings like `greeting :: "Hello"` are constructed by the compiler with a '0'-termination.
 
 Here are the most important C string manipulation procs:
-```c++
+```jai
 to_c_string :: (str: string) -> *u8; // NOTE: This function heap allocates memory
 to_string :: takes a *u8 (a C string) or a []u8 and returns a Jai string
 c_style_strlen :: (ptr: *u8) -> int; 
@@ -486,7 +486,7 @@ And here are some examples of usage:
 
 See *19.5_cstrings.jai*:
 
-```c++
+```jai
 #import "Basic";
 #import "String";
 

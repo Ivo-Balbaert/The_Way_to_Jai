@@ -14,7 +14,7 @@ Let's first make a version which uses only print to display the living cells. Th
 A living cell is depicted with '1', a dead cell with '0'. Because we cannot give any input, the starting generation has to be hardcoded.
 
 See *51.1_game_of_life.jai*:
-```c++
+```jai
 #import "Basic";
 #import "Math";
 
@@ -97,7 +97,7 @@ When running you see the oscillating horizontal and vertical "111" pattern typic
 This version uses the same algorithm, but shows a graphical display. It is much more refined: the starting situation can be given by the user, and several other options are available to direct the game. And all this only in some 260 lines of code!
 
 See *51.2_game_of_life_gui.jai*:
-```c++
+```jai
 #import "Basic";
 #import "GetRect";
 Input :: #import "Input";
@@ -378,7 +378,7 @@ In line (6), `gol_grid` is updated.
 A particularly nice pattern permits to draw a widget and test an event on it.
 For example in this code snippet:
 
-```c++
+```jai
 if button(r, "Next") {
     next_generation();
     ui_interaction = true;

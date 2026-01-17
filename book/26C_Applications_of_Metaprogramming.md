@@ -24,7 +24,7 @@ Suppose our program works with `Vec3 :: { x: float, y: float, z: float }` (defin
 An AOS with Vec3's would be like `[vec31, vec32, vec33, vec34, vec35]`, where vec31: Vec3, and so on, so basically: `[{x1, y1, z1}, {x2, y2, z2}, {x3, y3, z3}, {x4, y4, z4}, {x5, y5, z5}]`  
 
 An SOA Vec3 struct would be like:  
-```c++
+```jai
     SOA_Vec3 :: struct {
        x: [5] float;
        y: [5] float;
@@ -36,7 +36,7 @@ Accessing all x's and so on will be much faster in the SOA configuration.
 Now we discuss an example of how SOA is implemented in Jai as a polymorphic struct with #insert.
 
 See *26.10_soa.jai*:
-```c++
+```jai
 #import "Basic";
 
 Person :: struct {                      // (1)
@@ -121,7 +121,7 @@ In § 27.2 we extend this example to work with Person data from a .csv file.
 
 ## 26.11 How to get the generated source files after the meta-program step?
 The piece of source code that gets generated from a #insert can be retrieved from the hidden _.build_ folder. For example: program 26.10_soa.jai generates an additional source file called `.added_strings_w2.jai` in .build with this content:
-```c++
+```jai
 // Workspace: Target Program
 //
 // #insert text. Generated from d:/Jai/The_Way_to_Jai/examples/26/26.10_soa.jai:10.
@@ -146,7 +146,7 @@ compiler_get_nodes :: (code: Code) -> (root: *Code_Node, expressions: [] *Code_N
 In the program below we analyze the nodes of the statement: `code :: #code a := Vector3.{1,2,3};`
 
 See *26.11_code_nodes.jai*:
-```c++
+```jai
 # import "Basic";
 # import "Compiler";
 # import "Program_Print";                   // (1)
@@ -194,7 +194,7 @@ We saw in § 26.12.1 that at compile-time, Code can be converted to Abstract Syn
 Instead of simply inserting code at compile time, let's change it also!
 
 See *26.36_changing_ast.jai*:
-```c++
+```jai
 #import "Basic";
 #import "Compiler";
 
@@ -261,7 +261,7 @@ To summarize, in this example we:
 All this in pure Jai code!
 
 Here is a snippet of code that searches for string literals in code, (possibly) changing them, and writing the changes back with the proc `compiler_get_code`:
-```c++
+```jai
 root, expressions := compiler_get_nodes(code);
 for expressions {
     if it.kind != .LITERAL continue;  
@@ -280,7 +280,7 @@ This directive tells the compiler that the next following syntax is a type liter
 
 Here is a simple example:  
 See *26.38_proc_type_pointer.jai*:
-```c++
+```jai
 #import "Basic";
 
 main :: () {
@@ -297,7 +297,7 @@ main :: () {
 `my_proc_type` is the type of `my_proc`, as indicated in line (1), and confirmed by the assert in line (1B). With this type, we can define a procedure pointer (line (2)), which can be used to call the proc (line (3)).
 
 Here is a more complex example used in interaction with C code:  
-```c++
+```jai
 IL_LoggingLevel :: u16;
 IL_Logger_Callback :: #type (level: IL_LoggingLevel, text: *u8, ctx: *void) -> void #c_call;
 ```
@@ -310,7 +310,7 @@ but adding #type it does compile:
 It can also be used to define **type variants**, as in the following example, with syntax `#type,distinct` or `#type,isa`:
 
 See *26.21_type_variants.jai*:
-```c++
+```jai
 #import "Basic";
 #import "Math";
 
@@ -354,7 +354,7 @@ Taking type_info(), and dereferencing the `variant_of` field shows the underlyin
 The different possibilities and limits are nicely illustrated in the following example:
 
 See *26.37_type_distinction.jai*:
-```c++
+```jai
 #import "Basic";
 
 // cpp: using HandleA = u32;
@@ -404,7 +404,7 @@ main :: () {
 
 ## 26.14 Getting the name of a variable at compile time
 See *26.23_get_variable_name.jai*:
-```c++
+```jai
 #import "Compiler";
 #import "Program_Print";
 #import "Basic";
@@ -431,7 +431,7 @@ There is also a `print_type_to_builder` proc for printing type info to a string 
 
 ## 26.15 Converting code to string
 See *26.27_convert_code_string.jai*:
-```c++
+```jai
 #import "Basic";
 
 code_to_string :: (code: Code) -> string #expand {
@@ -459,7 +459,7 @@ We again use compiler_get_nodes to get the AST, which is then `printed` to a str
 The following example is a quick (non recursive) helper to create some code for each member in a structure (it is derived and slightly changed from a Snippets example in the Jai Community Wiki): 
 
 See *26.29_code_struct_member.jai*:
-```c++
+```jai
 #import "Basic";
 
 for_each_member :: ($T: Type, format: string) -> string
@@ -541,7 +541,7 @@ To compile this, a proc `serialize` has to exist, which is also polymorphic in o
 We discussed unions in § 13.2, where we saw that a union has only one field, but can take values of different types. It could be useful to know at any time which type the union value has. This could be done by enclosing the union within a struct, with a field containing the type.
 
 See *26.31_tagged_union.jai*:
-```c++
+```jai
 #import "Basic";
 
 Tag_Union :: struct(fields: [] string, types: []Type) {
@@ -632,7 +632,7 @@ If the type of the supplied value is not present in the types array, we get a co
 The following program combines polymorphism, a macro, #insert -> string and #code to do something with each type from a list of types:
 
 See *26.39_creating_types.jai*:
-```c++
+```jai
 #import "Basic";
 
 create_code_for_each_type :: (code: Code, $types: ..Type) #expand {

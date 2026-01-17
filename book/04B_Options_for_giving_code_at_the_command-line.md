@@ -11,7 +11,7 @@ With `-add arg`, you can add the string 'arg' to the target program as code.
 Now the variable n is know in the program, and we can print it out with for example:  `print("%", n);`
 
 See *4.1_hello_sailor.jai*
-```c++
+```jai
 #import "Basic";
 
 main :: () {
@@ -30,7 +30,7 @@ The `-verbose` option gives some extra information about what the meta-program i
 	`jai -run write_string(\"Hello!\n\") -add "n := 42" -verbose 4.1_hello_sailor.jai`  
 shows the following at the start of the compiler output:
             
-```c++
+```jai
 4.1_hello_sailor.jai
 options.output_path = "D:/Jai/The_Way_to_Jai/examples/4/";
 options.output_executable_name = "4.1_hello_sailor";

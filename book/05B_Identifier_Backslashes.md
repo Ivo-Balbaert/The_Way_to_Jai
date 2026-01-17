@@ -2,7 +2,7 @@
 
 This feature is illustrated here (See *5B.ident_back.jai* :)
 
-```c++
+```jai
 #import "Basic";
 
 main :: () {

@@ -15,7 +15,7 @@ Jai's macros are so called _hygienic_:
 
 Syntactically, macros resemble a procedure: they are defined by adding the **#expand** directive to the end of the proc declaration before the curly brackets.   
 Let's see this in *26.7A_macros_intro.jai*:
-```c++
+```jai
 #import "Basic";
 
 // proc1 :: ()         {      // (1)  procedure
@@ -37,7 +37,7 @@ The following examples in this section are meant to show the basic syntax, they 
 The syntax is shown in `macro0` defined in line (1) below, which does nothing. A macro is called like any proc: `macro0()`.
 
 See *26.7B_macros_basics.jai*:
-```c++
+```jai
 #import "Basic";
 #import "Math";
 
@@ -178,7 +178,7 @@ But notice what happens when we use `defer` in line (6B): because of the backtic
 Sometimes you might want to unroll loops to optimize a program's execution speed so that the program does less branching. Loops can be unrolled through a mixture of #insert directives and macros. In the example below, we unroll a basic for loop that counts from 0 to 10.
 
 See *26.14_insert_for_loop.jai*:
-```c++
+```jai
 #import "Basic";
 
 unroll_for_loop :: (a: int, b: int, body: Code) #expand {
@@ -210,7 +210,7 @@ When compiling, you can see what is inserted in `.\build\.added_strings_w2`.
 In § 17.2 we saw that an inner proc cannot access outer variables. A way to circumvent this is to define the inner proc as a macro and use `. The example below is inner_proc() from *17.2_local_procs.jai*, which is now redefined as a macro to be able to change the outer variable x.
 
 See *26.13_local_procs.jai*:
-```c++
+```jai
 #import "Basic";
 
 proc :: () {
@@ -237,7 +237,7 @@ Wouldn't it be nice if we could do this with a for loop?
 
 ### 26.5.4 Using a macro with #insert,scope()
 See *26.22_insert_scope.jai*:
-```c++
+```jai
 #import "Basic";
 
 bubble_sort :: (arr: [] $T, compare_code: Code) #expand { // (1)
@@ -280,7 +280,7 @@ This example also shows that a macro can be polymorphic.
 
 ### 26.5.5 Using a macro for swapping values
 See *26.28_swap_macro.jai*:
-```c++
+```jai
 #import "Basic";
 
 swap :: (a: Code, b: Code) #expand {
@@ -308,7 +308,7 @@ This macro uses Code arguments and #insert to insert the values. It also provide
 Remember § 6B.2 where we used get_time() to measure performance of a procedure (see 6B.2_get_time.jai) ? We can also do this with a macro `perf_measure`:
 
 See *26.33_measure_performance.jai*:
-```c++
+```jai
 #import "Basic";
 
 factorial :: (n: int) -> int {
@@ -340,7 +340,7 @@ As easy as it is to for-loop over an array, this is not defined for other compos
 This can be done with a macro, by defining a so-called *for_expansion*:
 
 See *26.8_linked_list_for_expansion.jai*:
-```c++
+```jai
 #import "Basic";
 
 LinkedList :: struct {
@@ -429,7 +429,7 @@ So `#insert` is used inside macros to insert code in the expansion.
 A macro often takes an argument suitably named `body: Code`, which is then used to insert in the expansion: `#insert body`.)
 
 The `For_Flags` enum_flags is found in module *Preload_.jai* with the following definition:
-```c++
+```jai
 For_Flags :: enum_flags u32 {
   POINTER :: 0x1; // this for-loop is done by pointer.
   REVERSE :: 0x2; // this for-loop is a reverse for loop.
@@ -450,7 +450,7 @@ But we can do better! (see for_expansion macro Version 2). Just leave out the te
 > Our code would then become:
 
 See *26.8B_linked_list_for_expansion.jai*:
-```c++
+```jai
 #import "Basic";
 
 LinkedList :: struct {
@@ -522,7 +522,7 @@ Now let's make the same for-loop for a double linked-list:
 Let's now define a more general linked list as having a first and a last Node (see line (1)), whereby Node is recursively defined(see line (2)) as having a value, a previous and a next Node. Another advantage is that the type of the value (and Node) is polymorph written as T.
 
 See *26.9_double_linked_list.jai*:
-```c++
+```jai
 #import "Basic";
 // Debug :: #import "Debug";
 
@@ -664,7 +664,7 @@ See also [Named Custom for Expansion](https://jai.community/docs?topic=176) for 
 This seems totally unnecessary, because a for-loop is built-in for arrays! But it could be useful in case the for-loop has to do something additional, in which case it is beneficial to define it in one place as a for_expansion macro, instead of writing the addition in every for loop on your array.
 
 See *26.34_abstracting_loop.jai*:
-```c++
+```jai
 #import "Basic";
 
 Player :: struct {
@@ -744,7 +744,7 @@ We can of course give it another name like `player_loop`, and/or use the index b
 
 **Exercise**
 Here is a definition of a polymorphic struct:  
-```c++
+```jai
 FixedVector :: struct($T: Type, N: int) {
   values : [N]T;
   count : int; // number of items already stored in values
@@ -760,7 +760,7 @@ Write a 2nd version that skips values equal to 5.
 This is also easily done with a for_expansion macro, as shown in the following example:
 
 See *26.40_step_iterator.jai*:
-```c++
+```jai
 #import "Basic";
 
 Step_Iterator :: struct {
@@ -808,7 +808,7 @@ Here are a number of examples:
 
 (1) Suppose we want to force a polymorph type to be a certain concrete type:  
 See *26.16_modify1.jai*:
-```c++
+```jai
 #import "Basic";
 
 proc1 :: (a : $T)    // (1)
@@ -841,7 +841,7 @@ main :: () {
 Converting these types to s64 works implicitly. But what if it does not convert, like for a bool in line (4)? We get a compile error. However, you can put an auto-cast xx on the argument to make it work (see (5)).
 
 (2) Here is an example with multiple generic types, showing how they can be compared and changed:
-```c++
+```jai
 proc2 :: (a: $A, b: $B, c: $C) 
 #modify {
     if B == A then B = C;
@@ -853,7 +853,7 @@ proc2 :: (a: $A, b: $B, c: $C)
 (3) The following example shows how #modify can call a procedure, that has to have this signature: take the polymorph type(s) as parameters and return a bool. It checks whether the resolved type T is an integer, enum or pointer. Only then can `proc` be completely compiled.  
 
 See *26.17_modify2.jai*:
-```c++
+```jai
 #import "Basic";
 
 do_something :: (T: Type) -> bool {
@@ -880,7 +880,7 @@ main :: () {
 (3B) The next example shows how to require a polymorphic procedure (which is also a macro) to take parameters of a specific type. 
 
 See *26.32_modify_require.jai*:
-```c++
+```jai
 #import "Basic";
 
 ModifyRequire :: (t: Type, kind: Type_Info_Tag) #expand {   // (1)
@@ -905,7 +905,7 @@ main :: () {
 (4) In this example we define a struct `Holder` with parameters that holds an array of size N of items of type T. But we don't want the size N to be smaller than 8, we can control this in the #modify:
 
 See *26.18_modify3.jai*:
-```c++
+```jai
 #import "Basic";
 
 Holder :: struct (N: int, T: Type)
@@ -925,7 +925,7 @@ main :: () {
 (5) In this example we are going to add all items of numeric type arrays (see line (2) and following) with the `sum` proc, defined in line (1).
 
 See *26.19_modify4.jai*:
-```c++
+```jai
 #import "Basic";
 
 sum :: (array: [] $T) -> T {        // (1)
@@ -976,7 +976,7 @@ Now we get the correct result: see line (11). We needed #modify here to give R a
 
 (6) Here is a #modify within which every numeric type is converted to a 64 bit type:
 
-```c++
+```jai
 #modify {
 if T == {
     case s8;  T = s64;
@@ -1002,7 +1002,7 @@ Note how you can append an error message string to the return false case. It wil
 (7) Here is an example where a polymorph struct is rejected based on a constraint between multiple variables:
 
 See *26.20_modify5.jai*:
-```c++
+```jai
 #import "Basic";
 
 Bitmap :: struct (Width: s16, Height: s16)

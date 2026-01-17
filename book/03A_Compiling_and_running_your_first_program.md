@@ -38,7 +38,7 @@ After all, the computer needs to know where to start executing your program!
 
 In Jai syntax, this looks like:
 
-```c++
+```jai
 main :: () {
 }
 ```
@@ -110,13 +110,13 @@ Now we want to display a greeting to a sailor, let's say: _Hello, Sailor from Ja
 This is a string and must be enclosed within double quotes "", like: _"Hello, Sailor from Jai!"_.  
 To produce an output in Jai, we use the `print` procedure, which can take this string as argument, like this:
 
-```c++
+```jai
 print("Hello, Sailor from Jai!");
 ```
 This is a complete code statement, so it must end with a semicolon **;**  
 We now have the following code:
 
-```c++
+```jai
 main :: () {
    print("Hello, Sailor from Jai!");
 }
@@ -125,7 +125,7 @@ main :: () {
 Let's compile it again:  `jai 3.1_hello_sailor.jai`   
 But there is a problem, we get the following output:
 
-```c++
+```jai
 In Workspace 2 ("Target Program"):
 d:/Jai/The Way to Jai/3-Compiling_and_running_your_first_program/code/hello_sailor.jai:2,4:  
 Error: Undeclared identifier 'print'.
@@ -141,7 +141,7 @@ means the compiler can't find the `print` procedure. That's because this procedu
 In order to make this clear to the compiler, we must **import** that module with the following statement:  `#import "Basic";`
 Add this at the start, so that our code file looks like:
 
-```c++
+```jai
 #import "Basic";
 
 main :: () {
@@ -180,7 +180,7 @@ _run a program during compile-time_! Let's see that in action.
 
 Make a new source file called for example *3.2_hello_sailor_comptime.jai* and add the following line after (or before) main: `#run main();`, so that we get:
 
-```c++
+```jai
 #import "Basic";
 
 main :: () {
@@ -191,7 +191,7 @@ main :: () {
 ```
 
 Now compile the program as before and carefully look at the output:
-```c++
+```jai
    Hello, Sailor from Jai!
    
    Running linker: ...
@@ -259,7 +259,7 @@ Normally a Jai program will stop after execution of the last statement in `main(
 In exceptional circumstances, a program can encounter a run-time error and crash, which means that the OS has terminated the program. 
 Jai also provides the `exit` procedure to stop the program. This can be used always, but more specifically when an abnormal condition is encountered, see for example the following program (see 3.3_exit.jai):
 
-```c++
+```jai
 #import "Basic";
 
 main :: () {

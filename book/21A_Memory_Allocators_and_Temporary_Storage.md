@@ -39,7 +39,7 @@ In § 18.4 we discovered that the definition of a Resizable_Array contains a fie
 Allocators are specialized ways you can invoke to allocate memory for an object. They are specialized in the sense that they store data very efficiently, and they often have simpler mechanisms for freeing memory.  
 
 An Allocator is defined in _Preload_ as a struct:
-```c++
+```jai
 Allocator :: struct {
     proc: Allocator_Proc;
     data: *void;
@@ -51,7 +51,7 @@ A proc of type `Allocator_Proc` is basically a function pointer, for example it 
 where `my_allocator_proc` is a function that allocates memory.
 
 Here is the signature of `Allocator_Proc` from module _Preload_:
-```c++
+```jai
 Allocator_Proc :: #type (mode: Allocator_Mode, size: s64, old_size: s64, old_memory: *void,  
 allocator_data: *void) -> *void;
 ```
@@ -82,7 +82,7 @@ An allocation is a simple increment into a block of memory. Objects can not be f
 It is defined as a struct in the _Preload_ module, and module _Basic_ contains support routines to make working with temporary storage very easy. Its memory resides in the Context (see § 25).
 
 Here is the struct's definition:
-```c++
+```jai
 Temporary_Storage :: struct {  
     data:     *u8;
     size:     s64;
@@ -121,7 +121,7 @@ Whenever you want, but many programs have a natural time at which it is best to 
 
 A typical game loop goes like this:
 
-```c++
+```jai
 while true {
             input();
             simulate();
@@ -137,7 +137,7 @@ The procedure `push_allocator(temp)` is used to set temporary storage as the cur
 
 ## 21.4 Examples of using Temporary Storage
 See *21.1_temp_storage.jai*:
-```c++
+```jai
 #import "Basic";
 
 make_array :: (x: int) -> [..] int {
@@ -187,7 +187,7 @@ Line (6B) shows how to store a string builder in temporary storage; this makes c
 ## 21.4.3 Using New with temp
 As we saw in § 21.2, New can take any defined Allocator, so also `temp`. This can be done with the following code:
 
-```c++
+```jai
 Node :: struct {
   value: int;
   name: string;
@@ -216,7 +216,7 @@ To cope with a possible problem of memory-leakage, Jai has a built-in memory-lea
 This hooks alloc(), free(), and realloc() with routines that record allocations and frees. Enabling the MEMORY_DEBUGGER will slow down your program, so use it only when solving memory-issues.
 
 See *21.2_leak_detect.jai*:
-```c++
+```jai
 #import "Basic"()(MEMORY_DEBUGGER=true);
 
 main :: () {
@@ -268,7 +268,7 @@ The following program does just that, which could be useful while debugging.
 (// v 0.1.072: assert in line 52 doesn't work anymore for rpmalloc ?? )
 
 See *21.3_allocators_check.jai*:
-```c++
+```jai
 // An example that uses several different allocators, then asks them all
 // who owns which memory.
 //

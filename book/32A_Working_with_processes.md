@@ -29,7 +29,7 @@ kill_process_if_parent_exits := true) -> success: bool;
 ```
 
 Because of the returned bool value, you can use it as follows:
-```c++
+```jai
 if create_process(process1) {
     // further processing
 } else {

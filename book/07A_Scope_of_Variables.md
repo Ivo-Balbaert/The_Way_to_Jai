@@ -6,7 +6,7 @@ In fact, there is a hierarchy of scopes: if you use an identifier, and it's not 
 ## 7.1 - Data scope and imperative scope                                           
 See *7.1_scope.jai*:
 
-```c++
+```jai
 #import "Basic";
 
 // global scope
@@ -60,7 +60,7 @@ Unlike Rust's behavior, a block cannot return a value to be assigned, if you try
 ## 7.2 - Shadowing of variables
 See *7.2_shadowing.jai*:
 
-```c++
+```jai
 #import "Basic";
 
 main :: () {

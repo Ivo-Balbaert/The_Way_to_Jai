@@ -15,7 +15,7 @@ Here are some manipulations with types, explained in the next subsections:
 
 See *9.1_types.jai*:
 
-```c++
+```jai
 #import "Basic";
 
 Thread_Index :: s64;  // (0A)
@@ -102,7 +102,7 @@ It is useful when working with heterogeneous arrays of pointers to different typ
 ## 9.6 Any and the print procedure
 `print` is defined as:
 
-```c++
+```jai
 print :: (format_string: string, args: .. Any, to_standard_error := false) -> bytes_printed: s64 {
 //..
 }

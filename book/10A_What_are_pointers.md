@@ -16,7 +16,7 @@ Example:
 
 A pointer to a variable contains the memory address of that variable, it _points to_ the variable. So it is a  reference to a memory location, which can be on the stack or on the heap (see § 4D). If var is the variable,  then a pointer ptr to var is written with a * as follows: 
 
-```c++
+```jai
 ptr = *var
 ```
 
@@ -33,7 +33,7 @@ You can have pointers to any type of variable. Pointers can be used with primiti
 
 See *10.1_pointers.jai*:
 
-```c++
+```jai
 #import "Basic";
 
 main :: () {
@@ -97,14 +97,14 @@ In lines (1A-B) we first declare and then initialize a pointer to an int. b cont
 
 To obtain the value pointed to by a pointer (often called _dereferencing_ the pointer), use the **<<** notation on the pointer, like in C (see line (2)):
 
-```c++
+```jai
 val = << ptr;   
 ```
 In some cases dereferencing happens automatically when using the pointer itself, to simplify the syntax.  
 From line (3) we see that the type of b is `*s64`.  
 In line (4) we see how this type can be inferred with the shorter := notation. We also see that in line (4B) that you can change the value by using the dereference operator as left hand side:
 
-```c++
+```jai
 << ptr = new_val;   
 ```
 The value at the address ptr points to is changed, but the address ptr contains stays the same.
@@ -139,7 +139,7 @@ Some languages (like Java) have _references_ instead of pointers. References are
 We saw that a pointer has also an address, so nothing prevents you from having a pointer to a pointer. This can even be several levels of _indirection_ deep, as lines (8) and following show. 
 To get to the value of a three-level pointer, you have to dereference three times:  
 
-```c++
+```jai
     d2: ***int = *c2;
     print("%\n", << << << d2); // => 3, the value of a2
 ```
@@ -150,7 +150,7 @@ When this happens in a program, there clearly is a bug, because the pointer didn
 
 See *10.2_dereference_a_null_pointer.jai*:
 
-```c++
+```jai
 #import "Basic";
 
 main :: () {
@@ -234,7 +234,7 @@ In a later chapter on Debugging (see § 20), we'll see how you can pinpoint the 
 ## 10.4 Dangling pointers
 See *10.4_dangling_pointers.jai*:
 
-```c++
+```jai
 #import "Basic";
 
 main :: () {

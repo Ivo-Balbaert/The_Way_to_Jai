@@ -21,7 +21,7 @@ There are no goto and no jump instructions in the current assembly. There are no
 
 ## 28.2 How do Jai and inline assembly interact? - Declaring variables  
 Inside Jai code, we can start an inline assembler block like this:  
-```c++
+```jai
 #asm {
     ...
 }
@@ -36,7 +36,7 @@ Multiple #asm blocks can appear throughout Jai code.
 Such a block does NOT define a new scope. Jai variables defined in the same scope the #asm block is defined in are visible and can be changed inside it, as shown in the following example:
 
 See *28.1_jai_asm1.jai*:
-```c++
+```jai
 #import "Basic";
 
 main :: () {
@@ -56,7 +56,7 @@ Jai sees that and prints out the changed value 27. Inside the #asm block, count 
 We can also define variables in the asm block, and let them interact with Jai variables like this:
 
 See *28.2_jai_asm2.jai*:
-```c++
+```jai
 #import "Basic";
 
 main :: () {
@@ -93,7 +93,7 @@ In line (4) var1 is added to `count`, and Jai prints out its new value 27.
 
 **Cross Block #asm Referencing**
 #asm blocks can also be named, so that variables can be cross-referenced:  
-```c++
+```jai
 block_1 :: #asm { pxor x:, x; }
 block_2 :: #asm { movdqu y:, block_1.x; }
 ```
@@ -174,7 +174,7 @@ Using the sizes from § 28.3.2, we can do the following `mov` instructions. We j
 If not, you get an error, like in (1).
 
 See *28.3_immediates.jai*:
-```c++
+```jai
 #import "Basic";
 
 main :: () {
@@ -206,7 +206,7 @@ The compiler implements register allocation to replace variables with registers,
 You can also directly use the names of registers (see § 28.3.5) to allocate values in them:
 
 See *28.4_allocation_pinning.jai*:
-```c++
+```jai
 #import "Basic";
 
 main :: () {
@@ -260,7 +260,7 @@ Set feature bits on `build_options.machine_options.x86_features.leaves` via the 
 ### 28.6.2 Asm-block level
 In addition to the global build flags, you can specify additional features to enable for a specific #asm block. The names match with the `x86_Feature_Flag` enum in *Machine_X64.jai.*  
 Do this by listing the feature flags as follows:
-```c++
+```jai
     #asm AVX, AVX2 {
         ...
     }
@@ -273,7 +273,7 @@ To make use of feature flags, you'll have to do a runtime check and branch on th
 You can test on which instruction sets are available with the proc `get_cpu_info` from module *Machine_X64*:
 
 See *28.5_get_cpu_info_feature_flags.jai*
-```c++
+```jai
 #import "Basic";
 #import "Machine_X64";
 
@@ -308,7 +308,7 @@ Here are some other rules:
 * disp  - optional, a signed 8 or 32 bit integer byte offset
 
 See *28.9_loading_memory*:
-```c++
+```jai
 #import "Basic";
 
 main :: () {
@@ -329,7 +329,7 @@ The instruction in line (1) effective declares register a to be the array.data p
 Here is some basic SIMD Vector Code to process a few 32-bit floats together in parallel (at the same time).   
 
 See *28.6_simd.jai*:
-```c++
+```jai
 #import "Basic";
 
 main :: () {
@@ -405,7 +405,7 @@ No additional mov's or other instructions will be generated as a result of this.
 
 This is used in the following example:  
 See *28.7_asm_and_macros.jai*:
-```c++
+```jai
 add_regs :: (c: __reg, d: __reg) #expand {  // (1)
   #asm {
      add c, d;
@@ -435,7 +435,7 @@ In line (1) we define a macro `add_regs` that is called in line (3). It takes 2 
 #asm blocks can also run at compile time, just like any other code. The code is compiled to machine code once and runs at native speed, so you can expect it to be just as fast.
 
 See *28.8_compile_time_exec.jai*:
-```c++
+```jai
 #import "Basic";
 
 do_some_work :: (a: int, b: int) -> int {
@@ -462,7 +462,7 @@ To clearly see what's going on, we shuffled the indices a bit. In the #asm block
 the items from `orig_arr` in the order of `gather_indices`, and put them in `dest_arr`.
 
 See *28.10_vsib1.jai*:
-```c++
+```jai
 #import "Basic";
 
 main :: () {
@@ -494,7 +494,7 @@ In line (3), the destination array is filled, and in (4), Jai prints it out.
 Here is a basic example to do load effective address. Note that in rax*4, the constant must go after the register. LEA is explained [here](https://www.felixcloutier.com/x86/lea). 
 
 See *28.11_load_effective_address.jai*:
-```c++
+```jai
 #import "Basic";
 
 main :: () {
@@ -511,7 +511,7 @@ main :: () {
 The fetch-and-add instruction increments the contents of a memory location by a specified value. This is a translation of a C++ fetch add from `Godbolt`. This operation is normally used in concurrency. More information on this can be found at: [Fetch-and-Add](https://en.wikipedia.org/wiki/Fetch-and-add)
 
 See *28.12_fetch_and_add.jai*:
-```c++
+```jai
 #import "Basic";
 
 global_variable := 108;
@@ -534,7 +534,7 @@ main :: () {
 Here is how you can do a swap operation in inline assembly:
 
 See *28.13_binary_swap.jai*:
-```c++
+```jai
 #import "Basic";
 
 main :: () {
@@ -559,7 +559,7 @@ main :: () {
 BLSR, or Reset Lowest Set Bit, is an instruction that copies all bits from the source into the destination, and sets the least significant bit to zero. This is equivalent to a &= a-1. You can find more information on BLSR [here](https://www.felixcloutier.com/x86/blsr).
 
 See *28.14_blsr.jai*:
-```c++
+```jai
 #import "Basic";
 
 popbit :: (a: u64) -> u64 #expand {
@@ -590,7 +590,7 @@ main :: () {
 This is some code from the Jai Community Wiki to reverse a 64-bit integer, translated from an objdump on a clang intrinsic. movabs can be replaced by a mov.q.
 
 See *28.15_bit_reverse.jai*:
-```c++
+```jai
 #import "Basic";
 
 bit_reverse64  :: (x: u64) -> u64 #expand {

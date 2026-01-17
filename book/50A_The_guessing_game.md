@@ -28,7 +28,7 @@ First we look at the Linux version. The logic for the Windows version is entirel
 
 ## 50.1 Linux version
 See *50.1_guessing_game_linux.jai*:
-```c++
+```jai
 #import "Basic";
 #import "Random";
 #import "POSIX";  
@@ -142,7 +142,7 @@ and line (3) returns. This prints "Finished in ", the number of guesses and even
 ## 50.2 Windows version
 Here is the Windows version:  
 See *50.1_guessing_game_windows.jai*:
-```c++
+```jai
 #import "Basic";
 #import "Random";
 #import "Windows";

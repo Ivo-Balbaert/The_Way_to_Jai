@@ -7,7 +7,7 @@ Each thread has its own Context. Because Temporary_Storage is in the Context, th
 
 ## 31.1 Basics of threads
 See *31.1_basic_threads.jai*:
-```c++
+```jai
 #import "Basic";
 #import "Thread";
 
@@ -83,7 +83,7 @@ Let's see this in action in the following example:
 
 See *31.3_thread_groups.jai*:  
 (Example taken from the Jai Community Library wiki)
-```c++
+```jai
 #import "Basic";
 #import "Thread";
 
@@ -186,7 +186,7 @@ The basic example above didn't do any useful work. Let's see a more practical ex
 
 See *31.4_thread_group_response.jai*:  
 (Example taken from the Jai Community Library wiki)
-```c++
+```jai
 
 #import "Basic";
 #import "Thread";
@@ -279,7 +279,7 @@ What is a suitable number of threads?
 The number of threads `num_threads` should be smaller than or equal to the number of CPUs. More than that will make our computer do a lot of context-switching work, which is wasted. You could use the following routine to determine `num_threads` before launching init:  
 
 See _31.5_num_threads.jai_:
-```c++
+```jai
 #import "Basic";
 #import "System";
 
@@ -300,7 +300,7 @@ main :: () {
 
 ## 31.2.4 Periodically checking which portion of the work is completed
 In the _thread_group_ example in module _Thread_  we also see a way to do this. Schematically, it runs as follows:
-```c++
+```jai
    work_remaining := NUM_WORK_ITEMS;
    while work_remaining > 0 {
       sleep_milliseconds(10);
@@ -319,7 +319,7 @@ A **mutex** (mutual exclusion object) is a program object that is created so tha
 Jai has a _Mutex_ struct built-in in module _Thread_. The following example shows how to work with a mutex:  
 
 See _31.6_mutex1.jai_:
-```c++
+```jai
 #import "Basic";
 #import "Thread";
 
@@ -352,7 +352,7 @@ Now several mutexes can be  defined having an order like 1, 2, 3. If the DEBUG m
 This is illustrated in the following program:  
 
 See _31.7_mutex_order.jai_:
-```c++
+```jai
 #import "Basic";
 #import "Thread";   // (1)
 // #import "Thread"()(DEBUG=true);   // (1)
@@ -438,7 +438,7 @@ When the compiler emits the COMPLETE message, we change the window title to "Suc
 To accomplish this, OpenGL is used to show the windows in a separate (GUI) thread from the main thread, using macros as well. See it in action in the following example, started with `jai 31.2_build_threads.jai`.  
 
 See *31.2_build_threads.jai*:
-```c++
+```jai
 #import "Basic";
 #import "Compiler";
 #import "Process";
@@ -500,7 +500,7 @@ Here are screenshots of the windows:
 
 The loaded file `build_gui.jai` contains the following code:
 See *build_gui.jai*:
-```c++
+```jai
 #import "Basic";
 #import "SDL";      // (1)
 #import "GL";
@@ -577,7 +577,7 @@ Cons:   locking (which is needed in a multithreaded situation) is not implemente
 (To turn off buffering, set n=1).
 
 See *31.8_channels.jai*:
-```c++
+```jai
 #import "Basic";
 
 Channel :: struct(T: Type, n: u64) {

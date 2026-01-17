@@ -11,7 +11,7 @@ So what is its purpose? Using a union is data flexible and economizes on storage
 
 See *13.1_unions.jai*:
 
-```c++
+```jai
 #import "Basic";
 
 T :: union {                // (1)
@@ -94,7 +94,7 @@ All names are constants, internally they are if not specified  64bit-integers.Th
 
 *13.2_enums.jai* shows a few examples:
 
-```c++
+```jai
 #import "Basic";
 
 Compass_Direction :: enum {
@@ -179,7 +179,7 @@ As we see in line (4B), each member can be given its own constant integer value.
 These enums are defined in the global data scope. 
 
 An **anonymous enum** can be defined like this:
-```c++
+```jai
 enum {
     NONE;           // 0
     MINIMAL;        // 1
@@ -190,7 +190,7 @@ enum {
 
 Here is an example of an anonymous enum:
 See *13.5_anonymous_enum*:
-```c++
+```jai
 #import "Basic";
 
 state: enum {
@@ -222,7 +222,7 @@ New member values added to an enum get auto-incremented automatically. But what 
 To avoid this, we can annotate an enum with the directive **#specified**.  The author of the enum uses #specified in order to declare the intention of maintaining compatibility of enum values over time. This requires declaring each integer explicitly: an enum declared as #specified will no longer accept the auto-increment.
 
 Here is an example: 
-```c++
+```jai
 Operating_Systems :: enum u16 #specified {
         VMS      :: 1;
         ATT_UNIX :: 2;
@@ -236,7 +236,7 @@ If a struct has an enum marked as #specified, you know that it's safe just to se
 ## 13.5 enum_flags and masking flags
 A special version of an enum is a **enum_flags**. Here the integer values backing the member names are subsequent powers of 2, like in this example *13.3_enum_flags.jai*:
 
-```c++
+```jai
 #import "Basic";
 
 Direction :: enum_flags u8 {
@@ -286,7 +286,7 @@ Lines (1) and following show ways to assign enum flags to variables.
 ## 13.6 Some useful enum methods
 *13.4_enum_methods.jai* shows some useful methods on enums:
 
-```c++
+```jai
 #import "Basic";
 
 Direction :: enum {
@@ -327,7 +327,7 @@ Enum declarations also can contain notes, directly on the enum, just as with str
 
 Example:
 
-```c++
+```jai
 An_Enum :: enum_flags @Hi @There {
     x :: 1;
 }

@@ -36,7 +36,7 @@ You can make your own module(s) in /jai/modules. But these could be deleted when
 
 When you look at the start of the `module.jai` for _Basic_, you can see that it loads the other .jai files in the folder:
 
-```c++
+```jai
 #load "Array.jai";
 #load "Simple_String.jai";
 #load "String_Builder.jai";
@@ -55,7 +55,7 @@ The `#load` directive effectively copies in the contents from the loaded source 
 Have a look at this example:
 
 See *8.1_main.jai*:
-```c++
+```jai
 #import "Basic";
 
 #load "part1.jai";
@@ -88,20 +88,20 @@ Sometimes you want to qualify a procedure name with the module name it came from
 
 The name you give doesn't have to be the same as the module name, but it is a constant. Then you have to qualify all proc calls to that module with its module name (in other words: you give the proc a namespace), like this:
 
-```c++
+```jai
 	y := Math.sqrt(2.0);
 ```
 
 This improves readability: it makes it clear where a function comes from.  
 Alternatively, you can work with `using` so that you don't need to use the module's name:
-```c++
+```jai
     using Math;
     y := sqrt(2.0);
 ```
 
 The name can also be an abbreviation:
 
-```c++
+```jai
     Long :: #import "Long_Name_Library";
 ```
 
@@ -111,7 +111,7 @@ or simply serve to differentiate between two modules with the same name, like we
 Suppose you have two structs in two different files/libraries with the same name, causing a name conflict. You can prefix one or both of the imports to prevent naming conflicts.
 Suppose both modules Lib1 and Lib2 contain a procedure `proc1`, then you can name both imports:
 
-```c++
+```jai
 Lib1 :: #import "Lib1";
 Lib2 :: #import "Lib2";
 
@@ -120,7 +120,7 @@ b: Lib2.proc1(); // call proc "proc1()" from Lib2
 ```
 
 If you prefer, you can use just one named import:
-```c++
+```jai
 #import "Lib1";
 Lib2 :: #import "Lib2";
 
@@ -129,7 +129,7 @@ b: Lib2.proc1(); // call proc "proc1()" from Lib2
 ```
 
 Or you can exclude `proc1` from being visible when imported from `Lib1` like this:  
-```c++
+```jai
 Lib1 :: #import "Lib1";
 using,except(proc1) Lib1;
 ```
@@ -225,7 +225,7 @@ In fact, module _Basic_ has several module parameters:
 ### 8.7.2 Creating your own module parameters
 Let's create our own module `TestModule_Params` in d:\my_modules\TestModule_Params\module.jai (or similar on other platforms) with the following contents:
 
-```c++
+```jai
 #import "Basic";
 #module_parameters(VERBOSE := false);            // (1)
 
@@ -241,7 +241,7 @@ Let's create our own module `TestModule_Params` in d:\my_modules\TestModule_Para
 In line (1) we define a module parameter `VERBOSE` with default value false. Line (2) runs a code block at compile-time and prints a message according to the value of `VERBOSE`. 
 In our main file `8.2_main.jai` we have the code:
 
-```c++
+```jai
 #import "TestModule_Params" (VERBOSE=true); // (1)
 
 main :: () {}

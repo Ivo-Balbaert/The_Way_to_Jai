@@ -8,7 +8,7 @@ In this section we discover the branching, in the next section the looping capab
 ## 14.1 The if-else statement
 See example `14.1_if_else.jai`:
 
-```c++
+```jai
 #import "Basic";
 
 main :: () {
@@ -88,7 +88,7 @@ is caught by the compiler with:  Error: Operator '=' can only be used at stateme
 
 ## 14.2 Ternary operator ifx
 Sometimes you want to initialize a variable depending on some condition, like in:  
-```c++
+```jai
 name: string;
 if thing {
     name = thing.name;
@@ -102,7 +102,7 @@ Jai allows you to write this as:
 `name := ifx thing then thing.name else get_default_name();`
 
 See example *14.2_ifx.jai*:
-```c++
+```jai
 #import "Basic";
 
 Thing :: struct {
@@ -178,7 +178,7 @@ If you need to compare a variable against a lot of values, you would have to wri
 ## 14.3.1 What is the if-case construct?
 See example `14.3_if_case.jai`:
 
-```c++
+```jai
 #import "Basic";
 
 main :: () {
@@ -298,7 +298,7 @@ if !var {
 
 See example *14.4_test_empty.jai*:
 
-```c++
+```jai
 #import "Basic";
 
 main :: () {
@@ -332,7 +332,7 @@ As you can see this makes for easy tests on numbers with value 0, empty strings 
 ## 14.5 Other useful if tests
 See *14.5_if_tests.jai*:
 
-```c++
+```jai
 #import "Basic";
 
 main :: () {

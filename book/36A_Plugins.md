@@ -18,7 +18,7 @@ In the following line we invoke a plugin `TestRunner`:
 The module *Example_Plugin* was made to show you what is needed. Basically you need to copy the `get_plugin` procedure and adapt it to your needs.
 
 The `Default_MetaProgram` communicates with the plugins it has loaded  through the following code:
-```c++
+```jai
 message_loop :: (w: Workspace) {
     while true {
         message := compiler_wait_for_message();

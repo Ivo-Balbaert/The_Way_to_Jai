@@ -75,7 +75,7 @@ Finally, the sum of compilation and link time is reported as _Total time:    0.4
 
 Here is a complete example output again:
 
-```c++
+```jai
 Stats for Workspace 2 ("Target Program"):
 Lexer lines processed: 6481 (11075 including blank lines, comments.)
 Front-end time: 0.054479 seconds.

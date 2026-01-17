@@ -13,7 +13,7 @@ main :: () {
     print("%\n", n != m); // => true
 
     // operators:
-    print("! changes to %\n", !b1); // => ! changes to false
+    print("! changes to %\n", !b1); // => ! changes true to false and vice-versa
     b2 := !b1;
     print("b2 is %\n", b2); // => b2 is false
 

@@ -7,7 +7,7 @@ Arrays are a datatype built into the compiler, to improve performance and avoid 
 Jai supports both static (fixed) and dynamic arrays, and array views.
 Module _Preload_ defines an array type as:
  
-```c++
+```jai
 Array_Type :: enum u32 {
         FIXED     :: 0;
         VIEW      :: 1;
@@ -18,7 +18,7 @@ Array_Type :: enum u32 {
 ## 18.1. Array literals
 See *18.1_array_literals.jai*:
 
-```c++
+```jai
 #import "Basic";
 
 Good_Fruit :: enum {
@@ -104,7 +104,7 @@ starting from 0 like in all C-like languages. See § 18.3.1 and 18.6  for more e
 ## 18.3. Static arrays
 See *18.2_static_arrays.jai*:
 
-```c++
+```jai
 #import "Basic";
 
 Vector3 :: struct {
@@ -213,7 +213,7 @@ The indices of an array arr range from 0 to `arr.count - 1`.
 1) What is the size of an array of type [100_000]void?
 (see void_array.jai)
 2) Given the following struct definition:  
-```c++
+```jai
 Thing :: struct {
     x: int; @amount
 }
@@ -272,7 +272,7 @@ Jai (unlike C) also has **dynamic** or **resizable arrays** , where the size is 
 
 See *18.3_dynamic_arrays.jai*:
 
-```c++
+```jai
 #import "Basic";
 
 main :: () {
@@ -345,7 +345,7 @@ In line (10) we fill up a dynamic array in a simple for loop, but not in an effi
 ### 18.4.2 Internal definition of a dynamic array
 This is found in module _Preload_; again it is a struct, which takes up 40 bytes:
 
-```c++
+```jai
 Resizable_Array :: struct {
     count      : s64;        // Signed so that for 0..count-1 it works
     data       : *void;
@@ -361,7 +361,7 @@ Resizable_Array :: struct {
 ## 18.5. Array views
 See *18.4_array_view.jai*:
 
-```c++
+```jai
 #import "Basic";
 
 main :: () {
@@ -392,7 +392,7 @@ main :: () {
 
 An **array view** is like the name says, a view on an underlying array in memory; so it uses that memory. It allocates no memory of its own, so no need to free it. In lines (1)-(3) above, we define array views arrv, arrv2 and v (a view on a dynamic array). They are all of type **[]int**  
 _Preload_ defines an array view as:  
-```c++
+```jai
 Array_View_64 :: struct {
     count     : s64;  // Signed so that if we do for 0..count-1 it works...   
     data      : *u8;
@@ -413,7 +413,7 @@ Why are array views important? Besides getting an alternative look on an array w
 ### 18.5.2 Misuse of array views with dynamic arrays
 See *18.8_array_view_misuse.jai*:
 
-```c++
+```jai
 #import "Basic";
 
 main :: () {
@@ -437,7 +437,7 @@ The reason for this is that any time you call `array_add` on a, it might move it
 (See also *18.1_static_arrays.jai* line (4B) and following for examples with static arrays.)  
 See *18.5_array_for.jai*:
 
-```c++
+```jai
 #import "Basic";
 
 main :: () {
@@ -526,7 +526,7 @@ But for example when writing a game in 2D or 3D, we need arrays with that number
 
 See *18.6_multidim.jai*:
 
-```c++
+```jai
 #import "Basic";
 
 main :: () {
@@ -563,7 +563,7 @@ Lines (1) and following show some examples of declaration and initialization. Li
 ## 18.8. Passing an array to a procedure
 See *18.7_array_proc.jai*:
 
-```c++
+```jai
 #import "Basic";
 
 print_int_array :: (arr: [] int) {
@@ -623,7 +623,7 @@ This prevents the many possible bugs resulting from the way C handles this. In J
 ## 18.9. An array of pointers
 See *18.9_array_pointers.jai*:
 
-```c++
+```jai
 #import "Basic";
 
 Dragon :: struct {
@@ -665,7 +665,7 @@ Such a proc is sometimes called `variadic`.
 
 See *18.10_var_args.jai*:
 
-```c++
+```jai
 #import "Basic";
 
 var_args :: (args: ..int) {  // (1)
@@ -726,7 +726,7 @@ You can spread parameters with a name as well as in line (7B):
 The `print` proc is variadic:  
 
 See *18.11_print_proc.jai*:
-```c++
+```jai
 #import "Basic";
 
 main :: () {
@@ -746,7 +746,7 @@ We see it has a variable number argument `args`, which makes this possible.
 ## 18.12 Array of structs
 See 18.11_array_of_structs.jai:
 
-```c++
+```jai
 #import "Basic";
 
 Vec2 :: struct {

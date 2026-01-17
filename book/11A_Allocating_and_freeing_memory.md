@@ -13,7 +13,7 @@ Jai's solution to this is the **defer** keyword (first introduced by Go), which 
 
 Let's first see how defer works:  
 See *11.1_defer.jai*
-```c++
+```jai
 #import "Basic";
 
 main :: () {
@@ -37,7 +37,7 @@ We see that the defer statement in line (1) only executes right before the closi
 The execution of every statement or code block after the defer keyword is delayed until the end of the current (present) scope. This means that these deferred statements will be called when code execution has reached the ending }, that is: when we leave the current scope.
 
 Now let's look at a second example, where multiple defer statements are used, see  *11.2_defer.jai*:
-```c++
+```jai
 #import "Basic";
 
 main :: () {
@@ -61,7 +61,7 @@ Try your hand at the following exercises.
 "One!", "Three!" and "Two!" (see exercises/11/defer1.jai)
 
 2) What is the output of the following program and then run to check (see *defer2.jai*):
-```c++   
+```jai   
 #import "Basic";
 
 main :: () {
@@ -72,7 +72,7 @@ main :: () {
 ```
 Here is another example to demonstrate some subtleties where defer is used with a code block and nested levels, See *11.3_defer_levels.jai*:
 
-```c++   
+```jai   
 #import "Basic";
 
 main :: () {
@@ -99,7 +99,7 @@ x is 234
 > Also when measuring performance as we did in 6B.2_get_time.jai, you can defer the calculation of the elapsed time in the code, and after the line with defer call all code you want to measure: 
 > 
 See *11.5_get_time*:
-```c++
+```jai
 // version with defer:
 main :: () { 
     start_time := get_time();
@@ -121,7 +121,7 @@ defer is mainly used to free memory or other resources (closing a file (see § 2
 ## 11.2 Allocating and freeing primitive variables
 Let's take a look at *11.4_memory.jai*:
 
-```c++
+```jai
 #import "Basic";
 
 main :: () {
@@ -161,7 +161,7 @@ The type of n1 is *s64
 The int variable n0 defined in line (1) is allocated on the stack; it will automatically be freed at the end of the procedure (here main) it is defined in.
 The n1 variable is created on the heap in line (2) with the `alloc` proc, like this:
 
-```c++
+```jai
 n1 := cast(*int) alloc(size_of(int));  // (2) - on heap
 defer free(n1);                        // (3)
 ```

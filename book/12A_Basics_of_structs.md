@@ -7,7 +7,7 @@ Also because composite types like arrays and strings are defined internally as a
 ## 12.1 Struct declarations
 See *12.1_struct_declarations.jai*:
 
-```c++  
+```jai  
 #import "Basic";
 #import "Math"; // contains Vector2 struct
 
@@ -112,7 +112,7 @@ v3d = {
 
 Here is an example of a declaration of a struct that represents a 2-dimensional point. It is called `Vector2`, and is defined in module _Math_ (as are the also common `Vector3` and `Vector4`):
 
-```c++
+```jai
 Vector2 :: struct {
     x: float;
     y: float;
@@ -123,7 +123,7 @@ The **struct** keyword is mandatory, and its body contains an enumeration of its
 
 When two or more fields have the same type, there is a shorter syntax: 
 
-```c++
+```jai
 Vector3 :: struct {
     x, y, z: float;
 }
@@ -131,7 +131,7 @@ Vector3 :: struct {
 
 Here is a struct which describes a Person entity:
 
-```c++
+```jai
 Person :: struct {
     name            : string;
     age             : int;
@@ -174,7 +174,7 @@ The location field in Person is itself a Vector2 struct, that's why it is called
 
 Here are two examples of nested structs:
 
-```c++
+```jai
 Node :: struct {           
     value: int = 0;
 }
@@ -200,7 +200,7 @@ Look at the lines (0), (7) and (8): print knows how to print out a struct, and t
 `print` can also make use of the `formatStruct` proc, which gives additional functionality for printing out structs (see line (10)).
 
 This suggests that there is a much easier way to make a struct variable called **struct literals**. Instead of declaring it, and then assigning a value to each field, you can just do:  
-```c++
+```jai
 vec2 := Vector2.{2.0, 6.28}; 
 bob2 := Person.{"Robert", 42, Vector2.{64.139999, -21.92}}; 
 ```
@@ -216,7 +216,7 @@ Make a Super_Node struct variable with values 42 and 108; use the long and liter
 ## 12.5 Making structs on the heap
 See the code example *12.2_struct_heap.jai*:
 
-```c++
+```jai
 #import "Basic";
 
 Person :: struct {
@@ -258,7 +258,7 @@ A recursive struct is a struct that has as one (or more) of its fields a struct 
 ### 12.6.1 Linked List
 In code example *12.3_linked_list.jai*, we see how we can build a simple linked list, where each node has a 'payload' field `data`, and a `next` field that points to the next node:
 
-```c++
+```jai
 #import "Basic";
 
 LinkedList :: struct {
@@ -298,7 +298,7 @@ main :: () {
 ### 12.6.2 Double Linked List
 This can be defined as:
 
-```c++
+```jai
 LinkedList :: struct {  
     first: *Node; 
     last:  *Node;
@@ -314,7 +314,7 @@ Node :: struct {
 ### 12.6.3 Tree
 We can define a Tree data structure as follows:
 
-```c++
+```jai
 Tree :: struct {
   data: int;
   left: *Tree;
@@ -326,7 +326,7 @@ Later on we'll see (§ 26.6-7) how to read/print/process such structs, node by n
 
 ### 12.6.4 Circular dependencies
 A program containing the following struct definition:
-```c++
+```jai
 Node :: struct {
     owned_a: Node;
     owned_b: Node;
@@ -344,7 +344,7 @@ Cycle:
       depends on [0]
 `
 Use a pointer to get rid of the error:
-```c++
+```jai
 Node :: struct {
     owned_a: *Node;
     owned_b: *Node;
@@ -356,7 +356,7 @@ Node :: struct {
 Wouldn't it be nice if you could use the fields of a struct without having to prefix them with their struct-variable's name? That's possible! A struct defines a **namespace**, which you can locally create with the **using** keyword, to allow memory-smart composition. Then you don't need to use the variable's name anymore.
 
 See *12.4_using.jai*:
-```c++
+```jai
 #import "Basic";
 
 Person :: struct {
@@ -405,7 +405,7 @@ What if we want the power of `using` from § 12.7 and the ability to implicitly 
 
 See *12.6_#using_as.jai*:
 
-```c++
+```jai
 #import "Basic";
 
 Person :: struct {
@@ -468,7 +468,7 @@ More than one field can be prefixed with #as.
 
 Here is an example of a how to start a building a game entity system:  
 See *12.12_#as_using_entities.jai*:
-```c++
+```jai
 #import "Basic";
 
 Entity :: struct {
@@ -507,7 +507,7 @@ Make a pnt variable of type Point2D, initialize it as a struct literal. Then pri
 Suppose our application uses a struct Entity, with a number of fields that are used very much, and the rest is used much less. We could then place the frequently needed fields in an Entity_Hot struct, to be placed on the stack. The less needed fields could be placed in an Entity_Cold struct, to be allocated on the heap.  
 Our Entity struct could now be composed with pointers to these two parts as follows:
 
-```c++
+```jai
 Entity_Hot :: struct {
     // most-used fields, stored in stack
 }
@@ -527,7 +527,7 @@ Now fields can even be switched (for example based on the target platform) from 
 ## 12.10 Pointer to struct
 See *12.5_pointer_to_struct.jai*:
 
-```c++
+```jai
 #import "Basic";
 #import "Math";
 
@@ -575,7 +575,7 @@ This enhances memory efficiency and reduces cache misses for cache-sensitive dat
 It is used in the following example:
 
 See *12.7_struct_align.jai*:
-```c++
+```jai
 #import "Basic";
 
 Accumulator :: struct {
@@ -619,7 +619,7 @@ Also create a module TestScope with this content:
 ```
 
 Now create a `12.8_inner_module_test.jai` with as content:
-```c++
+```jai
 #import "Basic";
 #import "TestScope";
 
@@ -642,7 +642,7 @@ Then we can make an instance s1 of Struct1, and print out its value {42}.
 
 ## 12.13 Struct parameters
 See *12.9_struct_parameters.jai*
-```c++
+```jai
 #import "Basic";
 
 OUTER_VALUE :: 5;
@@ -674,7 +674,7 @@ What if we pass Type as a parameter?
 (Example taken from how_to/160_type_restrictions)  
 
 See *12.10_struct_parameters_type.jai*
-```c++
+```jai
 #import "Basic";
 
 Entity :: struct (Payload: Type) {           // (1)
@@ -701,7 +701,7 @@ In line (2), we make an Entity instance with an anonymous struct as Payload. Thi
 
 ## 12.15 Anonymous structs
 An **anonymous struct** can be defined as follows:
-```c++
+```jai
 struct {
      x: int;
      y: int;
@@ -712,7 +712,7 @@ struct {
 
 Here is an example of using an anonymous struct:  
 See *12.13_anonymous struct.jai*:
-```c++
+```jai
 #import "Basic";
 
 state: struct {             // (1)
@@ -751,7 +751,7 @@ Unlike classes in C++, Java, or any other object-oriented language, structs in J
 
 Here is an example of showing what is possible:   
 See *12.14_member_procs.jai*:
-```c++
+```jai
 #import "Basic";
 
 Obj :: struct {

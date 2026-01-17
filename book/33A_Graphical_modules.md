@@ -11,7 +11,7 @@ At the present time, Jai has bindings in the distribution for ImGui, nvt, stb_im
 We start with the basic setup code to open up a window:
 
 See *33.1_glfw_window.jai*:
-```c++
+```jai
 #import "GL";
 #import "glfw";
 
@@ -64,7 +64,7 @@ We saw a 1st example of its use in § 31.2
 
 The Jai _SDL_ module has SDL2 bindings. It contains the following test example:
 See _33.4_sdl_test.jai_:
-```c++
+```jai
 #import "Basic";
 #import "SDL";
 #import "String";
@@ -118,7 +118,7 @@ The Jai distribution contains a simple example of opening a window with the titl
 (Copy SDL2.dll and SDL2.lib from the SDL/win folder next to the exe)
 
 See *33.5_gl_sdl.jai*:
-```c++
+```jai
 #import "Basic";
 #import "GL";
 #import "SDL";
@@ -202,7 +202,7 @@ In this section, a number of simple examples are shown. They come from the many 
 Here is Simp's minimum code to open and close a window:
 
 See *33.2A_simp_window.jai*:
-```c++
+```jai
 #import "Basic";
 #import "Input";
 Simp :: #import "Simp";
@@ -251,7 +251,7 @@ To make Simp draw objects with opacity, use: `Simp.set_shader_for_color(true);`
 Let's see how to draw a triangle with some nice color effect.
 
 See *33.11_colored_triangle.jai*:
-```c++
+```jai
 #import "Basic";
 #import "Input";
 #import "Math";
@@ -320,7 +320,7 @@ A circle can be approximately made by drawing a number of triangles with top ver
 Here is how it is coded:
 
 See *33.12_drawing_circle.jai*:
-```c++
+```jai
 #import "Basic";
 #import "Input";
 #import "Math";
@@ -381,7 +381,7 @@ See the color effect you get when using three colors to draw the circle, as in �
 By only adding some 10 lines of code to the previous example, we can draw a moving red square, that bounces of the sides of the window: 
 
 See *33.2B_bouncing_square.jai*:
-```c++
+```jai
 #import "Basic";
 #import "Input";
 #import "Math";
@@ -467,7 +467,7 @@ The module Simp also contains some examples (_modules/Simp/examples_):
 Here is the code to draw a board:  
 
 See *33.13_drawing_board.jai*:
-```c++
+```jai
 #import "Basic";
 #import "Input";
 #import "Math";
@@ -542,7 +542,7 @@ The actual drawing takes place in the for-loop starting in (1). Here we:
 ### 33.5.6 A moving shape
 Starting from the code in the previous §, we change the colors so that the board appears more like a background.  
 To draw a shape, we change a few adjacent cells to another color (shape_color), and call `immediate_cell_quad` four times (see line (1)).
-```c++
+```jai
 immediate_cell_quad(0, 1, shape_color);
 immediate_cell_quad(1, 1, shape_color);
 immediate_cell_quad(2, 1, shape_color);
@@ -550,7 +550,7 @@ immediate_cell_quad(2, 2, shape_color);
 ```
 To show the falling movement, the y coordinate is set to a variable row, which starts at the top (grid_rows - 2), and diminishes when time goes by (implemented in snippets (2A-B)).  
 Implementing left-right movement is done in the event-handler (see lines (3) where we check for arrow-left and arrow-right keys):   
-```c++
+```jai
 case .ARROW_LEFT;  col -= 1;      // (3)
 case .ARROW_RIGHT; col += 1;
 ```  
@@ -558,7 +558,7 @@ so we now have to replace the x coordinate by col.
 
 
 See *33.14_moving_shape.jai*:
-```c++
+```jai
 #import "Basic";
 #import "Input";
 #import "Math";
@@ -669,7 +669,7 @@ The following program draws two buttons when the render1 macro call is uncomment
 When render2 is called, a dropdown list is shown.
 
 See _33.3_getrect_buttons.jai_:
-```c++
+```jai
 #import "Basic";
 #import "GetRect";
 Input :: #import "Input";
@@ -763,7 +763,7 @@ The module also contains an example (_modules/Simp/examples_):
 This module contains platform-independent window creation routines.
 Showing a window is as easy as this code-snippet:
 
-```c++
+```jai
 #import "Input";
 #import "Windows";
 #import "Window_Creation";
@@ -780,7 +780,7 @@ main :: () {
 Adding handling a QUIT event:
 
 See *33.6_window_creation_events.jai*:
-```c++
+```jai
 #import "Input";
 #import "Windows";
 #import "Window_Creation";
@@ -818,7 +818,7 @@ The functionalities for working with fonts are contained in the file `font.jai` 
 
 
 See *33.8_load_font.jai*:
-```c++
+```jai
 #import "Basic";
 #import "Simp";
 
@@ -836,7 +836,7 @@ main :: () {
 The font "Anonymous Pro" is loaded through the procedure `get_font_at_size` into `my_font` from the .ttf file in subfolder *assets/fonts/*.
 
 Once you have a font, you use it to initialize and draw some `text` (which is a string) on the screen:  
-```c++
+```jai
 text := sprint("Score: %", num_invaders_destroyed);
 text_w := prepare_text(my_font, text);
 draw_prepared_text(my_font, window_width/30, window_height-my_font.character_height, .{.5, .8, .2, 1});
@@ -850,7 +850,7 @@ The functionalities for working with textures are contained in the file `texture
 Here is the minimal code to load a texture:
 
 See *33.9_load_texture.jai*:
-```c++
+```jai
 #import "Basic";
 #import "Simp";
 
@@ -873,7 +873,7 @@ The loading of a texture needs bitmap functionality, which is defined in `bitmap
 Let's extend the previous example so that the ship texture is shown as a tile in a whole window:  
 
 See *33.15_drawing_texture.jai*:
-```c++
+```jai
 #import "Basic";
 #import "Math";
 #import "Window_Creation";
@@ -997,7 +997,7 @@ The following example shows how to accomplish this:
 (Playing a sound only works while showing a window, but we omit event-handling code here (stop the program with CTRL+C).)
 
 See *33.10_play_sound.jai*:
-```c++
+```jai
 #import "Basic";
 #import "File";
 #import "Input";
@@ -1129,7 +1129,7 @@ In line (1) we create a `Sound_Player` struct instance. (2A-B) load the sound fr
 ## 33.12 How to disable a Windows app from opening the console
 In all the previous examples in this chapter, when we started the windows executable, a window appears combined with a (black) console window. But when you want to run your app in production, you don't want the console!  
 There is an easy way to do this, just add the following lines to your app:  
-```c++
+```jai
 #run {
     Windows_Resources :: #import "Windows_Resources";
     Windows_Resources.disable_runtime_console();

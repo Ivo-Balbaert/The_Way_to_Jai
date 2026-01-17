@@ -10,13 +10,11 @@ main :: () {
     print("%2 %1 %2\n", n, m); // => 42 7 42
     // print("% %", n, m, counter); // =>  Warning: Incorrect number of arguments supplied to 'print': The format string requires 2 arguments, but 3 arguments are given.
 
-    // printing % with %%:
-    // => Error: Incorrect number of arguments supplied to 'print': 
-    // The format string requires 3 arguments, but 1 argument is given.
+    // printing %: use \%
     value := 50;
-    print("Everything is on sale for %1 off!\n", value); // (4)
+    print("Everything is on sale for %1\% off!\n", value); // (4)
     // => Everything is on sale for 50% off!
-    bytes_printed := print("Everything is on sale for %1 off!\n", value); // (4B)
+    bytes_printed := print("Everything is on sale for %1\% off!\n", value); // (4B)
     // => Everything is on sale for 50% off!
     print("%", bytes_printed); // => 35
 }

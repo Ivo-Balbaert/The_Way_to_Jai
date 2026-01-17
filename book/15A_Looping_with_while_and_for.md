@@ -5,7 +5,7 @@ Often we need to repeat a block of code a number of times (a for-loop) or as lon
 ## 15.1 While loop
 See *15.1_while.jai*:
 
-```c++
+```jai
 #import "Basic";
 
 main :: () {
@@ -119,7 +119,7 @@ In line (7) you see the same while loop as used for the counting down, but now t
 ### 15.1.3 Printing out a recursive list
 In § 12.6 we constructed a linked-list with a recursive struct LinkedList. To print out its data, now we can do this through a loop mechanism, See *15.2_while_looping_through_a_linked_list.jai*. This has the same definition of LinkedList and variable lst as in example 13.3_linked_list.jai, so we omit this code here; the following code is used between c.next = null and the free statements:
 
-```c++
+```jai
     print("List printed in a while loop: \n");
     print("% -> ", lst.data);
     r := lst.next;              //   (1)
@@ -139,7 +139,7 @@ When you want to iterate over a range of things, `for` is your best tool.
 
 See *15.3_for.jai*:
 
-```c++
+```jai
 #import "Basic";
 
 main :: () {
@@ -206,7 +206,7 @@ Here is a version of a factorial proc (see § 6B.2) that uses a reversed for loo
 
 See *15.8_for_reverse.jai*:
 
-```c++
+```jai
 #import "Basic";
 
 factorial :: (f: int) -> int {
@@ -243,7 +243,7 @@ ii) break out of the current loop iteration at a certain condition, and continue
 Here are examples of these situations:
 See *15.4_break.jai*:
 
-```c++
+```jai
 #import "Basic";
 
 main :: () {
@@ -294,7 +294,7 @@ So normally a `break` terminates the current innermost loop immediately, but a `
 
 Here is a more useful example of `break condition` when testing for a QUIT signal in a game's eventloop:
 
-```c++
+```jai
  while eventloop := true {
     Input.update_window_events();
     ...
@@ -306,7 +306,7 @@ Here is a more useful example of `break condition` when testing for a QUIT signa
 
 See *15.5_continue.jai*:
 
-```c++
+```jai
 #import "Basic";
 
 main :: () {
@@ -366,7 +366,7 @@ Line (4) and following show a combined use of break and continue. A lot of flexi
 ## 15.4 Looping over an enum's values:
 See *15.6_for_enum.jai*:
 
-```c++
+```jai
 #import "Basic";
 
 Direction :: enum {
@@ -398,7 +398,7 @@ The info provided in Type_Info gives us the capability to do runtime reflection,
 
 See *15.7_struct_members.jai*:
 
-```c++
+```jai
 #import "Basic";
 #import "Math";
 

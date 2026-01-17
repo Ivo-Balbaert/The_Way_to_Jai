@@ -8,7 +8,7 @@ with a type tag that tells you which sub-type you are dealing with.
 This example exhibits quite a lot of OO-like features.
 
 See *23B.1_documents.jai*:
-```c++
+```jai
 #import "Basic";
 
 Document :: struct {      // (1)

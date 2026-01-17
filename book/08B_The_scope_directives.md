@@ -23,7 +23,7 @@ If you want to have some definitions only visible within the module, use the `#s
 ## 8B.3 An example of using the #scope directives
 See *8.2_file_and_global_scopes.jai* (this is the code of the how_to 151_file_and_global_scopes example by J. Blow):  
 
-```c++
+```jai
 #import "Basic";
 
 #load "file_alpha.jai";
@@ -54,7 +54,7 @@ main :: () {
 ```
 
 *file_alpha.jai*:
-```c++
+```jai
 file_and_application_scope_in_file_alpha :: () {
     print("Whiskey: %\n", whiskey);
     print("Tango:   %\n", tango);
@@ -69,7 +69,7 @@ foxtrot :: "File Scope        (from file alpha).";
 ```
 
 *file_beta.jai*:
-```c++
+```jai
 file_and_application_scope_in_file_beta :: () {
     print("Whiskey: %\n", whiskey);
     print("Tango:   %\n", tango);

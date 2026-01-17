@@ -15,7 +15,7 @@ Get it from the lib folder in the Jai module, or from the following [distributio
 Copy raylib.dll next to the game executable.
 
 See *35.1_raylib_sample.jai*:
-```c++
+```jai
 #import,dir "raylib";
 #import "Math";
 

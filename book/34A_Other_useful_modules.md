@@ -5,7 +5,7 @@ We already used bubble sort in program 30.11_using_notes.jai - § 30.12
 Here we present a simple example for using these procs.
 
 See *34.1_sorting.jai*:
-```c++
+```jai
 #import "Basic";
 #import "Sort";
 #import "String";
@@ -48,7 +48,7 @@ A hash table uses a _hash_ function to compute an index, also called a hash code
 (For more info, see: [https://en.wikipedia.org/wiki/Hash_table])  
 
 See *34.2_hash_table.jai*:
-```c++
+```jai
 #import "Basic";
 #import "Hash_Table";
 
@@ -105,7 +105,7 @@ This module provides a memory allocator to quickly allocate memory blocks of man
 ### 34.3.1 Using a Pool 
 Here is an example which shows how to use a Pool:  
 See *34.3_pool.jai*:
-```c++
+```jai
 #import "Basic";
 #import "Pool";
 
@@ -190,7 +190,7 @@ The the reset/initial state is indeed bytes_left = 0, because no memory has been
 To use a Pool allocator when using New, use allocator as the 2nd argument to New and set it to a Pool instance, like in the following example (see line (1)):
 
 See *34.4_struct_pool.jai*:
-```c++
+```jai
 #import "Basic";
 #import "Pool";
 
@@ -221,7 +221,7 @@ main :: () {
 ### 34.3.3 Using a pool with a macro 
 Here is an example (taken from the Jai Wiki site) showing how to use a pool in a macro.  
 See *34.5_macro_pool.jai*:
-```c++
+```jai
 #import "Basic";
 #import "Pool";
 
@@ -250,7 +250,7 @@ The pool itself is used only within the macro `use_pool`.
 A simpler alternative than module _Pool_ with perhaps better performance characteristics is offered by the *Flat_Pool* module.
 
 Here is a simple example of its use, see *34.6_flat_pool.jai*:
-```c++
+```jai
 #import "Basic";
 #import "Flat_Pool";
 
@@ -289,7 +289,7 @@ This single-file module contains all you need to send plain-text or HTML e-mails
 Here is a simple working example that shows how to send an e-mail:  
 
 See *34.7_mailing.jai*:
-```c++
+```jai
 #import "Basic";
 Mail :: #import "Mail";
 

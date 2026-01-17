@@ -16,7 +16,7 @@ It also contains very low-level functions or **intrinsics** which closely mimic 
 > Notice the #intrinsic directive with which these functions are marked.
 
 For some example code, See *4.2_intrinsics.jai*:
-```c++
+```jai
 #import "Basic";
 
 main :: () {

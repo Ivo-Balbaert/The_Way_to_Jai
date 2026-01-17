@@ -20,7 +20,7 @@ We already talked about running code at compile time as early as § 3.2.4. Jai p
 
 ## 26.1 The type table
 See *26.1_type_table.jai*:
-```c++
+```jai
 #import "Basic";
 #import "Compiler";
 
@@ -66,7 +66,7 @@ We already know that we need to use `#run main()` to run the whole program at co
 In fact, any code (a code-line, a block of code or a procedure) can be run at compile time with **#run**. #run produces a constant as result.
 
 See *26.2_run.jai*:
-```c++
+```jai
 #import "Basic";
 #import "Math";
 
@@ -154,7 +154,7 @@ In lines (4)-(5) two lambdas are called at compile-time. Line (6) shows the same
 #run can access and modify globals and by default, global variables will be reset back to the original default values when outputting the executable (see lines 7A-B).  If you don't want that, use `#no_reset` (see § 26.2.2).
 
 > Summary: difference between running at compile-time and at runtime:
-```c++
+```jai
 proc1 :: () { ... }
 
 #run proc1();   // (1) running byte-code at compile time
@@ -182,7 +182,7 @@ But: you can't run FFI (see § 29) during a #run.
 
 The following program will make the difference between compile-time and run-time even clearer.
 See *26.15_comprun.jai*:
-```c++
+```jai
 #import "Basic";
 
 comprun :: (x: $T) {  
@@ -231,7 +231,7 @@ Note that the order of the #run's can vary, because compilation works multi-thre
 With all these meta-programming functionalities, it can be important to know when you are running in compile-time and when you are 'really' running. Luckily there is a **#compile_time** directive, that is true at compile-time, and false at run-time. However it cannot be used as a constant.
 
 See *26.3_ct.jai*:
-```c++
+```jai
 #import "Basic";
 
 main :: () {
@@ -256,7 +256,7 @@ The `#no_reset` directive tells the compiler that the value of a variable can be
 This is shown in the following program:
 
 See *26.4_no_reset.jai*:
-```c++
+```jai
 #import "Basic";
 
 #no_reset globvar := 0;
@@ -291,7 +291,7 @@ The following code shows how to compute a struct at compile-time, then stash its
 (example from Jai Community - Wiki)
 
 See *26.30_stash_struct.jai*:
-```c++
+```jai
 #import "Basic";
  
 Stock :: struct {
@@ -341,7 +341,7 @@ For example:
 This is exactly what **#if** does:
 
 See *26.5_if.jai*:
-```c++
+```jai
 #import "Basic";
 #import "Math";
 
@@ -425,7 +425,7 @@ Here is a way to use it in debugging to print out info you want to inspect; in p
 }
 ```
 This technique is used in the _Basic_ module to load specific code depending on the OS:
-```c++
+```jai
 #if OS == .WINDOWS {
     #load "windows.jai";
 }
@@ -441,7 +441,7 @@ This technique is used in the _Basic_ module to load specific code depending on 
 There is a nice illustration of this in example § 29.8.
 
 The same idea works for importing modules, for example:  
-```c++
+```jai
 #import "Basic";
 #import "Compiler";
 #import "String";
@@ -466,7 +466,7 @@ The **#insert** directive lets you insert code. It inserts a piece of compile-ti
 
 ### 26.4.1 Inserting code strings with #insert
 See *26.6_insert.jai*:
-```c++
+```jai
 #import "Basic";
 
 my_code :: #string END_STRING
@@ -499,7 +499,7 @@ And of course the string that you #insert is checked that it is valid Jai code w
 Now we are going to combine #insert with #run:
 
 See *26.35_insert_string_from_proc.jai*:
-```c++
+```jai
 #import "Basic";
 
 // helper proc to generate a string that represents code
@@ -537,7 +537,7 @@ So at compile-time we can execute arbitrary Jai code that generates and inserts 
 ### 26.4.3 Using #insert with multi-line strings
 Here is a more useful example, where #insert is used with multi-line strings:  
 See *26.24_insert_multi.jai*:
-```c++
+```jai
 #import "Basic";
 
 report :: ($header: string, $body: string, $footer: string, n: int) {
@@ -581,7 +581,7 @@ You can see that it is real code, because variable `count` is incremented. Heade
 
 ### 26.4.4 Using #insert -> string
 Even the entire contents of a struct can be made through a `#insert -> string` construction. This takes the form:
-```c++
+```jai
 A_Type :: struct( ... ) {
     #insert -> string { ... }
 }
@@ -593,7 +593,7 @@ Instead of an anonymous proc, this form can also take a named procedure, like:  
 Here is an example where this is used to make an identity matrix (example taken from how_to/600):
 
 See *26.25_insert_ident_matrix.jai*:
-```c++
+```jai
 #import "Basic";
 
 Matrix :: struct (N: int) {
@@ -651,7 +651,7 @@ You can convert a #code during compile-time execution back-and-forth to the synt
 
 Here are some use-cases :
 See *26.26_insert_code.jai*:
-```c++
+```jai
 #import "Basic";
 
 what_type :: ($c: Code) {                   // (2)
@@ -680,7 +680,7 @@ In the same way as you can do a #insert -> string (see previous §), you can mak
 `#insert` can also take a variable c of type Code, e.g.: `#insert(c: Code);`.  
 
 It is also often used in the body of a macro like this:  
-```c++ 
+```jai 
 some_macro :: (body: Code) #expand {
     ...
     #insert body;

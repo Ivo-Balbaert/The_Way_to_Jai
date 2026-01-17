@@ -5,7 +5,7 @@ Everybody knows the ping-pong simulation game, the first ever computer game that
 Here is a still imperfect version of this game using pure Jai:
 
 See *52.1_simp_pong.jai*:
-```c++
+```jai
 #import "Basic";
 #import "Input";
 #import "Math";
@@ -175,7 +175,7 @@ A number of lovely simple games where made by `hopeforsenegal`, see [https://git
 Here is the version of the Pong game from this collection.
 
 See *52.2_jai_raylib_pong.jai*:
-```c++
+```jai
 #import "String"; 
 #import "Math"; 
 #import "Basic";

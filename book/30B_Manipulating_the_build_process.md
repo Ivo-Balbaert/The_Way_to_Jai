@@ -4,7 +4,7 @@
 As developer you can access the workings of the compiler through the compiler message loop.
 
 See *30.5_compiler_intercept.jai*:
-```c++
+```jai
 #import "Basic";
 #import "Compiler";
 
@@ -165,7 +165,7 @@ Entering phase PRE_WRITE_EXECUTABLE
 ```
 
 Here are all possible compilation phases:  
-```c++
+```jai
 phase: enum u32 {
   ALL_SOURCE_CODE_PARSED        :: 0;
   TYPECHECKED_ALL_WE_CAN        :: 1;
@@ -209,7 +209,7 @@ Another use-case would be to run the program after successful completion of the 
 What if we want to build our project, and run it on successful completion?
 
 See *30.6_build_and_run.jai*:
-```c++
+```jai
 #import "Basic";
 #import "Compiler";
 #import "Process";
@@ -278,7 +278,7 @@ This program was built with meta-program 30.8_build_and_run.jai
 Sometimes it is easier to specify the file to compile at the command-line, instead of hardcoded within the build program. The following example shows how to do this:
 
 See *30.14_build_inlining.jai*:
-```c++
+```jai
 #import "Basic";
 #import "Compiler";
 
@@ -332,7 +332,7 @@ args[0] is the program name (30.14_...jai), args[1] the separator '-' and main8 
 > Command line: Missing argument to -run.
 
 Here is the contents of main8.jai:
-```c++
+```jai
 #import "Basic";
 
 main :: () {
@@ -347,7 +347,7 @@ In § 2B we told you that arguments given at the end of a `jai` command with `- 
 Now we will show you how to use them, enhancing our previous program.
 
 See *30.7_build_and_run2.jai*:
-```c++
+```jai
 #import "Basic";
 #import "Compiler";
 #import "Process";
@@ -414,7 +414,7 @@ To get the same output as in the previous section, you now have to call the comp
 In the same way as in the previous section, we can decide to either do a debug build or a release build based on the given command-line argument. This is shown in the following code, which is a further development of the code in § 30.4.8:
 
 See *30.8_debug_release_build.jai*:
-```c++
+```jai
 
 #import "Basic";
 #import "Compiler";
@@ -487,7 +487,7 @@ Another use-case would be enforcing coding house rules, an example is shown in 3
 MISRA coding standards are a set of C and C++ coding standards, developed by the Motor Industry Software Reliability Association (MISRA). These are standards specific to the automotive industry,.
 
 See *30.9_house_rules.jai*:
-```c++
+```jai
 #import "Basic";
 #import "Compiler";
 
@@ -578,7 +578,7 @@ How_to/490 shows how to get info on loaded files and imported modules at compile
 
 ## 30.12 Generating optimized LLVM bitcode
 See *30.10_generate_llvm_bitcode.jai*:
-```c++
+```jai
 #import "Basic";
 #import "Compiler";
 
@@ -631,7 +631,7 @@ Notes on a struct or function were described in § 15.7, and code was shown to d
 In _main4.jai_ we have tagged a number of procs with the note `@fruit`.
 
 See *main4.jai*:
-```c++
+```jai
 #import "Basic";
 
 dog :: () {
@@ -660,7 +660,7 @@ The program contains no `main` proc; this will be created by the meta-program!
 The meta-program finds all the procs tagged @note and adds them to an array of strings called `procs` declared in line (1). It then sorts procs alphabetically, and generates a main proc that calls all procs tagged @fruit in alphabetical order.
 
 See *30.11_using_notes.jai*:
-```c++
+```jai
 #import "Compiler";
 #import "String";
 #import "Basic";
@@ -747,7 +747,7 @@ elephant
 The following code builds a dynamic library *dynlib.dll* on Windows and *dynlib.so* on Linux. 
 
 See *30.13_dynamic_libraries.jai*:
-```c++
+```jai
 #import "Basic";
 #import "Compiler";
 
@@ -796,7 +796,7 @@ build :: ()
 Line (1) is needed for building a dynamic library, which uses the following code: 
 
 See *dynlib.jai*:
-```c++
+```jai
 #program_export 
 dll_func :: () #no_context {
     write_string("Hello Sailor!\n");
@@ -809,7 +809,7 @@ Adding #c_call and push a fresh context here are needed also if you plan on call
 After the dynamic library `dynlib`and in a separate workspace `main7`, 30.13_dynamic_libraries.jai builds an executable *main7* from the following code:
 
 See *main7.jai*:
-```c++
+```jai
 dynlib :: #library,no_static_library "dynlib";
 dll_func :: () #no_context #elsewhere dynlib;
 
@@ -829,7 +829,7 @@ The compiler bakes type info data into the executable (see § 16.4.3). But you c
 The following code does just that.
 
 See *30.15_global_data.jai*:
-```c++
+```jai
 #import "Basic";
 #import "Compiler";
 #import "File";
@@ -881,13 +881,13 @@ OK! generated 'windows.jai'
 
 `windows.jai` contains only the Jai versions of C++ struct definitions and function signatures.  
 For example: `cpp_library.cpp` contains the following definition of a `VirtualCppSub::normal_method()` function, containing a printf statement.
-```c++
+```jai
 void VirtualCppSub::normal_method() {
     printf("VirtualCppSub::normal_method\n");
 }
 ``` 
 The header file `cpp_library.h` contains this signature:
-```c++  
+```jai  
 struct VirtualCppSub : public VirtualCppBase {
     DLL_API VirtualCppSub();
 
@@ -899,7 +899,7 @@ struct VirtualCppSub : public VirtualCppBase {
 ```
 
 This gets translated to the following definition in `windows.jai` (Line 5 starting with `normal_method`):
-```c++  
+```jai  
 VirtualCppSub :: struct {
     #as using virtualcppbase: VirtualCppBase;
     Constructor :: (this: *VirtualCppSub) -> void #cpp_method #foreign cpp_library "??0VirtualCppSub@@QEAA@XZ";
@@ -923,7 +923,7 @@ Note that the generated binding in Jai does NOT contain the printf statement. A 
 `windows.jai` is an auto-generated file, so any changes you make to it are overwritten when `first.jai` is compiled the next time! If you really need to make some changes, don't forget to take a backup copy.
 
 Here is the code of *first.jai*:  
-```c++
+```jai
 #run build();
 
 build :: () {
@@ -1011,7 +1011,7 @@ generate_bindings :: () -> bool {
 Finally a *main.jai* file is compiled to an executable *example*. It calls some of the C++ functions in cpp_library.cpp and prints that out, proving that we use the original C++ library from Jai.    
 Here is its source:
 
-```c++
+```jai
 main :: () {
     #if OS == .WINDOWS {
         log("CppBase:");
@@ -1112,7 +1112,7 @@ Extract it to a subfolder *vendor* in the folder created in Step 1.
 This file is called *build.jai* in folder *jai_raylib*.
 
 See *The_Way_to_Jai\examples\30\jai_raylib\build.jai*:
-```c++
+```jai
 #import "Basic";
 #import "Compiler";
 #import "File_Utilities";
@@ -1207,7 +1207,7 @@ In line (4) the bindings are generated and saved as *module.jai*. Lines (5) and 
 Then we create a workspace for a (here debug) build. In (6) we add the *local_modules* folder to the modules *import_path*.  
 Finally we add a file *main.jai* (in subfolder *src*) to compile, which will test our newly created bindings.  
 Here is the source of *main.jai*:  
-```c++
+```jai
 #import "Basic";
 rl :: #import "raylib_win64";
 

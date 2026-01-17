@@ -14,7 +14,7 @@ The following operators cannot be overloaded: = and New.
 
 ## 24.2 Vector operators
 See *24.1_overloading_vec.jai*:
-```c++
+```jai
 #import "Basic";
 #import "Math";
 
@@ -59,7 +59,7 @@ The **#symmetric** directive tells us that a Vector3 * a float (like in (3)) or 
 In this section we make a few operator overloadings ourselves.
 
 See *24.2_overloading_object.jai*:
-```c++
+```jai
 #import "Basic";
 
 Obj :: struct {     
@@ -127,7 +127,7 @@ using Hash_Table :: #import "Hash_Table";
 The **#poke_name** directive here effectively injects a reference to your operator== into the Hash_Table module.
 
 Here is a complete working example. See 24.3_poke_name.jai_:
-```c++
+```jai
 #import "Basic";
 Math :: #import "Math";
 

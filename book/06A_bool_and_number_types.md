@@ -1,7 +1,7 @@
 # Chapter 6 – Bool and number types
 See *6.1_bools.jai*:
 
-```c++
+```jai
 #import "Basic";
 
 main :: () {
@@ -57,13 +57,13 @@ You can find complete truth tables [here](https://en.wikipedia.org/wiki/Truth_ta
 ### 6.1.3 The assert statement
 See *6.2_assert.jai*:
 
-```c++
+```jai
 #import "Basic";
 
 main :: () {
     assert(5 == 5.0);
     // assert(4 == 5, "4 does not equal 5"); // (1)
-    // print("This is not printed when assert (false)");
+    // print("This is not printed when previous assert is false"); // (2)
 
     n := 42;
     assert(type_of(n) == int);
@@ -74,15 +74,17 @@ main :: () {
 d:/Jai/The_Way_to_Jai/6_Bool_and_number types/examples/6.3_assert.jai:5,3: Assertion failed: 4 does not equal 5
 
 Stack trace:
-c:/jai/modules/Preload.jai:334: default_assertion_failed
-c:/jai/modules/Basic/module.jai:74: assert
-d:/Jai/The_Way_to_Jai/6_Bool_and_number types/examples/6.3_assert.jai:5: main
+c:/jai/modules/Runtime_Support.jai:103: runtime_support_assertion_failed
+c:/jai/modules/Basic/module.jai:87: assert_helper
+D:/Jai/The_Way_to_Jai/examples/06/6.2_assert.jai:5: main
+A breakpoint was hit, but no debugger is attached.
 */
 ```
 
 Instead of always printing out if a bool expression is true of false, there is a handy shortcut with the **assert** procedure, defined in module _Basic_.
 
 `assert` takes an expression, and when this is true, nothing happens. When the expression is false, an assert stops the program execution with **Assertion failed** and the line where it happened, and prints out a stack trace. A message parameter after the expression is optional, but when there is one, it is also printed out (see the example in line (1)).
+So, assert is like: "verify this condition is still true at that point in the program, if not, stop it, because this is not normal".
 
 `assert` also works with complex expressions, procedure calls, and so on. It is a very useful tool to make sure your program is always in a correct state. It is also very handy during debugging.
 Also you can leave important assert statements in production code and disable them as described in § 20.1.2. That way, when a problem occurs you can quickly enable them in development/test to try to find the cause.
@@ -90,7 +92,7 @@ Also you can leave important assert statements in production code and disable th
 ## 6.2 - Number types
 See *6.3_numbers.jai*:
 
-```c++
+```jai
 #import "Basic";
 
 main :: () {
@@ -102,7 +104,7 @@ main :: () {
 
     print("8 / 3 is %\n", 8 / 3); // => 8 / 3 is 2
     print("8.0 / 3 is %\n", 8.0 / 3); // => 8.0 / 3 is 2.666667
-    print("8 %% 3 is %\n", 8 % 3); // => 8 % 3 is 2
+    print("8 \% 3 is %\n", 8 % 3); // => 8 % 3 is 2
     
     // (1) Dividing by zero
     // print("8 / 0 is %\n", 8 / 0); // => Error: Division by zero.
@@ -181,6 +183,9 @@ main                              d:\Jai\The_Way_to_Jai\examples\6\6.3_numbers.j
 ```
 
 We talked about the different number types in § 5.1.2
+xx is explained in §6.2.5. ifx is explained in § 14.2.
+true cast to integer results in 1, false results in 0.
+When casting to bool, only 0 results in false.
 
 ### 6.2.1 - Comparison operators
 We encountered == and != in § 6.1.1.
@@ -199,7 +204,7 @@ Division by zero results in a compile-time error if the compiler can see it, but
 ### 6.2.3 - Mixing of different types
 Different int types can be mixed, but int and float types cannot: see line (2).  
 Addition (+) is only defined for numbers, not for strings, as we see in line (3).  
-Line (4) and following: Any number literal or variable can be assigned to a variable if the variable has a 'bigger' type than the literal (so called widening), that is: if it can accommodate the literal; this is _implicit conversion_.
+Line (4) and following: Any number literal or variable can be assigned to a variable if the variable has a 'bigger' type than the literal (so called _widening_), that is: if it can accommodate (has enough memory space for) the literal; this is _implicit conversion_.
 For example, s8, s16, u32 will automatically cast to s64.
 But in many cases, Jai blocks the conversion, when the receiving type is too small, or when you want to put a signed integer into an unsigned type.
 
@@ -209,7 +214,7 @@ Conversions cause a lot of bugs in C/C++, that’s why Jai only allows implicit 
 Line (5) and following: In cases where the compiler indicates an assignment is not possible (for example: to put a bigger type into a smaller type), you can try to force an explicit cast (conversion) with :    **n = cast(Type) m;**  
 casting m to type Type and assigning the result to n.
 
-Casting will not always work as you can see in line (6). Cast operations check the range of the value they are casting; if information is lost, that's an error, but it's a runtime error:  
+Casting will not always work as you can see in line (6). Cast operations check the range of the value they are casting; if information is lost, that's an error, but it's a runtime error.  
 
 Explicit cast of a float to an int works, but the value is truncated, as you see in line (7):
 
@@ -220,17 +225,17 @@ This gives an added performance bonus.
 If there is information loss, you can _truncate_ the bits you don't care about, when you are very sure nothing wrong will happen:
 **cast, trunc(type)** 
 
-!! At this time (Jan 2023), math bounds checks are not yet implemented: casting checks for overflow, when the compiler can check it with constant values.  For an example of overflow, see 26.19_modify4. One way of taking care of this with polymorph procedures is to write an #modify that checks the type, see § 26.10 !!
+!! check ?? At this time (Jan 2026), math bounds checks are not yet implemented: casting checks for overflow, when the compiler can check it with constant values.  For an example of overflow, see 26.19_modify4. One way of taking care of this with polymorph procedures is to write an #modify that checks the type, see § 26.10 !
 
 ### 6.2.5 - Autocasting with xx
 Automatic casting can be used when the compiler can infer what casting has to take place at a certain moment, this is indicated with **xx**:  
 xx variable;   	// autocast variable to whatever type is needed  
 Example:   
-`b = xx c;`
+`b = xx c;`     // autocast c to the type of b
 
 But with xx the run-time casting checks are still in place.  
 `b = xx a;`    
-fails with the same previous error as when doing a cast(u8) a;
+fails with the same previous error as when doing: cast(u8) a;
 
 In the float to int example, this works but truncates:  
 `e = xx pi;`
@@ -239,14 +244,14 @@ Use xx to do a quick cast, you can always write the complete cast() when reviewi
 
 #### 6.2.5.1 - Cast of bool to int
 bool values can be autocast to ints with xx (see lines (8A-B)):
-```c++    
+```jai    
 xx true  returns 1  
 xx false returns 0
 ```
 #### 6.2.5.2 - Cast of int to bool - truthiness
 xx doesn't work here, but a cast(bool) of 0 returns false, and a cast(bool) of any other integer gives true (see line (8C and 8D)).
 
-```c++ 
+```jai 
  // Cast of int to bool:
     b1: bool = cast(bool) 0;
     print("%", b1);       // (8C) => false
@@ -261,14 +266,14 @@ This is called the _truthiness_ of a value. This is very useful in branching and
 ### 6.2.6 Complex expressions and precedence
 The same [precedence rules as in C](https://www.tutorialspoint.com/cprogramming/c_operators_precedence.htm) are followed, for example: *, /, and % operators have higher precedence and are by default evaluated first before evaluating + and -  
 But you can override these rules by using parentheses ( ) around the expression(s) that have to be evaluated first.  
-Arbitrarily complex expressions can be formed with boolean and other operators, which can quickly become unreadable. Use parentheses to make the expression more readable, as the code in line (7) shows.
+Arbitrarily complex expressions can be formed with boolean and other operators, which can quickly become unreadable. Use parentheses to make the expression more readable.
 
 ### 6.2.7 Bitwise operators
 
 #### 6.2.7.1 Using bitwise operators
 See *6.4_bitwise.jai*:
 
-```c++
+```jai
 #import "Basic";
 
 main :: () {
@@ -299,7 +304,7 @@ true
 
 These are Jai's bitwise operators (they work as in C):
 
-```c++
+```jai
 | - bitwise OR
 & - bitwise AND
 ^ - bitwise XOR
@@ -315,21 +320,21 @@ The code shows some examples of their use. The bitwise operators perform an arit
 #### 6.2.7.2 Tests on numbers
 Using the % or & operator, the following expressions return true when n is even:	
 
-```c++
+```jai
 n % 2 == 0   
 n & 1 == 0 
 ```
 
 This expression checks that n is a power of 2:
 
-```c++
+```jai
 n & (n - 1) == 0
 ```
 
 ### 6.2.8 Formatting procs
 See *6.5_formatting.jai*:
 
-```c++
+```jai
 #import "Basic";
 
 main :: () {
@@ -360,7 +365,7 @@ Scientific-notation-formatted float: 1.234235e+10, Decimal value: 12342345234
 */
 ```
 
-These `format` procs give additional functionality for formatting integers and floating numbers. They are defined in Print.jai in the _Basic_ module and return a `Formatter` data structure. The print function knows how to use a Formatter as control structure.
+These `format` procs give additional functionality for formatting integers and floating numbers. They are defined in _Print.jai_ in the _Basic_ module and return a `Formatter` data structure. The print function knows how to use a Formatter as control structure.
 
 **formatInt** :: (value : Any, base := 10, minimum_digits := 1, digits_per_comma : u16 = 0, comma_string := "") -> FormatInt 
 
@@ -371,7 +376,7 @@ Additionally, you can use `print_style.default_format_int` and `print_style.defa
 ### 6.2.9 Random numbers
 See *6.6_random.jai*:
 
-```c++
+```jai
 #import "Basic";
 #import "Random";
 
@@ -383,25 +388,25 @@ main :: () {
 
     r := random_seed(current_time_monotonic().low); 
     
-    print("\nA random integer: %\n", random_get()); // => 1137526400306752306
-    print("A random float between 0 and 1: %\n", random_get_zero_to_one()); // => 0.709799
-    print("A random float between 0 and 100: %\n", random_get_within_range(0, 100)); // => 75.796494
+    print("\nA random integer: %\n", random_get()); // => 15685560710023859762
+    print("A random float between 0 and 1: %\n", random_get_zero_to_one()); // => 0.571844
+    print("A random float between 0 and 100: %\n", random_get_within_range(0, 100)); // =>  29.475393
 
 }
 
 /*
 A random integer: 1137526400306752306
 A random float between 0 and 1: 0.709799
-A random float between 0 and 100: 75.796494
+A random float between 0 and 100: 75.796501
 
-A random integer: 16108974926811509810
-A random float between 0 and 1: 0.603063
-A random float between 0 and 100: 65.397636 
+A random integer: 15685560710023859762
+A random float between 0 and 1: 0.571844
+A random float between 0 and 100: 29.475393
 */
 ```
 
 The following procedures are defined in the _Random_ module (this is just a file *Random.jai* in the _modules_ folder) which deals with random number generation.    
-```c++
+```jai
 // sets the global random seed to the value passed as argument
 random_seed :: (new_seed: u32) 
 
@@ -425,7 +430,7 @@ The _Math_ module deals with mathematical operations with an emphasis on game pr
 
 It contains amongst others:
 * a list of constants like PI, TAU, FLOAT64_MIN, FLOAT64_MAX, FLOAT64_INFINITY, FLOAT64_NAN
-* a set of common mathematical functions, like abs,log2
+* a set of common mathematical functions, like abs, log2, etc.
 * color utility procedures
 * a set of common mathematical objects, such as Vector2, Vector3, Vector4, Quaternion, Matrix2, Matrix3 and Matrix4, Plane, which are all structs  
 

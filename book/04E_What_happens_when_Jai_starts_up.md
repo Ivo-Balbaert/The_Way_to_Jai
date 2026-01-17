@@ -1,7 +1,7 @@
 # 4E - What happens when Jai starts up?
 The actual entry point of any Jai program is called `__system_entry_point`, found in _modules/Runtime_Support.jai_:
 
-```c++
+```jai
 #program_export
 __jai_runtime_init :: (argc: s32, argv: **u8) -> *Context #c_call {
     __command_line_arguments.count = argc;

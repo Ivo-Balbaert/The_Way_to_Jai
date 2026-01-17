@@ -83,7 +83,7 @@ Pay attention to the following points:
 
 ## 29.5 Examples on Linux 
 See *29.1_call_c_linux.jai*:
-```c++
+```jai
 // This program only works on Linux!
 #import "Basic";
 
@@ -106,7 +106,7 @@ In line (1) we declare the Linux C standard library `libc`, lines (2) and follow
 ## 29.6 Examples on Windows 
 ### 29.6.1 Calling system library functions
 See *29.2_call_c_windows.jai*:
-```c++
+```jai
 // This program only works on Windows!
 #import "Basic";
 
@@ -139,7 +139,7 @@ In line (1) we declare the Windows C standard library `crt`, lines (2) and follo
 _1) Write your C source code_   
 Suppose we have some useful C functions (here they are not especially useful but deliberately kept simple) gathered in a file called *my.c*:
 
-```c++
+```jai
 int add_int(int a, int b) {                 // (1)
     return a + b;
 }
@@ -154,7 +154,7 @@ We want to call these functions from within Jai code.
 _2) Write your Jai source code_  
 
 See *29.5_callc.jai*:
-```c++
+```jai
 #import "Basic";
 
 add_int    :: (a: s32, b: s32) -> s32                #foreign my;   // (3A)
@@ -217,7 +217,7 @@ The **#type** directive lets us specify the expected parameters of the callback,
 `IL_Logger_Callback` is an example of a callback-function which has both directives.
 
 See *29.3_c_call.jai*:
-```c++
+```jai
 #import "Basic";
 
 IL_LoggingLevel :: u16;
@@ -254,7 +254,7 @@ When we write an actual callback procedure to use with our definition, we need t
 (Example adapted from */how_to/095_static_if.jai*)
 
 See *29.4_get_computer_name.jai*:
-```c++
+```jai
 #import "Basic";
 
 alloc_string :: (data: *u8, bytes_excluding_zero: s64) -> string { 

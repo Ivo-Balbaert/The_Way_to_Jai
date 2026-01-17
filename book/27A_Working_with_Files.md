@@ -7,7 +7,7 @@ Here are some examples of the most common operations:
 
 ## 27.1 Basic file operations
 See *27.1_working_with_files.jai*:
-```c++
+```jai
 #import "Basic";
 #import "File";               // (1)
 
@@ -166,7 +166,7 @@ Index,User Id,First Name,Last Name,Sex,Email,Phone,Date of birth,Job Title
 Our program will read in the CSV file, and process each person record. It will extract the fields and put these in a Person struct variable. 
 
 See *27.2_working_with_csv.jai*:
-```c++
+```jai
 #import "Basic";
 #import "String";
 #import "File";               
@@ -296,7 +296,7 @@ We turn this into an SOA (struct of arrays), by using the technique explained in
 
 ## 27.3 How to copy some files from one folder to another
 This is very easy to do, see *27.3_copy_files.jai*:  
-```c++
+```jai
 #import "Basic";
 #import "File_Utilities";
 
@@ -317,7 +317,7 @@ main :: () {
 The following program provides a way to recursively delete directories with a specific name.
 
 See *27.4_del_dirs.jai*:
-```c++
+```jai
 #import "Basic";
 #import "File";
 #import "File_Utilities";
@@ -381,7 +381,7 @@ Removed all directories named '.build' from D:\Jai\testing!
 
 ## 27.5 Working with Paths
 See *27.5_paths.jai*:
-```c++
+```jai
 #import "Basic";
 #import "String";
 #import "System";

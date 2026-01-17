@@ -9,7 +9,7 @@ or:
 This is done with the `get_command_line_arguments` proc from module _Basic_, which returns an array of type []string.
 
 See *19B.1_command_line_args.jai*:
-```c++
+```jai
 #import "Basic";
 
 main :: () {
@@ -39,7 +39,7 @@ You can use the arguments as args[1], args[2] and so on.
 Here is an example program that adds all the command-line arguments to a string builder:
 
 See *19B.2_clargs_string_builder.jai*:
-```c++
+```jai
 #import "Basic";
 #import "String";
 

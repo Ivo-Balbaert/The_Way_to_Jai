@@ -31,7 +31,7 @@ The 'Target Program' mentioned here is `main.jai`. For each program that is buil
 A workspace represents a completely separate environment, inside which we can compile programs. When the compiler starts up, it makes a workspace for the first files that you tell it to compile on the command-line. 
 
 See *30.1_workspaces.jai*:
-```c++
+```jai
 #import "Basic";
 #import "Compiler";
 
@@ -68,7 +68,7 @@ When launching the compiler, the Default_Metaprogram that builds your program is
 
 ## 30.2 The source file location directives
 See *30.2_location.jai*:
-```c++
+```jai
 #import "Basic";
 
 add :: (x: int, y: int, loc := #caller_location) -> int {
@@ -100,7 +100,7 @@ When using or setting file-paths in Jai, always use the forward slash / as path-
 In § 17.1.2 Exercise (5) we made a naive implementation of the assert statement.   
 But now we can show in our code where an assertion fails with `#location`.  
 Moreover with the metaprogramming tools of § 26 (`compiler_get_nodes` used in `code_to_string`, see § 26.15),  we can make the difference between displaying a proc call and its value in displaying an assert, like this:  
-```c++
+```jai
 assert_eq(42, factorial(3));
   left: 42  expr: 42
   right: 6  expr: factorial(3)
@@ -111,7 +111,7 @@ assert_eq(42, factorial(3));
 ## 30.3 A minimal build file
 ### 30.3.1 Compiling with add_build_file
 See *30.3_build.jai*:
-```c++
+```jai
 #import "Basic";
 #import "Compiler";
 
@@ -163,7 +163,7 @@ This means no executable for the build program itself is generated and no statis
 In the previous example, we used the `add_build_file()` proc to add source files to compile to the process. Another way of doing this is to the code as a multiline string with `add_build_string()`, as in the following minimal example:
 
 See *30.3B_build_add_build_string.jai*:
-```c++
+```jai
 #import "Basic";
 #import "Compiler";
 // (1)
@@ -207,7 +207,7 @@ A build file can instantiate multiple workspaces, to build various different kin
 
 ### 30.3.3 The #placeholder directive
 See *30.12_placeholder.jai*:
-```c++
+```jai
 #import "Basic";
 
 #placeholder TRUTH;                     // (1)
@@ -231,7 +231,7 @@ The first argument is a string, the second argument is the workspace (see § 30.
 
 ## 30.4 The build options
 See *30.4_build_options.jai*:
-```c++
+```jai
 #import "Basic";
 #import "Compiler";
 
@@ -309,7 +309,7 @@ for debug, or:
 `set_optimization(*target_options, Optimization_Type.OPTIMIZED);`   
 for release.
 The Optimization_Type enum values defined in module `Compiler` are:  
-```c++
+```jai
     DEBUG                :: 0;
     VERY_DEBUG           :: 1;
     OPTIMIZED            :: 2;
@@ -395,7 +395,7 @@ You can set additional module import paths with the option `.import_path`, which
 You could make one build file which contains both the debug- and the release-options, like this:
 
 See *build_debug_release.jai*:
-```c++
+```jai
 #import "Basic";
 #import "Compiler";
 
@@ -419,7 +419,7 @@ To build for production (release), you would do only `#run build_release();`, or
 
 ### 30.4.10 Preventing the output of compiler messages
 If you want a cleaner output, add this code line to the build:
-```c++
+```jai
 target_options.text_output_flags = 0; 
 ```
 This line disables most of the text output from the compiler.

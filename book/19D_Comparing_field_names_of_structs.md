@@ -2,7 +2,7 @@
 (Code snippet taken from how_to/044_using_advanced)
 
 See _19C.1_comparing_fields.jai_:
-```c++
+```jai
 #import "Basic";
 
 Person :: struct {

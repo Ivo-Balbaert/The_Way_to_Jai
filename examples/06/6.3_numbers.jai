@@ -9,7 +9,7 @@ main :: () {
 
     print("8 / 3 is %\n", 8 / 3); // => 8 / 3 is 2
     print("8.0 / 3 is %\n", 8.0 / 3); // => 8.0 / 3 is 2.666667
-    print("8 %% 3 is %\n", 8 % 3); // => 8 % 3 is 2
+    print("8 \% 3 is %\n", 8 % 3); // => 8 % 3 is 2
     
     // (1) Dividing by zero
     // print("8 / 0 is %\n", 8 / 0); // => Error: Division by zero.

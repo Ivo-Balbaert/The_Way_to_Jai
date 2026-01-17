@@ -3,7 +3,7 @@
 Getting string input from a user at a console (terminal) window is quite straightforward on a Linux platform:  
 
 See *19.7_linux_input.jai*:
-```c++
+```jai
 #import "Basic";
 #import "POSIX";
 
@@ -24,7 +24,7 @@ In line (1) the `read` from module _POSIX_ waits for user input. The characters 
 On Windows we can directly use the Windows APIs (namely the `ReadConsoleA` function from the Windows kernel32 system library), which makes our code a bit more complex: 
 
 See *19.8_windows_input.jai*. 
-```c++
+```jai
 #import "Basic";
 #import "Windows";
 
