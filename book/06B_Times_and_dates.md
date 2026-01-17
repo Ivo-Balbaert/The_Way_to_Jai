@@ -45,39 +45,33 @@ The `to_calendar` proc gives you a struct from which you can extract all useful 
 
 
 ## 6B.2 - Measuring time
+We measure the time-lapse invoked by calling sleep_milliseconds(100), which suspends execution for 100 ms:
+
+
 See *6B.2_measuring_time.jai*:
 ```jai
 #import "Basic";
 
-factorial :: (n: int) -> int {
-    if n <= 1  return 1;
-    return n * factorial(n-1);
-}
-
 main :: () {
     // _Basic_ time:
     start_time := seconds_since_init();
-    print("Factorial 20 is %\n", factorial(20)); 
-    // => Factorial 20 is 2432902008176640000
+    sleep_milliseconds(100);
     elapsed := seconds_since_init() - start_time;
-    print("Factorial 20 took % ms\n", elapsed * 1000);
-    // => Factorial 20 took 0.1857 ms
-
+    print("Sleep 100 ms took % ms\n", elapsed * 1000); 
+    // => Sleep 100 ms took 114.5402 ms
+   
     // Apollo time:    
     start := current_time_monotonic();              // (3)
-    print("%\n", start); // => // {3386047850652241920, 5}
-    factorial(20);
-   duration := current_time_monotonic() - start; // (3B)
+    sleep_milliseconds(100);
+    end := current_time_monotonic();
+    duration :=  end - start; // (3B)
     // duration := operator - (current_time_monotonic(), start); // (3C)
-    print("%\n",  duration); // =>  //{185400000000, 0}
-    print("%\n",  to_float64_seconds(duration) * 1.e6); // =>  //{185400000000, 0}  
-    // This is 0.1854 ms
+    print("Sleep 100 ms Apollo took %\n",  duration); 
+    // =>  {109085200000000, 0}
+    print("%\n",  to_float64_seconds(duration) * 1000 ); 
+    // This is 109,0852 ms
 }
 ```
-
-`factorial` is a recursive (see § 17.9) procedure to compute:  
-factorial(n) = n * (n-1) * (n-2) * ... 3 * 2 * 1.
-See another example in § 31.2.2
 
 Measuring the time it takes for a procedure or any piece of code to run is as simple as calculating end_time - start_time. This can be done with the Basic function `seconds_since_init()`.
 
@@ -93,7 +87,6 @@ Apollo_Time :: struct {
 (A monotonic clock is a time source that won't ever jump forward or go backward, due to NTP or Daylight Savings Time updates).
 
 In line (3B), we ask for the current time again, and subtract it from the previous time.This gives us a very accurate way to measure time-spans.
-?? Problem with line (3B): duration does not correspond with seconds_since_init() calculation.
 
 Use `current_time_consensus` as in §6B.1 for getting calendar dates. 
 Use `current_time_monotonic` for getting time when doing simulations.
